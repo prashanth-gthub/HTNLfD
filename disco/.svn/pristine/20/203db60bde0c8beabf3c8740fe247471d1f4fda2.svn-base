@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/task"/>
+	<classpathentry exported="true" kind="lib" path="d4g/golden_0_2_3.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/disco/docs/GTGE_0_2_3_docs.zip!/GTGE/docs"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="class"/>
+</classpath>

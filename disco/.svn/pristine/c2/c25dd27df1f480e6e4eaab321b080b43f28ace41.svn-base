@@ -1,0 +1,14 @@
+#!/bin/bash
+# 
+# Usage: export-src [ <path> ]
+
+# Create src.zip with disco and task sources in given path (defaults to /tmp)
+#
+ws="`dirname $0`/../.."
+rm -fR /tmp/edu
+svn export -q $ws/disco/java/edu /tmp/edu
+svn export -q $ws/task/java/edu/wpi/cetask /tmp/edu/wpi/cetask
+zip -qr /tmp/src.zip /tmp/edu
+if [ "$1" ]; then
+  cp -v /tmp/src.zip $1
+fi
