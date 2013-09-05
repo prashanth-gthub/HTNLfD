@@ -5,9 +5,12 @@
  */
 package edu.wpi.disco;
 
-import edu.wpi.cetask.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-import java.util.*;
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
 
 public class Segment {
    

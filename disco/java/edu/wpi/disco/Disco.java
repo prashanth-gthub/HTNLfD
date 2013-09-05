@@ -5,24 +5,50 @@
  */
 package edu.wpi.disco;
 
-import edu.wpi.cetask.*;
-import edu.wpi.disco.Agenda.Plugin;
-import edu.wpi.disco.Recognition.Explanation;
-import edu.wpi.disco.javaff.data.UngroundProblem;
-import edu.wpi.disco.javaff.data.strips.*;
-import edu.wpi.disco.javaff.parser.*;
-import edu.wpi.disco.lang.*;
-
-import org.iso_relax.verifier.Schema;
-import org.w3c.dom.Document;
-import org.xml.sax.*;
-
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
+
+import org.iso_relax.verifier.Schema;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.cetask.TaskClass;
+import edu.wpi.cetask.TaskEngine;
+import edu.wpi.cetask.TaskModel;
+import edu.wpi.cetask.Utils;
+import edu.wpi.disco.Agenda.Plugin;
+import edu.wpi.disco.Recognition.Explanation;
+import edu.wpi.disco.javaff.data.UngroundProblem;
+import edu.wpi.disco.javaff.data.strips.NullEffect;
+import edu.wpi.disco.javaff.data.strips.OperatorName;
+import edu.wpi.disco.javaff.data.strips.SimpleType;
+import edu.wpi.disco.javaff.data.strips.TrueCondition;
+import edu.wpi.disco.javaff.data.strips.UngroundInstantAction;
+import edu.wpi.disco.javaff.data.strips.Variable;
+import edu.wpi.disco.javaff.parser.EcmaScript;
+import edu.wpi.disco.javaff.parser.ParseException;
+import edu.wpi.disco.lang.Accept;
+import edu.wpi.disco.lang.Ok;
+import edu.wpi.disco.lang.Utterance;
 
 /**
  * Collaborative Discourse Manager (see papers in docs).

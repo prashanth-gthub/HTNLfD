@@ -5,11 +5,13 @@
  */
 package edu.wpi.disco;
 
-import edu.wpi.cetask.*;
+import java.util.List;
+
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.cetask.Utils;
 import edu.wpi.disco.Agenda.Plugin;
 import edu.wpi.disco.lang.Utterance;
-
-import java.util.List;
 
 /**
  * Base class for entities that execute actions and utterances.  An actor

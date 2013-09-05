@@ -28,10 +28,18 @@
 
 package edu.wpi.disco.javaff.data.strips;
 
-import edu.wpi.disco.javaff.data.*;
-import edu.wpi.disco.javaff.planning.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-import java.util.*;
+import edu.wpi.disco.javaff.data.CompoundLiteral;
+import edu.wpi.disco.javaff.data.GroundEffect;
+import edu.wpi.disco.javaff.data.Literal;
+import edu.wpi.disco.javaff.data.PDDLPrinter;
+import edu.wpi.disco.javaff.data.UngroundCondition;
+import edu.wpi.disco.javaff.data.UngroundEffect;
+import edu.wpi.disco.javaff.planning.STRIPSState;
+import edu.wpi.disco.javaff.planning.State;
 
 public class NOT implements CompoundLiteral, GroundEffect, UngroundEffect
 {

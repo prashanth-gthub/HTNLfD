@@ -5,7 +5,7 @@
  */
 package edu.wpi.disco.plugin;
 
-import edu.wpi.cetask.*;
+import edu.wpi.cetask.Plan;
 import edu.wpi.disco.Agenda;
 
 /**

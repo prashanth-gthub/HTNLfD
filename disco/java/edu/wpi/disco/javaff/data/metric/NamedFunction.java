@@ -28,12 +28,15 @@
 
 package edu.wpi.disco.javaff.data.metric;
 
-import edu.wpi.disco.javaff.data.strips.*;
+import java.math.BigDecimal;
+import java.util.Iterator;
+import java.util.Map;
+
+import edu.wpi.disco.javaff.data.strips.PDDLObject;
+import edu.wpi.disco.javaff.data.strips.PredicateSymbol;
+import edu.wpi.disco.javaff.data.strips.Variable;
 import edu.wpi.disco.javaff.planning.MetricState;
 import edu.wpi.disco.javaff.scheduling.MatrixSTN;
-
-import java.math.BigDecimal;
-import java.util.*;
 
 public class NamedFunction extends edu.wpi.disco.javaff.data.Literal implements Function
 {

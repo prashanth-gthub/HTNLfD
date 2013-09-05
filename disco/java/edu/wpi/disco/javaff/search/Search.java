@@ -29,9 +29,9 @@
 
 package edu.wpi.disco.javaff.search;
 
-import edu.wpi.disco.javaff.planning.State;
-
 import java.util.Comparator;
+
+import edu.wpi.disco.javaff.planning.State;
 
 public abstract class Search
 {

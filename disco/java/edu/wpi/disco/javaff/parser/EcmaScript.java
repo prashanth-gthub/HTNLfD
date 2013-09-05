@@ -2,7 +2,8 @@
 package edu.wpi.disco.javaff.parser;
 
 import java.io.FileInputStream;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 public class EcmaScript implements EcmaScriptConstants {
 

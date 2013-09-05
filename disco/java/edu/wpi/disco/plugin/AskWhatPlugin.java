@@ -5,9 +5,12 @@
  */
 package edu.wpi.disco.plugin;
 
-import edu.wpi.cetask.*;
-import edu.wpi.disco.*;
-import edu.wpi.disco.lang.*;
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.disco.Agenda;
+import edu.wpi.disco.Disco;
+import edu.wpi.disco.lang.Ask;
+import edu.wpi.disco.lang.Utterance;
 
 /**
  * Plugin which asks for first unknown input value of non-utterance 

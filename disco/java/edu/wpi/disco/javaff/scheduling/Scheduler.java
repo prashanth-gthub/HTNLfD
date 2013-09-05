@@ -28,7 +28,8 @@
 
 package edu.wpi.disco.javaff.scheduling;
 
-import edu.wpi.disco.javaff.data.*;
+import edu.wpi.disco.javaff.data.TimeStampedPlan;
+import edu.wpi.disco.javaff.data.TotalOrderPlan;
 
 public interface Scheduler
 {

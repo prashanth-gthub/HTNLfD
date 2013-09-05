@@ -5,10 +5,11 @@
  */
 package edu.wpi.disco.game;
 
-import edu.wpi.cetask.TaskEngine;
-import edu.wpi.disco.*;
-
 import java.util.HashMap;
+
+import edu.wpi.cetask.TaskEngine;
+import edu.wpi.disco.Actor;
+import edu.wpi.disco.Console;
 
 public class GameConsole extends Console {
    

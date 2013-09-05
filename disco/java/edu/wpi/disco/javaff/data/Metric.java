@@ -28,9 +28,9 @@
 
 package edu.wpi.disco.javaff.data;
 
-import edu.wpi.disco.javaff.data.metric.Function;
-
 import java.io.PrintStream;
+
+import edu.wpi.disco.javaff.data.metric.Function;
 
 public class Metric implements PDDLPrintable
 {

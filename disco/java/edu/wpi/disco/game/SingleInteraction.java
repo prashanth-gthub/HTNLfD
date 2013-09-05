@@ -5,10 +5,12 @@
  */
 package edu.wpi.disco.game;
 
-import edu.wpi.cetask.*;
-import edu.wpi.disco.*;
-
 import java.util.Map;
+
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.disco.Actor;
+import edu.wpi.disco.Interaction;
 
 public class SingleInteraction extends Interaction {
    

@@ -5,11 +5,25 @@
  */
 package edu.wpi.disco;
 
-import edu.wpi.disco.Agenda.Plugin;
-import edu.wpi.disco.lang.*;
-import edu.wpi.disco.plugin.*;
-
 import java.util.List;
+
+import edu.wpi.disco.Agenda.Plugin;
+import edu.wpi.disco.lang.Ok;
+import edu.wpi.disco.lang.Propose;
+import edu.wpi.disco.plugin.DecompositionPlugin;
+import edu.wpi.disco.plugin.ImplicitAcceptPlugin;
+import edu.wpi.disco.plugin.ProposeGlobalPlugin;
+import edu.wpi.disco.plugin.ProposeHowPlugin;
+import edu.wpi.disco.plugin.ProposeShouldNotPlugin;
+import edu.wpi.disco.plugin.ProposeShouldOptionalPlugin;
+import edu.wpi.disco.plugin.ProposeShouldOtherPlugin;
+import edu.wpi.disco.plugin.ProposeShouldSelfPlugin;
+import edu.wpi.disco.plugin.ProposeWhatPlugin;
+import edu.wpi.disco.plugin.ProposeWhoPlugin;
+import edu.wpi.disco.plugin.RejectProposeWhatPlugin;
+import edu.wpi.disco.plugin.RespondPlugin;
+import edu.wpi.disco.plugin.TopsPlugin;
+import edu.wpi.disco.plugin.UtterancePlugin;
 
 public class User extends Actor {
   

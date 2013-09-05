@@ -5,9 +5,18 @@
  */
 package edu.wpi.disco;
 
-import edu.wpi.cetask.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
-import java.util.*;
+import edu.wpi.cetask.Decomposition;
+import edu.wpi.cetask.DecompositionClass;
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.cetask.TaskClass;
+import edu.wpi.cetask.TaskEngine;
+import edu.wpi.cetask.Utils;
 
 class Recognition { 
    

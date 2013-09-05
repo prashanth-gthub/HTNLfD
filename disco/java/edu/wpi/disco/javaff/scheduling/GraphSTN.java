@@ -28,10 +28,14 @@
 
 package edu.wpi.disco.javaff.scheduling;
 
-import edu.wpi.disco.javaff.data.strips.InstantAction;
-
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import edu.wpi.disco.javaff.data.strips.InstantAction;
 
 public class GraphSTN implements Cloneable, SimpleTemporalNetwork
 {    

@@ -5,12 +5,14 @@
  */
 package edu.wpi.disco.game;
 
-import edu.wpi.disco.Agenda.Plugin.Item;
-import edu.wpi.disco.*;
-import edu.wpi.disco.lang.*;
-import edu.wpi.disco.plugin.AskHowPlugin;
-
 import java.util.LinkedList;
+
+import edu.wpi.disco.Agenda.Plugin.Item;
+import edu.wpi.disco.Agent;
+import edu.wpi.disco.Interaction;
+import edu.wpi.disco.lang.Say;
+import edu.wpi.disco.lang.Utterance;
+import edu.wpi.disco.plugin.AskHowPlugin;
 
 /**
  * Represents a non-player character in Disco for Games

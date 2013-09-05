@@ -28,11 +28,20 @@
 
 package edu.wpi.disco.javaff.data;
 
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
 import edu.wpi.disco.javaff.data.strips.InstantAction;
 import edu.wpi.disco.javaff.data.temporal.DurativeAction;
-import edu.wpi.disco.javaff.planning.*;
-
-import java.util.*;
+import edu.wpi.disco.javaff.planning.MetricState;
+import edu.wpi.disco.javaff.planning.RelaxedMetricPlanningGraph;
+import edu.wpi.disco.javaff.planning.RelaxedPlanningGraph;
+import edu.wpi.disco.javaff.planning.RelaxedTemporalMetricPlanningGraph;
+import edu.wpi.disco.javaff.planning.STRIPSState;
+import edu.wpi.disco.javaff.planning.TemporalMetricState;
 
 public class GroundProblem
 {

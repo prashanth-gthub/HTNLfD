@@ -28,10 +28,11 @@
 
 package edu.wpi.disco.javaff.scheduling;
 
-import edu.wpi.disco.javaff.data.strips.InstantAction;
-
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.wpi.disco.javaff.data.strips.InstantAction;
 
 public class TemporalConstraint extends Constraint
 {

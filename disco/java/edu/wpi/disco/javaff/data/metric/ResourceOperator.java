@@ -28,14 +28,19 @@
 
 package edu.wpi.disco.javaff.data.metric;
 
-import edu.wpi.disco.javaff.data.*;
-import edu.wpi.disco.javaff.data.strips.PredicateSymbol;
-import edu.wpi.disco.javaff.planning.*;
-import edu.wpi.disco.javaff.scheduling.MatrixSTN;
-
 import java.io.PrintStream;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import edu.wpi.disco.javaff.data.GroundEffect;
+import edu.wpi.disco.javaff.data.PDDLPrinter;
+import edu.wpi.disco.javaff.data.UngroundCondition;
+import edu.wpi.disco.javaff.data.strips.PredicateSymbol;
+import edu.wpi.disco.javaff.planning.MetricState;
+import edu.wpi.disco.javaff.planning.State;
+import edu.wpi.disco.javaff.scheduling.MatrixSTN;
 
 public class ResourceOperator implements edu.wpi.disco.javaff.data.GroundEffect, edu.wpi.disco.javaff.data.UngroundEffect
 {

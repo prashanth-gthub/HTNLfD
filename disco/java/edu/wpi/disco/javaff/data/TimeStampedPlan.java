@@ -28,9 +28,14 @@
 
 package edu.wpi.disco.javaff.data;
 
-import java.io.*;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class TimeStampedPlan implements Plan
 {

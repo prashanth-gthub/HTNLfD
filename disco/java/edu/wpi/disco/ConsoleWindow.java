@@ -1,8 +1,9 @@
 package edu.wpi.disco;
 
-import edu.wpi.cetask.ShellWindow;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-import java.awt.event.*;
+import edu.wpi.cetask.ShellWindow;
 
 public class ConsoleWindow extends ShellWindow {
 

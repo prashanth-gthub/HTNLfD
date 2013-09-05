@@ -28,9 +28,11 @@
 
 package edu.wpi.disco.javaff.planning;
 
-import edu.wpi.disco.javaff.data.Action;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
-import java.util.*;
+import edu.wpi.disco.javaff.data.Action;
 
 public class HelpfulFilter implements Filter
 {

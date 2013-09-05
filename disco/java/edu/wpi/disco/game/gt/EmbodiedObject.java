@@ -5,11 +5,12 @@
  */
 package edu.wpi.disco.game.gt;
 
-import com.golden.gamedev.object.Sprite;
-
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.Map;
+
+import com.golden.gamedev.object.Sprite;
 
 public class EmbodiedObject {
    

@@ -5,9 +5,10 @@
  */
 package edu.wpi.disco.game.gt;
 
-import edu.wpi.disco.game.NPC;
+import java.awt.Color;
+import java.awt.Point;
 
-import java.awt.*;
+import edu.wpi.disco.game.NPC;
 
 public class GTNPC extends EmbodiedObject implements ICarry {
 	private final NPC npc;

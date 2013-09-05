@@ -5,9 +5,11 @@
  */
 package edu.wpi.disco.plugin;
 
-import edu.wpi.cetask.*;
-import edu.wpi.disco.*;
-import edu.wpi.disco.lang.*;
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.disco.Agenda;
+import edu.wpi.disco.Disco;
+import edu.wpi.disco.lang.Propose;
 
 /**
  * Plugin which proposes to execute a non-optional task with defined inputs by self

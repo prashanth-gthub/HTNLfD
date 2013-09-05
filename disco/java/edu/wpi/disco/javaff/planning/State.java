@@ -28,10 +28,14 @@
 
 package edu.wpi.disco.javaff.planning;
 
-import edu.wpi.disco.javaff.data.*;
-
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+import edu.wpi.disco.javaff.data.Action;
+import edu.wpi.disco.javaff.data.GroundCondition;
+import edu.wpi.disco.javaff.data.Plan;
 
 public abstract class State implements Cloneable
 {

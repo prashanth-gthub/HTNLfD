@@ -28,9 +28,9 @@
 
 package edu.wpi.disco.javaff.scheduling;
 
-import edu.wpi.disco.javaff.data.strips.InstantAction;
-
 import java.util.Set;
+
+import edu.wpi.disco.javaff.data.strips.InstantAction;
 
 public interface SimpleTemporalNetwork
 {

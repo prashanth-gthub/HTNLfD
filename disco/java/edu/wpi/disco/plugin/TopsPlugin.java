@@ -5,12 +5,19 @@
  */
 package edu.wpi.disco.plugin;
 
-import edu.wpi.cetask.*;
-import edu.wpi.disco.*;
-import edu.wpi.disco.Agenda.Plugin;
-import edu.wpi.disco.lang.Propose;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
-import java.util.*;
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.cetask.TaskClass;
+import edu.wpi.cetask.Utils;
+import edu.wpi.disco.Agenda;
+import edu.wpi.disco.Agenda.Plugin;
+import edu.wpi.disco.Disco;
+import edu.wpi.disco.Segment;
+import edu.wpi.disco.lang.Propose;
 
 /**
  * Plugin to propose non-primitive toplevel plans. If interrupt argument is false, then only

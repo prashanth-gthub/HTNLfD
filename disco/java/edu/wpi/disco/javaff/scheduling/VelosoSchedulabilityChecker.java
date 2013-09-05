@@ -28,12 +28,18 @@
 
 package edu.wpi.disco.javaff.scheduling;
 
-import edu.wpi.disco.javaff.data.strips.InstantAction;
-import edu.wpi.disco.javaff.data.temporal.*;
-import edu.wpi.disco.javaff.planning.TemporalMetricState;
-
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import edu.wpi.disco.javaff.data.strips.InstantAction;
+import edu.wpi.disco.javaff.data.temporal.EndInstantAction;
+import edu.wpi.disco.javaff.data.temporal.SplitInstantAction;
+import edu.wpi.disco.javaff.data.temporal.StartInstantAction;
+import edu.wpi.disco.javaff.planning.TemporalMetricState;
 
 public class VelosoSchedulabilityChecker implements SchedulabilityChecker, Cloneable 
 {

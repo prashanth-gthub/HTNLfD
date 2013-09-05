@@ -28,10 +28,12 @@
 
 package edu.wpi.disco.javaff.data;
 
-import edu.wpi.disco.javaff.data.strips.PredicateSymbol;
-
 import java.io.PrintStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import edu.wpi.disco.javaff.data.strips.PredicateSymbol;
 
 public abstract class Literal implements Condition, Effect
 {

@@ -28,9 +28,14 @@
 
 package edu.wpi.disco.javaff.data.strips;
 
-import edu.wpi.disco.javaff.data.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
-import java.util.*;
+import edu.wpi.disco.javaff.data.Action;
+import edu.wpi.disco.javaff.data.PDDLPrinter;
+import edu.wpi.disco.javaff.data.UngroundCondition;
+import edu.wpi.disco.javaff.data.UngroundEffect;
 
 public class UngroundInstantAction extends Operator
 {

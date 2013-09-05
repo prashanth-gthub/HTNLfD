@@ -28,13 +28,27 @@
 
 package edu.wpi.disco.javaff.scheduling;
 
-import edu.wpi.disco.javaff.data.*;
-import edu.wpi.disco.javaff.data.metric.*;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import edu.wpi.disco.javaff.data.Action;
+import edu.wpi.disco.javaff.data.GroundProblem;
+import edu.wpi.disco.javaff.data.Metric;
+import edu.wpi.disco.javaff.data.PartialOrderPlan;
+import edu.wpi.disco.javaff.data.TimeStampedPlan;
+import edu.wpi.disco.javaff.data.TotalOrderPlan;
+import edu.wpi.disco.javaff.data.metric.BinaryComparator;
+import edu.wpi.disco.javaff.data.metric.MetricSymbolStore;
+import edu.wpi.disco.javaff.data.metric.NamedFunction;
+import edu.wpi.disco.javaff.data.metric.NumberFunction;
+import edu.wpi.disco.javaff.data.metric.ResourceOperator;
+import edu.wpi.disco.javaff.data.metric.TotalTimeFunction;
 import edu.wpi.disco.javaff.data.temporal.StartInstantAction;
 import edu.wpi.disco.javaff.planning.TemporalMetricState;
-
-import java.math.BigDecimal;
-import java.util.*;
 
 public class JavaFFScheduler implements Scheduler
 {

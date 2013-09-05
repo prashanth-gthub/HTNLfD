@@ -5,10 +5,11 @@
  */
 package edu.wpi.disco.game.actions;
 
-import edu.wpi.disco.Agenda.Plugin;
-import edu.wpi.disco.game.*;
-
 import java.util.List;
+
+import edu.wpi.disco.Agenda.Plugin;
+import edu.wpi.disco.game.Player;
+import edu.wpi.disco.game.SingleInteraction;
 
 /**
  * Execute a TTSay utterance task

@@ -28,9 +28,9 @@
 
 package edu.wpi.disco.javaff.data;
 
-import edu.wpi.disco.javaff.data.strips.RootType;
-
 import java.io.PrintStream;
+
+import edu.wpi.disco.javaff.data.strips.RootType;
 
 public abstract class Type implements PDDLPrintable
 {

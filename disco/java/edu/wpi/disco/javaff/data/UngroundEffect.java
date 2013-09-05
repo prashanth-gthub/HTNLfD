@@ -28,9 +28,9 @@
 
 package edu.wpi.disco.javaff.data;
 
-import edu.wpi.disco.javaff.data.strips.PredicateSymbol;
-
 import java.util.Map;
+
+import edu.wpi.disco.javaff.data.strips.PredicateSymbol;
 
 public interface UngroundEffect extends Effect
 {

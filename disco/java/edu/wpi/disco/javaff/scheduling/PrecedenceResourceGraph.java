@@ -28,13 +28,20 @@
 
 package edu.wpi.disco.javaff.scheduling;
 
-import edu.wpi.disco.javaff.data.Action;
-import edu.wpi.disco.javaff.data.metric.*;
-import edu.wpi.disco.javaff.data.strips.InstantAction;
-import edu.wpi.disco.javaff.data.temporal.*;
-
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+import edu.wpi.disco.javaff.data.Action;
+import edu.wpi.disco.javaff.data.metric.BinaryComparator;
+import edu.wpi.disco.javaff.data.metric.MetricSymbolStore;
+import edu.wpi.disco.javaff.data.metric.ResourceOperator;
+import edu.wpi.disco.javaff.data.strips.InstantAction;
+import edu.wpi.disco.javaff.data.temporal.DurationFunction;
+import edu.wpi.disco.javaff.data.temporal.DurativeAction;
 
 //OK for new precedence relations (i.e. meetCosntraints) should move consumers to AFTER the >= etc..) (actually maybe no)
 // AND for the new bounds should do incremental sweeps as in precedence relations

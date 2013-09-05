@@ -5,11 +5,11 @@
  */
 package edu.wpi.disco.plugin;
 
-import edu.wpi.cetask.Plan;
-import edu.wpi.disco.*;
-import edu.wpi.disco.Agenda.Plugin;
-
 import java.util.List;
+
+import edu.wpi.cetask.Plan;
+import edu.wpi.disco.Agenda;
+import edu.wpi.disco.Agenda.Plugin;
 
 /**
  * Base class for plugins that are not related to any plan.

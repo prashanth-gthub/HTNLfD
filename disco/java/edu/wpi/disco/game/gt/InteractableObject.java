@@ -5,10 +5,11 @@
  */
 package edu.wpi.disco.game.gt;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.wpi.disco.Actor;
 import edu.wpi.disco.game.NWayInteraction;
-
-import java.util.*;
 
 /**
  * Supertype for objects that have actions associated with them

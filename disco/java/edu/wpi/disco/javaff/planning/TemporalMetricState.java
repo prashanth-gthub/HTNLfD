@@ -30,12 +30,23 @@
 
 package edu.wpi.disco.javaff.planning;
 
-import edu.wpi.disco.javaff.data.*;
-import edu.wpi.disco.javaff.data.strips.InstantAction;
-import edu.wpi.disco.javaff.data.temporal.*;
-import edu.wpi.disco.javaff.scheduling.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import java.util.*;
+import edu.wpi.disco.javaff.data.Action;
+import edu.wpi.disco.javaff.data.GroundCondition;
+import edu.wpi.disco.javaff.data.Metric;
+import edu.wpi.disco.javaff.data.TotalOrderPlan;
+import edu.wpi.disco.javaff.data.strips.InstantAction;
+import edu.wpi.disco.javaff.data.temporal.SplitInstantAction;
+import edu.wpi.disco.javaff.data.temporal.StartInstantAction;
+import edu.wpi.disco.javaff.scheduling.SchedulabilityChecker;
+import edu.wpi.disco.javaff.scheduling.VelosoSchedulabilityChecker;
 
 public class TemporalMetricState extends MetricState
 {

@@ -28,10 +28,18 @@
 
 package edu.wpi.disco.javaff.data;
 
-import edu.wpi.disco.javaff.data.metric.FunctionSymbol;
-import edu.wpi.disco.javaff.data.strips.*;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
-import java.util.*;
+import edu.wpi.disco.javaff.data.metric.FunctionSymbol;
+import edu.wpi.disco.javaff.data.strips.Operator;
+import edu.wpi.disco.javaff.data.strips.PDDLObject;
+import edu.wpi.disco.javaff.data.strips.PredicateSymbol;
+import edu.wpi.disco.javaff.data.strips.Proposition;
+import edu.wpi.disco.javaff.data.strips.SimpleType;
 
 public class UngroundProblem
 {

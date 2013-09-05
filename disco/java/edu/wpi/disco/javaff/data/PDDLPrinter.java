@@ -28,11 +28,12 @@
 
 package edu.wpi.disco.javaff.data;
 
+import java.io.PrintStream;
+import java.util.Collection;
+import java.util.Iterator;
+
 import edu.wpi.disco.javaff.data.metric.NamedFunction;
 import edu.wpi.disco.javaff.data.strips.Operator;
-
-import java.io.PrintStream;
-import java.util.*;
 
 public abstract class PDDLPrinter
 {

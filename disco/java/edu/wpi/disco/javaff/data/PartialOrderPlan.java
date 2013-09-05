@@ -28,12 +28,18 @@
 
 package edu.wpi.disco.javaff.data;
 
-import edu.wpi.disco.javaff.data.strips.*;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+import edu.wpi.disco.javaff.data.strips.InstantAction;
+import edu.wpi.disco.javaff.data.strips.Proposition;
 import edu.wpi.disco.javaff.data.temporal.SplitInstantAction;
 import edu.wpi.disco.javaff.scheduling.TemporalConstraint;
-
-import java.io.*;
-import java.util.*;
 
 
 public class PartialOrderPlan implements Plan

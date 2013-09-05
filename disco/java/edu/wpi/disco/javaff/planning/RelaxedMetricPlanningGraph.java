@@ -28,11 +28,24 @@
 
 package edu.wpi.disco.javaff.planning;
 
-import edu.wpi.disco.javaff.data.*;
-import edu.wpi.disco.javaff.data.metric.*;
-
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import edu.wpi.disco.javaff.data.GroundCondition;
+import edu.wpi.disco.javaff.data.GroundProblem;
+import edu.wpi.disco.javaff.data.metric.BinaryComparator;
+import edu.wpi.disco.javaff.data.metric.BinaryFunction;
+import edu.wpi.disco.javaff.data.metric.Function;
+import edu.wpi.disco.javaff.data.metric.MetricSymbolStore;
+import edu.wpi.disco.javaff.data.metric.NamedFunction;
+import edu.wpi.disco.javaff.data.metric.NumberFunction;
+import edu.wpi.disco.javaff.data.metric.ResourceOperator;
 
 public class RelaxedMetricPlanningGraph extends RelaxedPlanningGraph
 {

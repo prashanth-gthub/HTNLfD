@@ -28,10 +28,11 @@
 
 package edu.wpi.disco.javaff.data.temporal;
 
+import java.util.Iterator;
+import java.util.Set;
+
 import edu.wpi.disco.javaff.data.strips.Proposition;
 import edu.wpi.disco.javaff.planning.TemporalMetricState;
-
-import java.util.*;
 
 public class EndInstantAction extends SplitInstantAction 
 {

@@ -5,12 +5,19 @@
  */
 package edu.wpi.disco.plugin;
 
-import edu.wpi.cetask.*;
-import edu.wpi.disco.*;
-import edu.wpi.disco.Agenda.Plugin;
-import edu.wpi.disco.lang.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.disco.Agenda;
+import edu.wpi.disco.Agenda.Plugin;
+import edu.wpi.disco.lang.Accept;
+import edu.wpi.disco.lang.Ask;
+import edu.wpi.disco.lang.Propose;
 
 /**
  * Plugin to generate behaviors based on implicit acceptance of current

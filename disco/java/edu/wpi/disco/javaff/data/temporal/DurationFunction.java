@@ -28,12 +28,14 @@
 
 package edu.wpi.disco.javaff.data.temporal;
 
-import edu.wpi.disco.javaff.data.metric.*;
-import edu.wpi.disco.javaff.planning.MetricState;
-import edu.wpi.disco.javaff.scheduling.MatrixSTN;
-
 import java.math.BigDecimal;
 import java.util.Map;
+
+import edu.wpi.disco.javaff.data.metric.Function;
+import edu.wpi.disco.javaff.data.metric.NamedFunction;
+import edu.wpi.disco.javaff.data.metric.NumberFunction;
+import edu.wpi.disco.javaff.planning.MetricState;
+import edu.wpi.disco.javaff.scheduling.MatrixSTN;
 
 public class DurationFunction extends NamedFunction
 {

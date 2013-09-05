@@ -5,7 +5,10 @@
  */
 package edu.wpi.disco.lang;
 
-import edu.wpi.cetask.*;
+import edu.wpi.cetask.Decomposition;
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.TaskClass;
+import edu.wpi.cetask.Utils;
 import edu.wpi.disco.Disco;
 
 /**

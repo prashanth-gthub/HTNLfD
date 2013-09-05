@@ -28,11 +28,15 @@
 
 package edu.wpi.disco.javaff.data;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import edu.wpi.disco.javaff.data.strips.OperatorName;
 import edu.wpi.disco.javaff.planning.State;
-
-import java.math.BigDecimal;
-import java.util.*;
 
 public abstract class Action
 {

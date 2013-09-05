@@ -28,9 +28,12 @@
 
 package edu.wpi.disco.javaff.search;
 
-import edu.wpi.disco.javaff.planning.*;
+import java.util.Comparator;
+import java.util.Hashtable;
+import java.util.TreeSet;
 
-import java.util.*;
+import edu.wpi.disco.javaff.planning.Filter;
+import edu.wpi.disco.javaff.planning.State;
 
 
 public class BestFirstSearch extends Search

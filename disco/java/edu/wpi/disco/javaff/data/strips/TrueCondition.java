@@ -28,10 +28,15 @@
 
 package edu.wpi.disco.javaff.data.strips;
 
-import edu.wpi.disco.javaff.data.*;
-import edu.wpi.disco.javaff.planning.State;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-import java.util.*;
+import edu.wpi.disco.javaff.data.GroundCondition;
+import edu.wpi.disco.javaff.data.PDDLPrinter;
+import edu.wpi.disco.javaff.data.UngroundCondition;
+import edu.wpi.disco.javaff.data.UngroundEffect;
+import edu.wpi.disco.javaff.planning.State;
 
 public class TrueCondition implements GroundCondition, UngroundCondition
 {

@@ -28,13 +28,14 @@
 
 package edu.wpi.disco.javaff.data.temporal;
 
-import edu.wpi.disco.javaff.data.PDDLPrinter;
-import edu.wpi.disco.javaff.data.metric.*;
-import edu.wpi.disco.javaff.planning.MetricState;
-
 import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.util.Map;
+
+import edu.wpi.disco.javaff.data.PDDLPrinter;
+import edu.wpi.disco.javaff.data.metric.Function;
+import edu.wpi.disco.javaff.data.metric.MetricSymbolStore;
+import edu.wpi.disco.javaff.planning.MetricState;
 
 public class SimpleDurationConstraint extends DurationConstraint
 {

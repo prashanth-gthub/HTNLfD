@@ -5,12 +5,17 @@
  */
 package edu.wpi.disco;
 
+import java.util.List;
+import java.util.Properties;
+
 import org.w3c.dom.Document;
-import edu.wpi.cetask.*;
+
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.cetask.TaskClass;
+import edu.wpi.cetask.TaskModel;
 import edu.wpi.disco.Agenda.Plugin;
 import edu.wpi.disco.lang.Utterance;
-
-import java.util.*;
 
 /**
  * Class for managing a turn-based collaborative discourse interaction between

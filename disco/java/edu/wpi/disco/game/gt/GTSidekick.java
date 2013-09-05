@@ -5,9 +5,9 @@
  */
 package edu.wpi.disco.game.gt;
 
-import edu.wpi.disco.game.NPC;
-
 import java.awt.Color;
+
+import edu.wpi.disco.game.NPC;
 
 /**
  * Convenience class for working with sidekick character

@@ -28,11 +28,16 @@
 
 package edu.wpi.disco.javaff.planning;
 
-import edu.wpi.disco.javaff.data.*;
-import edu.wpi.disco.javaff.data.metric.NamedFunction;
-
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Set;
+
+import edu.wpi.disco.javaff.data.GroundCondition;
+import edu.wpi.disco.javaff.data.Metric;
+import edu.wpi.disco.javaff.data.TotalOrderPlan;
+import edu.wpi.disco.javaff.data.metric.NamedFunction;
 
 public class MetricState extends STRIPSState
 {

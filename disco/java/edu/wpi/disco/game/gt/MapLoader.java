@@ -5,7 +5,9 @@
  */
 package edu.wpi.disco.game.gt;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 
 /**

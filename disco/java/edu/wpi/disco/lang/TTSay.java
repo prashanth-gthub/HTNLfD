@@ -7,9 +7,10 @@ package edu.wpi.disco.lang;
 
 import java.util.List;
 
-import edu.wpi.cetask.*;
+import edu.wpi.cetask.Decomposition;
+import edu.wpi.cetask.TaskClass;
 import edu.wpi.disco.Agenda.Plugin;
-import edu.wpi.disco.*;
+import edu.wpi.disco.Disco;
 
 /**
  * Builtin primitive action for representing TTSay menu presentation (see Disco.xml)

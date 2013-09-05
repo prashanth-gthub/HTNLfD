@@ -28,10 +28,13 @@
 
 package edu.wpi.disco.javaff.data.strips;
 
-import edu.wpi.disco.javaff.data.*;
-import edu.wpi.disco.javaff.planning.State;
+import java.util.Map;
+import java.util.Set;
 
-import java.util.*;
+import edu.wpi.disco.javaff.data.Action;
+import edu.wpi.disco.javaff.data.GroundCondition;
+import edu.wpi.disco.javaff.data.GroundEffect;
+import edu.wpi.disco.javaff.planning.State;
 
 public abstract class InstantAction extends Action
 {

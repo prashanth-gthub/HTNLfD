@@ -28,11 +28,16 @@
 
 package edu.wpi.disco.javaff.data.strips;
 
-import edu.wpi.disco.javaff.data.*;
-import edu.wpi.disco.javaff.planning.State;
-
 import java.io.PrintStream;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import edu.wpi.disco.javaff.data.GroundEffect;
+import edu.wpi.disco.javaff.data.PDDLPrinter;
+import edu.wpi.disco.javaff.data.UngroundCondition;
+import edu.wpi.disco.javaff.data.UngroundEffect;
+import edu.wpi.disco.javaff.planning.State;
 
 public class NullEffect implements UngroundEffect, GroundEffect
 {

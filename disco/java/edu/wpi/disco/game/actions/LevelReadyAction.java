@@ -5,9 +5,9 @@
  */
 package edu.wpi.disco.game.actions;
 
-import edu.wpi.disco.game.SingleInteraction;
-
 import java.util.Map;
+
+import edu.wpi.disco.game.SingleInteraction;
 
 /**
  * Sets the ready flag. 

@@ -5,9 +5,12 @@
  */
 package edu.wpi.disco.plugin;
 
-import edu.wpi.cetask.*;
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
 import edu.wpi.disco.Agenda;
-import edu.wpi.disco.lang.*;
+import edu.wpi.disco.lang.Nested;
+import edu.wpi.disco.lang.Propose;
+import edu.wpi.disco.lang.Utterance;
 
 /**
  * Base plugin for generating Propose.Should and subclasses.  Prevents proposing utterances

@@ -29,10 +29,23 @@
 
 package edu.wpi.disco.javaff.data.temporal;
 
-import edu.wpi.disco.javaff.data.*;
-import edu.wpi.disco.javaff.data.strips.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
-import java.util.*;
+import edu.wpi.disco.javaff.data.Action;
+import edu.wpi.disco.javaff.data.PDDLPrinter;
+import edu.wpi.disco.javaff.data.UngroundCondition;
+import edu.wpi.disco.javaff.data.UngroundEffect;
+import edu.wpi.disco.javaff.data.strips.AND;
+import edu.wpi.disco.javaff.data.strips.NOT;
+import edu.wpi.disco.javaff.data.strips.Operator;
+import edu.wpi.disco.javaff.data.strips.OperatorName;
+import edu.wpi.disco.javaff.data.strips.PDDLObject;
+import edu.wpi.disco.javaff.data.strips.Predicate;
+import edu.wpi.disco.javaff.data.strips.PredicateSymbol;
+import edu.wpi.disco.javaff.data.strips.UngroundInstantAction;
+import edu.wpi.disco.javaff.data.strips.Variable;
 
 public class UngroundDurativeAction extends Operator
 {

@@ -28,9 +28,11 @@
 
 package edu.wpi.disco.javaff.search;
 
-import edu.wpi.disco.javaff.planning.*;
+import java.util.Hashtable;
+import java.util.LinkedList;
 
-import java.util.*;
+import edu.wpi.disco.javaff.planning.Filter;
+import edu.wpi.disco.javaff.planning.State;
 
 public class BreadthFirstSearch extends Search
 {

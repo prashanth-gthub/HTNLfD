@@ -28,7 +28,8 @@
 
 package edu.wpi.disco.javaff.data.temporal;
 
-import edu.wpi.disco.javaff.data.strips.*;
+import edu.wpi.disco.javaff.data.strips.InstantAction;
+import edu.wpi.disco.javaff.data.strips.Proposition;
 import edu.wpi.disco.javaff.planning.TemporalMetricState;
 
 public abstract class SplitInstantAction extends InstantAction

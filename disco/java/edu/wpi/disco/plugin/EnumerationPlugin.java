@@ -5,11 +5,13 @@
  */
 package edu.wpi.disco.plugin;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.script.Bindings;
+import javax.script.SimpleBindings;
+
 import edu.wpi.disco.Agenda;
-
-import java.util.*;
-
-import javax.script.*;
 
 /**
  * Abstract class to propose enumerated values.  Typically used to 

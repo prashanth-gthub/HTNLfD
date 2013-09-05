@@ -28,13 +28,20 @@
 
 package edu.wpi.disco.javaff.planning;
 
-import edu.wpi.disco.javaff.data.*;
+import java.math.BigDecimal;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import edu.wpi.disco.javaff.data.Action;
+import edu.wpi.disco.javaff.data.GroundProblem;
+import edu.wpi.disco.javaff.data.Plan;
+import edu.wpi.disco.javaff.data.TotalOrderPlan;
 import edu.wpi.disco.javaff.data.metric.Function;
 import edu.wpi.disco.javaff.data.strips.Proposition;
-import edu.wpi.disco.javaff.data.temporal.*;
-
-import java.math.BigDecimal;
-import java.util.*;
+import edu.wpi.disco.javaff.data.temporal.DurationFunction;
+import edu.wpi.disco.javaff.data.temporal.DurativeAction;
+import edu.wpi.disco.javaff.data.temporal.StartInstantAction;
 
 public class RelaxedTemporalMetricPlanningGraph extends RelaxedMetricPlanningGraph
 {

@@ -28,11 +28,11 @@
 
 package edu.wpi.disco.javaff.data.metric;
 
-import edu.wpi.disco.javaff.planning.MetricState;
-import edu.wpi.disco.javaff.scheduling.MatrixSTN;
-
 import java.math.BigDecimal;
 import java.util.Map;
+
+import edu.wpi.disco.javaff.planning.MetricState;
+import edu.wpi.disco.javaff.scheduling.MatrixSTN;
 
 public class NumberFunction implements Function
 {

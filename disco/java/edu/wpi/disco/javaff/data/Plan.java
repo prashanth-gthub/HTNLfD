@@ -28,7 +28,8 @@
 
 package edu.wpi.disco.javaff.data;
 
-import java.io.*;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.Set;
 
 public interface Plan extends Cloneable

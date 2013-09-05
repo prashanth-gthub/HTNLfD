@@ -28,9 +28,11 @@
 
 package edu.wpi.disco.javaff.data.strips;
 
-import edu.wpi.disco.javaff.data.Type;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
-import java.util.*;
+import edu.wpi.disco.javaff.data.Type;
 
 public class EitherType extends Type
 {

@@ -28,10 +28,10 @@
 
 package edu.wpi.disco.javaff.search;
 
-import edu.wpi.disco.javaff.planning.State;
-
 import java.math.BigDecimal;
 import java.util.Comparator;
+
+import edu.wpi.disco.javaff.planning.State;
 
 public class LimitedEnforcedHillClimbingSearch extends EnforcedHillClimbingSearch
 {

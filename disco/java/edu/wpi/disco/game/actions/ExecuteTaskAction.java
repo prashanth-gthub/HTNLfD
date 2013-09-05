@@ -5,11 +5,13 @@
  */
 package edu.wpi.disco.game.actions;
 
-import edu.wpi.cetask.*;
+import java.util.Iterator;
+import java.util.Map;
+
+import edu.wpi.cetask.Script;
+import edu.wpi.cetask.Task;
 import edu.wpi.disco.Actor;
 import edu.wpi.disco.game.SingleInteraction;
-
-import java.util.*;
 
 /**
  * Encapsulates creation and execution of a new task instance 

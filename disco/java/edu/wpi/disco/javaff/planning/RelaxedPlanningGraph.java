@@ -28,9 +28,9 @@
 
 package edu.wpi.disco.javaff.planning;
 
-import edu.wpi.disco.javaff.data.GroundProblem;
-
 import java.util.Set;
+
+import edu.wpi.disco.javaff.data.GroundProblem;
 
 public class RelaxedPlanningGraph extends PlanningGraph
 {

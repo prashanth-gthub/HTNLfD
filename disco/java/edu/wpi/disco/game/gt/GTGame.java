@@ -5,13 +5,17 @@
  */
 package edu.wpi.disco.game.gt;
 
-import com.golden.gamedev.*;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.golden.gamedev.GameEngine;
+import com.golden.gamedev.GameLoader;
+import com.golden.gamedev.GameObject;
 import com.golden.gamedev.object.font.SystemFont;
 
 import edu.wpi.disco.game.actions.LevelReadyAction;
-
-import java.awt.*;
-import java.util.*;
 
 /**
  * Base class for Golden T Game.  Can be instantiated for testing.

@@ -28,10 +28,15 @@
 
 package edu.wpi.disco.javaff.search;
 
-import edu.wpi.disco.javaff.planning.*;
-
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Set;
+
+import edu.wpi.disco.javaff.planning.Filter;
+import edu.wpi.disco.javaff.planning.State;
 
 public class EnforcedHillClimbingSearch extends Search
 {

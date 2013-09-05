@@ -28,8 +28,14 @@
 
 package edu.wpi.disco.javaff.data;
 
-import java.io.*;
-import java.util.*;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
 
 public class TotalOrderPlan implements Plan, Cloneable
 {

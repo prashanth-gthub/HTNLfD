@@ -5,13 +5,17 @@
  */
 package edu.wpi.disco.game;
 
-import edu.wpi.cetask.*;
-import edu.wpi.disco.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.disco.Actor;
 import edu.wpi.disco.Agenda.Plugin;
 import edu.wpi.disco.Agenda.Plugin.Item;
+import edu.wpi.disco.Disco;
 import edu.wpi.disco.lang.Utterance;
-
-import java.util.*;
 
 /**
  * Models a conversation between multiple parties.  This thread class runs as the 

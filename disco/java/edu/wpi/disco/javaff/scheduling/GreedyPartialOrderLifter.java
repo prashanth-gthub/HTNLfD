@@ -28,10 +28,16 @@
 
 package edu.wpi.disco.javaff.scheduling;
 
-import edu.wpi.disco.javaff.data.*;
-import edu.wpi.disco.javaff.data.strips.Proposition;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.Set;
 
-import java.util.*;
+import edu.wpi.disco.javaff.data.Action;
+import edu.wpi.disco.javaff.data.GroundProblem;
+import edu.wpi.disco.javaff.data.PartialOrderPlan;
+import edu.wpi.disco.javaff.data.TotalOrderPlan;
+import edu.wpi.disco.javaff.data.strips.Proposition;
 
 public class GreedyPartialOrderLifter implements PartialOrderLifter
 {

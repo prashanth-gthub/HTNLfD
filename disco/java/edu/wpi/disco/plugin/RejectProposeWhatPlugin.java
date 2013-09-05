@@ -5,12 +5,17 @@
  */
 package edu.wpi.disco.plugin;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-import edu.wpi.cetask.*;
-import edu.wpi.disco.*;
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.cetask.TaskClass;
+import edu.wpi.disco.Agenda;
 import edu.wpi.disco.Agenda.Plugin;
-import edu.wpi.disco.lang.*;
+import edu.wpi.disco.lang.Propose;
+import edu.wpi.disco.lang.Reject;
 
 /**
  * Plugin for rejecting the setting of optional inputs.  Typically

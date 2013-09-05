@@ -28,9 +28,9 @@
 
 package edu.wpi.disco.javaff.data;
 
-import edu.wpi.disco.javaff.data.strips.SimpleType;
-
 import java.io.PrintStream;
+
+import edu.wpi.disco.javaff.data.strips.SimpleType;
 
 public abstract class Parameter implements PDDLPrintable
 {

@@ -28,10 +28,13 @@
 
 package edu.wpi.disco.javaff.data.strips;
 
-import edu.wpi.disco.javaff.data.*;
-
 import java.io.PrintStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import edu.wpi.disco.javaff.data.PDDLPrintable;
+import edu.wpi.disco.javaff.data.PDDLPrinter;
 
 public class PredicateSymbol implements PDDLPrintable
 {

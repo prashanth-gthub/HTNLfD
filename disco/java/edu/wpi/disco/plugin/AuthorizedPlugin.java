@@ -5,9 +5,12 @@
  */
 package edu.wpi.disco.plugin;
 
-import edu.wpi.cetask.*;
-import edu.wpi.disco.*;
-import edu.wpi.disco.lang.*;
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.disco.Agenda;
+import edu.wpi.disco.Disco;
+import edu.wpi.disco.lang.Accept;
+import edu.wpi.disco.lang.Propose;
 
 /**
  * Plugin used to execute authorized task for which all inputs known.

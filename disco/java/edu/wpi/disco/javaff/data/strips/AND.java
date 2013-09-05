@@ -28,11 +28,21 @@
 
 package edu.wpi.disco.javaff.data.strips;
 
-import edu.wpi.disco.javaff.data.*;
-import edu.wpi.disco.javaff.planning.State;
-
 import java.io.PrintStream;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+import edu.wpi.disco.javaff.data.CompoundLiteral;
+import edu.wpi.disco.javaff.data.Condition;
+import edu.wpi.disco.javaff.data.GroundCondition;
+import edu.wpi.disco.javaff.data.GroundEffect;
+import edu.wpi.disco.javaff.data.Literal;
+import edu.wpi.disco.javaff.data.PDDLPrinter;
+import edu.wpi.disco.javaff.data.UngroundCondition;
+import edu.wpi.disco.javaff.data.UngroundEffect;
+import edu.wpi.disco.javaff.planning.State;
 
 public class AND implements CompoundLiteral, GroundCondition, GroundEffect, UngroundCondition, UngroundEffect
 {

@@ -5,11 +5,15 @@
  */
 package edu.wpi.disco.plugin;
 
-import edu.wpi.cetask.*;
-import edu.wpi.disco.*;
-import edu.wpi.disco.lang.Ask;
-
 import java.util.List;
+
+import edu.wpi.cetask.DecompositionClass;
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.cetask.Utils;
+import edu.wpi.disco.Agenda;
+import edu.wpi.disco.Disco;
+import edu.wpi.disco.lang.Ask;
 
 /**
  * Plugin that asks about (applicable, non-rejected, non-internal) decomposition classes.

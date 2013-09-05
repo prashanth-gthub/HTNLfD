@@ -5,12 +5,15 @@
  */
 package edu.wpi.disco.plugin;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 
-import edu.wpi.cetask.*;
-import edu.wpi.disco.*;
+import edu.wpi.cetask.DecompositionClass;
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.disco.Agenda;
 import edu.wpi.disco.Agenda.Plugin;
-import edu.wpi.disco.lang.*;
+import edu.wpi.disco.lang.Ask;
 
 /**
  * Plugin that asks for first unknown input value of non-primitive 

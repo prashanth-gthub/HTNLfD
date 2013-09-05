@@ -5,24 +5,36 @@
  */
 package edu.wpi.disco.game.gt;
 
-import com.golden.gamedev.*;
-import com.golden.gamedev.object.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import com.golden.gamedev.GameEngine;
+import com.golden.gamedev.GameObject;
+import com.golden.gamedev.object.GameFont;
+import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.Timer;
 import com.golden.gamedev.object.background.TileBackground;
 import com.golden.gamedev.object.font.SystemFont;
 
 import edu.wpi.cetask.Utils;
 import edu.wpi.disco.Actor;
-import edu.wpi.disco.game.*;
-import edu.wpi.disco.game.actions.*;
+import edu.wpi.disco.game.NPC;
+import edu.wpi.disco.game.NWayInteraction;
+import edu.wpi.disco.game.Player;
+import edu.wpi.disco.game.actions.AddActorAction;
+import edu.wpi.disco.game.actions.ChooseTTSayOptionAction;
+import edu.wpi.disco.game.actions.LoadModelAction;
+import edu.wpi.disco.game.actions.PauseDebugAction;
+import edu.wpi.disco.game.actions.RemoveActorAction;
 import edu.wpi.disco.game.gt.MapLoader.MapFormatException;
-
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.*;
-import java.util.List;
 
 /**
  * Base class for a single level. 

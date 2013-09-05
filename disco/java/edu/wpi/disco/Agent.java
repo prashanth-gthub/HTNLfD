@@ -5,12 +5,29 @@
  */
 package edu.wpi.disco;
 
-import edu.wpi.cetask.*;
-import edu.wpi.disco.Agenda.Plugin;
-import edu.wpi.disco.lang.*;
-import edu.wpi.disco.plugin.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
-import java.util.*;
+import edu.wpi.cetask.DecompositionClass;
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.cetask.Utils;
+import edu.wpi.disco.Agenda.Plugin;
+import edu.wpi.disco.lang.Ok;
+import edu.wpi.disco.lang.Utterance;
+import edu.wpi.disco.plugin.AskHowPassablePlugin;
+import edu.wpi.disco.plugin.AskHowPlugin;
+import edu.wpi.disco.plugin.AskShouldPassablePlugin;
+import edu.wpi.disco.plugin.AskShouldPlugin;
+import edu.wpi.disco.plugin.AskShouldTopPlugin;
+import edu.wpi.disco.plugin.AskWhatNoBindingPlugin;
+import edu.wpi.disco.plugin.AskWhatPlugin;
+import edu.wpi.disco.plugin.AskWhoPlugin;
+import edu.wpi.disco.plugin.AuthorizedPlugin;
+import edu.wpi.disco.plugin.ProposeHowPlugin;
+import edu.wpi.disco.plugin.ProposeShouldOtherPlugin;
+import edu.wpi.disco.plugin.ProposeShouldSelfPlugin;
 
 public class Agent extends Actor {
   

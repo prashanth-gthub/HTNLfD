@@ -28,10 +28,20 @@
 
 package edu.wpi.disco.javaff.planning;
 
-import edu.wpi.disco.javaff.data.*;
-import edu.wpi.disco.javaff.data.strips.Proposition;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import java.util.*;
+import edu.wpi.disco.javaff.data.Action;
+import edu.wpi.disco.javaff.data.GroundCondition;
+import edu.wpi.disco.javaff.data.GroundProblem;
+import edu.wpi.disco.javaff.data.Plan;
+import edu.wpi.disco.javaff.data.TotalOrderPlan;
+import edu.wpi.disco.javaff.data.strips.Proposition;
 
 public class PlanningGraph
 {

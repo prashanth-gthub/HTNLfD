@@ -1,9 +1,16 @@
 import java.util.List;
 
-import edu.wpi.cetask.*;
-import edu.wpi.disco.*;
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.disco.Actor;
 import edu.wpi.disco.Agenda.Plugin;
-import edu.wpi.disco.lang.*;
+import edu.wpi.disco.Agent;
+import edu.wpi.disco.ConsoleWindow;
+import edu.wpi.disco.Disco;
+import edu.wpi.disco.Interaction;
+import edu.wpi.disco.User;
+import edu.wpi.disco.lang.Propose;
+import edu.wpi.disco.lang.Utterance;
 
 /**
  * This class illustrates the appropriate methods to use to embed Disco 

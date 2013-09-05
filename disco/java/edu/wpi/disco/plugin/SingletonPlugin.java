@@ -5,10 +5,13 @@
  */
 package edu.wpi.disco.plugin;
 
-import edu.wpi.cetask.*;
-import edu.wpi.disco.*;
+import java.util.Collections;
+import java.util.List;
 
-import java.util.*;
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.disco.Agenda;
+import edu.wpi.disco.Disco;
 
 /**
  * Convenient base plugin for defining plugins which return a single task.

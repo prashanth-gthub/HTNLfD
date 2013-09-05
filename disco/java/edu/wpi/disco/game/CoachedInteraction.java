@@ -1,6 +1,7 @@
 package edu.wpi.disco.game;
 
-import edu.wpi.disco.*;
+import edu.wpi.disco.Actor;
+import edu.wpi.disco.Agent;
 
 /**
  * This is a specialized interaction pattern developed for use

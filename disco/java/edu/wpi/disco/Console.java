@@ -5,12 +5,25 @@
  */
 package edu.wpi.disco;
 
-import edu.wpi.cetask.*;
-import edu.wpi.disco.Agenda.Plugin;
-import edu.wpi.disco.lang.*;
-
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.List;
+
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Script;
+import edu.wpi.cetask.Shell;
+import edu.wpi.cetask.Task;
+import edu.wpi.cetask.TaskEngine;
+import edu.wpi.cetask.Utils;
+import edu.wpi.disco.Agenda.Plugin;
+import edu.wpi.disco.lang.Propose;
+import edu.wpi.disco.lang.Say;
+import edu.wpi.disco.lang.TTSay;
+import edu.wpi.disco.lang.Utterance;
    
 /**
  * Interactive console for developing and debugging task models.

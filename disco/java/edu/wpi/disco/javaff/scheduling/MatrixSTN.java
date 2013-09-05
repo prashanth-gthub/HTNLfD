@@ -28,12 +28,20 @@
 
 package edu.wpi.disco.javaff.scheduling;
 
-import edu.wpi.disco.javaff.data.*;
-import edu.wpi.disco.javaff.data.strips.*;
-import edu.wpi.disco.javaff.data.temporal.*;
-
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
+
+import edu.wpi.disco.javaff.data.Action;
+import edu.wpi.disco.javaff.data.Plan;
+import edu.wpi.disco.javaff.data.TimeStampedPlan;
+import edu.wpi.disco.javaff.data.strips.InstantAction;
+import edu.wpi.disco.javaff.data.strips.OperatorName;
+import edu.wpi.disco.javaff.data.strips.STRIPSInstantAction;
+import edu.wpi.disco.javaff.data.temporal.DurativeAction;
+import edu.wpi.disco.javaff.data.temporal.EndInstantAction;
+import edu.wpi.disco.javaff.data.temporal.StartInstantAction;
 
 public class MatrixSTN implements SimpleTemporalNetwork
 {

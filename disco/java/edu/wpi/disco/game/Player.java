@@ -5,14 +5,20 @@
  */
 package edu.wpi.disco.game;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
 import edu.wpi.disco.Agenda.Plugin.Item;
-import edu.wpi.disco.*;
+import edu.wpi.disco.Disco;
+import edu.wpi.disco.Interaction;
+import edu.wpi.disco.User;
 import edu.wpi.disco.game.actions.Action;
 import edu.wpi.disco.lang.Utterance;
-import edu.wpi.disco.plugin.*;
-
-import java.util.*;
-import java.util.concurrent.*;
+import edu.wpi.disco.plugin.ProposeHowPlugin;
+import edu.wpi.disco.plugin.ProposeShouldSelfPlugin;
 
 /**
  * Represents a player in Disco for Games

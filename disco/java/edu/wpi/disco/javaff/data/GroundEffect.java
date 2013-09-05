@@ -28,9 +28,10 @@
 
 package edu.wpi.disco.javaff.data;
 
-import edu.wpi.disco.javaff.planning.State;
+import java.util.Map;
+import java.util.Set;
 
-import java.util.*;
+import edu.wpi.disco.javaff.planning.State;
 
 public interface GroundEffect extends Effect
 {

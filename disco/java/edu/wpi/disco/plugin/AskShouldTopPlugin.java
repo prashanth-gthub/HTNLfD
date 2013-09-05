@@ -5,12 +5,15 @@
  */
 package edu.wpi.disco.plugin;
 
-import edu.wpi.cetask.*;
-import edu.wpi.disco.*;
-import edu.wpi.disco.Agenda.Plugin;
-import edu.wpi.disco.lang.*;
+import java.util.Collections;
+import java.util.List;
 
-import java.util.*;
+import edu.wpi.cetask.Plan;
+import edu.wpi.cetask.Task;
+import edu.wpi.disco.Agenda;
+import edu.wpi.disco.Agenda.Plugin;
+import edu.wpi.disco.Disco;
+import edu.wpi.disco.lang.Ask;
 
 /**
  * Plugin for agent to ask about first live toplevel plan iff
