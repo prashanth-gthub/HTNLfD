@@ -1,4 +1,4 @@
-<taskModel about="" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+<taskModel about="urn:disco.wpi.edu:htnlfd:SetTable" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
 
 	<task id="SettingTable2">
 		<input name="isFancy" type="boolean"/>
@@ -22,7 +22,26 @@
 		<input name="isFancy" type="boolean"/>
 
 		<subtasks id="settingTable1">
-			<step name="setPlace" task="SetPlace" maxOccurs="5"/>	
+			<step name="setPlaceRepeat" task="SetPlaceRepeat" maxOccurs="5"/>	
+
+			<binding slot="$setPlaceRepeat.isFancy" value="$this.isFancy"/>
+		</subtasks>		
+	</task>
+	<!--
+		This additional step has been added to SettingTable1 task in order to 
+		changing the location for each placement. If we don't add this 
+		extra task we could not be able to use "$plan.getRepeatStep()" function 
+		since if we use it in SettingTable1 task, we don't have the # of repetitions 
+		of it's steps.(We just can have # of repeatitions for SettingTable1 task.)
+		We can also add the location calculations in the SetPlace task, 
+		but for doing this we should have different SetPlace functions for 
+		SettingTable1 and SettingTable2; that's not suitable.
+	-->
+	<task id="SetPlaceRepeat">
+		<input name="isFancy" type="boolean"/>
+
+		<subtasks id="setPlaceRepeat">
+			<step name="setPlace" task="SetPlace"/>	
 			
 			<binding slot="$setPlace.location" value="findCoordination($plan.getRepeatStep())"/>
 			<binding slot="$setPlace.isFancy" value="$this.isFancy"/>

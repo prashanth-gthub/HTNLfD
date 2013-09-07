@@ -1,4 +1,4 @@
-<taskModel about="" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+<taskModel about="urn:disco.wpi.edu:htnlfd:SetTableDemonstration" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
 
 	<task id="PlacePlate">  
 		<script> println("Placing Plate"); </script>	
