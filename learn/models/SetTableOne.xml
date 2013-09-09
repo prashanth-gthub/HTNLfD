@@ -1,0 +1,10 @@
+<taskModel xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext" xmlns:SetTableDemonstration="urn:disco.wpi.edu:htnlfd:SetTableDemonstration" about="urn:disco.wpi.edu:htnlfd:SetTableOne">
+<task id="SetTableOne">
+<subtasks id="setTableOne">
+<step name="placePlate" task="SetTableDemonstration:PlacePlate"/>
+<step name="placeSpoon" task="SetTableDemonstration:PlaceSpoon"/>
+<step name="placeFork" task="SetTableDemonstration:PlaceFork"/>
+<step name="placeGlass" task="SetTableDemonstration:PlaceGlass"/>
+</subtasks>
+</task>
+</taskModel>
