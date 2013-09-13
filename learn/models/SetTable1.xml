@@ -1,48 +1,16 @@
 <taskModel xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext" xmlns:std="urn:disco.wpi.edu:htnlfd:std" about="urn:disco.wpi.edu:htnlfd:setTable1">
   <task id="PlaceDishes">
-    <input name="isFancy" type="boolean"/>
-    <subtasks id="placeDishes1">
+    <subtasks id="placeDishes">
       <step name="placeDinnerPlate" task="std:PlaceDinnerPlate"/>
       <step name="placeSaladPlate" task="std:PlaceSaladPlate"/>
       <step name="placeSoupBowl" task="std:PlaceSoupBowl"/>
-      <applicable>$this.isFancy</applicable>
-    </subtasks>
-    <subtasks id="placeDishes2">
-      <step name="placeDinnerPlate" task="std:PlaceDinnerPlate"/>
-      <applicable>!$this.isFancy</applicable>
     </subtasks>
   </task>
   <task id="PlaceSilverWare">
-    <input name="isFancy" type="boolean"/>
-    <subtasks id="placeSilverWare1">
+    <subtasks id="placeSilverWare">
       <step name="placeSpoon" task="std:PlaceSpoon"/>
       <step name="placeFork" task="std:PlaceFork"/>
       <step name="placeKnife" task="std:PlaceKnife"/>
-      <applicable>$this.isFancy</applicable>
-    </subtasks>
-    <subtasks id="placeSilverWare2">
-      <step name="placeSpoon" task="std:PlaceSpoon"/>
-      <step name="placeFork" task="std:PlaceFork"/>
-      <applicable>!$this.isFancy</applicable>
-    </subtasks>
-  </task>
-  <task id="PlaceGlasses">
-    <input name="isFancy" type="boolean"/>
-    <subtasks id="placeGlasses1">
-      <step name="placeWaterGlass" task="std:PlaceWaterGlass"/>
-      <step name="placeWineGlass" task="std:PlaceWineGlass"/>
-      <applicable>$this.isFancy</applicable>
-    </subtasks>
-    <subtasks id="placeGlasses2">
-      <step name="placeWaterGlass" task="std:PlaceWaterGlass"/>
-      <applicable>!$this.isFancy</applicable>
-    </subtasks>
-  </task>
-  <task id="SetTable">
-    <subtasks id="setTable">
-      <step name="placeDishes" task="PlaceDishes"/>
-      <step name="placeSilverWare" task="PlaceSilverWare"/>
-      <step name="placeGlasses" task="PlaceGlasses"/>
     </subtasks>
   </task>
 </taskModel>
