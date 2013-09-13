@@ -1,7 +1,13 @@
-<taskModel about="urn:disco.wpi.edu:htnlfd:SetTableDemonstration" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+<taskModel about="urn:disco.wpi.edu:htnlfd:std" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
 
-	<task id="PlacePlate">  
-		<script> println("Placing Plate"); </script>	
+	<task id="PlaceDinnerPlate">  
+		<script> println("Placing Dinner Plate"); </script>	
+	</task>
+	<task id="PlaceSaladPlate">  
+		<script> println("Placing Salad Plate"); </script>	
+	</task>
+	<task id="PlaceSoupBowl">  
+		<script> println("Placing Soup Bowl"); </script>	
 	</task>
 	<task id="PlaceSpoon">  
 		<script> println("Placing Spoon"); </script>	
@@ -9,8 +15,22 @@
 	<task id="PlaceFork">  
 		<script> println("Placing Fork"); </script>	
 	</task>
-	<task id="PlaceGlass">  
-		<script> println("Placing Glass"); </script>	
+	<task id="PlaceKnife">  
+		<script> println("Placing Knife"); </script>	
+	</task>
+	<task id="PlaceWaterGlass">  
+		<script> println("Placing Water Glass"); </script>	
+	</task>
+	<task id="PlaceWineGlass">  
+		<script> println("Placing Wine Glass"); </script>	
 	</task>
 	
+	<task id="Demonstration">  
+		<input name="name" type="string"/>
+		<input name="inputName" type="string"/>
+		<script>
+				Packages.edu.wpi.htnlfd.Init.demonstrationTask($disco,$this.name,$this.inputName);		
+		</script>	
+	</task>
+
 </taskModel>

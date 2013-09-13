@@ -1,0 +1,102 @@
+    # 13-Sep-2013 2:28:55 PM - TaskEngine 1.4.8 / Disco 1.6.10
+    Welcome to Disco! (Type 'help' for command list)
+  > cd ..\..\GitHub\HTNLfD\learn\test
+    D:\GitHub\HTNLfD\learn\test
+  > source HierarchicalDemonstration.txt
+  > cd ..\models
+  > load SetTableDemonstration.xml
+  > 
+  > execute PlaceDinnerPlate
+Placing Dinner Plate
+    User execute PlaceDinnerPlate.
+    Agent says "Ok."
+  > execute PlaceSaladPlate
+Placing Salad Plate
+    User execute PlaceSaladPlate.
+    Agent says "Ok."
+  > execute PlaceSoupBowl
+Placing Soup Bowl
+    User execute PlaceSoupBowl.
+    Agent says "Ok."
+  > execute Demonstration / "PlaceDishes" / ""
+    User achieve Demonstration on PlaceDishes and .
+    Agent says "Ok."
+  > 
+  > execute PlaceSpoon
+Placing Spoon
+    User execute PlaceSpoon.
+    Agent says "Ok."
+  > execute PlaceFork
+Placing Fork
+    User execute PlaceFork.
+    Agent says "Ok."
+  > execute PlaceKnife
+Placing Knife
+    User execute PlaceKnife.
+    Agent says "Ok."
+  > execute Demonstration / "PlaceSilverWare" / ""
+Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+    User achieve Demonstration on PlaceSilverWare and .
+    Agent says "Ok."
+  > 
+  > execute PlaceWaterGlass
+Placing Water Glass
+    User execute PlaceWaterGlass.
+    Agent says "Ok."
+  > execute PlaceWineGlass
+Placing Wine Glass
+    User execute PlaceWineGlass.
+    Agent says "Ok."
+  > execute Demonstration / "PlaceGlasses" / ""
+Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+    User achieve Demonstration on PlaceGlasses and .
+    Agent says "Ok."
+  > 
+  > execute PlaceDishes
+    User achieve PlaceDishes.
+    Agent says "Ok."
+  > execute PlaceSilverWare
+    User achieve PlaceSilverWare.
+    Agent says "Ok."
+  > execute PlaceGlasses
+    User achieve PlaceGlasses.
+    Agent says "Ok."
+  > execute Demonstration / "SetTable" / ""
+Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+    User achieve Demonstration on SetTable and .
+    Agent says "Ok."
+  > 
+  > execute PlaceDinnerPlate
+Placing Dinner Plate
+    User execute PlaceDinnerPlate.
+    Agent says "Ok."
+  > execute Demonstration / "PlaceDishes" / "isCasual"
+Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+    User achieve Demonstration on PlaceDishes and isCasual.
+    Agent says "Ok."
+  > 
+  > execute PlaceSpoon
+Placing Spoon
+    User execute PlaceSpoon.
+    Agent says "Ok."
+  > execute PlaceFork
+Placing Fork
+    User execute PlaceFork.
+    Agent says "Ok."
+  > execute Demonstration / "PlaceSilverWare" / "isCasual"
+Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+    User achieve Demonstration on PlaceSilverWare and isCasual.
+    Agent says "Ok."
+  > 
+  > execute PlaceWaterGlass
+Placing Water Glass
+    User execute PlaceWaterGlass.
+    Agent says "Ok."
+  > execute Demonstration / "PlaceGlasses" / "isCasual"
+Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+    User achieve Demonstration on PlaceGlasses and isCasual.
+    Agent says "Ok."
+  > 
+  > 
+  > 
+  > 

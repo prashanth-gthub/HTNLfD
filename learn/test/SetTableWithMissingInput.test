@@ -1,0 +1,47 @@
+    # 13-Sep-2013 3:11:49 PM - TaskEngine 1.4.8 / Disco 1.6.10
+    Welcome to Disco! (Type 'help' for command list)
+  > cd ..\..\GitHub\HTNLfD\learn\test
+    D:\GitHub\HTNLfD\learn\test
+  > cd ..\models
+    D:\GitHub\HTNLfD\learn\models
+  > load SetTableDemonstration.xml
+  > 
+  > execute PlaceDinnerPlate
+Placing Dinner Plate
+    User execute PlaceDinnerPlate.
+    Agent says "Ok."
+  > execute PlaceSaladPlate
+Placing Salad Plate
+    User execute PlaceSaladPlate.
+    Agent says "Ok."
+  > execute PlaceSoupBowl
+Placing Soup Bowl
+    User execute PlaceSoupBowl.
+    Agent says "Ok."
+  > execute Demonstration / "PlaceDishes"
+WARNING: All input values must be defined--ignored.
+    Agent says "Ok."
+  > eval $disco.getStack().get(0).getChildren()
+    # Returned '[PlaceDinnerPlate, Ok, PlaceSaladPlate, Ok, PlaceSoupBowl, Ok, Ok]'
+  > execute PlaceSpoon
+Placing Spoon
+    User execute PlaceSpoon.
+    Agent says "Ok."
+  > execute PlaceFork
+Placing Fork
+    User execute PlaceFork.
+    Agent says "Ok."
+  > execute PlaceKnife
+Placing Knife
+    User execute PlaceKnife.
+    Agent says "Ok."
+  > execute Demonstration / "PlaceSilverWare"
+Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+WARNING: All input values must be defined--ignored.
+    Agent says "Ok."
+  > eval $disco.getStack().get(0).getChildren()
+    # Returned '[PlaceDinnerPlate, Ok, PlaceSaladPlate, Ok, PlaceSoupBowl, Ok, Ok, PlaceSpoon, Ok, PlaceFork, Ok, PlaceKnife, Ok, Ok]'
+  > quti
+    Invalid command. Type 'help' for commands.
+  > quit
+    

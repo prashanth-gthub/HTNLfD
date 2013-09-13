@@ -1,0 +1,31 @@
+cd ..\models
+load SetTableDemonstration.xml
+
+execute PlaceDinnerPlate
+execute PlaceSaladPlate
+execute PlaceSoupBowl
+execute Demonstration / "PlaceDishes" / ""
+
+execute PlaceSpoon
+execute PlaceFork
+execute PlaceKnife
+execute Demonstration / "PlaceSilverWare" / ""
+
+execute PlaceWaterGlass
+execute PlaceWineGlass
+execute Demonstration / "PlaceGlasses" / ""
+
+execute PlaceDishes
+execute PlaceSilverWare
+execute PlaceGlasses
+execute Demonstration / "SetTable" / ""
+
+execute PlaceDinnerPlate
+execute Demonstration / "PlaceDishes" / "isFancy"
+
+execute PlaceSpoon
+execute PlaceFork
+execute Demonstration / "PlaceSilverWare" / "isFancy"
+
+execute PlaceWaterGlass
+execute Demonstration / "PlaceGlasses" / "isFancy"
