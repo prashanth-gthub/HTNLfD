@@ -13,8 +13,7 @@ public class Init {
       System.out.println("YUHU");
    }
 
-   public static void demonstrationTask (Disco disco, String taskName,
-         String inputName) throws IOException {
+   public static void learn (Disco disco, String taskName) throws IOException {
 
       String separator = System.getProperty("file.separator");
       String filename = "SetTable1";
@@ -24,14 +23,13 @@ public class Init {
          demonstration.addDependentLibaries(System.getProperty("user.dir")
             + separator + "SetTableDemonstration.xml");
       }
-
-      List<Task> tasks = demonstration.findDemonstration(disco, taskName);
-
+      
       String fileName = System.getProperty("user.dir") + separator + filename
-         + ".xml";
-
-      demonstration.writeDOM(fileName, taskName, tasks, inputName);
+            + ".xml";
+      List<Task> tasks = demonstration.findDemonstration(disco, taskName);
+      demonstration.writeDOM(fileName, taskName, tasks, "isFancy");
       //demonstration.resetDisco(disco);
       demonstration.readDOM(disco, fileName);
    }
+   
 }

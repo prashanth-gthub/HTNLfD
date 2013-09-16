@@ -82,6 +82,9 @@
 			<binding slot="$placeDinnerPlate.object" value="Object.DinnerPlate"/>
 			<binding slot="$placeSaladPlate.object" value="Object.SaladPlate"/>
 			<binding slot="$placeSoupBowl.object" value="Object.SoupBowl"/>
+			<binding slot="$placeDinnerPlate.refrenceFrame" value="Table.SquareTable"/> <!-- -->
+			<binding slot="$placeSaladPlate.refrenceFrame" value="Object.DinnerPlate"/>
+			<binding slot="$placeSoupBowl.refrenceFrame" value="Object.SaladPlate"/>
 		</subtasks>
 		<subtasks id="placingDishesCasual">	
 			<step name="placeDinnerPlate" task="Place"/>
@@ -89,6 +92,7 @@
 			
 			<binding slot="$placeDinnerPlate.location" value="$this.location"/>
 			<binding slot="$placeDinnerPlate.object" value="Object.DinnerPlate"/>
+			<binding slot="$placeDinnerPlate.refrenceFrame" value="Table.SquareTable"/> <!-- -->
 		</subtasks>
 		
 	</task>
@@ -115,6 +119,7 @@
 			
 			<binding slot="$placeFork.location" value="$this.location"/>
 			<binding slot="$placeFork.object" value="Object.Fork"/>  
+			<binding slot="$placeFork.refrenceFrame" value="Object.DinnerPlate"/>
 		</subtasks>
 	</task>
 	<task id="RightOfPlate">	
@@ -130,13 +135,16 @@
 			<binding slot="$placeSpoon.location" value="$this.location"/>	
 			<binding slot="$placeKnife.object" value="Object.Knife"/>
 			<binding slot="$placeSpoon.object" value="Object.Spoon"/>	 
+			<binding slot="$placeKnife.refrenceFrame" value="Object.DinnerPlate"/>
+			<binding slot="$placeSpoon.refrenceFrame" value="Object.DinnerPlate"/>
 		</subtasks>
 		<subtasks id="rightCasual">
 			<step name="placeSpoon" task="Place"/>
 			<applicable> !$this.isFancy </applicable>
 			
 			<binding slot="$placeSpoon.location" value="$this.location"/>	
-			<binding slot="$placeSpoon.object" value="Object.Spoon"/>	 
+			<binding slot="$placeSpoon.object" value="Object.Spoon"/>	
+			<binding slot="$placeSpoon.refrenceFrame" value="Object.DinnerPlate"/>
 		</subtasks>
 	</task>
 	  
@@ -151,9 +159,11 @@
 			<applicable> $this.isFancy </applicable>
 			
 			<binding slot="$placeWaterGlass.location" value="$this.location"/>
-			<binding slot="$placeWineGlass.location" value="$this.location"/>
+			<binding slot="$placeWineGlass.location" value="$this.location"/>			
 			<binding slot="$placeWaterGlass.object" value="Object.WaterGlass"/>
-			<binding slot="$placeWineGlass.object" value="Object.WineGlass"/>	
+			<binding slot="$placeWineGlass.object" value="Object.WineGlass"/>
+			<binding slot="$placeWaterGlass.refrenceFrame" value="Object.DinnerPlate"/>
+			<binding slot="$placeWineGlass.refrenceFrame" value="Object.DinnerPlate"/>
 		</subtasks>
 		<subtasks id="placingGlassesCasual">	
 			<step name="placeWaterGlass" task="Place"/>
@@ -161,6 +171,7 @@
 			
 			<binding slot="$placeWaterGlass.location" value="$this.location"/>
 			<binding slot="$placeWaterGlass.object" value="Object.WaterGlass"/>
+			<binding slot="$placeWaterGlass.refrenceFrame" value="Object.DinnerPlate"/>
 		</subtasks>
 	</task>
 
@@ -169,6 +180,7 @@
 	<task id="Place">  
 		<input name="object" type="Object"/>
 		<input name="location" type="Location"/>	
+		<input name="refrenceFrame" type="Object"/>
 			
 		<subtasks id="placing" ordered="true">
 			<step name="find" task="Find"/>
@@ -182,6 +194,7 @@
 			<binding slot="$put.object" value="$find.object"/>
 			<binding slot="$pickup.location" value="$find.location"/>
 			<binding slot="$pickup.object" value="$find.object"/>
+			<binding slot="$put.refrenceFrame" value="$this.refrenceFrame"/>
 					
 			<binding slot="$find.external" value="false"/>
 			<binding slot="$pickup.external" value="false"/>
@@ -209,6 +222,7 @@
 	<task id="PutOnTable">    
 		<input name="location" type="Location"/>	
 		<input name="object" type="Object"/>
+		<input name="refrenceFrame" type="Object"/>
 	</task>
 	  
 	  
@@ -228,6 +242,9 @@
 			this.y = y;
 			this.z = z;
 		}
+				
+		Table.prototype = new Object("Table");        // Here's where the inheritance occurs 
+		Table.prototype.constructor=Table; 
 		
 		function Table (width,location) {
 			this.width = width;
@@ -246,7 +263,8 @@
 			
 		Object.WaterGlass = new Object("waterGlass");
 		Object.WineGlass = new Object("wineGlass");
-			
+		
+		
 		Table.SquareTable = new Table(10,new Location(1,2,3)); 
 		
 		// assuming location is the coordination of left of the table

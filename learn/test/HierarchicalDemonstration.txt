@@ -1,31 +1,38 @@
 cd ..\models
 load SetTableDemonstration.xml
 
-execute PlaceDinnerPlate
-execute PlaceSaladPlate
-execute PlaceSoupBowl
-execute Demonstration / "PlaceDishes" / ""
+task Demonstration
+task PlaceSpoon
+task PlaceFork
+task PlaceKnife
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
 
-execute PlaceSpoon
-execute PlaceFork
-execute PlaceKnife
-execute Demonstration / "PlaceSilverWare" / ""
+task Demonstration
+task PlaceDinnerPlate
+task PlaceSaladPlate
+task PlaceSoupBowl
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
 
-execute PlaceWaterGlass
-execute PlaceWineGlass
-execute Demonstration / "PlaceGlasses" / ""
+task Demonstration
+task PlaceWaterGlass
+task PlaceWineGlass
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")
 
-execute PlaceDishes
-execute PlaceSilverWare
-execute PlaceGlasses
-execute Demonstration / "SetTable" / ""
+task Demonstration
+task PlaceDishes
+task PlaceSilverware
+task PlaceGlasses
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"SetTable")
 
-execute PlaceDinnerPlate
-execute Demonstration / "PlaceDishes" / "isFancy"
+task Demonstration
+task PlaceDinnerPlate
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
 
-execute PlaceSpoon
-execute PlaceFork
-execute Demonstration / "PlaceSilverWare" / "isFancy"
+task Demonstration
+task PlaceSpoon
+task PlaceFork
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
 
-execute PlaceWaterGlass
-execute Demonstration / "PlaceGlasses" / "isFancy"
+task Demonstration
+task PlaceWaterGlass
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")

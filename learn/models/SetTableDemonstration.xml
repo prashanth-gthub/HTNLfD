@@ -25,12 +25,6 @@
 		<script> println("Placing Wine Glass"); </script>	
 	</task>
 	
-	<task id="Demonstration">  
-		<input name="name" type="string"/>
-		<input name="inputName" type="string"/>
-		<script>
-				Packages.edu.wpi.htnlfd.Init.demonstrationTask($disco,$this.name,$this.inputName);		
-		</script>	
-	</task>
+	<task id="Demonstration"/>
 
 </taskModel>

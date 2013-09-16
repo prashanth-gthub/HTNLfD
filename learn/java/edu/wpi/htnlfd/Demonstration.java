@@ -28,7 +28,6 @@ public class Demonstration {
          builder = factory.newDocumentBuilder();
          document = builder.newDocument();
       } catch (ParserConfigurationException e) {
-         e.printStackTrace();
          throw new RuntimeException(
                "An error occured while creating the document builder", e);
       }
@@ -41,26 +40,22 @@ public class Demonstration {
    public List<Task> findDemonstration (Disco disco, String taskName) {
       List<Task> demonstratedTasks = new ArrayList<Task>();
       Segment parent = disco.getSegment();
-
-      int start = 0;
-      int end = parent.getChildren().size() - 1;
-      for (int i = parent.getChildren().size() - 1; i >= 0; i--) {
+      for (int i=parent.getChildren().size()-1;i>=0;i--) {
          Object child = parent.getChildren().get(i);
          if ( (child instanceof Task) ) {
             Task task = (Task) child;
-            if ( task.getType().getId().compareTo("Demonstration") == 0 ) {
-               start = i + 1;
-               break;
+            //if(task.getType().getId())
+              //break;
+            if(task instanceof Utterance)
+               if(((Utterance)task).getSlotValueToString("goal").contains("Demonstration")){
+                  break;
             }
          }
-      }
-      for (int i = start; i < end; i++) {
-         Object child = parent.getChildren().get(i);
-         if ( (child instanceof Task) ) {
-            Task task = (Task) child;
-            if ( !(task instanceof Utterance) ) {
-               demonstratedTasks.add(task);
-            }
+         else if(child instanceof Segment){
+            Segment segment = (Segment) child;
+            if(segment.getPurpose().getType().getId().equals("Demonstration"))
+               break;
+            demonstratedTasks.add(segment.getPurpose());         
          }
       }
 
@@ -93,7 +88,6 @@ public class Demonstration {
          transformer.transform(domSource, streamResult);
 
       } catch (Exception e) {
-         e.printStackTrace();
          throw new RuntimeException(
                "An error occured while writing to the xml file", e);
       }
