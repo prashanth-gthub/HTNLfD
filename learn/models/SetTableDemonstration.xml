@@ -1,30 +1,38 @@
 <taskModel about="urn:disco.wpi.edu:htnlfd:std" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
 
-	<task id="PlaceDinnerPlate">  
-		<script> println("Placing Dinner Plate"); </script>	
-	</task>
-	<task id="PlaceSaladPlate">  
-		<script> println("Placing Salad Plate"); </script>	
-	</task>
-	<task id="PlaceSoupBowl">  
-		<script> println("Placing Soup Bowl"); </script>	
-	</task>
-	<task id="PlaceSpoon">  
-		<script> println("Placing Spoon"); </script>	
-	</task>
-	<task id="PlaceFork">  
-		<script> println("Placing Fork"); </script>	
-	</task>
-	<task id="PlaceKnife">  
-		<script> println("Placing Knife"); </script>	
-	</task>
-	<task id="PlaceWaterGlass">  
-		<script> println("Placing Water Glass"); </script>	
-	</task>
-	<task id="PlaceWineGlass">  
-		<script> println("Placing Wine Glass"); </script>	
+	<task id="Place"> 
+		<input name="referenceFrame" type="Object"/>
+		<input name="object" type="Object"/>		
+		<binding slot="$this.external" value="false"/>
+		<script> println("Placing"); </script>	
 	</task>
 	
+
 	<task id="Demonstration"/>
 
+	<script init="true">
+
+		// define Object class
+
+		function Object (name) {
+			this.name = name;
+		}
+
+		Object.prototype.toString = function () { return this.name; }
+		
+		Object.DinnerPlate = new Object("DinnerPlate");
+		Object.SaladPlate = new Object("SaladPlate");
+		Object.SoupBowl = new Object("SoupBowl");
+			
+		Object.Fork = new Object("Fork");
+		Object.Spoon = new Object("Spoon");
+		Object.Knife = new Object("Knife");
+			
+		Object.WaterGlass = new Object("WaterGlass");
+		Object.WineGlass = new Object("WineGlass");
+				
+		Object.SquareTable = new Object("SquareTable"); 		
+			
+	</script>
+	
 </taskModel>

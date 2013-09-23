@@ -82,7 +82,7 @@
 			<binding slot="$placeDinnerPlate.object" value="Object.DinnerPlate"/>
 			<binding slot="$placeSaladPlate.object" value="Object.SaladPlate"/>
 			<binding slot="$placeSoupBowl.object" value="Object.SoupBowl"/>
-			<binding slot="$placeDinnerPlate.refrenceFrame" value="Table.SquareTable"/> <!-- -->
+			<binding slot="$placeDinnerPlate.refrenceFrame" value="Table.SquareTable"/> 
 			<binding slot="$placeSaladPlate.refrenceFrame" value="Object.DinnerPlate"/>
 			<binding slot="$placeSoupBowl.refrenceFrame" value="Object.SaladPlate"/>
 		</subtasks>
@@ -92,7 +92,7 @@
 			
 			<binding slot="$placeDinnerPlate.location" value="$this.location"/>
 			<binding slot="$placeDinnerPlate.object" value="Object.DinnerPlate"/>
-			<binding slot="$placeDinnerPlate.refrenceFrame" value="Table.SquareTable"/> <!-- -->
+			<binding slot="$placeDinnerPlate.refrenceFrame" value="Table.SquareTable"/> 
 		</subtasks>
 		
 	</task>

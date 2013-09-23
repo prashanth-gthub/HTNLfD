@@ -1,5 +1,6 @@
 package edu.wpi.htnlfd;
 
+import org.w3c.dom.Element;
 import java.io.IOException;
 import java.util.*;
 import edu.wpi.cetask.*;
@@ -20,16 +21,17 @@ public class Init {
 
       if ( demonstration == null ) {
          demonstration = new Demonstration();
-         demonstration.addDependentLibaries(System.getProperty("user.dir")
-            + separator + "SetTableDemonstration.xml");
       }
-      
+
       String fileName = System.getProperty("user.dir") + separator + filename
-            + ".xml";
+         + ".xml";
       List<Task> tasks = demonstration.findDemonstration(disco, taskName);
-      demonstration.writeDOM(fileName, taskName, tasks, "isFancy");
-      //demonstration.resetDisco(disco);
+
+      demonstration.writeDOM(fileName, taskName, tasks, "input1");
+      // demonstration.resetDisco(disco);
+      demonstration.partialOrderring(tasks, taskName);
       demonstration.readDOM(disco, fileName);
+
    }
-   
+
 }
