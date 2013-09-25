@@ -1,0 +1,119 @@
+<taskModel xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext" xmlns:std="urn:disco.wpi.edu:htnlfd:std" about="urn:disco.wpi.edu:htnlfd:setTable1">
+  <task id="PlaceSilverware">
+    <input name="input1" type="boolean"/>
+    <input name="object3" type="PhysObj"/>
+    <input name="object2" type="PhysObj"/>
+    <input name="object1" type="PhysObj"/>
+    <input name="referenceFrame1" type="PhysObj"/>
+    <subtasks id="placeSilverware1">
+      <step name="place1" task="std:Place"/>
+      <step name="place2" task="std:Place"/>
+      <step name="place3" task="std:Place"/>
+      <applicable>$this.input1</applicable>
+      <binding slot="$place3.referenceFrame" value="$this.referenceFrame1"/>
+      <binding slot="$place1.referenceFrame" value="$this.referenceFrame1"/>
+      <binding slot="$place1.object" value="$this.object2"/>
+      <binding slot="$place2.referenceFrame" value="$this.referenceFrame1"/>
+      <binding slot="$place3.object" value="$this.object1"/>
+      <binding slot="$place2.object" value="$this.object3"/>
+    </subtasks>
+    <subtasks id="placeSilverware3">
+      <step name="place1" task="std:Place"/>
+      <step name="place2" task="std:Place"/>
+      <applicable>!$this.input1</applicable>
+      <binding slot="$place1.referenceFrame" value="$this.referenceFrame1"/>
+      <binding slot="$place1.object" value="$this.object2"/>
+      <binding slot="$place2.referenceFrame" value="$this.referenceFrame1"/>
+      <binding slot="$place2.object" value="$this.object3"/>
+    </subtasks>
+  </task>
+  <task id="SetTable">
+    <input name="object32" type="PhysObj"/>
+    <input name="object23" type="PhysObj"/>
+    <input name="object31" type="PhysObj"/>
+    <input name="object22" type="PhysObj"/>
+    <input name="referenceFrame21" type="PhysObj"/>
+    <input name="object13" type="PhysObj"/>
+    <input name="object12" type="PhysObj"/>
+    <input name="object21" type="PhysObj"/>
+    <input name="object11" type="PhysObj"/>
+    <input name="referenceFrame11" type="PhysObj"/>
+    <subtasks id="setTable1">
+      <step name="placeDishes1" task="PlaceDishes"/>
+      <step name="placeSilverware1" task="PlaceSilverware"/>
+      <step name="placeGlasses1" task="PlaceGlasses"/>
+      <binding slot="$placeGlasses1.object1" value="$this.object12"/>
+      <binding slot="$placeGlasses1.object2" value="$this.object23"/>
+      <binding slot="$placeGlasses1.referenceFrame1" value="$this.referenceFrame11"/>
+      <binding slot="$placeSilverware1.object2" value="$this.object22"/>
+      <binding slot="$placeSilverware1.object1" value="$this.object13"/>
+      <binding slot="$placeSilverware1.object3" value="$this.object32"/>
+      <binding slot="$this.object22" value="PhysObj.Spoon"/>
+      <binding slot="$placeSilverware1.referenceFrame1" value="$this.referenceFrame11"/>
+      <binding slot="$this.object21" value="PhysObj.SoupBowl"/>
+      <binding slot="$this.referenceFrame21" value="PhysObj.SquareTable"/>
+      <binding slot="$placeDishes1.referenceFrame2" value="$this.referenceFrame21"/>
+      <binding slot="$this.object11" value="PhysObj.DinnerPlate"/>
+      <binding slot="$placeDishes1.object3" value="$this.object31"/>
+      <binding slot="$placeDishes1.object1" value="$this.object11"/>
+      <binding slot="$this.referenceFrame11" value="PhysObj.DinnerPlate"/>
+      <binding slot="$this.object13" value="PhysObj.Knife"/>
+      <binding slot="$placeDishes1.object2" value="$this.object21"/>
+      <binding slot="$this.object12" value="PhysObj.WineGlass"/>
+      <binding slot="$this.object23" value="PhysObj.WaterGlass"/>
+      <binding slot="$placeDishes1.referenceFrame1" value="$this.referenceFrame11"/>
+      <binding slot="$this.object31" value="PhysObj.SaladPlate"/>
+      <binding slot="$this.object32" value="PhysObj.Fork"/>
+    </subtasks>
+  </task>
+  <task id="PlaceGlasses">
+    <input name="input1" type="boolean"/>
+    <input name="object2" type="PhysObj"/>
+    <input name="object1" type="PhysObj"/>
+    <input name="referenceFrame1" type="PhysObj"/>
+    <subtasks id="placeGlasses1">
+      <step name="place1" task="std:Place"/>
+      <step name="place2" task="std:Place"/>
+      <applicable>$this.input1</applicable>
+      <binding slot="$place1.referenceFrame" value="$this.referenceFrame1"/>
+      <binding slot="$place1.object" value="$this.object2"/>
+      <binding slot="$place2.referenceFrame" value="$this.referenceFrame1"/>
+      <binding slot="$place2.object" value="$this.object1"/>
+    </subtasks>
+    <subtasks id="placeGlasses3">
+      <step name="place1" task="std:Place"/>
+      <applicable>!$this.input1</applicable>
+      <binding slot="$place1.referenceFrame" value="$this.referenceFrame1"/>
+      <binding slot="$place1.object" value="$this.object2"/>
+    </subtasks>
+  </task>
+  <task id="PlaceDishes">
+    <input name="input1" type="boolean"/>
+    <input name="object3" type="PhysObj"/>
+    <input name="referenceFrame2" type="PhysObj"/>
+    <input name="object2" type="PhysObj"/>
+    <input name="referenceFrame1" type="PhysObj"/>
+    <input name="object1" type="PhysObj"/>
+    <subtasks id="placeDishes1">
+      <step name="place1" task="std:Place"/>
+      <step name="place2" task="std:Place"/>
+      <step name="place3" task="std:Place"/>
+      <applicable>$this.input1</applicable>
+      <binding slot="$place1.referenceFrame" value="$this.referenceFrame2"/>
+      <binding slot="$place3.referenceFrame" value="$this.referenceFrame1"/>
+      <binding slot="$place1.object" value="$this.object1"/>
+      <binding slot="$place2.referenceFrame" value="$this.referenceFrame1"/>
+      <binding slot="$place3.object" value="$this.object2"/>
+      <binding slot="$place2.object" value="$this.object3"/>
+    </subtasks>
+    <subtasks id="placeDishes3">
+      <step name="place1" task="std:Place"/>
+      <step name="place2" task="std:Place"/>
+      <applicable>!$this.input1</applicable>
+      <binding slot="$place1.referenceFrame" value="$this.referenceFrame2"/>
+      <binding slot="$place1.object" value="$this.object1"/>
+      <binding slot="$place2.referenceFrame" value="$this.referenceFrame1"/>
+      <binding slot="$place2.object" value="$this.object2"/>
+    </subtasks>
+  </task>
+</taskModel>

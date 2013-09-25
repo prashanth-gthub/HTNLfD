@@ -20,7 +20,9 @@
 		}
 
 		PhysObj.prototype.toString = function () { return this.name; }
-		PhysObj.prototype.find = function () { return "PhysObj."+this.name; }
+		function find (obj) { 
+			return "PhysObj."+obj.name; 
+		}
 		
 		PhysObj.DinnerPlate = new PhysObj("DinnerPlate");
 		PhysObj.SaladPlate = new PhysObj("SaladPlate");
