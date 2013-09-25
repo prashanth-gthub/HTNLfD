@@ -14,7 +14,7 @@ public class Init {
       System.out.println("YUHU");
    }
 
-   public static void learn (Disco disco, String taskName) throws IOException {
+   public static void learn (Disco disco, String taskName) throws Exception {
 
       String separator = System.getProperty("file.separator");
       String filename = "SetTable1";
@@ -27,9 +27,10 @@ public class Init {
          + ".xml";
       List<Task> tasks = demonstration.findDemonstration(disco, taskName);
 
-      demonstration.writeDOM(fileName, taskName, tasks, "input1");
+      demonstration.writeDOM(disco,fileName, taskName, tasks, "input1");
       // demonstration.resetDisco(disco);
-      demonstration.partialOrderring(tasks, taskName);
+      //demonstration.partialOrderring(tasks, taskName);
+      //demonstration.findParentsOfTasks();
       demonstration.readDOM(disco, fileName);
 
    }

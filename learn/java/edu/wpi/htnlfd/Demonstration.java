@@ -12,6 +12,7 @@ import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.script.*;
 
 public class Demonstration {
 
@@ -31,7 +32,9 @@ public class Demonstration {
 
    private final String namespacePrefix;
 
-   private Map<String, ArrayList<String>> OrderedTasks = new HashMap<String, ArrayList<String>>();
+   private ArrayList<String[]> OrderedTasks = new ArrayList<String[]>();
+
+   private TaskClass recipeTaskClass = null;
 
    public Demonstration () {
       factory = DocumentBuilderFactory.newInstance();
@@ -50,6 +53,7 @@ public class Demonstration {
 
    public List<Task> findDemonstration (Disco disco, String taskName) {
       List<Task> demonstratedTasks = new ArrayList<Task>();
+      List<Task> demonstratedTasksReversed = new ArrayList<Task>();
       Object parent = (disco.getStack().get(0).getChildren().get(disco
             .getStack().get(0).getChildren().size() - 1));
       if ( parent instanceof Segment ) {
@@ -65,15 +69,19 @@ public class Demonstration {
                demonstratedTasks.add(segment.getPurpose());
             }
          }
-
-         return demonstratedTasks;
+         
+         for(int i=demonstratedTasks.size()-1;i>=0;i--){
+            Task myTask = demonstratedTasks.get(i);
+            demonstratedTasksReversed.add(myTask);
+         }
+         return demonstratedTasksReversed;
       } else {
          return null;
       }
    }
 
-   public void writeDOM (String fileName, String taskName, List<Task> steps,
-         String input) throws IOException {
+   public void writeDOM (Disco disco, String fileName, String taskName,
+         List<Task> steps, String input) throws Exception {
 
       // Writing document into xml file
       document = builder.newDocument();
@@ -89,7 +97,7 @@ public class Demonstration {
          TransformerFactory tf = TransformerFactory.newInstance();
          Transformer transformer = tf.newTransformer();
 
-         buildDOM(taskName, steps, input);
+         buildDOM(disco, taskName, steps, input);
 
          // Adding indentation and omitting xml declaration
          transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -99,8 +107,8 @@ public class Demonstration {
          transformer.transform(domSource, streamResult);
 
       } catch (Exception e) {
-         throw new RuntimeException(
-               "An error occured while writing to the xml file", e);
+         
+         throw e;
       }
 
    }
@@ -109,12 +117,14 @@ public class Demonstration {
       taskModel = disco.getInteraction().load(fileName);
    }
 
-   private void buildDOM (String taskName, List<Task> steps, String input) {
+   private void buildDOM (Disco disco, String taskName, List<Task> steps,
+         String input) throws NoSuchMethodException, ScriptException {
 
       Element taskModelElement = null;
 
       taskModelElement = document.createElementNS(xmlnsValue, "taskModel");
       document.appendChild(taskModelElement);
+
       Attr about = document.createAttribute("about");
       about.setValue(namespace);
       taskModelElement.setAttributeNode(about);
@@ -126,8 +136,8 @@ public class Demonstration {
       List<String> namespaces = new ArrayList<String>();
 
       if ( this.taskModel != null ) {
-         recipe = learnedTaskmodelToDom(namespaces, taskName, taskModelElement,
-               input);
+         recipe = learnedTaskmodelToDom(namespaces, taskName, steps,
+               taskModelElement, input);
       }
       Element taskElement = null;
 
@@ -151,8 +161,8 @@ public class Demonstration {
 
       }
 
-      demonstratedTaskToDom(taskElement, taskName, steps, namespaces, recipe,
-            input);
+      demonstratedTaskToDom(disco, taskElement, taskName, steps, namespaces,
+            recipe, input);
 
       for (String namespaceOfTasks : namespaces) {
 
@@ -167,21 +177,32 @@ public class Demonstration {
 
    }
 
-   public void demonstratedTaskToDom (Element taskElement, String taskName,
-         List<Task> steps, List<String> namespaces, Element recipe, String input) {
+   public void demonstratedTaskToDom (Disco disco, Element taskElement,
+         String taskName, List<Task> steps, List<String> namespaces,
+         Element recipe, String input) throws NoSuchMethodException, ScriptException {
 
       Element subtasks = document.createElementNS(xmlnsValue, "subtasks");
       taskElement.appendChild(subtasks);
       Attr idSubtask = document.createAttribute("id");
+      int countSubtask = 0;
+      NodeList nodes = taskElement.getChildNodes();
+      for (int i = 0; i < nodes.getLength(); i++) {
+         if ( nodes.item(i).getNodeName().equals("subtasks") )
+            countSubtask++;
+      }
       subtasks.setAttributeNode(idSubtask);
-      int countSubtask = taskElement.getChildNodes().getLength() == 1 ? 1
-         : taskElement.getChildNodes().getLength() - 1;
+      countSubtask = taskElement.getChildNodes().getLength() == 1 ? 1
+         : countSubtask + 1;
       idSubtask.setValue(Character.toLowerCase(taskName.charAt(0))
          + (taskName.length() > 1 ? taskName.substring(1) : "") + countSubtask);
       Map<String, Integer> StepNames = new HashMap<String, Integer>();
-      ArrayList<Element> bindings = new ArrayList<Element>();
+      Map<String, String> bindings = new HashMap<String, String>();
+
+      Map<String, List<String[]>> inputs = new HashMap<String, List<String[]>>();
+      List<String> inputsNumbers = new ArrayList<String>();
 
       for (Task step : steps) {
+         
          String stepName = step.getType().getId();
          int count = 1;
          Map.Entry<String, Integer> stepEntry = null;
@@ -228,46 +249,279 @@ public class Demonstration {
          // ///////////////////////////////////////////////
 
          for (String inputName : step.getType().getDeclaredInputNames()) {
-            Element subtaskBinding = document.createElementNS(xmlnsValue,
-                  "binding");
-            // subtasks.appendChild(subtaskBinding);
-            Attr bindingSlot = document.createAttribute("slot");
 
-            bindingSlot.setValue("$" + stepStrValue + "." + inputName);
-            subtaskBinding.setAttributeNode(bindingSlot);
+            String bindingSlotvalue = "$" + stepStrValue + "." + inputName;
 
-            Attr bindingValue = document.createAttribute("value");
-            String temp2 = step.getSlotValueToString(inputName);
-           
-            String inputBindingValue = step.getType().getSlotType(inputName)
-               + "." + temp2;
+             
+            //String temp2 = step.getSlotValueToString(inputName);
+            
+            Object inputBinding = 
+                  (((Invocable) disco.getScriptEngine()).invokeFunction("find",
+                  step.getSlotValue(inputName)));
 
-            bindingValue.setValue(inputBindingValue);
-            subtaskBinding.setAttributeNode(bindingValue);
+            String inputBindingValue = (String) inputBinding;
+            
+            if ( inputs.get(inputBindingValue) != null ) {
+               boolean contain = false;
+               for (String[] str : inputs.get(inputBindingValue)) {
+                  if ( str[0].contains(inputName) ) {
+                     contain = true;
+                     break;
+                  }
+               }
+               if ( !contain ) {
+                  String[] nameType = new String[2];
+                  nameType[0] = inputName;
+                  nameType[1] = step.getType().getSlotType(inputName);
+                  inputs.get(inputBindingValue).add(nameType);
+                  System.out.println(inputBindingValue + " " + nameType[0]);
+               }
 
-            bindings.add(subtaskBinding);
+            } else {
+               String[] nameType = new String[2];
+               List<String[]> name = new ArrayList<String[]>();
+               nameType[0] = inputName;
+               nameType[1] = step.getType().getSlotType(inputName);
+               name.add(nameType);
+               inputs.put(inputBindingValue, name);
+               System.out.println(inputBindingValue + " " + nameType[0]);
+            }
+
+            bindings.put(bindingSlotvalue, inputBindingValue);
+         }
+
+         if ( recipe != null ) {
+
          }
 
       }
+
       if ( recipe != null ) {
          taskElement = recipe;
          Element applicable = document
                .createElementNS(xmlnsValue, "applicable");
          applicable.setTextContent("!$this." + input);
          subtasks.appendChild(applicable);
+
+         for (Entry<String, List<String[]>> inputEntry : inputs.entrySet()) {
+            for (String[] inputListName : inputEntry.getValue()) {
+               for (String ins : recipeTaskClass.getDeclaredInputNames()) {
+                  boolean change = false;
+                  if ( recipeTaskClass.getSlotType(ins)
+                        .equals(inputListName[1])
+                     && ins.contains(inputListName[0]) ) {
+                     String findParent = findValueOfInput(ins,
+                           recipeTaskClass.getId());
+                     if ( findParent != null
+                        && findParent.equals(inputEntry.getKey()) ) {
+                        inputListName[0] = ins;
+                        change = true;
+                        System.out.println("---" + inputEntry.getKey() + " "
+                           + ins);
+                     }
+
+                     // if we cannot find the value in it's parents, it may be
+                     // in it's siblings
+                     if ( !change ) {
+
+                        List<DecompositionClass> decompositions = recipeTaskClass
+                              .getDecompositions();
+                        for (DecompositionClass subtaskDecomposition : decompositions) {
+
+                           boolean breaking = false;
+
+                           Collection<Entry<String, Binding>> bindingsSubtask = subtaskDecomposition
+                                 .getBindings().entrySet();
+                           for (Entry<String, Binding> binding : bindingsSubtask) {
+
+                              if ( binding.getKey().equals("$this." + ins) ) {
+
+                                 if ( binding.getValue().value
+                                       .equals(inputEntry.getKey()) ) {
+                                    inputListName[0] = ins;
+                                    System.out
+                                          .println("---" + inputListName[0]);
+                                 }
+
+                              }
+
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }
+
       }
-      for (Element binding : bindings) {
-         subtasks.appendChild(binding);
+
+      for (Entry<String, List<String[]>> inputEntry : inputs.entrySet()) {
+         for (String[] inputListName : inputEntry.getValue()) {
+            System.out.println("- " + inputEntry.getKey() + " "
+               + inputListName[0] + " " + inputListName[1]);
+         }
+      }
+      // taskElement.appendChild();
+      if ( recipe == null ) {
+         for (Entry<String, List<String[]>> inputEntry : inputs.entrySet()) {
+            for (String[] inputListName : inputEntry.getValue()) {
+
+               Element inputTask = document
+                     .createElementNS(xmlnsValue, "input");
+               taskElement.insertBefore(inputTask, taskElement.getFirstChild());
+               Attr inputName = document.createAttribute("name");
+               boolean contain = false;
+               for (String str : inputsNumbers) {
+                  if ( str.contains(inputListName[0] + "1") ) {
+                     contain = true;
+                     break;
+                  }
+               }
+               if ( !contain ) {
+                  if ( recipe != null ) {
+                     ;
+                  } else {
+                     inputName.setValue(inputListName[0] + "1");
+                     inputsNumbers.add(inputListName[0] + "1");
+                     inputListName[0] = inputListName[0] + "1";
+                  }
+               } else {
+                  for (int i = inputsNumbers.size() - 1; i >= 0; i--) {
+                     if ( inputsNumbers.get(i).contains(inputListName[0]) ) {
+                        int start = inputsNumbers.get(i).lastIndexOf(
+                              inputsNumbers.get(i))
+                           + inputsNumbers.get(i).length() - 1;
+                        int end = inputsNumbers.get(i).length();
+                        String number = inputsNumbers.get(i).substring(start,
+                              end);
+                        int num = Integer.parseInt(number);
+                        num++;
+                        inputsNumbers.add(inputListName[0] + num);
+                        inputName.setValue(inputListName[0] + num);
+                        inputListName[0] = inputListName[0] + num;
+                        break;
+                     }
+                  }
+               }
+               inputTask.setAttributeNode(inputName);
+               Attr inputType = document.createAttribute("type");
+               inputType.setValue(inputListName[1]);
+               inputTask.setAttributeNode(inputType);
+            }
+
+         }
+
+         for (Entry<String, List<String[]>> inputEntry : inputs.entrySet()) {
+            for (String[] inputListName : inputEntry.getValue()) {
+
+               Element subtaskBinding = document.createElementNS(xmlnsValue,
+                     "binding");
+               // subtasks.appendChild(subtaskBinding);
+               Attr bindingSlot = document.createAttribute("slot");
+               bindingSlot.setValue("$this." + inputListName[0]);
+               subtaskBinding.setAttributeNode(bindingSlot);
+
+               Attr bindingValue = document.createAttribute("value");
+
+               bindingValue.setValue(inputEntry.getKey());
+               subtaskBinding.setAttributeNode(bindingValue);
+
+               subtasks.appendChild(subtaskBinding);
+
+            }
+         }
+      }
+      for (Entry<String, String> binding : bindings.entrySet()) {
+
+         for (Entry<String, List<String[]>> inputEntry : inputs.entrySet()) {
+            for (String[] inputListName : inputEntry.getValue()) {
+
+               // System.out.println(binding.getValue() + ": "+
+               // inputEntry.getKey());
+               // System.out.println(binding.getKey() + ": "
+               // +inputListName[0].replaceAll("[0-9]*$", ""));
+
+               if ( inputEntry.getKey().equals(binding.getValue())
+                  && binding.getKey().endsWith(
+                        inputListName[0].replaceAll("[0-9]$", "")) ) {
+                  Element subtaskBinding = document.createElementNS(xmlnsValue,
+                        "binding");
+                  // subtasks.appendChild(subtaskBinding);
+                  Attr bindingSlot = document.createAttribute("slot");
+                  bindingSlot.setValue(binding.getKey());
+                  subtaskBinding.setAttributeNode(bindingSlot);
+
+                  Attr bindingValue = document.createAttribute("value");
+
+                  bindingValue.setValue("$this." + inputListName[0]);
+                  subtaskBinding.setAttributeNode(bindingValue);
+
+                  subtasks.appendChild(subtaskBinding);
+               }
+            }
+         }
+
       }
    }
 
+   private String findValueOfInput (String in, String parent) {
+
+      Iterator<TaskClass> tasksIterator = this.taskModel.getTaskClasses()
+            .iterator();
+      while (tasksIterator.hasNext()) {
+         TaskClass taskclass = tasksIterator.next();
+         List<DecompositionClass> decompositions = taskclass
+               .getDecompositions();
+         for (DecompositionClass subtaskDecomposition : decompositions) {
+
+            for (String stepName : subtaskDecomposition.getStepNames()) {
+
+               if ( subtaskDecomposition.getStepType(stepName).getId()
+                     .equals(parent) ) { // I should add namespace
+                  Collection<Entry<String, Binding>> bindingsSubtask = subtaskDecomposition
+                        .getBindings().entrySet();
+                  for (Entry<String, Binding> binding : bindingsSubtask) {
+
+                     if ( binding.getKey().contains(stepName)
+                        && binding.getKey().contains(in) ) {
+                        Collection<Entry<String, Binding>> bindingsSubtask2 = subtaskDecomposition
+                              .getBindings().entrySet();
+                        String val = binding.getValue().value;
+                        for (Entry<String, Binding> binding2 : bindingsSubtask2) {
+
+                           if ( binding2.getKey().contains(val) ) {
+                              if ( !binding2.getValue().value.contains("$this") ) {
+                                 return binding2.getValue().value;
+                              } else {
+                                 return findValueOfInput(val.substring(6),
+                                       subtaskDecomposition.getGoal().getId());
+                              }
+                           }
+
+                        }
+                        return findValueOfInput(val.substring(6),
+                              subtaskDecomposition.getGoal().getId());
+                     }
+
+                  }
+               }
+            }
+
+         }
+      }
+      return null;
+   }
+
    public Element learnedTaskmodelToDom (List<String> namespaces,
-         String taskName, Element taskModelElement, String input) {
+         String taskName, List<Task> steps, Element taskModelElement,
+         String input) {
 
       Element recipe = null;
       boolean recipeOccured = true;
       Iterator<TaskClass> tasksIterator = this.taskModel.getTaskClasses()
             .iterator();
+      ArrayList<Task> changedTasks = new ArrayList<Task>();
+
       while (tasksIterator.hasNext()) {
 
          TaskClass task = tasksIterator.next();
@@ -279,9 +533,18 @@ public class Demonstration {
          taskElement.setAttributeNode(idTask);
          if ( task.getId().equals(taskName) ) {
             recipe = taskElement;
+            recipeTaskClass = task;
          }
 
-         List<DecompositionClass> decompositions = task.getDecompositions();
+         boolean changedTask = false;
+         for (Task step : steps) {
+            String stepType = step.getType().getId();
+            if ( task.getId().equals(stepType) ) {
+               changedTasks.add(step);
+               changedTask = true;
+               break;
+            }
+         }
 
          for (String inputName : task.getDeclaredInputNames()) {
             Element inputTask = document.createElementNS(xmlnsValue, "input");
@@ -294,6 +557,18 @@ public class Demonstration {
             inputTask.setAttributeNode(inputType);
          }
 
+         for (String outputName : task.getDeclaredOutputNames()) {
+            Element inputTask = document.createElementNS(xmlnsValue, "output");
+            taskElement.appendChild(inputTask);
+            Attr inputNameAttr = document.createAttribute("name");
+            inputNameAttr.setValue(outputName);
+            inputTask.setAttributeNode(inputNameAttr);
+            Attr inputType = document.createAttribute("type");
+            inputType.setValue(task.getSlotType(outputName));
+            inputTask.setAttributeNode(inputType);
+         }
+
+         List<DecompositionClass> decompositions = task.getDecompositions();
          for (DecompositionClass subtaskDecomposition : decompositions) {
 
             Element subtasks = document.createElementNS(xmlnsValue, "subtasks");
@@ -360,13 +635,17 @@ public class Demonstration {
                Attr bindingSlot = document.createAttribute("slot");
 
                bindingSlot.setValue(binding.getKey());
+
                subtaskBinding.setAttributeNode(bindingSlot);
 
                Attr bindingValue = document.createAttribute("value");
-               bindingValue.setValue(binding.getValue().value);
-               subtaskBinding.setAttributeNode(bindingValue);
 
-               subtasks.appendChild(subtaskBinding);
+               bindingValue.setValue(binding.getValue().value);
+               // else
+               // bindingValue.setValue("$this."+);
+               subtaskBinding.setAttributeNode(bindingValue);
+               if ( changedTask == false || !binding.getKey().contains("this") )
+                  subtasks.appendChild(subtaskBinding);
             }
 
             subtasks.setAttributeNode(idSubtask);
@@ -411,7 +690,7 @@ public class Demonstration {
                                     .contains(ReferenceFrame)) ) {
                               String valueOfTask = step
                                     .getSlotValueToString(inputName);
-                              
+
                               String typeOfTask = step.getType().getSlotType(
                                     inputName);
                               String bindingTask = typeOfTask + "."
@@ -419,16 +698,28 @@ public class Demonstration {
                               if ( bindingTask.equals(valueOfDec) ) {
                                  if ( nameOfDec.contains(ReferenceFrame) ) {
                                     System.out.println("------------ "
-                                       + subtaskDecomposition.getId()
-                                       + " is dependent on " + taskName);
+                                       + task.getId() + " is dependent on "
+                                       + taskName);
+                                    String[] order = new String[2];
+                                    order[0] = task.getId();
+                                    order[1] = taskName;
+                                    OrderedTasks.add(order);
+
                                  } else {
                                     System.out.println("------------ "
                                        + taskName + " is dependent on "
-                                       + subtaskDecomposition.getId());
+                                       + task.getId());
+
+                                    String[] order = new String[2];
+                                    order[0] = task.getId();
+                                    order[1] = taskName;
+                                    OrderedTasks.add(order);
                                  }
+
                               }
                            }
                         }
+
                      }
                }
             }
@@ -449,15 +740,17 @@ public class Demonstration {
                      || (!inputName1.contains(ReferenceFrame) && inputName2
                            .contains(ReferenceFrame)) ) {
                      // /////////////////////////////////////////
-                     String valueOfTask1 = step1.getSlotValueToString(inputName1);
-                     
+                     String valueOfTask1 = step1
+                           .getSlotValueToString(inputName1);
+
                      String typeOfTask1 = step1.getType().getSlotType(
                            inputName1);
                      String bindingTask1 = typeOfTask1 + "." + valueOfTask1;
                      // ////////////////////////////////////////
                      // /////////////////////////////////////////
-                     String valueOfTask2 = step2.getSlotValueToString(inputName2);
-                    
+                     String valueOfTask2 = step2
+                           .getSlotValueToString(inputName2);
+
                      String typeOfTask2 = step2.getType().getSlotType(
                            inputName2);
                      String bindingTask2 = typeOfTask2 + "." + valueOfTask2;
@@ -484,5 +777,50 @@ public class Demonstration {
 
       }
 
+   }
+
+   public void findParentsOfTasks () {
+
+      ArrayList<TaskClass> parent1 = new ArrayList<TaskClass>();
+      ArrayList<TaskClass> parent2 = new ArrayList<TaskClass>();
+
+      for (int i = 0; i < OrderedTasks.size(); i++) {
+         findParent(OrderedTasks.get(i)[0], parent1);
+         findParent(OrderedTasks.get(i)[1], parent2);
+      }
+
+      for (int i = 0; i < parent1.size(); i++) {
+         for (int j = 0; i < parent2.size(); j++) {
+            if ( parent1.get(i).getId().equals(parent2.get(j).getId()) ) {
+               System.out.println("... " + parent1.get(i).getId());
+            }
+         }
+      }
+
+   }
+
+   private int findParent (String task, ArrayList<TaskClass> parent) {
+
+      Iterator<TaskClass> tasksIterator = this.taskModel.getTaskClasses()
+            .iterator();
+      while (tasksIterator.hasNext()) {
+         TaskClass taskclass = tasksIterator.next();
+         List<DecompositionClass> decompositions = taskclass
+               .getDecompositions();
+         for (DecompositionClass subtaskDecomposition : decompositions) {
+            for (String stepName : subtaskDecomposition.getStepNames()) {
+
+               if ( subtaskDecomposition.getStepType(stepName).getId()
+                     .equals(task) ) { // I should add namespace
+                  parent.add(taskclass);
+
+                  findParent(taskclass.getId(), parent);
+                  return 0; // maybe exception
+               }
+            }
+
+         }
+      }
+      return 0;
    }
 }

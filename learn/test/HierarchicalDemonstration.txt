@@ -3,24 +3,26 @@ cd ..\models
 load SetTableDemonstration.xml
 
 task Demonstration
-task Place / Object.DinnerPlate / Object.Spoon 
-task Place / Object.DinnerPlate / Object.Fork
-task Place / Object.DinnerPlate / Object.Knife
+task Place / PhysObj.DinnerPlate / PhysObj.Spoon 
+task Place / PhysObj.DinnerPlate / PhysObj.Fork
+task Place / PhysObj.DinnerPlate / PhysObj.Knife
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
 
 task Demonstration
-task Place / Object.SquareTable / Object.DinnerPlate
-task Place / Object.DinnerPlate / Object.SaladPlate
-task Place / Object.DinnerPlate / Object.SoupBowl
+task Place / PhysObj.SquareTable / PhysObj.DinnerPlate
+task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate
+task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
 
 task Demonstration
-task Place / Object.DinnerPlate / Object.WaterGlass
-task Place / Object.DinnerPlate / Object.WineGlass
+task Place / PhysObj.DinnerPlate / PhysObj.WaterGlass
+task Place / PhysObj.DinnerPlate / PhysObj.WineGlass
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")
+
+
 
 task Demonstration
 task PlaceDishes
@@ -29,19 +31,21 @@ task PlaceGlasses
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"SetTable")
 
+
+
 task Demonstration
-task  Place / Object.SquareTable / Object.DinnerPlate
-task Place / Object.DinnerPlate / Object.SoupBowl
+task  Place / PhysObj.SquareTable / PhysObj.DinnerPlate
+task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
 
 task Demonstration
-task Place / Object.DinnerPlate / Object.Spoon 
-task Place / Object.DinnerPlate / Object.Fork
+task Place / PhysObj.DinnerPlate / PhysObj.Spoon 
+task Place / PhysObj.DinnerPlate / PhysObj.Fork
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
 
 task Demonstration
-task Place / Object.DinnerPlate / Object.WaterGlass
+task Place / PhysObj.DinnerPlate / PhysObj.WaterGlass
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")

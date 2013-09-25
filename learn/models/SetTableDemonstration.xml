@@ -1,10 +1,11 @@
 <taskModel about="urn:disco.wpi.edu:htnlfd:std" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
 
 	<task id="Place"> 
-		<input name="referenceFrame" type="Object"/>
-		<input name="object" type="Object"/>		
+		<input name="referenceFrame" type="PhysObj"/>
+		<input name="object" type="PhysObj" modified="newObject"/>		
+		<output name="newObject" type="PhysObj"/>
 		<binding slot="$this.external" value="false"/>
-		<script> println("Placing"); </script>	
+		<script> $this.newObject = $this.object; </script>	
 	</task>
 	
 
@@ -12,26 +13,29 @@
 
 	<script init="true">
 
-		// define Object class
+		// define PhysObj class
 
-		function Object (name) {
+		function PhysObj (name) {
 			this.name = name;
 		}
 
-		Object.prototype.toString = function () { return this.name; }
+		PhysObj.prototype.toString = function () { return this.name; }
+		PhysObj.prototype.find = function () { return "PhysObj."+this.name; }
 		
-		Object.DinnerPlate = new Object("DinnerPlate");
-		Object.SaladPlate = new Object("SaladPlate");
-		Object.SoupBowl = new Object("SoupBowl");
+		PhysObj.DinnerPlate = new PhysObj("DinnerPlate");
+		PhysObj.SaladPlate = new PhysObj("SaladPlate");
+		PhysObj.SoupBowl = new PhysObj("SoupBowl");
 			
-		Object.Fork = new Object("Fork");
-		Object.Spoon = new Object("Spoon");
-		Object.Knife = new Object("Knife");
+		PhysObj.Fork = new PhysObj("Fork");
+		PhysObj.Spoon = new PhysObj("Spoon");
+		PhysObj.Knife = new PhysObj("Knife");
 			
-		Object.WaterGlass = new Object("WaterGlass");
-		Object.WineGlass = new Object("WineGlass");
+		PhysObj.WaterGlass = new PhysObj("WaterGlass");
+		PhysObj.WineGlass = new PhysObj("WineGlass");
 				
-		Object.SquareTable = new Object("SquareTable"); 		
+		PhysObj.SquareTable = new PhysObj("SquareTable"); 
+			
+		
 			
 	</script>
 	

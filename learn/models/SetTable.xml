@@ -178,9 +178,10 @@
 
 	  
 	<task id="Place">  
-		<input name="object" type="Object"/>
+		<input name="object" type="Object" modified="newObject"/>
 		<input name="location" type="Location"/>	
 		<input name="referenceFrame" type="Object"/>
+		<output name="newObject" type="Object"/>
 			
 		<subtasks id="placing" ordered="true">
 			<step name="find" task="Find"/>
@@ -191,10 +192,12 @@
 			<binding slot="$find.object" value="$this.object"/>
 			<binding slot="$go.location" value="$this.location"/>
 			<binding slot="$put.location" value="$this.location"/>
-			<binding slot="$put.object" value="$find.object"/>
+			<binding slot="$go.object" value="$this.object"/>
+			<binding slot="$put.object" value="$go.newObject"/> <!-- -->
 			<binding slot="$pickup.location" value="$find.location"/>
-			<binding slot="$pickup.object" value="$find.object"/>
+			<binding slot="$pickup.object" value="$find.object"/>			
 			<binding slot="$put.referenceFrame" value="$this.referenceFrame"/>
+			<binding slot="$this.newObject" value="$go.newObject"/>
 					
 			<binding slot="$find.external" value="false"/>
 			<binding slot="$pickup.external" value="false"/>
@@ -216,7 +219,10 @@
 	</task>
 	  
 	<task id="GoToTable">  
-		<input name="location" type="Location"/> 	
+		<input name="location" type="Location"/>
+		<input name="object" type="Object" modified="newObject"/>
+		<output name="newObject" type="Object"/>
+		<script> $this.newObject = $this.object; </script>
 	</task>
 	  
 	<task id="PutOnTable">    
