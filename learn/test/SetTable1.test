@@ -1,0 +1,50 @@
+    # 26-Sep-2013 2:52:50 PM - TaskEngine 1.4.8 / Disco 1.6.10
+    Welcome to Disco! (Type 'help' for command list)
+  > cd ..\..\GitHub\HTNLfD\learn\test
+    D:\GitHub\HTNLfD\learn\test
+  > cd ..\models
+    D:\GitHub\HTNLfD\learn\models
+  > load SetTableDemonstration.xml
+  > 
+  > task Demonstration
+    User says "Let's achieve Demonstration."
+    Agent says "Ok."
+  > task Place / PhysObj.DinnerPlate / PhysObj.Spoon 
+    User says "Please execute Place on DinnerPlate and Spoon."
+    Agent execute Place on DinnerPlate and Spoon producing Spoon.
+    Agent says "Ok."
+  > task Place / PhysObj.DinnerPlate / PhysObj.Fork
+    User says "Please execute Place on DinnerPlate and Fork."
+    Agent execute Place on DinnerPlate and Fork producing Fork.
+    Agent says "Ok."
+  > task Place / PhysObj.DinnerPlate / PhysObj.Knife
+    User says "Please execute Place on DinnerPlate and Knife."
+    Agent execute Place on DinnerPlate and Knife producing Knife.
+    Agent says "Ok."
+  > done Demonstration
+    User says "Achieve Demonstration is done."
+    Agent says "Ok."
+  > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
+    # Returned 'null'
+  > 
+  > task Demonstration
+    User says "Let's achieve Demonstration."
+    Agent says "Ok."
+  > task Place / PhysObj.SquareTable / PhysObj.DinnerPlate
+    User says "Please execute Place on SquareTable and DinnerPlate."
+    Agent execute Place on SquareTable and DinnerPlate producing DinnerPlate.
+    Agent says "Ok."
+  > task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate
+    User says "Please execute Place on DinnerPlate and SaladPlate."
+    Agent execute Place on DinnerPlate and SaladPlate producing SaladPlate.
+    Agent says "Ok."
+  > task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl
+    User says "Please execute Place on DinnerPlate and SoupBowl."
+    Agent execute Place on DinnerPlate and SoupBowl producing SoupBowl.
+    Agent says "Ok."
+  > done Demonstration
+    User says "Achieve Demonstration is done."
+    Agent says "Ok."
+  > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
+    # Returned 'null'
+  > 

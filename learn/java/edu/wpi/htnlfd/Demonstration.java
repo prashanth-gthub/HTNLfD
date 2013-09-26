@@ -42,12 +42,15 @@ public class Demonstration {
       ArrayList<Task> steps = new ArrayList<Task>();
 
       ArrayList<String> inputs = new ArrayList<String>();
+      
+      ArrayList<String> stepNames = new ArrayList<String>();
 
-      public TempClass (String name, Task step, String input) {
+      public TempClass (String name, Task step, String input, String stepStrValue) {
 
          this.name = name;
          this.steps.add(step);
          this.inputs.add(input);
+         this.stepNames.add(stepStrValue);
       }
 
    }
@@ -219,7 +222,7 @@ public class Demonstration {
       ArrayList<TempClass> inputs = new ArrayList<TempClass>();
 
       List<String> inputsNumbers = new ArrayList<String>();
-      Map<String, String> outputs = new HashMap<String, String>();
+      Map<String, Task> outputs = new HashMap<String, Task>();
       List<String> outputNumbers = new ArrayList<String>();
       for (Task step : steps) {
 
@@ -297,12 +300,13 @@ public class Demonstration {
 
                   findInput.inputs.add(inputName);
                   findInput.steps.add(step);
+                  findInput.stepNames.add(stepStrValue);
                   // System.out.println(inputBindingValue + " " + nameType[0]);
                }
 
             } else {
 
-               inputs.add(new TempClass(inputBindingValue, step, inputName));
+               inputs.add(new TempClass(inputBindingValue, step, inputName, stepStrValue));
                // System.out.println(inputBindingValue + " " + nameType[0]);
             }
 
@@ -333,8 +337,7 @@ public class Demonstration {
                outputNumbers.add(outputName + "1");
                bindingSlotValue = outputName + "1";
             }
-            outputs.put(bindingSlotValue, step.getType()
-                  .getSlotType(outputName));
+            outputs.put(bindingSlotValue, step);
             bindingsOutputs.put("$this." + bindingSlotValue, bindingSlot);
          }
 
@@ -349,6 +352,34 @@ public class Demonstration {
          addNotRecipe(inputs, taskElement, inputsNumbers, outputs, subtasks);
          
       }
+      
+      for (TempClass inp : inputs){         
+         for(int h=0;h<inp.inputs.size();h++){
+            String inputRef = inp.inputs.get(h);
+            if(inputRef.contains(ReferenceFrame)){
+               for(int s=0;s<inp.inputs.size();s++){
+                  String inputDep = inp.inputs.get(s);
+                  String modified = inp.steps.get(s).getType().getModified(inputDep.replaceAll("[0-9]$", ""));
+                  if(!inputDep.contains(ReferenceFrame) && !inp.steps.get(s).equals(inp.steps.get(h)) && modified!=null){
+                     //System.out.println(inp.steps.get(s).getType().getId()+" "+inp.steps.get(h).getType().getId());
+                     Element orderStep = findNode(subtasks, "step","name",inp.stepNames.get(h));
+                     
+                        if(orderStep.getAttribute("requires")==null || orderStep.getAttribute("requires")==""){
+                           Attr requires = document.createAttribute("requires");
+                           requires.setValue(inp.stepNames.get(s));
+                           orderStep.setAttributeNode(requires);
+                        }
+                        else{
+                           orderStep.setAttribute("requires",orderStep.getAttribute("name")+" "+inp.stepNames.get(s) );
+                        }
+                     
+                     
+                  }
+               }
+            }
+         }
+      }
+      
       
       for (Entry<String, String> binding : bindingsInputs.entrySet()) {
 
@@ -405,7 +436,7 @@ public class Demonstration {
    }
 
    private void addNotRecipe (ArrayList<TempClass> inputs, Element taskElement,
-         List<String> inputsNumbers, Map<String, String> outputs,
+         List<String> inputsNumbers, Map<String, Task> outputs,
          Element subtasks) {
       for (TempClass inputEntry : inputs) {
          for (int m = 0; m < inputEntry.inputs.size(); m++) {
@@ -447,8 +478,22 @@ public class Demonstration {
             Attr inputType = document.createAttribute("type");
 
             inputType.setValue(inputEntry.steps.get(m).getType()
-                  .getSlotType(inputListName.replaceAll("[0-9]$", "")));
+                  .getSlotType(inputListName));
             inputTask.setAttributeNode(inputType);
+            
+            String modified = inputEntry.steps.get(m).getType().getModified(inputListName);
+            if(modified!=null && modified!=""){
+            for(Entry<String, Task> out:outputs.entrySet()){
+               if(out.getValue().equals(inputEntry.steps.get(m))){
+                  
+                     Attr modifiedAttr = document.createAttribute("modified");
+                     
+                     modifiedAttr.setValue(out.getKey());
+                     inputTask.setAttributeNode(modifiedAttr);
+                     
+                  }
+               }
+            }
          }
 
       }
@@ -459,14 +504,14 @@ public class Demonstration {
                .equals("subtasks") )
             endInput = (Element) taskElement.getChildNodes().item(i);
       }
-      for (Entry<String, String> out : outputs.entrySet()) {
+      for (Entry<String, Task> out : outputs.entrySet()) {
          Element outputTask = document.createElementNS(xmlnsValue, "output");
          taskElement.insertBefore(outputTask, endInput);
          Attr outputName = document.createAttribute("name");
          outputName.setValue(out.getKey());
          outputTask.setAttributeNode(outputName);
          Attr outputType = document.createAttribute("type");
-         outputType.setValue(out.getValue());
+         outputType.setValue(out.getValue().getType().getSlotType(out.getKey().replaceAll("[0-9]$", "")));
          outputTask.setAttributeNode(outputType);
       }
 
@@ -648,9 +693,10 @@ public class Demonstration {
             inputTask.setAttributeNode(inputType);
 
             String modified = task.getModified(inputName);
-            if ( modified != null ) {
+            //System.out.println("modified: "+modified);
+            if ( modified != null && modified!="" ) {
                Attr modifiedAttr = document.createAttribute("modified");
-               inputNameAttr.setValue(modified);
+               modifiedAttr.setValue(modified);
                inputTask.setAttributeNode(modifiedAttr);
             }
          }
@@ -754,171 +800,21 @@ public class Demonstration {
       }
       return recipe;
    }
-
-   public void partialOrderring (List<Task> tasks, String taskName) {
-      if ( this.taskModel != null ) {
-         Iterator<TaskClass> tasksIterator = this.taskModel.getTaskClasses()
-               .iterator();
-         // Checking each task with all other tasks
-         while (tasksIterator.hasNext()) {
-            TaskClass task = tasksIterator.next();
-            List<DecompositionClass> decompositions = task.getDecompositions();
-            for (DecompositionClass subtaskDecomposition : decompositions) {
-
-               Collection<Entry<String, Binding>> bindingsSubtask = subtaskDecomposition
-                     .getBindings().entrySet();
-
-               for (Entry<String, Binding> binding : bindingsSubtask) {
-
-                  String nameOfDec = binding.getKey();
-                  String valueOfDec = binding.getValue().value;
-                  String typeOfDec = binding.getValue().slot;
-                  if ( (nameOfDec != null || nameOfDec != "")
-                     && (typeOfDec != null || typeOfDec != "")
-                     && (valueOfDec != null || valueOfDec != "") )
-
-                     for (Task step : tasks) {
-
-                        for (String inputName : step.getType()
-                              .getDeclaredInputNames()) {
-
-                           if ( (nameOfDec.contains(ReferenceFrame) && !inputName
-                                 .contains(ReferenceFrame))
-                              || (!nameOfDec.contains(ReferenceFrame) && inputName
-                                    .contains(ReferenceFrame)) ) {
-                              String valueOfTask = step
-                                    .getSlotValueToString(inputName);
-
-                              String typeOfTask = step.getType().getSlotType(
-                                    inputName);
-                              String bindingTask = typeOfTask + "."
-                                 + valueOfTask;
-                              if ( bindingTask.equals(valueOfDec) ) {
-                                 if ( nameOfDec.contains(ReferenceFrame) ) {
-                                    System.out.println("------------ "
-                                       + task.getId() + " is dependent on "
-                                       + taskName);
-                                    String[] order = new String[2];
-                                    order[0] = task.getId();
-                                    order[1] = taskName;
-                                    OrderedTasks.add(order);
-
-                                 } else {
-                                    System.out.println("------------ "
-                                       + taskName + " is dependent on "
-                                       + task.getId());
-
-                                    String[] order = new String[2];
-                                    order[0] = task.getId();
-                                    order[1] = taskName;
-                                    OrderedTasks.add(order);
-                                 }
-
-                              }
-                           }
-                        }
-
-                     }
-               }
+   
+   private Element findNode(Element parent, String nodeName, String name, String value){
+      for(int i=0;i<parent.getChildNodes().getLength();i++){
+         Element child = (Element) parent.getChildNodes().item(i);
+      
+         if(child.getNodeName().equals(nodeName)){
+            String attrVal = child.getAttribute(name);
+            if(value.equals(attrVal)){
+               return child;
             }
          }
       }
-
-      // Checking each step with all other steps
-
-      for (int i = 0; i < tasks.size(); i++) {
-         Task step1 = tasks.get(i);
-         for (int j = i + 1; j < tasks.size(); j++) {
-            Task step2 = tasks.get(j);
-            for (String inputName1 : step1.getType().getDeclaredInputNames()) {
-               for (String inputName2 : step2.getType().getDeclaredInputNames()) {
-                  // System.out.println("names: "+inputName1+" "+inputName2);
-                  if ( (inputName1.contains(ReferenceFrame) && !inputName2
-                        .contains(ReferenceFrame))
-                     || (!inputName1.contains(ReferenceFrame) && inputName2
-                           .contains(ReferenceFrame)) ) {
-                     // /////////////////////////////////////////
-                     String valueOfTask1 = step1
-                           .getSlotValueToString(inputName1);
-
-                     String typeOfTask1 = step1.getType().getSlotType(
-                           inputName1);
-                     String bindingTask1 = typeOfTask1 + "." + valueOfTask1;
-                     // ////////////////////////////////////////
-                     // /////////////////////////////////////////
-                     String valueOfTask2 = step2
-                           .getSlotValueToString(inputName2);
-
-                     String typeOfTask2 = step2.getType().getSlotType(
-                           inputName2);
-                     String bindingTask2 = typeOfTask2 + "." + valueOfTask2;
-                     // ////////////////////////////////////////
-                     // System.out.println("input values: "+bindingTask1+" "+bindingTask2);
-
-                     if ( bindingTask1.equals(bindingTask2) ) {
-                        if ( bindingTask1.contains(ReferenceFrame) ) {
-                           System.out.println("------------ "
-                              + step1.getType().getId() + ":" + bindingTask1
-                              + " is dependent on " + step2.getType().getId()
-                              + ":" + bindingTask2);
-                        } else {
-                           System.out.println("------------ "
-                              + step2.getType().getId() + ":" + bindingTask2
-                              + " is dependent on " + step1.getType().getId()
-                              + ":" + bindingTask1);
-                        }
-                     }
-                  }
-               }
-            }
-         }
-
-      }
-
+      return null;
    }
-
-   public void findParentsOfTasks () {
-
-      ArrayList<TaskClass> parent1 = new ArrayList<TaskClass>();
-      ArrayList<TaskClass> parent2 = new ArrayList<TaskClass>();
-
-      for (int i = 0; i < OrderedTasks.size(); i++) {
-         findParent(OrderedTasks.get(i)[0], parent1);
-         findParent(OrderedTasks.get(i)[1], parent2);
-      }
-
-      for (int i = 0; i < parent1.size(); i++) {
-         for (int j = 0; i < parent2.size(); j++) {
-            if ( parent1.get(i).getId().equals(parent2.get(j).getId()) ) {
-               System.out.println("... " + parent1.get(i).getId());
-            }
-         }
-      }
-
-   }
-
-   private int findParent (String task, ArrayList<TaskClass> parent) {
-
-      Iterator<TaskClass> tasksIterator = this.taskModel.getTaskClasses()
-            .iterator();
-      while (tasksIterator.hasNext()) {
-         TaskClass taskclass = tasksIterator.next();
-         List<DecompositionClass> decompositions = taskclass
-               .getDecompositions();
-         for (DecompositionClass subtaskDecomposition : decompositions) {
-            for (String stepName : subtaskDecomposition.getStepNames()) {
-
-               if ( subtaskDecomposition.getStepType(stepName).getId()
-                     .equals(task) ) { // I should add namespace
-                  parent.add(taskclass);
-
-                  findParent(taskclass.getId(), parent);
-                  return 0; // maybe exception
-               }
-            }
-
-         }
-      }
-      return 0;
-   }
+   
+ 
 }
+
