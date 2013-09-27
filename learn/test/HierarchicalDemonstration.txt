@@ -22,8 +22,6 @@ task Place / PhysObj.DinnerPlate / PhysObj.WineGlass
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")
 
-
-
 task Demonstration
 task PlaceDishes
 task PlaceSilverware

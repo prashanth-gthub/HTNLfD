@@ -4,48 +4,38 @@ import edu.wpi.cetask.*;
 import edu.wpi.cetask.DecompositionClass.Binding;
 import edu.wpi.disco.*;
 import edu.wpi.disco.lang.Utterance;
-import org.w3c.dom.*;
-import java.io.*;
+import edu.wpi.htnlfd.dto.*;
 import java.util.*;
 import java.util.Map.Entry;
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import javax.script.*;
 
 public class Demonstration {
 
-   private DocumentBuilderFactory factory;
 
-   private DocumentBuilder builder;
+   
+   
 
-   private Document document;
+   private List<TaskBlock> tasks = new ArrayList<TaskBlock>();
 
    TaskModel taskModel = null;
 
    private final String ReferenceFrame = "referenceFrame";
 
-   private final String xmlnsValue = "http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext";
 
-   private final String namespace = "urn:disco.wpi.edu:htnlfd:setTable1";
-
-   private final String namespacePrefix;
-
-   private ArrayList<String[]> OrderedTasks = new ArrayList<String[]>();
 
    private TaskClass recipeTaskClass = null;
 
    class TempClass {
       String name;
 
-      ArrayList<Task> steps = new ArrayList<Task>();
+      ArrayList<ArrayList<Task>> steps = new ArrayList<ArrayList<Task>>();
 
       ArrayList<String> inputs = new ArrayList<String>();
-      
-      ArrayList<String> stepNames = new ArrayList<String>();
 
-      public TempClass (String name, Task step, String input, String stepStrValue) {
+      ArrayList<ArrayList<String>> stepNames = new ArrayList<ArrayList<String>>();
+
+      public TempClass (String name, ArrayList<Task> step, String input,
+            ArrayList<String> stepStrValue) {
 
          this.name = name;
          this.steps.add(step);
@@ -56,18 +46,7 @@ public class Demonstration {
    }
 
    public Demonstration () {
-      factory = DocumentBuilderFactory.newInstance();
-      factory.setNamespaceAware(true);
-
-      String[] dNSNameArray = namespace.split(":");
-      namespacePrefix = dNSNameArray[dNSNameArray.length - 1];
-      try {
-         builder = factory.newDocumentBuilder();
-         // document = builder.newDocument();
-      } catch (ParserConfigurationException e) {
-         throw new RuntimeException(
-               "An error occured while creating the document builder", e);
-      }
+      
    }
 
    public List<Task> findDemonstration (Disco disco, String taskName) {
@@ -99,122 +78,37 @@ public class Demonstration {
       }
    }
 
-   public void writeDOM (Disco disco, String fileName, String taskName,
-         List<Task> steps, String input) throws Exception {
+   
 
-      // Writing document into xml file
-      document = builder.newDocument();
-      DOMSource domSource = new DOMSource(document);
-      File demonstrationFile = new File(fileName);
-      if ( !demonstrationFile.exists() )
-         demonstrationFile.createNewFile();
-
-      try (FileOutputStream fileOutputStream = new FileOutputStream(
-            demonstrationFile, false)) {
-
-         StreamResult streamResult = new StreamResult(fileOutputStream);
-         TransformerFactory tf = TransformerFactory.newInstance();
-         Transformer transformer = tf.newTransformer();
-
-         buildDOM(disco, taskName, steps, input);
-
-         // Adding indentation and omitting xml declaration
-         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-         transformer.setOutputProperty(
-               "{http://xml.apache.org/xslt}indent-amount", "2");
-         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-         transformer.transform(domSource, streamResult);
-
-      } catch (Exception e) {
-
-         throw e;
-      }
-
-   }
-
-   public void readDOM (Disco disco, String fileName) {
-      taskModel = disco.getInteraction().load(fileName);
-   }
-
-   private void buildDOM (Disco disco, String taskName, List<Task> steps,
+   
+   public List<TaskBlock> build(Disco disco, String taskName, List<Task> steps,
          String input) throws NoSuchMethodException, ScriptException {
-
-      Element taskModelElement = null;
-
-      taskModelElement = document.createElementNS(xmlnsValue, "taskModel");
-      document.appendChild(taskModelElement);
-
-      Attr about = document.createAttribute("about");
-      about.setValue(namespace);
-      taskModelElement.setAttributeNode(about);
-      Attr xmlns = document.createAttribute("xmlns");
-      xmlns.setValue(xmlnsValue);
-      taskModelElement.setAttributeNode(xmlns);
-      Element recipe = null;
-
-      List<String> namespaces = new ArrayList<String>();
-
+      TaskBlock recipe = null;
+      TaskBlock task = null;
       if ( this.taskModel != null ) {
-         recipe = learnedTaskmodelToDom(namespaces, taskName, steps,
-               taskModelElement, input);
-      }
-      Element taskElement = null;
-
-      if ( recipe == null ) {
-         taskElement = document.createElementNS(xmlnsValue, "task");
-         taskModelElement.appendChild(taskElement);
-         Attr idTask = document.createAttribute("id");
-         idTask.setValue(taskName);
-         taskElement.setAttributeNode(idTask);
-      } else {
-         taskElement = recipe;
-
-         Element inputTask = document.createElementNS(xmlnsValue, "input");
-         taskElement.insertBefore(inputTask, taskElement.getFirstChild());
-         Attr inputName = document.createAttribute("name");
-         inputName.setValue(input);
-         inputTask.setAttributeNode(inputName);
-         Attr inputType = document.createAttribute("type");
-         inputType.setValue("boolean");
-         inputTask.setAttributeNode(inputType);
-
+         recipe  = learnedTaskmodelToDom(taskName, steps,input);
       }
 
-      demonstratedTaskToDom(disco, taskElement, taskName, steps, namespaces,
+     demonstratedTaskToDom(disco,taskName, steps,
             recipe, input);
-
-      for (String namespaceOfTasks : namespaces) {
-
-         String[] namespaceOfTaskArray = namespaceOfTasks.split(":");
-         String namespaceOfTask = namespaceOfTaskArray[namespaceOfTaskArray.length - 1];
-
-         Attr xmlnsReference = document.createAttribute("xmlns:"
-            + namespaceOfTask);
-         xmlnsReference.setValue(namespaceOfTasks);
-         taskModelElement.setAttributeNode(xmlnsReference);
-      }
-
+     return tasks;
    }
-
-   public void demonstratedTaskToDom (Disco disco, Element taskElement,
-         String taskName, List<Task> steps, List<String> namespaces,
-         Element recipe, String input) throws NoSuchMethodException,
+   public void demonstratedTaskToDom (Disco disco, 
+         String taskName, List<Task> steps,
+         TaskBlock recipe, String input) throws NoSuchMethodException,
          ScriptException {
-
-      Element subtasks = document.createElementNS(xmlnsValue, "subtasks");
-      taskElement.appendChild(subtasks);
-      Attr idSubtask = document.createAttribute("id");
-      int countSubtask = 0;
-      NodeList nodes = taskElement.getChildNodes();
-      for (int i = 0; i < nodes.getLength(); i++) {
-         if ( nodes.item(i).getNodeName().equals("subtasks") )
-            countSubtask++;
+      TaskBlock task = null;
+      if(recipe!=null)
+         task = recipe;
+      else{
+         task = new TaskBlock(taskName);
+         this.tasks.add(task);
       }
-      subtasks.setAttributeNode(idSubtask);
-      countSubtask = taskElement.getChildNodes().getLength() == 1 ? 1
-         : countSubtask + 1;
-      idSubtask.setValue(Character.toLowerCase(taskName.charAt(0))
-         + (taskName.length() > 1 ? taskName.substring(1) : "") + countSubtask);
+      int countSubtask = task.getSubtasks().size()+1;            
+      Subtasks subtask = new Subtasks(Character.toLowerCase(taskName.charAt(0))
+            + (taskName.length() > 1 ? taskName.substring(1) : "") + countSubtask);
+      
+      task.addSubtask(subtask);
       Map<String, Integer> StepNames = new HashMap<String, Integer>();
       Map<String, String> bindingsInputs = new HashMap<String, String>();
       Map<String, String> bindingsOutputs = new HashMap<String, String>();
@@ -242,38 +136,14 @@ public class Demonstration {
             StepNames.put(stepName, count);
          }
 
-         if ( !namespaces.contains(step.getType().getNamespace())
-            && !step.getType().getNamespace().equals(namespace) ) {
-            namespaces.add(step.getType().getNamespace());
-         }
-
-         Element subtaskStep = document.createElementNS(xmlnsValue, "step");
-         subtasks.appendChild(subtaskStep);
-         Attr nameSubtaskStep = document.createAttribute("name");
-
-         String stepStrValue = Character.toLowerCase(stepName.charAt(0))
-            + (stepName.length() > 1 ? stepName.substring(1) : "") + count;
-         nameSubtaskStep.setValue(stepStrValue);
-         subtaskStep.setAttributeNode(nameSubtaskStep);
-         Attr valueSubtaskStep = document.createAttribute("task");
-         String namespaceName = step.getType().getNamespace();
-
-         String[] namespaceOfTaskArray = namespaceName.split(":");
-         String namespaceOfTask = namespaceOfTaskArray[namespaceOfTaskArray.length - 1];
-
-         if ( namespacePrefix.compareTo(namespaceOfTask) != 0 )
-            valueSubtaskStep.setValue(namespaceOfTask + ":" + stepName);
-         else
-            valueSubtaskStep.setValue(stepName);
-         subtaskStep.setAttributeNode(valueSubtaskStep);
-
-         // //////////////////////////////////////////////////
-
+         Step stp = new Step(Character.toLowerCase(stepName.charAt(0))
+               + (stepName.length() > 1 ? stepName.substring(1) : "") + count,stepName,step.getType().getNamespace());
+         subtask.getSteps().add(stp);
          // ///////////////////////////////////////////////
 
          for (String inputName : step.getType().getDeclaredInputNames()) {
 
-            String bindingSlotvalue = "$" + stepStrValue + "." + inputName;
+            String bindingSlotvalue = "$" + stp.getName() + "." + inputName;
 
             // String temp2 = step.getSlotValueToString(inputName);
 
@@ -290,8 +160,13 @@ public class Demonstration {
             }
             if ( findInput != null ) {
                boolean contain = false;
-               for (String str : findInput.inputs) {
+
+               for (int x = 0; x < findInput.inputs.size(); x++) {
+                  String str = findInput.inputs.get(x);
                   if ( str.contains(inputName) ) {
+
+                     findInput.steps.get(x).add(step);
+                     findInput.stepNames.get(x).add(stp.getName());
                      contain = true;
                      break;
                   }
@@ -299,14 +174,23 @@ public class Demonstration {
                if ( !contain ) {
 
                   findInput.inputs.add(inputName);
-                  findInput.steps.add(step);
-                  findInput.stepNames.add(stepStrValue);
+                  ArrayList<Task> task1 = new ArrayList<Task>();
+                  task1.add(step);
+                  ArrayList<String> taskVal = new ArrayList<String>();
+                  taskVal.add(stp.getName());
+                  findInput.steps.add(task1);
+                  findInput.stepNames.add(taskVal);
                   // System.out.println(inputBindingValue + " " + nameType[0]);
                }
 
             } else {
 
-               inputs.add(new TempClass(inputBindingValue, step, inputName, stepStrValue));
+               ArrayList<Task> task1 = new ArrayList<Task>();
+               task1.add(step);
+               ArrayList<String> taskVal = new ArrayList<String>();
+               taskVal.add(stp.getName());
+               inputs.add(new TempClass(inputBindingValue, task1, inputName,
+                     taskVal));
                // System.out.println(inputBindingValue + " " + nameType[0]);
             }
 
@@ -315,7 +199,7 @@ public class Demonstration {
 
          for (String outputName : step.getType().getDeclaredOutputNames()) {
 
-            String bindingSlot = "$" + stepStrValue + "." + outputName;
+            String bindingSlot = "$" + stp.getName() + "." + outputName;
             boolean contain = false;
             String bindingSlotValue = null;
             for (int i = outputNumbers.size() - 1; i >= 0; i--) {
@@ -344,106 +228,103 @@ public class Demonstration {
       }
 
       if ( recipe != null ) {
-         addRecipe(taskElement, input, subtasks, inputs, recipe);
+         addRecipe(task, input, subtask, inputs, recipe);
       }
 
       // taskElement.appendChild();
       if ( recipe == null ) {
-         addNotRecipe(inputs, taskElement, inputsNumbers, outputs, subtasks);
-         
+         addNotRecipe(inputs, task, inputsNumbers, outputs, subtask);
+
       }
-      
-      for (TempClass inp : inputs){         
-         for(int h=0;h<inp.inputs.size();h++){
+      // ordering
+      boolean subtaskOrdered = true;
+      for (TempClass inp : inputs) {
+         for (int h = 0; h < inp.inputs.size(); h++) {
             String inputRef = inp.inputs.get(h);
-            if(inputRef.contains(ReferenceFrame)){
-               for(int s=0;s<inp.inputs.size();s++){
+
+            if ( inputRef.contains(ReferenceFrame) ) {
+               for (int s = 0; s < inp.inputs.size(); s++) {
                   String inputDep = inp.inputs.get(s);
-                  String modified = inp.steps.get(s).getType().getModified(inputDep.replaceAll("[0-9]$", ""));
-                  if(!inputDep.contains(ReferenceFrame) && !inp.steps.get(s).equals(inp.steps.get(h)) && modified!=null){
-                     //System.out.println(inp.steps.get(s).getType().getId()+" "+inp.steps.get(h).getType().getId());
-                     Element orderStep = findNode(subtasks, "step","name",inp.stepNames.get(h));
-                     
-                        if(orderStep.getAttribute("requires")==null || orderStep.getAttribute("requires")==""){
-                           Attr requires = document.createAttribute("requires");
-                           requires.setValue(inp.stepNames.get(s));
-                           orderStep.setAttributeNode(requires);
+
+                  if ( !inputDep.contains(ReferenceFrame) ) {
+                     for (int l = 0; l < inp.steps.get(h).size(); l++) {
+
+                        String modified = inp.steps.get(h).get(l).getType()
+                              .getModified(inputDep.replaceAll("[0-9]$", ""));
+
+                        if ( modified != null ) {
+                           // System.out.println(inp.steps.get(s).getType().getId()+" "+inp.steps.get(h).getType().getId());
+
+                           String stepRef = inp.stepNames.get(s).get(0);
+                           String stepDep = inp.stepNames.get(h).get(l);
+                           Step orderStep = findStep(subtask,stepDep);
+                           if ( !stepRef.equals(stepDep) ) {
+                              if (orderStep.getRequires().size()==0) {
+                                 orderStep.getRequires().add(stepRef);
+   
+                                 subtaskOrdered = false;
+                              } else {
+                                 
+                                 boolean contain = false;
+                                 
+                                    for (String order : orderStep.getRequires()) {
+                                       if ( order.equals(stepRef) )
+                                          contain = true;
+                                    }
+                                 
+                                 if ( !contain ) {
+
+                                    orderStep.getRequires().add(stepRef);
+                                    subtaskOrdered = false;
+                                 }
+                              }
+                           }
                         }
-                        else{
-                           orderStep.setAttribute("requires",orderStep.getAttribute("name")+" "+inp.stepNames.get(s) );
-                        }
-                     
-                     
+                     }
+
                   }
                }
             }
          }
       }
-      
-      
+      if ( !subtaskOrdered ) {
+         
+         subtask.setOrdered(false);
+
+      }
+
       for (Entry<String, String> binding : bindingsInputs.entrySet()) {
 
          for (TempClass inputEntry : inputs) {
             for (int m = 0; m < inputEntry.inputs.size(); m++) {
                String inputListName = inputEntry.inputs.get(m);
 
-               // System.out.println(binding.getValue() + ": "+
-               // inputEntry.getKey());
-               // System.out.println(binding.getKey() + ": "
-               // +inputListName[0].replaceAll("[0-9]*$", ""));
 
                if ( inputEntry.name.equals(binding.getValue())
                   && binding.getKey().endsWith(
                         inputListName.replaceAll("[0-9]$", "")) ) {
-                  Element subtaskBinding = document.createElementNS(xmlnsValue,
-                        "binding");
-                  // subtasks.appendChild(subtaskBinding);
-                  Attr bindingSlot = document.createAttribute("slot");
-                  bindingSlot.setValue(binding.getKey());
-                  subtaskBinding.setAttributeNode(bindingSlot);
+                  
+                  subtask.getBindings().put(binding.getKey(), "$this." + inputListName);
 
-                  Attr bindingValue = document.createAttribute("value");
-
-                  bindingValue.setValue("$this." + inputListName);
-                  subtaskBinding.setAttributeNode(bindingValue);
-
-                  subtasks.appendChild(subtaskBinding);
                }
             }
          }
 
       }
-      
-     
-      
+
       for (Entry<String, String> bind : bindingsOutputs.entrySet()) {
-         Element subtaskBinding = document.createElementNS(xmlnsValue,
-               "binding");
-         // subtasks.appendChild(subtaskBinding);
-         Attr bindingSlot = document.createAttribute("slot");
-         bindingSlot.setValue(bind.getKey());
-         subtaskBinding.setAttributeNode(bindingSlot);
-
-         Attr bindingValue = document.createAttribute("value");
-
-         bindingValue.setValue(bind.getValue());
-         subtaskBinding.setAttributeNode(bindingValue);
-
-         subtasks.appendChild(subtaskBinding);
+         subtask.getBindings().put(bind.getKey(), bind.getValue());
       }
-      
-      
+
    }
 
-   private void addNotRecipe (ArrayList<TempClass> inputs, Element taskElement,
-         List<String> inputsNumbers, Map<String, Task> outputs,
-         Element subtasks) {
+   private void addNotRecipe (ArrayList<TempClass> inputs, TaskBlock task,
+         List<String> inputsNumbers, Map<String, Task> outputs, Subtasks subtasks) {
       for (TempClass inputEntry : inputs) {
          for (int m = 0; m < inputEntry.inputs.size(); m++) {
             String inputListName = inputEntry.inputs.get(m);
-            Element inputTask = document.createElementNS(xmlnsValue, "input");
-            taskElement.insertBefore(inputTask, taskElement.getFirstChild());
-            Attr inputName = document.createAttribute("name");
+            Input inp = new Input();
+            task.addInput(inp);
             boolean contain = false;
             for (String str : inputsNumbers) {
                if ( str.contains(inputListName + "1") ) {
@@ -453,7 +334,7 @@ public class Demonstration {
             }
             if ( !contain ) {
 
-               inputName.setValue(inputListName + "1");
+               inp.setName(inputListName + "1");
                inputsNumbers.add(inputListName + "1");
                inputEntry.inputs.set(m, inputListName + "1");
 
@@ -468,82 +349,53 @@ public class Demonstration {
                      int num = Integer.parseInt(number);
                      num++;
                      inputsNumbers.add(inputListName + num);
-                     inputName.setValue(inputListName + num);
+                     inp.setName(inputListName + num);
                      inputEntry.inputs.set(m, inputListName + num);
                      break;
                   }
                }
             }
-            inputTask.setAttributeNode(inputName);
-            Attr inputType = document.createAttribute("type");
-
-            inputType.setValue(inputEntry.steps.get(m).getType()
-                  .getSlotType(inputListName));
-            inputTask.setAttributeNode(inputType);
             
-            String modified = inputEntry.steps.get(m).getType().getModified(inputListName);
-            if(modified!=null && modified!=""){
-            for(Entry<String, Task> out:outputs.entrySet()){
-               if(out.getValue().equals(inputEntry.steps.get(m))){
-                  
-                     Attr modifiedAttr = document.createAttribute("modified");
-                     
-                     modifiedAttr.setValue(out.getKey());
-                     inputTask.setAttributeNode(modifiedAttr);
-                     
+            
+            inp.setType(inputEntry.steps.get(m).get(0).getType()
+                  .getSlotType(inputListName));
+
+            String modified = inputEntry.steps.get(m).get(0).getType()
+                  .getModified(inputListName);
+            if ( modified != null && modified != "" ) {
+               for (Entry<String, Task> out : outputs.entrySet()) {
+                  if ( out.getValue().equals(inputEntry.steps.get(m).get(0)) ) {
+
+                     inp.setModified(out.getKey());
+
                   }
                }
             }
          }
 
       }
-      
-      Element endInput = null;
-      for (int i = 0; i < taskElement.getChildNodes().getLength(); i++) {
-         if ( taskElement.getChildNodes().item(i).getNodeName()
-               .equals("subtasks") )
-            endInput = (Element) taskElement.getChildNodes().item(i);
-      }
+
       for (Entry<String, Task> out : outputs.entrySet()) {
-         Element outputTask = document.createElementNS(xmlnsValue, "output");
-         taskElement.insertBefore(outputTask, endInput);
-         Attr outputName = document.createAttribute("name");
-         outputName.setValue(out.getKey());
-         outputTask.setAttributeNode(outputName);
-         Attr outputType = document.createAttribute("type");
-         outputType.setValue(out.getValue().getType().getSlotType(out.getKey().replaceAll("[0-9]$", "")));
-         outputTask.setAttributeNode(outputType);
+         Output output = new Output(out.getKey(),out.getValue().getType()
+               .getSlotType(out.getKey().replaceAll("[0-9]$", "")));
+         task.addOutput(output);
       }
 
       for (TempClass inputEntry : inputs) {
          for (int m = 0; m < inputEntry.inputs.size(); m++) {
             String inputListName = inputEntry.inputs.get(m);
-
-            Element subtaskBinding = document.createElementNS(xmlnsValue,
-                  "binding");
-            // subtasks.appendChild(subtaskBinding);
-            Attr bindingSlot = document.createAttribute("slot");
-            bindingSlot.setValue("$this." + inputListName);
-            subtaskBinding.setAttributeNode(bindingSlot);
-
-            Attr bindingValue = document.createAttribute("value");
-
-            bindingValue.setValue(inputEntry.name);
-            subtaskBinding.setAttributeNode(bindingValue);
-
-            subtasks.appendChild(subtaskBinding);
-
+            subtasks.getBindings().put("$this." + inputListName, inputEntry.name);
          }
       }
 
    }
 
-   private void addRecipe (Element taskElement, String input, Element subtasks,
-         ArrayList<TempClass> inputs, Element recipe) {
-      taskElement = recipe;
-      Element applicable = document.createElementNS(xmlnsValue, "applicable");
-      applicable.setTextContent("!$this." + input);
-      subtasks.appendChild(applicable);
+   private void addRecipe (TaskBlock task, String input, Subtasks subtasks,
+         ArrayList<TempClass> inputs, TaskBlock recipe) {
+      task = recipe;
+      
+      subtasks.setApplicable("!$this." + input);
+      
 
       for (TempClass inputEntry : inputs) {
          for (int m = 0; m < inputEntry.inputs.size(); m++) {
@@ -551,7 +403,7 @@ public class Demonstration {
             for (String ins : recipeTaskClass.getDeclaredInputNames()) {
                boolean change = false;
                if ( recipeTaskClass.getSlotType(ins).equals(
-                     inputEntry.steps.get(m).getType()
+                     inputEntry.steps.get(m).get(0).getType()
                            .getSlotType(inputEntry.inputs.get(m)))
                   && ins.contains(inputListName) ) {
                   String findParent = findValueOfInput(ins,
@@ -647,174 +499,120 @@ public class Demonstration {
       return null;
    }
 
-   public Element learnedTaskmodelToDom (List<String> namespaces,
-         String taskName, List<Task> steps, Element taskModelElement,
+   public TaskBlock learnedTaskmodelToDom (
+         String taskName, List<Task> steps,
          String input) {
 
-      Element recipe = null;
+      TaskBlock recipe = null;
       boolean recipeOccured = true;
       Iterator<TaskClass> tasksIterator = this.taskModel.getTaskClasses()
             .iterator();
-      ArrayList<Task> changedTasks = new ArrayList<Task>();
+  
 
       while (tasksIterator.hasNext()) {
 
          TaskClass task = tasksIterator.next();
+         
+         TaskBlock domTask = new TaskBlock(task.getId());
 
-         Element taskElement = document.createElementNS(xmlnsValue, "task");
-         taskModelElement.appendChild(taskElement);
-         Attr idTask = document.createAttribute("id");
-         idTask.setValue(task.getId());
-         taskElement.setAttributeNode(idTask);
          if ( task.getId().equals(taskName) ) {
-            recipe = taskElement;
+            recipe = domTask;
             recipeTaskClass = task;
+            Input inputC = new Input(input,"boolean");
+            recipe.addInput(inputC);
          }
 
          boolean changedTask = false;
          for (Task step : steps) {
             String stepType = step.getType().getId();
             if ( task.getId().equals(stepType) ) {
-               changedTasks.add(step);
+           
                changedTask = true;
                break;
             }
          }
 
          for (String inputName : task.getDeclaredInputNames()) {
-            Element inputTask = document.createElementNS(xmlnsValue, "input");
-            taskElement.appendChild(inputTask);
-            Attr inputNameAttr = document.createAttribute("name");
-            inputNameAttr.setValue(inputName);
-            inputTask.setAttributeNode(inputNameAttr);
 
-            Attr inputType = document.createAttribute("type");
-            inputType.setValue(task.getSlotType(inputName));
-            inputTask.setAttributeNode(inputType);
-
-            String modified = task.getModified(inputName);
-            //System.out.println("modified: "+modified);
-            if ( modified != null && modified!="" ) {
-               Attr modifiedAttr = document.createAttribute("modified");
-               modifiedAttr.setValue(modified);
-               inputTask.setAttributeNode(modifiedAttr);
-            }
+            Input inputTask = new Input(inputName,task.getSlotType(inputName),task.getModified(inputName));
+            domTask.addInput(inputTask);
          }
 
          for (String outputName : task.getDeclaredOutputNames()) {
-            Element inputTask = document.createElementNS(xmlnsValue, "output");
-            taskElement.appendChild(inputTask);
-            Attr inputNameAttr = document.createAttribute("name");
-            inputNameAttr.setValue(outputName);
-            inputTask.setAttributeNode(inputNameAttr);
-            Attr inputType = document.createAttribute("type");
-            inputType.setValue(task.getSlotType(outputName));
-            inputTask.setAttributeNode(inputType);
+
+            
+            Output outputTask = new Output(outputName,task.getSlotType(task.getSlotType(outputName)));
+            domTask.addOutput(outputTask);
+            
          }
 
          List<DecompositionClass> decompositions = task.getDecompositions();
          for (DecompositionClass subtaskDecomposition : decompositions) {
 
-            Element subtasks = document.createElementNS(xmlnsValue, "subtasks");
-            taskElement.appendChild(subtasks);
-            Attr idSubtask = document.createAttribute("id");
-            String name = subtaskDecomposition.getId();
 
+            Subtasks subtask = new Subtasks(subtaskDecomposition.getId(),subtaskDecomposition.isOrdered());
+            
+            String name = subtaskDecomposition.getId();
+            
+            subtask.setId(name);
+            
             for (String stepName : subtaskDecomposition.getStepNames()) {
 
-               Element subtaskStep = document.createElementNS(xmlnsValue,
-                     "step");
-               subtasks.appendChild(subtaskStep);
-               Attr nameSubtaskStep = document.createAttribute("name");
-
-               String stepStrValue = stepName;
-               nameSubtaskStep.setValue(stepStrValue);
-               subtaskStep.setAttributeNode(nameSubtaskStep);
-               Attr valueSubtaskStep = document.createAttribute("task");
                String namespaceDec = subtaskDecomposition.getStepType(stepName)
                      .getNamespace();
-               String[] dNSNameArrayDec = namespaceDec.split(":");
-               String dNSNameDec = dNSNameArrayDec[dNSNameArrayDec.length - 1];
+               
 
-               if ( dNSNameDec.compareTo(namespacePrefix) != 0 )
-                  valueSubtaskStep.setValue(dNSNameDec + ":"
-                     + subtaskDecomposition.getStepType(stepName).getId());
-               else
-                  valueSubtaskStep.setValue(subtaskDecomposition.getStepType(
-                        stepName).getId());
-               subtaskStep.setAttributeNode(valueSubtaskStep);
-
-               if ( !namespaces.contains(subtaskDecomposition.getStepType(
-                     stepName).getNamespace())
-                  && !subtaskDecomposition.getStepType(stepName).getNamespace()
-                        .equals(namespace) ) {
-                  namespaces.add(subtaskDecomposition.getStepType(stepName)
-                        .getNamespace());
-               }
+               Step step = new Step(stepName,subtaskDecomposition.getStepType(
+                     stepName).getId(),namespaceDec);
+               
+               subtask.getSteps().add(step);
+               
             }
 
             Collection<Entry<String, Binding>> bindingsSubtask = subtaskDecomposition
                   .getBindings().entrySet();
 
             if ( recipe != null && recipeOccured ) {
-               Element applicable = document.createElementNS(xmlnsValue,
-                     "applicable");
-               applicable.setTextContent("$this." + input);
-               subtasks.appendChild(applicable);
+
+               subtask.setApplicable("$this." + input);
+               
                recipeOccured = false;
             }
 
-            if ( subtaskDecomposition.applicable != null
-               && subtaskDecomposition.applicable != "" ) {
-               Element applicable = document.createElementNS(xmlnsValue,
-                     "applicable");
-               applicable.setTextContent(subtaskDecomposition.applicable);
-               subtasks.appendChild(applicable);
+            if ( subtaskDecomposition.getApplicable() != null
+               && subtaskDecomposition.getApplicable() != "" ) {
+
+               subtask.setApplicable(subtaskDecomposition.getApplicable());
             }
 
             for (Entry<String, Binding> binding : bindingsSubtask) {
-               Element subtaskBinding = document.createElementNS(xmlnsValue,
-                     "binding");
-               // subtasks.appendChild(subtaskBinding);
-               Attr bindingSlot = document.createAttribute("slot");
-
-               bindingSlot.setValue(binding.getKey());
-
-               subtaskBinding.setAttributeNode(bindingSlot);
-
-               Attr bindingValue = document.createAttribute("value");
-
-               bindingValue.setValue(binding.getValue().value);
-               // else
-               // bindingValue.setValue("$this."+);
-               subtaskBinding.setAttributeNode(bindingValue);
+          
                if ( changedTask == false || !binding.getKey().contains("this") )
-                  subtasks.appendChild(subtaskBinding);
+                  subtask.getBindings().put(binding.getKey(), binding.getValue().value); //Error
+               
             }
 
-            subtasks.setAttributeNode(idSubtask);
-            idSubtask.setValue(name);
 
          }
-
+         this.tasks.add(domTask);
       }
       return recipe;
    }
-   
-   private Element findNode(Element parent, String nodeName, String name, String value){
-      for(int i=0;i<parent.getChildNodes().getLength();i++){
-         Element child = (Element) parent.getChildNodes().item(i);
-      
-         if(child.getNodeName().equals(nodeName)){
-            String attrVal = child.getAttribute(name);
-            if(value.equals(attrVal)){
-               return child;
-            }
+
+   public Step findStep (Subtasks subtask,
+         String value) {
+      for (Step step:subtask.getSteps()) {
+         
+         if ( step.getName().equals(value) ) {
+            
+               return step;
+            
          }
       }
       return null;
    }
-   
- 
-}
+   public TaskModel readDOM (Disco disco, String fileName) {
+      return disco.getInteraction().load(fileName);
+   }
 
+}

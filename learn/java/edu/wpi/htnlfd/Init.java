@@ -1,14 +1,15 @@
 package edu.wpi.htnlfd;
 
-import org.w3c.dom.Element;
-import java.io.IOException;
+
 import java.util.*;
 import edu.wpi.cetask.*;
 import edu.wpi.disco.*;
+import edu.wpi.htnlfd.dto.TaskBlock;
 
 public class Init {
 
    private static Demonstration demonstration = null;
+   private static DomManipulation DOM = null;
 
    public static void main (String[] args) {
       System.out.println("YUHU");
@@ -21,16 +22,15 @@ public class Init {
 
       if ( demonstration == null ) {
          demonstration = new Demonstration();
+         DOM = new DomManipulation();
       }
 
       String fileName = System.getProperty("user.dir") + separator + filename
          + ".xml";
-      List<Task> tasks = demonstration.findDemonstration(disco, taskName);
-
-      demonstration.writeDOM(disco,fileName, taskName, tasks, "input1");
-      // demonstration.resetDisco(disco);
-      //demonstration.partialOrderring(tasks, taskName);
-      //demonstration.findParentsOfTasks();
+      List<Task> DemonstratedTasks = demonstration.findDemonstration(disco, taskName);
+      
+      List<TaskBlock> tasks = demonstration.build(disco, taskName, DemonstratedTasks, "input1");
+      DOM.writeDOM(fileName, tasks);
       demonstration.readDOM(disco, fileName);
 
    }
