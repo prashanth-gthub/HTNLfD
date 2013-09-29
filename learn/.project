@@ -3,6 +3,7 @@
 	<name>learn</name>
 	<comment></comment>
 	<projects>
+		<project>disco</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

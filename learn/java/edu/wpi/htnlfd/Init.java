@@ -1,14 +1,14 @@
 package edu.wpi.htnlfd;
 
-
 import java.util.*;
-import edu.wpi.cetask.*;
+import edu.wpi.cetask.Task;
 import edu.wpi.disco.*;
-import edu.wpi.htnlfd.dto.TaskBlock;
+import edu.wpi.htnlfd.model.TaskClass;
 
 public class Init {
 
    private static Demonstration demonstration = null;
+
    private static DomManipulation DOM = null;
 
    public static void main (String[] args) {
@@ -27,9 +27,11 @@ public class Init {
 
       String fileName = System.getProperty("user.dir") + separator + filename
          + ".xml";
-      List<Task> DemonstratedTasks = demonstration.findDemonstration(disco, taskName);
-      
-      List<TaskBlock> tasks = demonstration.build(disco, taskName, DemonstratedTasks, "input1");
+      List<Task> DemonstratedTasks = demonstration.findDemonstration(disco,
+            taskName);
+      //demonstration.readDOM(disco, fileName);
+      List<TaskClass> tasks = demonstration.build(disco, taskName,
+            DemonstratedTasks, "input1");
       DOM.writeDOM(fileName, tasks);
       demonstration.readDOM(disco, fileName);
 
