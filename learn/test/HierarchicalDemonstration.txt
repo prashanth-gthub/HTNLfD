@@ -2,12 +2,6 @@ cd ..\..\GitHub\HTNLfD\learn\test
 cd ..\models
 load SetTableDemonstration.xml
 
-task Demonstration
-task Place / PhysObj.DinnerPlate / PhysObj.Spoon 
-task Place / PhysObj.DinnerPlate / PhysObj.Fork
-task Place / PhysObj.DinnerPlate / PhysObj.Knife
-done Demonstration
-eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
 
 task Demonstration
 task Place / PhysObj.SquareTable / PhysObj.DinnerPlate
@@ -15,6 +9,13 @@ task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate
 task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
+
+task Demonstration
+task Place / PhysObj.DinnerPlate / PhysObj.Spoon 
+task Place / PhysObj.DinnerPlate / PhysObj.Fork
+task Place / PhysObj.DinnerPlate / PhysObj.Knife
+done Demonstration
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
 
 task Demonstration
 task Place / PhysObj.DinnerPlate / PhysObj.WaterGlass

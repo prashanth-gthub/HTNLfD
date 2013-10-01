@@ -1,6 +1,5 @@
 package edu.wpi.htnlfd.model;
 
-import edu.wpi.cetask.DecompositionClass.Binding;
 import java.util.*;
 import javax.xml.namespace.QName;
 

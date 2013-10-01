@@ -18,17 +18,23 @@ public class TaskClass extends TaskModel.Member {
 
    private List<Output> declaredOutputs;
 
-   private Map<String, String> slotTypes;
-
-   public String getSlotType (String name) {
-      return slotTypes.get(name);
-   }
 
    abstract class Slot {
 
       private String type;
 
       private String name;
+      
+
+      protected Slot (String name,String type) {
+         super();
+         this.type = type;
+         this.name = name;
+      }
+
+      public Slot () {
+         
+      }
 
       public TaskClass getTask () {
          return TaskClass.this;
@@ -57,13 +63,14 @@ public class TaskClass extends TaskModel.Member {
       private Output modified;
 
       public Input (String inputName, String primitiveType, Output modifies) {
+         super(inputName,primitiveType);
          this.setName(inputName);
          this.setType(primitiveType);
          this.setModified(modified);
       }
 
       public Input () {
-
+         super();
       }
 
       public Output getModified () {
@@ -79,6 +86,7 @@ public class TaskClass extends TaskModel.Member {
    public class Output extends Slot {
 
       public Output (String outputName, String slotType) {
+         super(outputName, slotType);
          this.setName(outputName);
          this.setType(slotType);
       }
@@ -119,7 +127,7 @@ public class TaskClass extends TaskModel.Member {
 
    }
 
-   List<DecompositionClass> decompositions = new ArrayList<DecompositionClass>();
+   private List<DecompositionClass> decompositions = new ArrayList<DecompositionClass>();
 
    public List<DecompositionClass> getDecompositions () {
       return decompositions;

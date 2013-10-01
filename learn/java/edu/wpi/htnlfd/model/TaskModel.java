@@ -1,22 +1,17 @@
 package edu.wpi.htnlfd.model;
 
-import org.w3c.dom.Node;
-import edu.wpi.cetask.*;
+
 import java.util.*;
 import javax.xml.namespace.QName;
-import javax.xml.xpath.XPath;
 
-public class TaskModel extends Description {
-
-   public TaskModel (Node node, TaskEngine engine, XPath xpath) {
-      // super(node, engine, xpath);
-   }
+public class TaskModel {
 
    public TaskModel () {
-      super();
+      
    }
 
-   List<TaskClass> tasks = new ArrayList<TaskClass>();
+
+   private List<TaskClass> tasks = new ArrayList<TaskClass>();
 
    public TaskClass getTaskClass (String name) {
       return null;
@@ -73,5 +68,4 @@ public class TaskModel extends Description {
 
    }
 
-   // method to transform to XML
 }
