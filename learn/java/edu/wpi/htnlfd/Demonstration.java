@@ -51,7 +51,7 @@ public class Demonstration {
       }
    }
 
-   public List<TaskClass> build (Disco disco, String taskName,
+   public List<TaskClass> buildTaskModel (Disco disco, String taskName,
          List<edu.wpi.cetask.Task> steps, String input)
          throws NoSuchMethodException, ScriptException {
 
@@ -73,12 +73,6 @@ public class Demonstration {
    private void inputGeneralization () {
       Iterator<TaskClass> tasksIterator = this.taskModel.getTaskClasses()
             .iterator();
-
-      /*
-       * while (tasksIterator.hasNext()) { TaskClass task =
-       * tasksIterator.next(); for(task.get) }
-       */
-
    }
 
    public boolean checkRecipe (TaskClass newTask, String input) {
@@ -103,7 +97,7 @@ public class Demonstration {
          }
       }
       return false;
-      // addRecipe(task, input, subtask, inputs, recipe);
+
 
    }
 
@@ -142,8 +136,7 @@ public class Demonstration {
          if ( stepEntry == null ) {
             StepNames.put(stepName, count);
          }
-         // finding step's name
-         // step type problem
+
          DecompositionClass.Step stp = subtask.new Step(new TaskClass(
                taskModel, step.getType().getId()), 1, 1, null);
          String stepNameR = Character.toLowerCase(stepName.charAt(0))
@@ -151,7 +144,6 @@ public class Demonstration {
          stp.setNamespace(step.getType().getNamespace());
          subtask.addStep(stepNameR, stp);
          subtask.setGoal(task);
-         // ///////////////////////////////////////////////
 
          for (String outputName : step.getType().getDeclaredOutputNames()) {
 
@@ -197,7 +189,7 @@ public class Demonstration {
             String inputBindingValue = (String) inputBinding;
             int inputNum1 = task.getDeclaredInputs().size();
             String changedName = addInput(task, inputName, step.getType()
-                  .getSlotType(inputName), inputBindingValue, subtask);
+                  .getSlotType(inputName), inputBindingValue, subtask,stepNameR);
             int inputNum2 = task.getDeclaredInputs().size();
             subtask.addBinding(bindingSlotvalue, subtask.new Binding(stepNameR,
                   stepNameR, "$this." + changedName, true));
@@ -206,6 +198,7 @@ public class Demonstration {
                subtask.addBinding("$this." + changedName, subtask.new Binding(
                      "this", stepNameR, inputBindingValue, true));
 
+               
                for (int i = task.getDeclaredOutputs().size() - 1; i >= (task
                      .getDeclaredOutputs().size() - step.getType()
                      .getDeclaredOutputNames().size()); i--) {
@@ -231,7 +224,7 @@ public class Demonstration {
    }
 
    private String addInput (TaskClass task, String inputName, String inputType,
-         String inputBindingValue, DecompositionClass subtask) {
+         String inputBindingValue, DecompositionClass subtask, String prefix) {
       boolean contain = false;
       String name = null;
       for (Entry<String, Binding> bind : subtask.getBindings().entrySet()) {
@@ -261,15 +254,15 @@ public class Demonstration {
          }
       }
       if ( contain ) {
-
          return name;
       } else {
          if ( name == null )
-            name = inputName + "1";
-
-         TaskClass.Input inputC = task.new Input(name, inputType, null);
+            name = prefix +"_"+ inputName + "1";
+         String prefixName = prefix+name.substring(name.indexOf("_"));
+         
+         TaskClass.Input inputC = task.new Input(prefixName, inputType, null);
          task.addInput(inputC);
-         return name;
+         return prefixName;
       }
    }
 
@@ -411,11 +404,7 @@ public class Demonstration {
       }
    }
 
-   /*
-    * public Step findStep (Subtasks subtask, String value) { for (Step step :
-    * subtask.getSteps()) { if ( step.getName().equals(value) ) { return step; }
-    * } return null; }
-    */
+
    public void readDOM (Disco disco, String fileName) {
       this.externalTaskModel = disco.getInteraction().load(fileName);
    }

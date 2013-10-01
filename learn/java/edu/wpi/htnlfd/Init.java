@@ -30,7 +30,7 @@ public class Init {
       List<Task> DemonstratedTasks = demonstration.findDemonstration(disco,
             taskName);
       //demonstration.readDOM(disco, fileName);
-      List<TaskClass> tasks = demonstration.build(disco, taskName,
+      List<TaskClass> tasks = demonstration.buildTaskModel(disco, taskName,
             DemonstratedTasks, "input1");
       DOM.writeDOM(fileName, tasks);
       demonstration.readDOM(disco, fileName);
