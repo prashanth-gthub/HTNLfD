@@ -86,6 +86,8 @@ public class TaskClass extends TaskModel.Member {
    }
 
    public List<Input> getDeclaredInputs () {
+      if ( this.declaredInputs == null )
+         this.declaredInputs = new ArrayList<Input>();
       return declaredInputs;
    }
 
@@ -94,6 +96,8 @@ public class TaskClass extends TaskModel.Member {
    }
 
    public List<Output> getDeclaredOutputs () {
+      if ( this.declaredOutputs == null )
+         this.declaredOutputs = new ArrayList<Output>();
       return declaredOutputs;
    }
 

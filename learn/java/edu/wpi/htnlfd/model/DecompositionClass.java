@@ -126,6 +126,17 @@ public class DecompositionClass extends TaskModel.Member {
          return required;
       }
 
+      public void addRequired(String required){
+         boolean contain = false;
+         for(String req:getRequired()){
+            if(req.equals(required)){
+               contain = true;
+               break;
+            }
+         }
+         if(!contain)
+            getRequired().add(required);
+      }
       public void setRequired (List<String> required) {
          this.required = required;
       }
@@ -196,6 +207,31 @@ public class DecompositionClass extends TaskModel.Member {
       public void setValue (String value) {
          this.value = value;
       }
+
+      public String getStep () {
+         return step;
+      }
+
+      public void setStep (String step) {
+         this.step = step;
+      }
+
+      public String getSlot () {
+         return slot;
+      }
+
+      public void setSlot (String slot) {
+         this.slot = slot;
+      }
+
+      public boolean isInputInput () {
+         return inputInput;
+      }
+
+      public void setInputInput (boolean inputInput) {
+         this.inputInput = inputInput;
+      }
+      
 
    }
 
