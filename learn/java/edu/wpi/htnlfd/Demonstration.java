@@ -148,29 +148,9 @@ public class Demonstration {
          for (String outputName : step.getType().getDeclaredOutputNames()) {
 
             String bindingSlot = "$" + stepNameR + "." + outputName;
-            boolean contain = false;
-            int num = 0;
-            String bindingSlotValue = null;
-            for (int i = outputNumbers.size() - 1; i >= 0; i--) {
-               if ( outputNumbers.get(i).contains(outputName) ) {
-                  int start = outputNumbers.get(i).lastIndexOf(outputName)
-                     + outputName.length();
-                  int end = outputNumbers.get(i).length();
-                  String number = outputNumbers.get(i).substring(start, end);
-                  num = Integer.parseInt(number);
-                  num++;
-                  outputNumbers.add(outputName + num);
-                  bindingSlotValue = outputName + num;
-                  contain = true;
-                  break;
 
-               }
-            }
-            if ( !contain ) {
-               num = 1;
-               outputNumbers.add(outputName + "1");
-               bindingSlotValue = outputName + "1";
-            }
+            String bindingSlotValue = null;
+            bindingSlotValue = stepNameR+"_"+outputName;
             outputs.put(bindingSlotValue, step);
 
             subtask.getBindings().put("$this." + bindingSlotValue,
@@ -238,18 +218,6 @@ public class Demonstration {
                contain = true;
                name = bind.getKey().substring(6);
                break;
-            } else {
-               if ( name == null ) {
-                  String temp = bind.getKey().substring(6);
-                  name = temp.substring(0, temp.length() - 1)
-                     + (Integer.parseInt(temp.substring(temp.length() - 1)) + 1);
-               } else if ( Integer.parseInt(bind.getKey().substring(
-                     bind.getKey().length() - 1)) >= Integer.parseInt(name
-                     .substring(name.length() - 1)) ) {
-                  String temp = bind.getKey().substring(6);
-                  name = temp.substring(0, temp.length() - 1)
-                     + (Integer.parseInt(temp.substring(temp.length() - 1)) + 1);
-               }
             }
          }
       }
@@ -257,7 +225,7 @@ public class Demonstration {
          return name;
       } else {
          if ( name == null )
-            name = prefix +"_"+ inputName + "1";
+            name = prefix +"_"+ inputName;
          String prefixName = prefix+name.substring(name.indexOf("_"));
          
          TaskClass.Input inputC = task.new Input(prefixName, inputType, null);
