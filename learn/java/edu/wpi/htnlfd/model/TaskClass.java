@@ -27,13 +27,12 @@ public class TaskClass extends TaskModel.Member {
       
 
       protected Slot (String name,String type) {
-         super();
+       
          this.type = type;
          this.name = name;
       }
 
-      public Slot () {
-         
+      public Slot () {         
       }
 
       public TaskClass getTask () {
@@ -99,9 +98,7 @@ public class TaskClass extends TaskModel.Member {
       return declaredInputs;
    }
 
-   public void setDeclaredInputs (List<Input> declaredInputs) {
-      this.declaredInputs = declaredInputs;
-   }
+
 
    public List<Output> getDeclaredOutputs () {
       if ( this.declaredOutputs == null )
@@ -109,9 +106,7 @@ public class TaskClass extends TaskModel.Member {
       return declaredOutputs;
    }
 
-   public void setDeclaredOutputs (List<Output> declaredOutputs) {
-      this.declaredOutputs = declaredOutputs;
-   }
+
 
    public void addInput (Input inputC) {
       if ( this.declaredInputs == null )
@@ -124,6 +119,11 @@ public class TaskClass extends TaskModel.Member {
       if ( this.declaredOutputs == null )
          this.declaredOutputs = new ArrayList<Output>();
       this.declaredOutputs.add(outputTask);
+
+   }
+   public void removeOutput (Output outputTask) {
+      if(this.declaredOutputs!=null)
+      this.declaredOutputs.remove(outputTask);
 
    }
 

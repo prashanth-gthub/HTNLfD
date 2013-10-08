@@ -136,9 +136,7 @@ public class DecompositionClass extends TaskModel.Member {
          if(!contain)
             getRequired().add(required);
       }
-      public void setRequired (List<String> required) {
-         this.required = required;
-      }
+
 
    }
 
@@ -166,7 +164,7 @@ public class DecompositionClass extends TaskModel.Member {
    private final Map<String, Binding> bindings = new HashMap<String, Binding>();
 
    public Map<String, Binding> getBindings () {
-      return bindings;
+      return bindings; //Collections.unmodifiableMap(
    }
 
    public void addBinding (String key, Binding value) {
@@ -176,7 +174,7 @@ public class DecompositionClass extends TaskModel.Member {
    public class Binding {
 
       // since these are final, ok to make public
-      public String value, step, slot;
+      private String value, step, slot;
 
       private boolean inputInput;
 

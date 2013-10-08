@@ -165,7 +165,8 @@ public class DomManipulation {
 
             subtaskStep.setAttributeNode(nameSubtaskStep);
             Attr valueSubtaskStep = document.createAttribute("task");
-            String namespaceDec = subtask.getStep(stepName).getNamespace();
+            //String namespaceDec = subtask.getStep(stepName).getNamespace();
+            String namespaceDec = subtask.getStep(stepName).getType().getQname().getNamespaceURI();
             String[] dNSNameArrayDec = namespaceDec.split(":");
             String dNSNameDec = dNSNameArrayDec[dNSNameArrayDec.length - 1];
 
@@ -198,7 +199,7 @@ public class DomManipulation {
                }
             }
 
-            namespaces.add(subtask.getStep(stepName).getNamespace());
+            namespaces.add(subtask.getStep(stepName).getType().getQname().getNamespaceURI());
 
          }
 

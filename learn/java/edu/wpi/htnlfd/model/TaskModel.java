@@ -4,12 +4,12 @@ package edu.wpi.htnlfd.model;
 import java.util.*;
 import javax.xml.namespace.QName;
 
+
 public class TaskModel {
 
    public TaskModel () {
       
    }
-
 
    private List<TaskClass> tasks = new ArrayList<TaskClass>();
 

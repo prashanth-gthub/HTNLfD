@@ -29,7 +29,7 @@ public class Init {
          + ".xml";
       List<Task> DemonstratedTasks = demonstration.findDemonstration(disco,
             taskName);
-      //demonstration.readDOM(disco, fileName);
+   
       List<TaskClass> tasks = demonstration.buildTaskModel(disco, taskName,
             DemonstratedTasks, "input1");
       DOM.writeDOM(fileName, tasks);
