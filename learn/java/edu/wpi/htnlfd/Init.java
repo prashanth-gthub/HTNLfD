@@ -3,7 +3,7 @@ package edu.wpi.htnlfd;
 import java.util.*;
 import edu.wpi.cetask.Task;
 import edu.wpi.disco.*;
-import edu.wpi.htnlfd.model.TaskClass;
+import edu.wpi.htnlfd.model.*;
 
 public class Init {
 
@@ -29,11 +29,15 @@ public class Init {
          + ".xml";
       List<Task> DemonstratedTasks = demonstration.findDemonstration(disco,
             taskName);
-   
-      List<TaskClass> tasks = demonstration.buildTaskModel(disco, taskName,
+      try{
+      TaskModel taskmodel = demonstration.buildTaskModel(disco, taskName,
             DemonstratedTasks, "input1");
-      DOM.writeDOM(fileName, tasks);
+      DOM.writeDOM(fileName, taskmodel);
       demonstration.readDOM(disco, fileName);
+      }
+      catch(Exception e){
+         e.printStackTrace();
+      }
 
    }
 
