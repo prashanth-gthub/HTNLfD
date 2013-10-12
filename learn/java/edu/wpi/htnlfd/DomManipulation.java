@@ -1,11 +1,9 @@
 package edu.wpi.htnlfd;
 
 import edu.wpi.htnlfd.model.*;
-
 import org.w3c.dom.*;
 import java.io.*;
-import java.util.*;
-import java.util.Map.Entry;
+
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
@@ -13,24 +11,27 @@ import javax.xml.transform.stream.StreamResult;
 
 public class DomManipulation {
 
-   private DocumentBuilderFactory factory;
+   public DocumentBuilderFactory factory;
 
    private DocumentBuilder builder;
 
    private Document document;
 
-   private final String xmlnsValue = "http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext";
+   public static final String xmlnsValue = "http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext";
 
-   public final String namespace = "urn:disco.wpi.edu:htnlfd:setTable1";
+   public static final String namespace = "urn:disco.wpi.edu:htnlfd:setTable1";
 
-   private final String namespacePrefix;
+   public static final String namespacePrefix;
+   
+   static {
+      String[] dNSNameArray = namespace.split(":");
+      namespacePrefix = dNSNameArray[dNSNameArray.length - 1];
+   }
 
    public DomManipulation () {
       factory = DocumentBuilderFactory.newInstance();
       factory.setNamespaceAware(true);
-
-      String[] dNSNameArray = namespace.split(":");
-      namespacePrefix = dNSNameArray[dNSNameArray.length - 1];
+      
       try {
          builder = factory.newDocumentBuilder();
          // document = builder.newDocument();
@@ -40,8 +41,8 @@ public class DomManipulation {
       }
    }
 
-   private void buildDOM (TaskModel taskmodel) {
-       taskmodel.toNode(document, xmlnsValue, namespace, namespacePrefix);
+   public Node buildDOM (TaskModel taskmodel) {
+       return taskmodel.toNode(document);
    }
 
    public void writeDOM (String fileName, TaskModel taskmodel)
@@ -76,6 +77,32 @@ public class DomManipulation {
       }
 
    }
+   
 
+   public void writeDOM (PrintStream stream, TaskModel taskmodel) throws TransformerException
+        {
+      try {
+         TransformerFactory tf = TransformerFactory.newInstance();
+         Transformer transformer;
+         
+            transformer = tf.newTransformer();
+         
+         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+         
+         Document doc = builder.newDocument();
+         DOMSource domSource = new DOMSource(doc);
+         taskmodel.toNode(doc);
+         
+         transformer.transform(domSource, new StreamResult(stream));
+      } catch (TransformerConfigurationException e) {
+         throw e;
+      } catch (TransformerException e) {
+         throw e;
+      }
+
+   }
+   
    
 }

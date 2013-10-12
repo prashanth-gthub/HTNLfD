@@ -1,5 +1,6 @@
 package edu.wpi.htnlfd.model;
 
+import edu.wpi.htnlfd.DomManipulation;
 import org.w3c.dom.*;
 import java.util.*;
 import javax.xml.namespace.QName;
@@ -39,10 +40,11 @@ public class TaskModel {
          while (iterator.hasNext()) {
             TaskClass next = iterator.next();
             if ( !next.equals(c) ) {
-               if ( c.isEquivalent(next) ) {
+               if ( c.isEquivalent(next, this) ) {
                   iterator.remove();
                   System.out.println(c.getId() + " and " + next.getId());
                } else if ( next.getDecompositions().isEmpty() ) {
+                  // not just remove, change their parents ?????????????????
                   iterator.remove();
                }
             }
@@ -86,26 +88,25 @@ public class TaskModel {
 
    }
 
-   public Node toNode (Document document, String xmlnsValue, String namespace,
-         String namespacePrefix) {
+   public Node toNode (Document document) {
       Element taskModelElement = null;
 
-      taskModelElement = document.createElementNS(xmlnsValue, "taskModel");
+      taskModelElement = document.createElementNS(DomManipulation.xmlnsValue, "taskModel");
       document.appendChild(taskModelElement);
 
       Attr about = document.createAttribute("about");
-      about.setValue(namespace);
+      about.setValue(DomManipulation.namespace);
       taskModelElement.setAttributeNode(about);
       Attr xmlns = document.createAttribute("xmlns");
-      xmlns.setValue(xmlnsValue);
+      xmlns.setValue(DomManipulation.xmlnsValue);
       taskModelElement.setAttributeNode(xmlns);
 
       Set<String> namespaces = new HashSet<String>();
       // namespaces.add("urn:disco.wpi.edu:htnlfd:std");
       for (TaskClass task : tasks) {
 
-         taskModelElement.appendChild(task.toNode(document, xmlnsValue,
-               namespacePrefix, namespaces));
+         taskModelElement.appendChild(task.toNode(document,
+                namespaces));
       }
 
       for (String namespaceOfTasks : namespaces) {
@@ -121,5 +122,6 @@ public class TaskModel {
       return taskModelElement;
 
    }
+   
 
 }

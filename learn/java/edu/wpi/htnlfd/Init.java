@@ -1,12 +1,17 @@
 package edu.wpi.htnlfd;
 
+import java.io.PrintStream;
 import java.util.*;
-import edu.wpi.cetask.Task;
+import javax.xml.transform.*;
+
+import edu.wpi.cetask.*;
 import edu.wpi.disco.*;
-import edu.wpi.htnlfd.model.*;
+
+import edu.wpi.htnlfd.model.TaskModel;
 
 public class Init {
 
+   private static TaskModel learnedTaskmodel = null;
    private static Demonstration demonstration = null;
 
    private static DomManipulation DOM = null;
@@ -30,9 +35,9 @@ public class Init {
       List<Task> DemonstratedTasks = demonstration.findDemonstration(disco,
             taskName);
       try{
-      TaskModel taskmodel = demonstration.buildTaskModel(disco, taskName,
+         learnedTaskmodel = demonstration.buildTaskModel(disco, taskName,
             DemonstratedTasks, "input1");
-      DOM.writeDOM(fileName, taskmodel);
+      DOM.writeDOM(fileName, learnedTaskmodel);
       demonstration.readDOM(disco, fileName);
       }
       catch(Exception e){
@@ -40,5 +45,14 @@ public class Init {
       }
 
    }
+   
+   public void print (PrintStream stream) throws TransformerException {
+      DOM.writeDOM (stream, learnedTaskmodel);
+   }
+   
+   public void load (TaskEngine engine, Properties properties) { 
+      //engine.load(learnedTaskmodel.toNode(), null); 
+   }
+
 
 }

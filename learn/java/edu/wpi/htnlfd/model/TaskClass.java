@@ -1,5 +1,6 @@
 package edu.wpi.htnlfd.model;
 
+import edu.wpi.htnlfd.DomManipulation;
 import edu.wpi.htnlfd.model.DecompositionClass.*;
 import org.w3c.dom.*;
 import java.util.*;
@@ -16,7 +17,15 @@ public class TaskClass extends TaskModel.Member {
       taskModel.super(id, null);
       this.setId(id);
    }
+   private boolean primitive;
+   
+   public boolean isPrimitive () {
+      return primitive;
+   }
 
+   public void setPrimitive (boolean primitive) {
+      this.primitive = primitive;
+   }
    private List<Input> declaredInputs;
 
    private List<Output> declaredOutputs;
@@ -126,8 +135,8 @@ public class TaskClass extends TaskModel.Member {
          this.modified = modifies;
       }
 
-      public Node toNode (Document document, String xmlnsValue) {
-         Element inputTask = document.createElementNS(xmlnsValue, "input");
+      public Node toNode (Document document) {
+         Element inputTask = document.createElementNS(DomManipulation.xmlnsValue, "input");
 
          Attr inputNameAttr = document.createAttribute("name");
          inputNameAttr.setValue(this.getName());
@@ -155,8 +164,8 @@ public class TaskClass extends TaskModel.Member {
          this.setType(slotType);
       }
 
-      public Node toNode (Document document, String xmlnsValue) {
-         Element outputTask = document.createElementNS(xmlnsValue, "output");
+      public Node toNode (Document document) {
+         Element outputTask = document.createElementNS(DomManipulation.xmlnsValue, "output");
 
          Attr inputNameAttr = document.createAttribute("name");
          inputNameAttr.setValue(this.getName());
@@ -173,6 +182,11 @@ public class TaskClass extends TaskModel.Member {
       if ( this.declaredInputs == null )
          this.declaredInputs = new ArrayList<Input>();
       return declaredInputs;
+   }
+   
+
+   public void setDeclaredInputs (List<Input> declaredInputs) {
+      this.declaredInputs = declaredInputs;
    }
 
    public List<Output> getDeclaredOutputs () {
@@ -218,12 +232,12 @@ public class TaskClass extends TaskModel.Member {
       return null;
    }
 
-   public boolean isEquivalent (TaskClass next) {
+   public boolean isEquivalent (TaskClass next, TaskModel taskModel) {
       DecompositionClass temp = null;
       for (DecompositionClass dec1 : this.getDecompositions()) {
          boolean contain = false;
          for (DecompositionClass dec2 : next.getDecompositions()) {
-            if ( dec1.isEquivalent(dec2) ) {
+            if ( dec1.isEquivalent(dec2,taskModel) ) {
                contain = true;
                temp = dec2;
                break;
@@ -236,10 +250,9 @@ public class TaskClass extends TaskModel.Member {
       return true;
    }
 
-   public Node toNode (Document document, String xmlnsValue,
-         String namespacePrefix, Set<String> namespaces) {
+   public Node toNode (Document document, Set<String> namespaces) {
 
-      Element taskElement = document.createElementNS(xmlnsValue, "task");
+      Element taskElement = document.createElementNS(DomManipulation.xmlnsValue, "task");
 
       Attr idTask = document.createAttribute("id");
       idTask.setValue(this.getId());
@@ -247,18 +260,17 @@ public class TaskClass extends TaskModel.Member {
 
       for (TaskClass.Input input : this.getDeclaredInputs()) {
 
-         taskElement.appendChild(input.toNode(document, xmlnsValue));
+         taskElement.appendChild(input.toNode(document));
 
       }
 
       for (TaskClass.Output output : this.getDeclaredOutputs()) {
-         taskElement.appendChild(output.toNode(document, xmlnsValue));
+         taskElement.appendChild(output.toNode(document));
       }
 
       for (DecompositionClass subtask : this.getDecompositions()) {
 
-         taskElement.appendChild(subtask.toNode(document, xmlnsValue,
-               namespacePrefix, namespaces));
+         taskElement.appendChild(subtask.toNode(document, namespaces));
 
       }
       return taskElement;
@@ -274,6 +286,8 @@ public class TaskClass extends TaskModel.Member {
       }
       return false;
    }
+
+   
  
 
 }

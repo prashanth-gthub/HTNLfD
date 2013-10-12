@@ -5,10 +5,12 @@ import edu.wpi.disco.lang.Utterance;
 import edu.wpi.htnlfd.model.*;
 import edu.wpi.htnlfd.model.DecompositionClass.Binding;
 import edu.wpi.htnlfd.model.DecompositionClass.Step;
+import edu.wpi.htnlfd.model.TaskClass.Input;
 import java.util.*;
 import java.util.Map.Entry;
 import javax.script.*;
 import javax.xml.namespace.QName;
+
 
 public class Demonstration {
 
@@ -90,42 +92,7 @@ public class Demonstration {
       return null;
    }
 
-   public List<Object> findParent (TaskClass parentTask,
-         Entry<String, Step> parentStep, DecompositionClass parentSubtask) {
-      boolean contain = false;
-      while (true) {
-         contain = false;
-         for (TaskClass temptask : this.taskModel.getTaskClasses()) {
-            for (DecompositionClass subtask : temptask.getDecompositions()) {
-
-               for (Entry<String, Step> step : subtask.getSteps().entrySet()) {
-                  if ( step.getValue().getType().getId()
-                        .equals(parentTask.getId()) ) {
-                     parentStep = step;
-                     parentTask = temptask;
-                     parentSubtask = subtask;
-                     contain = true;
-                     break;
-                  }
-
-               }
-               if ( contain )
-                  break;
-            }
-
-            if ( contain )
-               break;
-         }
-         if ( !contain ) {
-            ArrayList<Object> temp = new ArrayList<Object>();
-            temp.add(parentTask);
-            temp.add(parentSubtask);
-            temp.add(parentStep);
-
-            return temp;
-         }
-      }
-   }
+   
 
 
    public boolean addAlternativeRecipe (TaskClass newTask, String input) {
@@ -189,7 +156,7 @@ public class Demonstration {
          for(TaskClass goalI :this.taskModel.getTaskClasses()){
             if(goalI.getId().equals(step.getType().getId())){
                goal = goalI;
-               System.out.println(goal.getQname());
+               
                //goal.setQname(step.getType().getQName());
                break;
             }
@@ -197,6 +164,30 @@ public class Demonstration {
          if(goal == null){
             goal = new TaskClass(
                   taskModel, step.getType().getId(), step.getType().getQName());
+            
+            for(String out:step.getType().getDeclaredOutputNames()){
+
+               TaskClass.Output outputTask = goal.new Output(out,
+                     step.getType().getSlotType(out));
+               goal.addOutput(outputTask);
+
+         }
+         
+      for(String in:step.getType().getDeclaredInputNames()){
+         
+         TaskClass.Input inputC = null;
+         for (TaskClass.Output out : goal.getDeclaredOutputs()) {
+            if (step.getType().getModified(in)!=null && out.getName().equals(step.getType().getModified(in)) ) {
+               inputC = goal.new Input(in,step.getType().getSlotType(in),null);
+               break;
+            }
+         }
+         if ( inputC == null ) {
+            inputC = goal.new Input(in,
+                  step.getType().getSlotType(in), null);
+         }
+         goal.addInput(inputC);
+      }
          }
          DecompositionClass.Step stp = subtask.new Step(goal,
                1, 1, null);
@@ -215,7 +206,7 @@ public class Demonstration {
             outputs.put(bindingSlotValue, step);
 
             subtask.addBinding("$this." + bindingSlotValue,
-                  subtask.new Binding(bindingSlotValue, stepNameR, bindingSlot,
+                  subtask.new Binding(bindingSlotValue, "this", bindingSlot,
                         false));
             task.addOutput(task.new Output(bindingSlotValue, step.getType()
                   .getSlotType(outputName)));
@@ -244,7 +235,7 @@ public class Demonstration {
 
             if ( inputNum1 != inputNum2 ) {
                subtask.addBinding("$this." + changedName, subtask.new Binding(
-                     changedName, stepNameR, inputBindingValue, true));
+                     changedName, "this", inputBindingValue, true));
 
                for (int i = task.getDeclaredOutputs().size() - 1; i >= (task
                      .getDeclaredOutputs().size() - step.getType()
@@ -328,12 +319,40 @@ public class Demonstration {
                   subtaskDecomposition.isOrdered(), domTask);
             subtask.setQname(subtaskDecomposition.getQName());
             domTask.addDecompositionClass(subtask);
+            
             for (String stepName : subtaskDecomposition.getStepNames()) {
               
                TaskClass taskType = this.taskModel.getTaskClass(subtaskDecomposition.getStepType(stepName).getId());
                if(taskType==null){
                   taskType = new TaskClass(
                         taskModel, subtaskDecomposition.getStepType(stepName).getId(), subtaskDecomposition.getStepType(stepName).getQName());
+                  
+                     for(String out:subtaskDecomposition.getStepType(stepName).getDeclaredOutputNames()){
+
+                           TaskClass.Output outputTask = taskType.new Output(out,
+                                 subtaskDecomposition.getStepType(stepName).getSlotType(out));
+                           taskType.addOutput(outputTask);
+
+                     }
+                     
+                  for(String in:subtaskDecomposition.getStepType(stepName).getDeclaredInputNames()){
+                     
+                     TaskClass.Input inputC = null;
+                     for (TaskClass.Output out : taskType.getDeclaredOutputs()) {
+                        if (subtaskDecomposition.getStepType(stepName).getModified(in)!=null && out.getName().equals(subtaskDecomposition.getStepType(stepName).getModified(in)) ) {
+                           inputC = taskType.new Input(in,subtaskDecomposition.getStepType(stepName).getSlotType(in),null);
+                           break;
+                        }
+                     }
+                     if ( inputC == null ) {
+                        inputC = taskType.new Input(in,
+                              subtaskDecomposition.getStepType(stepName).getSlotType(in), null);
+                     }
+                     taskType.addInput(inputC);
+                  }
+                  
+                  
+                  
                }
                DecompositionClass.Step step = subtask.new Step(taskType, 1, 1,
                      null);
@@ -377,5 +396,7 @@ public class Demonstration {
    public void readDOM (Disco disco, String fileName) {
       this.externalTaskModel = disco.getInteraction().load(fileName);
    }
+   
+   
 
 }
