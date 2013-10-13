@@ -266,19 +266,30 @@ public class DecompositionClass extends TaskModel.Member {
    @SuppressWarnings("unchecked")
    public String findValueInParents(TaskModel taskModel, String stp, TaskClass task,DecompositionClass dec, String inputName){
       
-      
-      for(Entry<String, Binding> bind1:dec.getBindings().entrySet()){
-         if(bind1.getValue().getStep().equals(stp) && bind1.getValue().getSlot().contains(inputName)){
-            String tem = getBindingValue(bind1,dec);
-            if(tem!=null)
-               return tem;
-            break;
+      if(dec!=null && stp!=null){
+         for(Entry<String, Binding> bind1:dec.getBindings().entrySet()){
+            if(bind1.getValue().getStep().equals(stp) && bind1.getValue().getSlot().contains(inputName)){
+               String tem = getBindingValue(bind1,dec);
+               if(tem!=null)
+                  return tem;
+               break;
+            }
          }
       }
       
       TaskClass parentTask = task;
       Entry<String, Step> parentStep = null;
       DecompositionClass parentSubtask = null;
+      
+      if(dec!=null && stp==null){
+         for(Entry<String, Binding> bind1:dec.getBindings().entrySet()){
+            if(bind1.getValue().getStep().equals("this") && bind1.getValue().getSlot().contains(inputName)){
+                return bind1.getValue().getValue();
+            }
+         }
+      }
+      
+      
 
       List<Object> temp = findRootParent(parentTask, parentStep, parentSubtask,taskModel);
       parentTask = (TaskClass) temp.get(0);
@@ -288,7 +299,7 @@ public class DecompositionClass extends TaskModel.Member {
       if(parentSubtask != null){
          for(Entry<String, Binding> bind1:parentSubtask.getBindings().entrySet()){
             if(bind1.getValue().getStep().equals(parentStep.getKey()) && bind1.getValue().getSlot().equals(inputName)){
-               String tem = getBindingValue(bind1,dec);
+               String tem = getBindingValue(bind1,parentSubtask);
                if(tem!=null)
                   return tem;
                break;
@@ -574,13 +585,13 @@ public class DecompositionClass extends TaskModel.Member {
       }
 
    }
-   public Binding getBindingStep(String stepName,String inputName){
+   public Entry<String, Binding> getBindingStep(String stepName,String inputName){
       for (Entry<String, Binding> binding : this
             .getBindings().entrySet()) {
          if ( binding.getValue().getStep().equals(stepName) && binding.getValue().isInputInput()
             && binding.getValue().getValue()
                   .contains(inputName) ) {
-            return binding.getValue();
+            return binding;
          }
       }
       return null;
