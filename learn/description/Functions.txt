@@ -1,0 +1,69 @@
+Functions' Description:
+
+1. Demonstration Class:
+	1) findDemonstration:
+		This function searches in disco's stack and finds the last demonstrations.
+	2) buildTaskModel:
+		This function uses the demonstrated tasks and learned tasks, and adds them to the taskmodel.
+	3) demonstratedTask:
+		This function uses the new demonstrated tasks and returns the generated TaskClass.(with subtask and inputs and outputs and bindings)
+	4) learnedTaskmodel:
+		This function add the learned tasks(finds them from disco's loaded taskmodel) to current taskmodel.
+	5) readDOM:
+		This function load the new taskModel into disco.
+	6) isAlternativeRecipe:
+		This function checks whether the new demonstrated task is an alternative recipe for previous tasks or not. (By checking it's name.)
+	7) addAlternativeRecipe:
+		This function first checks whether a new demonstrated task is alternative recipe or not. If it is an alternative recipe, it will add 
+		it to the it's task.
+
+2. TaskModel Class:
+	1) isEquivalent:
+		This function checks for equivalent TaskClass classes recursively.
+	2) toNode:
+		This function makes the TaslModel's DOM element recursively.
+3. TaskClass Class:
+	1) toNode:
+		This function makes the TaskClass's DOM element recursively.
+	2) isEquivalent:
+		This function checks for equivalent DecompositionClass classes recursively.
+	3) addInput:
+		This function checks the input value of a task, if it is existed, it will return the name of the existed input. If it can't find it, 
+		it will add the input to the TaskClass.
+4. DecompositionClass:
+	1) isEquivalent:
+		This function checks for equivalent steps recursively.
+	2) toNode:
+		This function makes the DecompositionClass's DOM element recursively.
+	3) addOrdering:
+		This function adds the ordering constraints according to the flow of inputs and outputs.
+	4) removeOrdering:
+		This function removes ordering constraints.
+	5) checkInputs:
+		This function checks whether two inputs have the same value in their parents.(This function is called in isEquivalent function)
+	6) findValueInParents:
+		This fucntion finds value of an input in it's parents.
+	7) findRootParent:
+		This function finds the last parent(older parent) of a TaskClass.
+	8) getBindingStep:
+		This fucntion returns the binding that is related to a step and an input.
+	9) removeBindingInput:
+		This function removes the binding that is related to an input.
+5. TaskClass.Input:
+	1) isEquivalent:
+		This function checks for equivalent inputs.
+	2) toNode:
+		This function makes the input's DOM element.
+6. TaskClass.Output:
+	1) isEquivalent:
+		This function checks for equivalent outputs.
+	2) toNode:
+		This function makes the output's DOM element.
+7. DecompositionClass.Step:
+	1) isEquivalent:
+		This function checks for equivalent steps.
+	2) toNode:
+		This function makes the step's DOM element.
+8. DecompositionClass.Binding:
+	1) toNode:
+		This function makes the binding's DOM element.
