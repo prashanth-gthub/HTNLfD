@@ -3,19 +3,29 @@ Functions' Description:
 1. Demonstration Class:
 	1) findDemonstration:
 		This function searches in disco's stack and finds the last demonstrations.
+		Algorithm: Since we know that all of our demonstrated tasks are in "Demonstration" segment, we can just search for all of segements 
+		in that segment.
 	2) buildTaskModel:
 		This function uses the demonstrated tasks and learned tasks, and adds them to the taskmodel.
+		Algorithm: Calling all "demonstratedTask" and "learnedTaskmodel" and "addAlternativeRecipe" functions.
 	3) demonstratedTask:
 		This function uses the new demonstrated tasks and returns the generated TaskClass.(with subtask and inputs and outputs and bindings)
+		Algorithm: This function converts all of the disco's data into our classes. It also calls addOrdering function to add ordering constraints.
+		It adds all of the subtask's steps' inputs and bindings to the new task.
 	4) learnedTaskmodel:
 		This function add the learned tasks(finds them from disco's loaded taskmodel) to current taskmodel.
+		Algorithm: This function converts all of the disco's data into our classes.
 	5) readDOM:
-		This function load the new taskModel into disco.
+		This function load the new taskModel into disco.(By calling "load" fucntion)
 	6) isAlternativeRecipe:
-		This function checks whether the new demonstrated task is an alternative recipe for previous tasks or not. (By checking it's name.)
+		This function checks whether the new demonstrated task is an alternative recipe for previous tasks or not. 
+		Algorithm: This function just checks the name of the new task to checks whether it is an alternative recipe or new task.
+		It also checks that the new task is not equivalent to the previous ones.
 	7) addAlternativeRecipe:
 		This function first checks whether a new demonstrated task is alternative recipe or not. If it is an alternative recipe, it will add 
 		it to the it's task.
+		Algorithm: This fucntion checks all of the inputs' binding values to find out whether it should add another input to this task or not.
+		(It doesn't add inputs to parents.)
 
 2. TaskModel Class:
 	1) isEquivalent:
@@ -28,8 +38,8 @@ Functions' Description:
 	2) isEquivalent:
 		This function checks for equivalent DecompositionClass classes recursively.
 	3) addInput:
-		This function checks the input value of a task, if it is existed, it will return the name of the existed input. If it can't find it, 
-		it will add the input to the TaskClass.
+		This function checks the input value of a task; if it is the same as the input of demonstrated task, it will return the name of the 
+		existed input. If it can't find it, it will add the input to the TaskClass.
 4. DecompositionClass:
 	1) isEquivalent:
 		This function checks for equivalent steps recursively.
@@ -40,11 +50,12 @@ Functions' Description:
 	4) removeOrdering:
 		This function removes ordering constraints.
 	5) checkInputs:
-		This function checks whether two inputs have the same value in their parents.(This function is called in isEquivalent function)
+		This function checks whether two inputs have the same value in their parents.(This function is called by isEquivalent function)
 	6) findValueInParents:
-		This fucntion finds value of an input in it's parents.
+		This fucntion finds value of an input in it's parents.(from each subtasks' bindings)
+		Assumption: The value of our input is in it's oldest parent.
 	7) findRootParent:
-		This function finds the last parent(older parent) of a TaskClass.
+		This function finds the last parent(oldest parent) of a TaskClass.(By calling the same fucntion recursively on it's parents.)		
 	8) getBindingStep:
 		This fucntion returns the binding that is related to a step and an input.
 	9) removeBindingInput:
@@ -67,3 +78,7 @@ Functions' Description:
 8. DecompositionClass.Binding:
 	1) toNode:
 		This function makes the binding's DOM element.
+9. InputTransformation:
+	1) transform:
+		This fucntion checks all the steps' of a decomposition class, if all of them have the same input and the TaskClass class doesn't have it, 
+		then it will be added to the TaskClass class. 
