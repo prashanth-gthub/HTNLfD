@@ -17,6 +17,36 @@ public class TaskClass extends TaskModel.Member {
       taskModel.super(id, null);
       this.setId(id);
    }
+   public TaskClass (TaskModel taskModel,TaskClass oldTaskClass) {
+      taskModel.super(oldTaskClass.getId(),oldTaskClass.getQname());
+      this.declaredOutputs = new ArrayList<Output>(oldTaskClass.declaredOutputs.size());
+      this.declaredInputs = new ArrayList<Input>(oldTaskClass.declaredInputs.size());
+      
+      for(Output out:declaredOutputs){
+         Output output = new Output(out);
+         declaredOutputs.add(output);
+         for(Input in:declaredInputs){
+            if(in.getModified().equals(out)){
+               declaredInputs.add(new Input(in,output));
+            }
+         }
+      }
+      
+      
+      for(Input in:declaredInputs){
+         if(in.getModified()==null)
+            declaredInputs.add(new Input(in,null));
+      }
+      
+      this.primitive = oldTaskClass.isPrimitive();
+      
+      this.decompositions = new ArrayList<DecompositionClass>(oldTaskClass.getDecompositions().size());
+      for(DecompositionClass oldDecomposition:oldTaskClass.getDecompositions()){
+         this.decompositions.add(new DecompositionClass(taskModel, oldDecomposition, this));
+      }
+      
+      
+   }
    private boolean primitive;
    
    public boolean isPrimitive () {
@@ -127,6 +157,11 @@ public class TaskClass extends TaskModel.Member {
          super();
       }
 
+      public Input (Input oldIn,Output modified) {
+         super(oldIn.getName(),oldIn.getType());
+         this.modified = modified;
+      }
+
       public Output getModified () {
          return modified;
       }
@@ -162,6 +197,10 @@ public class TaskClass extends TaskModel.Member {
          super(outputName, slotType);
          this.setName(outputName);
          this.setType(slotType);
+      }
+
+      public Output (Output oldOut) {
+         super(oldOut.getName(),oldOut.getType());
       }
 
       public Node toNode (Document document) {

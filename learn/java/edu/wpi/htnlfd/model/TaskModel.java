@@ -10,6 +10,13 @@ public class TaskModel {
    public TaskModel () {
 
    }
+   
+   public TaskModel (TaskModel oldModel) {
+      List<TaskClass> tasks = new ArrayList<TaskClass>(oldModel.tasks.size());
+      for(TaskClass oldTaskClass:oldModel.getTaskClasses()){
+         tasks.add(new TaskClass(this,oldTaskClass));
+      }
+   }
 
    private List<TaskClass> tasks = new ArrayList<TaskClass>();
 

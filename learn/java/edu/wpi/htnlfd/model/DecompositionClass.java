@@ -25,6 +25,25 @@ public class DecompositionClass extends TaskModel.Member {
       this.goal = goal;
    }
 
+   public DecompositionClass (TaskModel taskModel,DecompositionClass oldDecomposition, TaskClass goal) {
+      taskModel.super(oldDecomposition.getId(),oldDecomposition.getQname());
+      this.applicable = oldDecomposition.getApplicable();
+      this.ordered = oldDecomposition.isOrdered();
+      this.goal = goal;
+      this.stepNames = new ArrayList<String>();
+      for(String stepName:oldDecomposition.getStepNames())
+         this.stepNames.add(stepName);
+      this.steps = new HashMap<String, Step>();
+      for(Entry<String, Step> step:oldDecomposition.getSteps().entrySet()){
+         this.steps.put(step.getKey(), new Step(step.getValue()));
+      }
+      this.bindings = new HashMap<String, Binding>();
+      for(Entry<String, Binding> bind:oldDecomposition.getBindings().entrySet()){
+         this.bindings.put(bind.getKey(), new Binding(bind.getValue()));
+      }
+      
+   }
+
    private TaskClass goal;
 
    private String applicable;
@@ -126,6 +145,15 @@ public class DecompositionClass extends TaskModel.Member {
          this.minOccurs = minOccurs;
          this.maxOccurs = maxOccurs;
          this.required = required;
+      }
+
+      public Step (Step oldStep) {
+         this.type = oldStep.getType();
+         this.minOccurs = oldStep.getMinOccurs();
+         this.maxOccurs = oldStep.getMaxOccurs();
+         this.required = new ArrayList<String>();
+         for(String require:oldStep.getRequired())
+            this.required.add(require);
       }
 
       public TaskClass getType () {
@@ -370,7 +398,7 @@ public class DecompositionClass extends TaskModel.Member {
       return steps.get(name).minOccurs < 1;
    }
 
-   private final Map<String, Binding> bindings = new HashMap<String, Binding>();
+   private Map<String, Binding> bindings = new HashMap<String, Binding>();
 
    public Map<String, Binding> getBindings () {
       return Collections.unmodifiableMap(bindings); // Collections.unmodifiableMap(
@@ -403,6 +431,15 @@ public class DecompositionClass extends TaskModel.Member {
          this.step = step;
          this.value = value;
          this.inputInput = inputInput;
+      }
+
+      public Binding (Binding oldBind) {
+         this.slot = oldBind.getSlot();
+         this.step = oldBind.getStep();
+         this.value = oldBind.getValue();
+         this.inputInput = oldBind.isInputInput();
+         this.depends = new ArrayList<Binding>();
+         // depends ????
       }
 
       public List<Binding> getDepends () {
