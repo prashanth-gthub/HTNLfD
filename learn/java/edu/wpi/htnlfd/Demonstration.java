@@ -11,18 +11,39 @@ import java.util.Map.Entry;
 import javax.script.*;
 import javax.xml.namespace.QName;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Demonstration.
+ */
 public class Demonstration {
 
+   /** The task model. */
    private TaskModel taskModel;
 
+   /** The external task model. */
    private edu.wpi.cetask.TaskModel externalTaskModel = null;
 
+   /** The transformation. */
    private InputTransformation transformation = new InputTransformation();
 
+   /**
+    * Instantiates a new demonstration.
+    */
    public Demonstration () {
 
    }
 
+   /**
+    * Find demonstration.
+    *
+    *This function searches in disco's stack and finds the last demonstrations.
+      Algorithm: Since we know that all of our demonstrated tasks are in "Demonstration" 
+      segment, we can just search for all of segments in that segment.
+    *
+    * @param disco the disco
+    * @param taskName the task name
+    * @return the list
+    */
    public List<edu.wpi.cetask.Task> findDemonstration (Disco disco,
          String taskName) {
       List<edu.wpi.cetask.Task> demonstratedTasks = new ArrayList<edu.wpi.cetask.Task>();
@@ -53,6 +74,21 @@ public class Demonstration {
       }
    }
 
+   /**
+    * Builds the task model.
+    *
+    *This function uses the demonstrated tasks and learned tasks, and adds them to the taskmodel.
+      Algorithm: Calling all "demonstratedTask" and "learnedTaskmodel" and "addAlternativeRecipe" 
+      functions.
+    *
+    * @param disco the disco
+    * @param taskName the task name
+    * @param steps the steps
+    * @param input the input
+    * @return the task model
+    * @throws NoSuchMethodException the no such method exception
+    * @throws ScriptException the script exception
+    */
    public TaskModel buildTaskModel (Disco disco, String taskName,
          List<edu.wpi.cetask.Task> steps, String input)
          throws NoSuchMethodException, ScriptException {
@@ -73,6 +109,16 @@ public class Demonstration {
       return this.taskModel;
    }
 
+   /**
+    * Checks if is alternative recipe.
+    *
+    *This function checks whether the new demonstrated task is an alternative recipe for previous tasks or not. 
+      Algorithm: This function just checks the name of the new task to checks whether it is an alternative recipe or new task.
+      It also checks that the new task is not equivalent to the previous ones.
+    *
+    * @param newTask the new task
+    * @return the task class
+    */
    public TaskClass isAlternativeRecipe (TaskClass newTask) {
       Iterator<TaskClass> tasksIterator = this.taskModel.getTaskClasses()
             .iterator();
@@ -82,9 +128,9 @@ public class Demonstration {
 
          task = tasksIterator.next();
 
-         if(task.isEquivalent(newTask, taskModel))
+         if ( task.isEquivalent(newTask, taskModel) )
             return null;
-         
+
          if ( task.getId().equals(newTask.getId()) ) {
             return task;
 
@@ -93,6 +139,19 @@ public class Demonstration {
       return null;
    }
 
+   /**
+    * Adds the alternative recipe.
+    *
+    *This function first checks whether a new demonstrated task is alternative recipe or not. If it is an alternative recipe, it will add 
+      it to the it's task.
+      Algorithm: This fucntion checks all of the inputs' binding values to find out whether it should add another input to this task or not.
+      (It doesn't add inputs to parents.)
+    *
+    *
+    * @param newTask the new task
+    * @param input the input
+    * @return true, if successful
+    */
    @SuppressWarnings("unchecked")
    public boolean addAlternativeRecipe (TaskClass newTask, String input) {
 
@@ -131,25 +190,28 @@ public class Demonstration {
                                  task.getDecompositions().get(0), in1.getName());
                   if ( newTask.getDecompositions().get(0).getBindings()
                         .get("$this." + in2.getName()).getValue().equals(value) ) {
-                     if(bindValue!=null){
-                     removed1.put("$this." + in2.getName(),
-                           newTask.getDecompositions().get(0).getBindings()
-                                 .get("$this" + in2.getName()));
-                     bindedInput.put("$this." + in2.getName(),
-                           "$this." + in1.getName());
-                     if(in2.getModified()!=null){
-                        if(!in2.getModified().getName().equals(in1.getModified().getName()))
-                           bindedOutput.put("$this." + in2.getModified().getName(),"$this." + in1.getModified().getName() );
+                     if ( bindValue == null ) {
+                        removed1.put("$this." + in2.getName(),
+                              newTask.getDecompositions().get(0).getBindings()
+                                    .get("$this" + in2.getName()));
+                        bindedInput.put("$this." + in2.getName(), "$this."
+                           + in1.getName());
+                        if ( in2.getModified() != null ) {
+                           if ( !in2.getModified().getName()
+                                 .equals(in1.getModified().getName()) )
+                              bindedOutput.put("$this."
+                                 + in2.getModified().getName(), "$this."
+                                 + in1.getModified().getName());
+                        }
                      }
-                  }
                   }
                }
             }
          }
-         
+
          Map<String, Binding> bindedOutputADD = new HashMap<String, Binding>();
          Map<String, Binding> bindedOutputRemove = new HashMap<String, Binding>();
-         
+
          for (Entry<String, Binding> rem : removed1.entrySet()) {
             newTask.getDecompositions().get(0).removeBinding(rem.getKey());
 
@@ -159,7 +221,7 @@ public class Demonstration {
                   binding.getValue().setValue(bindedInput.get(rem.getKey()));
                }
                String valOut = bindedOutput.get(binding.getKey());
-               if(valOut!=null){
+               if ( valOut != null ) {
                   bindedOutputADD.put(valOut, binding.getValue());
                   bindedOutputRemove.put(binding.getKey(), binding.getValue());
                }
@@ -174,26 +236,25 @@ public class Demonstration {
                }
             }
          }
-         
-         for(Entry<String, Binding> binding:bindedOutputADD.entrySet()){
-            newTask.getDecompositions().get(0).addBinding(binding.getKey(), binding.getValue());
+
+         for (Entry<String, Binding> binding : bindedOutputADD.entrySet()) {
+            newTask.getDecompositions().get(0)
+                  .addBinding(binding.getKey(), binding.getValue());
          }
-         for(Entry<String, Binding> binding:bindedOutputRemove.entrySet()){
+         for (Entry<String, Binding> binding : bindedOutputRemove.entrySet()) {
             newTask.getDecompositions().get(0).removeBinding(binding.getKey());
          }
 
-         /*for(TaskClass.Output out : newTask.getDeclaredOutputs()){
-            TaskClass.Output outCC = task.new Output(newTask.getDecompositions().get(0).getId()+"_"+out.getName(),
-                  out.getType());
-            task.addOutput(outCC);
-         }
-         
-         for(TaskClass.Input in : newTask.getDeclaredInputs()){
-            TaskClass.Input inputCC = task.new Input(newTask.getDecompositions().get(0).getId()+"_"+in.getName(),
-                  in.getType(), in.getModified());
-            task.addInput(inputCC);
-         }*/
-               
+         /*
+          * for(TaskClass.Output out : newTask.getDeclaredOutputs()){
+          * TaskClass.Output outCC = task.new
+          * Output(newTask.getDecompositions().get(0).getId()+"_"+out.getName(),
+          * out.getType()); task.addOutput(outCC); } for(TaskClass.Input in :
+          * newTask.getDeclaredInputs()){ TaskClass.Input inputCC = task.new
+          * Input(newTask.getDecompositions().get(0).getId()+"_"+in.getName(),
+          * in.getType(), in.getModified()); task.addInput(inputCC); }
+          */
+
          // not added input and outputs.
          // end
          return true;
@@ -202,6 +263,20 @@ public class Demonstration {
 
    }
 
+   /**
+    * Demonstrated task.
+    *
+    *This function uses the new demonstrated tasks and returns the generated TaskClass.(with subtask and inputs and outputs and bindings)
+      Algorithm: This function converts all of the disco's data into our classes. It also calls addOrdering function to add ordering constraints.
+      It adds all of the subtask's steps' inputs and bindings to the new task.
+    *
+    * @param disco the disco
+    * @param taskName the task name
+    * @param steps the steps
+    * @return the task class
+    * @throws NoSuchMethodException the no such method exception
+    * @throws ScriptException the script exception
+    */
    public TaskClass demonstratedTask (Disco disco, String taskName,
          List<edu.wpi.cetask.Task> steps) throws NoSuchMethodException,
          ScriptException {
@@ -355,6 +430,13 @@ public class Demonstration {
 
    }
 
+   /**
+    * Learned taskmodel.
+    * 
+    * This function add the learned tasks(finds them from disco's loaded taskmodel) to current taskmodel.
+      Algorithm: This function converts all of the disco's data into our classes.
+      
+    */
    public void learnedTaskmodel () {
 
       Iterator<edu.wpi.cetask.TaskClass> tasksIterator = this.externalTaskModel
@@ -490,6 +572,14 @@ public class Demonstration {
       }
    }
 
+   /**
+    * Read dom.
+    *
+    *This function load the new taskModel into disco.(By calling "load" fucntion)
+    *
+    * @param disco the disco
+    * @param fileName the file name
+    */
    public void readDOM (Disco disco, String fileName) {
       this.externalTaskModel = disco.getInteraction().load(fileName);
    }

@@ -6,8 +6,20 @@ import edu.wpi.htnlfd.model.TaskClass.Input;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class InputTransformation extends Transformation{
-   // This function adds same input to upper levels
+// TODO: Auto-generated Javadoc
+/**
+ * The Class InputTransformation.
+ */
+public class InputTransformation extends Transformation {
+
+   
+   /* (non-Javadoc)
+    * 
+    * This fucntion checks all the steps' of a decomposition class, if all of them have the same input and the TaskClass class doesn't have it, 
+      then it will be added to the TaskClass class. 
+    * 
+    * @see edu.wpi.htnlfd.Transformation#transform(edu.wpi.htnlfd.model.TaskModel)
+    */
    public void transform (TaskModel taskModel) {
       Iterator<TaskClass> tasksIterator = taskModel.getTaskClasses().iterator();
       TaskClass task = null;
@@ -69,9 +81,9 @@ public class InputTransformation extends Transformation{
          // If task doesn't have this input add it
          for (int k = 0; k < decompositionInputs.size(); k++) {
 
-            if (!task.hasInput(decompositionInputs.get(k).getName())) {
-               task.addInput(task.new Input(decompositionInputs.get(k).getName(),
-                     decompositionInputs.get(k).getType(), null));
+            if ( !task.hasInput(decompositionInputs.get(k).getName()) ) {
+               task.addInput(task.new Input(decompositionInputs.get(k)
+                     .getName(), decompositionInputs.get(k).getType(), null));
             }
          }
 

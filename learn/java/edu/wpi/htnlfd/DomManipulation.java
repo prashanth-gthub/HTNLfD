@@ -9,18 +9,28 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DomManipulation.
+ */
 public class DomManipulation {
 
+   /** The factory. */
    public DocumentBuilderFactory factory;
 
+   /** The builder. */
    private DocumentBuilder builder;
 
+   /** The document. */
    private Document document;
 
+   /** The Constant xmlnsValue. */
    public static final String xmlnsValue = "http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext";
 
+   /** The Constant namespace. */
    public static final String namespace = "urn:disco.wpi.edu:htnlfd:setTable1";
 
+   /** The Constant namespacePrefix. */
    public static final String namespacePrefix;
    
    static {
@@ -28,6 +38,9 @@ public class DomManipulation {
       namespacePrefix = dNSNameArray[dNSNameArray.length - 1];
    }
 
+   /**
+    * Instantiates a new dom manipulation.
+    */
    public DomManipulation () {
       factory = DocumentBuilderFactory.newInstance();
       factory.setNamespaceAware(true);
@@ -41,10 +54,23 @@ public class DomManipulation {
       }
    }
 
+   /**
+    * Builds the dom.
+    *
+    * @param taskmodel the taskmodel
+    * @return the node
+    */
    public Node buildDOM (TaskModel taskmodel) {
        return taskmodel.toNode(document);
    }
 
+   /**
+    * Write dom.
+    *
+    * @param fileName the file name
+    * @param taskmodel the taskmodel
+    * @throws Exception the exception
+    */
    public void writeDOM (String fileName, TaskModel taskmodel)
          throws Exception {
 
@@ -79,6 +105,13 @@ public class DomManipulation {
    }
    
 
+   /**
+    * Write dom.
+    *
+    * @param stream the stream
+    * @param taskmodel the taskmodel
+    * @throws TransformerException the transformer exception
+    */
    public void writeDOM (PrintStream stream, TaskModel taskmodel) throws TransformerException
         {
       try {
