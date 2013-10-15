@@ -48,17 +48,17 @@ public class TaskClass extends TaskModel.Member {
       this.declaredInputs = new ArrayList<Input>(
             oldTaskClass.declaredInputs.size());
 
-      for (Output out : declaredOutputs) {
+      for (Output out : oldTaskClass.declaredOutputs) {
          Output output = new Output(out);
          declaredOutputs.add(output);
-         for (Input in : declaredInputs) {
-            if ( in.getModified().equals(out) ) {
+         for (Input in : oldTaskClass.declaredInputs) {
+            if (in.getModified()!=null && in.getModified().equals(out) ) {
                declaredInputs.add(new Input(in, output));
             }
          }
       }
 
-      for (Input in : declaredInputs) {
+      for (Input in : oldTaskClass.declaredInputs) {
          if ( in.getModified() == null )
             declaredInputs.add(new Input(in, null));
       }
@@ -330,6 +330,24 @@ public class TaskClass extends TaskModel.Member {
          }
          return inputTask;
       }
+      
+      /**
+       * Checks if is equivalent.
+       *
+       *Checks whether two inputs are equivalent by considering 
+       *their type and if they have modified output
+       *
+       * @param in the in
+       * @return true, if is equivalent
+       */
+      public boolean isEquivalent (Input in){
+         if(this.getType().equals(in.getType()) && (this.getModified()!=null && in.getModified()!=null
+               && this.getModified().getType().equals(in.getModified().getType())) || (this.getModified()==null && in.getModified()==null
+                     ) ){
+            return true;
+         }
+         return false;
+      }
 
    }
 
@@ -379,6 +397,22 @@ public class TaskClass extends TaskModel.Member {
          outputTask.setAttributeNode(inputType);
          return outputTask;
       }
+      
+      /**
+       * Checks if is equivalent.
+       *
+       *Checks whether two outputs are equivalent by considering their type
+       *
+       * @param out the out
+       * @return true, if is equivalent
+       */
+      public boolean isEquivalent (Output out){
+         if(this.getType().equals(out.getType())){
+            return true;
+         }
+         return false;
+      }
+      
 
    }
 
@@ -492,6 +526,45 @@ public class TaskClass extends TaskModel.Member {
     * @return true, if is equivalent
     */
    public boolean isEquivalent (TaskClass next, TaskModel taskModel) {
+      
+      TaskClass fakeTask = new TaskClass(taskModel, next);
+      
+      if(this.getDeclaredInputs().size() == fakeTask.getDeclaredInputs().size()){
+         for(Input thisIn : this.getDeclaredInputs()){
+            boolean contain = false;
+            Iterator<Input> iterate= fakeTask.getDeclaredInputs().iterator();
+            while(iterate.hasNext()){
+               Input input = iterate.next();
+               if(thisIn.isEquivalent(input)){
+                  contain = true;
+                  fakeTask.getDeclaredInputs().remove(input);
+                  break;
+               }
+            }
+            if(!contain){
+               return false;
+            }
+         }
+      }
+      
+      if(this.getDeclaredOutputs().size() == next.getDeclaredOutputs().size()){
+         for(Output thisOut : this.getDeclaredOutputs()){
+            boolean contain = false;
+            Iterator<Output> iterate= fakeTask.getDeclaredOutputs().iterator();
+            while(iterate.hasNext()){
+               Output output = iterate.next();
+               if(thisOut.isEquivalent(output)){
+                  contain = true;
+                  fakeTask.getDeclaredOutputs().remove(output);
+                  break;
+               }
+            }
+            if(!contain){
+               return false;
+            }
+         }
+      }
+      
       DecompositionClass temp = null;
       for (DecompositionClass dec1 : this.getDecompositions()) {
          boolean contain = false;
