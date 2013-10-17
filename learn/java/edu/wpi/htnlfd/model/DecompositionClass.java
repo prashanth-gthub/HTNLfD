@@ -1,26 +1,15 @@
 package edu.wpi.htnlfd.model;
 
-import edu.wpi.htnlfd.DomManipulation;
 import edu.wpi.htnlfd.model.TaskClass.Input;
 import org.w3c.dom.*;
 import java.util.*;
 import java.util.Map.Entry;
 import javax.xml.namespace.QName;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class DecompositionClass.
- */
 public class DecompositionClass extends TaskModel.Member {
 
    /**
     * Instantiates a new decomposition class.
-    *
-    * @param taskModel the task model
-    * @param id the id
-    * @param qname the qname
-    * @param ordered2 the ordered2
-    * @param goal the goal
     */
    public DecompositionClass (TaskModel taskModel, String id, QName qname,
          boolean ordered2, TaskClass goal) {
@@ -32,11 +21,6 @@ public class DecompositionClass extends TaskModel.Member {
 
    /**
     * Instantiates a new decomposition class.
-    *
-    * @param taskModel the task model
-    * @param id the id
-    * @param ordered2 the ordered2
-    * @param goal the goal
     */
    public DecompositionClass (TaskModel taskModel, String id, boolean ordered2,
          TaskClass goal) {
@@ -47,11 +31,7 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Instantiates a new decomposition class.
-    *
-    * @param taskModel the task model
-    * @param oldDecomposition the old decomposition
-    * @param goal the goal
+    * Copy constructor for decomposition class.
     */
    public DecompositionClass (TaskModel taskModel,
          DecompositionClass oldDecomposition, TaskClass goal) {
@@ -74,19 +54,14 @@ public class DecompositionClass extends TaskModel.Member {
 
    }
 
-   /** The goal. */
    private TaskClass goal;
 
-   /** The applicable. */
    private String applicable;
 
-   /** The step names. */
-   private List<String> stepNames; // in order of definition
+   private List<String> stepNames;
 
    /**
     * Gets the step names.
-    *
-    * @return the step names
     */
    public List<String> getStepNames () {
       return Collections.unmodifiableList(stepNames);
@@ -94,8 +69,6 @@ public class DecompositionClass extends TaskModel.Member {
 
    /**
     * Sets the step names.
-    *
-    * @param stepNames the new step names
     */
    public void setStepNames (List<String> stepNames) {
       this.stepNames = stepNames;
@@ -103,32 +76,24 @@ public class DecompositionClass extends TaskModel.Member {
 
    /**
     * Gets the applicable.
-    *
-    * @return the applicable
     */
    public String getApplicable () {
       return applicable;
    }
 
-   /** The ordered. */
    private boolean ordered;
 
    /**
     * Checks if is ordered.
-    *
-    * @return true, if is ordered
     */
    public boolean isOrdered () {
       return ordered;
    }
 
-   /** The steps. */
    private Map<String, Step> steps;
 
    /**
     * Gets the steps.
-    *
-    * @return the steps
     */
    public Map<String, Step> getSteps () {
       if ( steps == null ) {
@@ -139,9 +104,6 @@ public class DecompositionClass extends TaskModel.Member {
 
    /**
     * Adds the step.
-    *
-    * @param name the name
-    * @param step the step
     */
    public void addStep (String name, Step step) {
 
@@ -157,9 +119,6 @@ public class DecompositionClass extends TaskModel.Member {
 
    /**
     * Gets the step.
-    *
-    * @param name the name
-    * @return the step
     */
    public Step getStep (String name) {
       if ( steps != null )
@@ -168,16 +127,10 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * To node.
-    * 
     * This function makes the DecompositionClass's DOM element recursively.
-    *
-    * @param document the document
-    * @param namespaces the namespaces
-    * @return the node
     */
    public Node toNode (Document document, Set<String> namespaces) {
-      Element subtasks = document.createElementNS(DomManipulation.xmlnsValue,
+      Element subtasks = document.createElementNS(TaskModel.xmlnsValue,
             "subtasks");
 
       Attr idSubtask = document.createAttribute("id");
@@ -200,7 +153,7 @@ public class DecompositionClass extends TaskModel.Member {
 
       if ( this.getApplicable() != null && this.getApplicable() != "" ) {
          Element applicable = document.createElementNS(
-               DomManipulation.xmlnsValue, "applicable");
+               TaskModel.xmlnsValue, "applicable");
          applicable.setTextContent(this.getApplicable());
          subtasks.appendChild(applicable);
       }
@@ -213,27 +166,16 @@ public class DecompositionClass extends TaskModel.Member {
       return subtasks;
    }
 
-   /**
-    * The Class Step.
-    */
    public class Step {
-      
-      /** The type. */
+
       private TaskClass type;
 
-      /** The max occurs. */
       private int minOccurs, maxOccurs;
 
-      /** The required. */
       private List<String> required = new ArrayList<String>();
 
       /**
        * Instantiates a new step.
-       *
-       * @param type the type
-       * @param minOccurs the min occurs
-       * @param maxOccurs the max occurs
-       * @param required the required
        */
       public Step (TaskClass type, int minOccurs, int maxOccurs,
             List<String> required) {
@@ -245,8 +187,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Instantiates a new step.
-       *
-       * @param oldStep the old step
        */
       public Step (Step oldStep) {
          this.type = oldStep.getType();
@@ -258,18 +198,14 @@ public class DecompositionClass extends TaskModel.Member {
       }
 
       /**
-       * Gets the type.
-       *
-       * @return the type
+       * Gets the type of taskclass.
        */
       public TaskClass getType () {
          return type;
       }
 
       /**
-       * Sets the type.
-       *
-       * @param type the new type
+       * Sets the type of taskclass.
        */
       public void setType (TaskClass type) {
          this.type = type;
@@ -277,8 +213,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Gets the min occurs.
-       *
-       * @return the min occurs
        */
       public int getMinOccurs () {
          return minOccurs;
@@ -286,8 +220,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Sets the min occurs.
-       *
-       * @param minOccurs the new min occurs
        */
       public void setMinOccurs (int minOccurs) {
          this.minOccurs = minOccurs;
@@ -295,8 +227,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Gets the max occurs.
-       *
-       * @return the max occurs
        */
       public int getMaxOccurs () {
          return maxOccurs;
@@ -304,8 +234,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Sets the max occurs.
-       *
-       * @param maxOccurs the new max occurs
        */
       public void setMaxOccurs (int maxOccurs) {
          this.maxOccurs = maxOccurs;
@@ -313,8 +241,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Gets the required.
-       *
-       * @return the required
        */
       public List<String> getRequired () {
          if ( required == null )
@@ -324,8 +250,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Adds the required.
-       *
-       * @param require the require
        */
       public void addRequired (String require) {
          if ( required == null )
@@ -342,19 +266,12 @@ public class DecompositionClass extends TaskModel.Member {
       }
 
       /**
-       * To node.
-       *
-       *This function makes the step's DOM element.
-       *
-       * @param document the document
-       * @param stepName the step name
-       * @param namespaces the namespaces
-       * @return the node
+       * This function makes the step's DOM element.
        */
       public Node toNode (Document document, String stepName,
             Set<String> namespaces) {
          Element subtaskStep = document.createElementNS(
-               DomManipulation.xmlnsValue, "step");
+               TaskModel.xmlnsValue, "step");
 
          Attr nameSubtaskStep = document.createAttribute("name");
 
@@ -368,7 +285,7 @@ public class DecompositionClass extends TaskModel.Member {
          String[] dNSNameArrayDec = namespaceDec.split(":");
          String dNSNameDec = dNSNameArrayDec[dNSNameArrayDec.length - 1];
 
-         if ( dNSNameDec.compareTo(DomManipulation.namespacePrefix) != 0 )
+         if ( dNSNameDec.compareTo(TaskModel.namespacePrefix) != 0 )
             valueSubtaskStep.setValue(dNSNameDec + ":" + getType().getId());
          else
             valueSubtaskStep.setValue(getType().getId());
@@ -397,15 +314,7 @@ public class DecompositionClass extends TaskModel.Member {
       }
 
       /**
-       * Checks if is equivalent.
-       *
-       *This function checks for equivalent steps.
-       *
-       * @param step the step
-       * @param dec1 the dec1
-       * @param dec2 the dec2
-       * @param taskModel the task model
-       * @return true, if is equivalent
+       * Checks if is equivalent. This function checks for equivalent steps.
        */
       public boolean isEquivalent (Step step, DecompositionClass dec1,
             DecompositionClass dec2, TaskModel taskModel) {
@@ -437,18 +346,8 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Check inputs.
-    * 
-    * This function checks whether two inputs have the same value in their parents.(This function is called by isEquivalent function)
-    *
-    * @param stp1 the stp1
-    * @param type1 the type1
-    * @param stp2 the stp2
-    * @param type2 the type2
-    * @param dec1 the dec1
-    * @param dec2 the dec2
-    * @param taskModel the task model
-    * @return true, if successful
+    * Check inputs. This function checks whether two inputs have the same value
+    * in their parents.(This function is called by isEquivalent function)
     */
    public boolean checkInputs (String stp1, TaskClass type1, String stp2,
          TaskClass type2, DecompositionClass dec1, DecompositionClass dec2,
@@ -475,17 +374,9 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Find value in parents.
-    *
-    *This fucntion finds value of an input in it's parents.(from each subtasks' bindings)
-      Assumption: The value of our input is in it's oldest parent.
-    *
-    * @param taskModel the task model
-    * @param stp the stp
-    * @param task the task
-    * @param dec the dec
-    * @param inputName the input name
-    * @return the string
+    * Find value in parents. This function finds value of an input in it's
+    * parents.(from each subtasks' bindings) Assumption: The value of our input
+    * is in it's oldest parent.
     */
    @SuppressWarnings("unchecked")
    public String findValueInParents (TaskModel taskModel, String stp,
@@ -539,15 +430,8 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Find root parent.
-    *
-    *This function finds the last parent(oldest parent) of a TaskClass.(By calling the same fucntion recursively on it's parents.)
-    *
-    * @param parentTask the parent task
-    * @param parentStep the parent step
-    * @param parentSubtask the parent subtask
-    * @param taskModel the task model
-    * @return the list
+    * Find root parent. This function finds the last parent(oldest parent) of a
+    * TaskClass. (By calling the same function recursively on it's parents.)
     */
    public List<Object> findRootParent (TaskClass parentTask,
          Entry<String, Step> parentStep, DecompositionClass parentSubtask,
@@ -589,9 +473,6 @@ public class DecompositionClass extends TaskModel.Member {
 
    /**
     * Gets the step type.
-    *
-    * @param name the name
-    * @return the step type
     */
    public TaskClass getStepType (String name) {
       return steps.get(name).type;
@@ -599,17 +480,13 @@ public class DecompositionClass extends TaskModel.Member {
 
    /**
     * Sets the ordered.
-    *
-    * @param ordered the new ordered
     */
    public void setOrdered (boolean ordered) {
       this.ordered = ordered;
    }
 
    /**
-    * Sets the goal.
-    *
-    * @param goal the new goal
+    * Sets the goal(TaskClass).
     */
    public void setGoal (TaskClass goal) {
       this.goal = goal;
@@ -617,8 +494,6 @@ public class DecompositionClass extends TaskModel.Member {
 
    /**
     * Sets the applicable.
-    *
-    * @param applicable the new applicable
     */
    public void setApplicable (String applicable) {
       this.applicable = applicable;
@@ -626,22 +501,16 @@ public class DecompositionClass extends TaskModel.Member {
 
    /**
     * Checks if is optional step.
-    *
-    * @param name the name
-    * @return true, if is optional step
     */
    public boolean isOptionalStep (String name) {
       // note this pertains to the _first_ step of repeated steps only
       return steps.get(name).minOccurs < 1;
    }
 
-   /** The bindings. */
    private Map<String, Binding> bindings = new HashMap<String, Binding>();
 
    /**
     * Gets the bindings.
-    *
-    * @return the bindings
     */
    public Map<String, Binding> getBindings () {
       return Collections.unmodifiableMap(bindings); // Collections.unmodifiableMap(
@@ -649,9 +518,6 @@ public class DecompositionClass extends TaskModel.Member {
 
    /**
     * Adds the binding.
-    *
-    * @param key the key
-    * @param value the value
     */
    public void addBinding (String key, Binding value) {
       bindings.put(key, value);
@@ -659,32 +525,21 @@ public class DecompositionClass extends TaskModel.Member {
 
    /**
     * Removes the binding.
-    *
-    * @param key the key
     */
    public void removeBinding (String key) {
       bindings.remove(key);
    }
 
-   /**
-    * The Class Binding.
-    */
    public class Binding {
 
-      /** The slot. */
       private String value, step, slot;
 
-      /** The input input. */
       private boolean inputInput;
 
-      /** The depends. */
       private List<Binding> depends = new ArrayList<Binding>();
 
       /**
        * Instantiates a new binding.
-       *
-       * @param slot the slot
-       * @param value the value
        */
       public Binding (String slot, String value) {
          super();
@@ -694,11 +549,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Instantiates a new binding.
-       *
-       * @param slot the slot
-       * @param step the step
-       * @param value the value
-       * @param inputInput the input input
        */
       public Binding (String slot, String step, String value, boolean inputInput) {
          this.slot = slot;
@@ -708,9 +558,7 @@ public class DecompositionClass extends TaskModel.Member {
       }
 
       /**
-       * Instantiates a new binding.
-       *
-       * @param oldBind the old bind
+       * Copy constructor for binding.
        */
       public Binding (Binding oldBind) {
          this.slot = oldBind.getSlot();
@@ -723,8 +571,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Gets the depends.
-       *
-       * @return the depends
        */
       public List<Binding> getDepends () {
          return Collections.unmodifiableList(depends);
@@ -732,8 +578,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Gets the value.
-       *
-       * @return the value
        */
       public String getValue () {
          return value;
@@ -741,8 +585,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Sets the value.
-       *
-       * @param value the new value
        */
       public void setValue (String value) {
          this.value = value;
@@ -750,8 +592,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Gets the step.
-       *
-       * @return the step
        */
       public String getStep () {
          return step;
@@ -759,8 +599,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Sets the step.
-       *
-       * @param step the new step
        */
       public void setStep (String step) {
          this.step = step;
@@ -768,8 +606,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Gets the slot.
-       *
-       * @return the slot
        */
       public String getSlot () {
          return slot;
@@ -777,8 +613,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Sets the slot.
-       *
-       * @param slot the new slot
        */
       public void setSlot (String slot) {
          this.slot = slot;
@@ -786,8 +620,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Checks if is input input.
-       *
-       * @return true, if is input input
        */
       public boolean isInputInput () {
          return inputInput;
@@ -795,25 +627,17 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Sets the input input.
-       *
-       * @param inputInput the new input input
        */
       public void setInputInput (boolean inputInput) {
          this.inputInput = inputInput;
       }
 
       /**
-       * To node.
-       *
-       *This function makes the binding's DOM element.
-       *
-       * @param document the document
-       * @param name the name
-       * @return the node
+       * This function makes the binding's DOM element.
        */
       Node toNode (Document document, String name) {
          Element subtaskBinding = document.createElementNS(
-               DomManipulation.xmlnsValue, "binding");
+               TaskModel.xmlnsValue, "binding");
 
          Attr bindingSlot = document.createAttribute("slot");
 
@@ -833,8 +657,6 @@ public class DecompositionClass extends TaskModel.Member {
 
    /**
     * Gets the goal.
-    *
-    * @return the goal
     */
    public TaskClass getGoal () {
       return goal;
@@ -842,10 +664,6 @@ public class DecompositionClass extends TaskModel.Member {
 
    /**
     * Gets the binding value.
-    *
-    * @param bindingRef the binding ref
-    * @param dec the dec
-    * @return the binding value
     */
    public String getBindingValue (Entry<String, Binding> bindingRef,
          DecompositionClass dec) {
@@ -859,10 +677,8 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Adds the ordering.
-    * 
-    * This function adds the ordering constraints according to the flow of inputs and outputs.
-    * 
+    * Adds the ordering. This function adds the ordering constraints according
+    * to the flow of inputs and outputs.
     */
    public void addOrdering () {
       TaskClass task = this.goal;
@@ -909,10 +725,7 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Removes the ordering.
-    * 
-    * This function removes ordering constraints.
-    * 
+    * Removes the ordering. This function removes ordering constraints.
     */
    public void removeOrdering () {
       this.setOrdered(true);
@@ -922,13 +735,8 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Checks if is equivalent.
-    *
-    *This function checks for equivalent steps recursively.
-    *
-    * @param dec the dec
-    * @param taskModel the task model
-    * @return true, if is equivalent
+    * Checks if is equivalent. This function checks for equivalent steps
+    * recursively.
     */
    public boolean isEquivalent (DecompositionClass dec, TaskModel taskModel) {
 
@@ -968,11 +776,8 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Removes the binding input.
-    *
-    *This function removes the binding that is related to an input.
-    *
-    * @param input the input
+    * Removes the binding input. This function removes the binding that is
+    * related to an input.
     */
    public void removeBindingInput (String input) {
       String inputName = input;
@@ -996,13 +801,8 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Gets the binding step.
-    *
-    *This fucntion returns the binding that is related to a step and an input.
-    *
-    * @param stepName the step name
-    * @param inputName the input name
-    * @return the binding step
+    * Gets the binding step. This fucntion returns the binding that is related
+    * to a step and an input.
     */
    public Entry<String, Binding> getBindingStep (String stepName,
          String inputName) {

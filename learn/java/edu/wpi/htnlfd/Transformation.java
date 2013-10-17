@@ -3,16 +3,11 @@ package edu.wpi.htnlfd;
 import edu.wpi.htnlfd.model.TaskModel;
 
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class Transformation.
- */
 abstract class Transformation {
 
    /**
     * Transform.
-    *
-    * @param taskModel the task model
+    * This function change our taskmodel
     */
    abstract void transform(TaskModel taskModel);
 }

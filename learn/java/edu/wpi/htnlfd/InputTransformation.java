@@ -6,19 +6,14 @@ import edu.wpi.htnlfd.model.TaskClass.Input;
 import java.util.*;
 import java.util.Map.Entry;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class InputTransformation.
- */
 public class InputTransformation extends Transformation {
 
-   
-   /* (non-Javadoc)
-    * 
-    * This fucntion checks all the steps' of a decomposition class, if all of them have the same input and the TaskClass class doesn't have it, 
-      then it will be added to the TaskClass class. 
-    * 
-    * @see edu.wpi.htnlfd.Transformation#transform(edu.wpi.htnlfd.model.TaskModel)
+   /*
+    * This fucntion checks all the steps' of a decomposition class, if all of
+    * them have the same input and the TaskClass class doesn't have it, then it
+    * will be added to the TaskClass class.
+    * @see
+    * edu.wpi.htnlfd.Transformation#transform(edu.wpi.htnlfd.model.TaskModel)
     */
    public void transform (TaskModel taskModel) {
       Iterator<TaskClass> tasksIterator = taskModel.getTaskClasses().iterator();

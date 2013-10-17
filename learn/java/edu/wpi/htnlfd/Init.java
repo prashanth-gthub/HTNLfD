@@ -7,36 +7,24 @@ import edu.wpi.cetask.*;
 import edu.wpi.disco.*;
 import edu.wpi.htnlfd.model.TaskModel;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class Init.
- */
 public class Init {
 
    /** The learned taskmodel. */
    private static TaskModel learnedTaskmodel = null;
 
-   /** The demonstration. */
    private static Demonstration demonstration = null;
 
-   /** The dom. */
    private static DomManipulation DOM = null;
 
    /**
-    * The main method.
-    *
-    * @param args the arguments
+    * The main method.(Never called)
     */
    public static void main (String[] args) {
       System.out.println("YUHU");
    }
 
    /**
-    * Learn.
-    *
-    * @param disco the disco
-    * @param taskName the task name
-    * @throws Exception the exception
+    * Learns demonstrations.
     */
    public static void learn (Disco disco, String taskName) throws Exception {
 
@@ -64,20 +52,14 @@ public class Init {
    }
 
    /**
-    * Prints the.
-    *
-    * @param stream the stream
-    * @throws TransformerException the transformer exception
+    * Prints the learned taskmodel.
     */
    public void print (PrintStream stream) throws TransformerException {
       DOM.writeDOM(stream, learnedTaskmodel);
    }
 
    /**
-    * Load.
-    *
-    * @param engine the engine
-    * @param properties the properties
+    * Load learned taskmodel into disco.
     */
    public void load (TaskEngine engine, Properties properties) {
       // engine.load(learnedTaskmodel.toNode(), null);

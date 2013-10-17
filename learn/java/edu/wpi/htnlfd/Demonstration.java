@@ -4,45 +4,29 @@ import edu.wpi.disco.*;
 import edu.wpi.disco.lang.Utterance;
 import edu.wpi.htnlfd.model.*;
 import edu.wpi.htnlfd.model.DecompositionClass.Binding;
-import edu.wpi.htnlfd.model.DecompositionClass.Step;
-import edu.wpi.htnlfd.model.TaskClass.Input;
 import java.util.*;
 import java.util.Map.Entry;
 import javax.script.*;
 import javax.xml.namespace.QName;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class Demonstration.
- */
 public class Demonstration {
 
-   /** The task model. */
    private TaskModel taskModel;
 
-   /** The external task model. */
+   /** The external task model from disco. */
    private edu.wpi.cetask.TaskModel externalTaskModel = null;
 
-   /** The transformation. */
    private InputTransformation transformation = new InputTransformation();
 
-   /**
-    * Instantiates a new demonstration.
-    */
    public Demonstration () {
 
    }
 
    /**
-    * Find demonstration.
-    *
-    *This function searches in disco's stack and finds the last demonstrations.
-      Algorithm: Since we know that all of our demonstrated tasks are in "Demonstration" 
-      segment, we can just search for all of segments in that segment.
-    *
-    * @param disco the disco
-    * @param taskName the task name
-    * @return the list
+    * Find demonstration. This function searches in disco's stack and finds the
+    * last demonstrations. Algorithm: Since we know that all of our demonstrated
+    * tasks are in "Demonstration" segment, we can just search for all of
+    * segments in that segment.
     */
    public List<edu.wpi.cetask.Task> findDemonstration (Disco disco,
          String taskName) {
@@ -75,19 +59,10 @@ public class Demonstration {
    }
 
    /**
-    * Builds the task model.
-    *
-    *This function uses the demonstrated tasks and learned tasks, and adds them to the taskmodel.
-      Algorithm: Calling all "demonstratedTask" and "learnedTaskmodel" and "addAlternativeRecipe" 
-      functions.
-    *
-    * @param disco the disco
-    * @param taskName the task name
-    * @param steps the steps
-    * @param input the input
-    * @return the task model
-    * @throws NoSuchMethodException the no such method exception
-    * @throws ScriptException the script exception
+    * Builds the task model. This function uses the demonstrated tasks and
+    * learned tasks, and adds them to the taskmodel. Algorithm: Calling all
+    * "demonstratedTask" and "learnedTaskmodel" and "addAlternativeRecipe"
+    * functions.
     */
    public TaskModel buildTaskModel (Disco disco, String taskName,
          List<edu.wpi.cetask.Task> steps, String input)
@@ -110,14 +85,11 @@ public class Demonstration {
    }
 
    /**
-    * Checks if is alternative recipe.
-    *
-    *This function checks whether the new demonstrated task is an alternative recipe for previous tasks or not. 
-      Algorithm: This function just checks the name of the new task to checks whether it is an alternative recipe or new task.
-      It also checks that the new task is not equivalent to the previous ones.
-    *
-    * @param newTask the new task
-    * @return the task class
+    * Checks if is alternative recipe. This function checks whether the new
+    * demonstrated task is an alternative recipe for previous tasks or not.
+    * Algorithm: This function just checks the name of the new task to checks
+    * whether it is an alternative recipe or new task. It also checks that the
+    * new task is not equivalent to the previous ones.
     */
    public TaskClass isAlternativeRecipe (TaskClass newTask) {
       Iterator<TaskClass> tasksIterator = this.taskModel.getTaskClasses()
@@ -140,19 +112,12 @@ public class Demonstration {
    }
 
    /**
-    * Adds the alternative recipe.
-    *
-    *This function first checks whether a new demonstrated task is alternative recipe or not. If it is an alternative recipe, it will add 
-      it to the it's task.
-      Algorithm: This fucntion checks all of the inputs' binding values to find out whether it should add another input to this task or not.
-      (It doesn't add inputs to parents.)
-    *
-    *
-    * @param newTask the new task
-    * @param input the input
-    * @return true, if successful
+    * Adds the alternative recipe. This function first checks whether a new
+    * demonstrated task is alternative recipe or not. If it is an alternative
+    * recipe, it will add it to the it's task. Algorithm: This function checks
+    * all of the inputs' binding values to find out whether it should add
+    * another input to this task or not. (It doesn't add inputs to parents.)
     */
-   @SuppressWarnings("unchecked")
    public boolean addAlternativeRecipe (TaskClass newTask, String input) {
 
       TaskClass task = isAlternativeRecipe(newTask);
@@ -264,18 +229,12 @@ public class Demonstration {
    }
 
    /**
-    * Demonstrated task.
-    *
-    *This function uses the new demonstrated tasks and returns the generated TaskClass.(with subtask and inputs and outputs and bindings)
-      Algorithm: This function converts all of the disco's data into our classes. It also calls addOrdering function to add ordering constraints.
-      It adds all of the subtask's steps' inputs and bindings to the new task.
-    *
-    * @param disco the disco
-    * @param taskName the task name
-    * @param steps the steps
-    * @return the task class
-    * @throws NoSuchMethodException the no such method exception
-    * @throws ScriptException the script exception
+    * Demonstrated task. This function uses the new demonstrated tasks and
+    * returns the generated TaskClass. (with subtask and inputs and outputs and
+    * bindings) Algorithm: This function converts all of the disco's data into
+    * our classes. It also calls addOrdering function to add ordering
+    * constraints. It adds all of the subtask's steps' inputs and bindings to
+    * the new task.
     */
    public TaskClass demonstratedTask (Disco disco, String taskName,
          List<edu.wpi.cetask.Task> steps) throws NoSuchMethodException,
@@ -431,11 +390,9 @@ public class Demonstration {
    }
 
    /**
-    * Learned taskmodel.
-    * 
-    * This function add the learned tasks(finds them from disco's loaded taskmodel) to current taskmodel.
-      Algorithm: This function converts all of the disco's data into our classes.
-      
+    * Learned taskmodel. This function add the learned tasks(finds them from
+    * disco's loaded taskmodel) to current taskmodel. Algorithm: This function
+    * converts all of the disco's data into our classes.
     */
    public void learnedTaskmodel () {
 
@@ -573,12 +530,8 @@ public class Demonstration {
    }
 
    /**
-    * Read dom.
-    *
-    *This function load the new taskModel into disco.(By calling "load" fucntion)
-    *
-    * @param disco the disco
-    * @param fileName the file name
+    * Read dom. This function load the new taskModel into disco.(By calling
+    * "load" function)
     */
    public void readDOM (Disco disco, String fileName) {
       this.externalTaskModel = disco.getInteraction().load(fileName);

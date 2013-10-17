@@ -1,4 +1,4 @@
-    # 7-Oct-2013 11:46:16 PM - TaskEngine 1.4.8 / Disco 1.6.10
+    # 17-Oct-2013 11:39:20 AM - TaskEngine 1.4.8 / Disco 1.6.10
     Welcome to Disco! (Type 'help' for command list)
   > cd ..\..\GitHub\HTNLfD\learn\test
     D:\GitHub\HTNLfD\learn\test
@@ -47,7 +47,7 @@
     User says "Achieve Demonstration is done."
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
-Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
   > 
   > task Demonstration
@@ -65,7 +65,7 @@ Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     User says "Achieve Demonstration is done."
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")
-Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
   > 
   > task Demonstration
@@ -92,7 +92,7 @@ Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     User says "Achieve Demonstration is done."
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"SetTable")
-Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
   > 
   > 
@@ -112,7 +112,7 @@ Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     User says "Achieve Demonstration is done."
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
-Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
   > 
   > task Demonstration
@@ -130,7 +130,7 @@ Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     User says "Achieve Demonstration is done."
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
-Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
   > 
   > task Demonstration
@@ -144,72 +144,6 @@ Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     User says "Achieve Demonstration is done."
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")
-Warning: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
   > 
-  > task SetTable
-    User says "Let's achieve SetTable on SquareTable and DinnerPlate and DinnerPlate and SaladPlate and SoupBowl and Spoon and Fork and Knife and WaterGlass and WineGlass."
-    Agent says "What is the PlaceDishes input1?"
-  > say
-[1] True.
-[2] False.
-[3] Let's not achieve PlaceDishes on SquareTable and DinnerPlate and DinnerPlate and SaladPlate and SoupBowl.
-[4] Let's not achieve SetTable on SquareTable and DinnerPlate and DinnerPlate and SaladPlate and SoupBowl and Spoon and Fork and Knife and WaterGlass and WineGlass.
-[5] Let's achieve Demonstration.
-[6] Let's achieve SetTable.
-[7] Let's achieve PlaceDishes.
-[8] Let's achieve SetTable.
-[9] Let's achieve PlaceDishes.
-[10] Let's achieve PlaceSilverware.
-[11] Let's achieve SetTable.
-[12] Let's achieve PlaceDishes on SquareTable and DinnerPlate and DinnerPlate and SaladPlate and SoupBowl.
-[13] Let's achieve PlaceSilverware.
-[14] Let's achieve PlaceGlasses.
-  >> 1
-    User says "True."
-    Agent execute Place on SquareTable and DinnerPlate producing DinnerPlate.
-    Agent execute Place on DinnerPlate and SaladPlate producing SaladPlate.
-    Agent execute Place on DinnerPlate and SoupBowl producing SoupBowl.
-    Agent says "What is the PlaceSilverware input1?"
-  > say
-[1] True.
-[2] False.
-[3] Let's not achieve PlaceSilverware on DinnerPlate and Spoon and Fork and Knife.
-[4] Let's achieve Demonstration.
-[5] Let's achieve SetTable.
-[6] Let's achieve PlaceDishes.
-[7] Let's achieve SetTable.
-[8] Let's achieve PlaceDishes.
-[9] Let's achieve PlaceSilverware.
-[10] Let's achieve SetTable.
-[11] Let's achieve PlaceDishes.
-[12] Let's achieve PlaceSilverware on DinnerPlate and Spoon and Fork and Knife.
-[13] Let's achieve PlaceGlasses.
-  >> 1
-    User says "True."
-    Agent execute Place on DinnerPlate and Spoon producing Spoon.
-    Agent execute Place on DinnerPlate and Fork producing Fork.
-    Agent execute Place on DinnerPlate and Knife producing Knife.
-    Agent says "What is the PlaceGlasses input1?"
-  > say
-[1] True.
-[2] False.
-[3] Let's not achieve PlaceGlasses on DinnerPlate and WaterGlass and WineGlass.
-[4] Let's achieve Demonstration.
-[5] Let's achieve SetTable.
-[6] Let's achieve PlaceDishes.
-[7] Let's achieve SetTable.
-[8] Let's achieve PlaceDishes.
-[9] Let's achieve PlaceSilverware.
-[10] Let's achieve SetTable.
-[11] Let's achieve PlaceDishes.
-[12] Let's achieve PlaceSilverware.
-[13] Let's achieve PlaceGlasses on DinnerPlate and WaterGlass and WineGlass.
-  >> 1
-    User says "True."
-    Agent execute Place on DinnerPlate and WaterGlass producing WaterGlass.
-    Agent execute Place on DinnerPlate and WineGlass producing WineGlass.
-    Agent says "Ok."
-  > 
-  > quit
-    

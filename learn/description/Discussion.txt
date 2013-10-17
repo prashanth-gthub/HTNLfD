@@ -1,0 +1,48 @@
+1_ Next step:
+
+	1. Writing log file
+	
+	2. Finishing single demonstration
+	
+	3. Starting Multiple Demonstration
+	
+2_ What we should have to build the HTNs:
+
+	1. Hierarchy:
+		+ Bottom-up
+		- We cannot add another step to one of the existed subtasks
+	2. Ordering:
+		+ Adding ordering constraints by finding the flow of inputs and outputs (Reference Frame)
+		- Combining multiple demonstrations for finding ordering constraints
+		- User tell us
+	3. Inputs:
+		+ Adding inputs of each lower levels to upper levels
+		+ Adding the same inputs in all steps to it's parents	
+		- Deciding which level to parameterize(Choosing the level that should has these inputs)
+		- Adding new inputs of alternative recipes to all it's parents
+	4. Alternative Recipe:
+		+ Just correct for two recipe with boolean input (Hard coded)
+		- Adding which has more probability of success
+		- Finding whether it is an alternative recipe or it is a new task(Or maybe one step could be optional)
+	5. Equality of two task:
+		+ Checking whether they have the same subtasks and steps and bindings
+		- No generalization of inputs
+	6. Finding the similarities and differences between two tasks(Adding Optional attribute to one step)
+	
+	7. Preconditions and postconditions(sufficient attribute in disco) and applicable conditions
+
+	8. Recursive functions (loops)
+	
+	9. Gathering information from user(By giving some commands(Using eval command in disco))
+
+3_ What we should add later:
+
+	1. Batch vs. incremental
+
+	2. Changing domain(Car maintenance)
+	
+	3. Uncertainty
+
+	4. Segmentations / robots actions and user's actions doesn't match or some part of actions have overlap
+
+	5. When actions probabilities are low (Joint communication + human)(Exploratory behavior)

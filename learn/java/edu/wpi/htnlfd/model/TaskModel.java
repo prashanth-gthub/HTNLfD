@@ -1,15 +1,22 @@
 package edu.wpi.htnlfd.model;
 
-import edu.wpi.htnlfd.DomManipulation;
 import org.w3c.dom.*;
 import java.util.*;
 import javax.xml.namespace.QName;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class TaskModel.
- */
 public class TaskModel {
+
+   public static final String xmlnsValue = "http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext";
+
+   public static final String namespace = "urn:disco.wpi.edu:htnlfd:setTable1";
+
+   public static final String namespacePrefix;
+   
+   static {
+      String[] dNSNameArray = namespace.split(":");
+      namespacePrefix = dNSNameArray[dNSNameArray.length - 1];
+   }
+   
 
    /**
     * Instantiates a new task model.
@@ -19,9 +26,7 @@ public class TaskModel {
    }
 
    /**
-    * Instantiates a new task model.
-    *
-    * @param oldModel the old model
+    * Copy constructor for taskmodel.
     */
    public TaskModel (TaskModel oldModel) {
       List<TaskClass> tasks = new ArrayList<TaskClass>(oldModel.tasks.size());
@@ -30,14 +35,10 @@ public class TaskModel {
       }
    }
 
-   /** The tasks. */
    private List<TaskClass> tasks = new ArrayList<TaskClass>();
 
    /**
     * Gets the task class.
-    *
-    * @param id the id
-    * @return the task class
     */
    public TaskClass getTaskClass (String id) {
       for (TaskClass task : tasks) {
@@ -49,8 +50,6 @@ public class TaskModel {
 
    /**
     * Gets the task classes.
-    *
-    * @return the task classes
     */
    public List<TaskClass> getTaskClasses () {
       return tasks;// return unmodifiableList
@@ -58,30 +57,21 @@ public class TaskModel {
    }
 
    /**
-    * Adds the.
-    *
-    * @param task the task
+    * Adds task to our taskmodel.
     */
    public void add (TaskClass task) {
       tasks.add(task);
    }
 
    /**
-    * Removes the.
-    *
-    * @param task the task
-    * @return true, if successful
+    * Removes task from our taskmodel.
     */
    public boolean remove (TaskClass task) {
       return tasks.remove(task);
    }
 
    /**
-    * Checks if is equivalent.
-    *
-    *This function checks for equivalent TaskClass classes recursively.
-    *
-    * @return true, if is equivalent
+    * This function checks for equivalent TaskClass classes recursively.
     */
    public boolean isEquivalent () {
       Iterator<TaskClass> iterator = tasks.iterator();
@@ -102,16 +92,10 @@ public class TaskModel {
       return tasks.isEmpty();
    }
 
-   /**
-    * The Class Member.
-    */
    abstract class Member {
 
       /**
        * Instantiates a new member.
-       *
-       * @param id the id
-       * @param qname the qname
        */
       public Member (String id, QName qname) {
          super();
@@ -119,16 +103,12 @@ public class TaskModel {
          this.qname = qname;
       }
 
-      /** The id. */
       private String id;
 
-      /** The qname. */
       private QName qname;
 
       /**
        * Sets the id.
-       *
-       * @param id the new id
        */
       public void setId (String id) {
          this.id = id;
@@ -136,8 +116,6 @@ public class TaskModel {
 
       /**
        * Sets the qname.
-       *
-       * @param qname the new qname
        */
       public void setQname (QName qname) {
          this.qname = qname;
@@ -145,8 +123,6 @@ public class TaskModel {
 
       /**
        * Gets the id.
-       *
-       * @return the id
        */
       public String getId () {
          return id;
@@ -154,8 +130,6 @@ public class TaskModel {
 
       /**
        * Gets the qname.
-       *
-       * @return the qname
        */
       public QName getQname () {
          return qname;
@@ -163,8 +137,6 @@ public class TaskModel {
 
       /**
        * Gets the model.
-       *
-       * @return the model
        */
       public TaskModel getModel () {
          return TaskModel.this;
@@ -173,25 +145,20 @@ public class TaskModel {
    }
 
    /**
-    * To node.
-    *
-    *This function makes the TaslModel's DOM element recursively.
-    *
-    * @param document the document
-    * @return the node
+    * This function makes the TaslModel's DOM element recursively.
     */
    public Node toNode (Document document) {
       Element taskModelElement = null;
 
-      taskModelElement = document.createElementNS(DomManipulation.xmlnsValue,
+      taskModelElement = document.createElementNS(TaskModel.xmlnsValue,
             "taskModel");
       document.appendChild(taskModelElement);
 
       Attr about = document.createAttribute("about");
-      about.setValue(DomManipulation.namespace);
+      about.setValue(TaskModel.namespace);
       taskModelElement.setAttributeNode(about);
       Attr xmlns = document.createAttribute("xmlns");
-      xmlns.setValue(DomManipulation.xmlnsValue);
+      xmlns.setValue(TaskModel.xmlnsValue);
       taskModelElement.setAttributeNode(xmlns);
 
       Set<String> namespaces = new HashSet<String>();
