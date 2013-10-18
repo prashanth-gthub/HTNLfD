@@ -181,5 +181,12 @@ public class TaskModel {
       return taskModelElement;
 
    }
+   
+   static Attr addAttribute (Document document, Element element, String name, String value) {
+      Attr attr = document.createAttribute(name);
+      attr.setValue(value);
+      element.setAttributeNode(attr);
+      return attr;
+   }
 
 }

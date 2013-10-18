@@ -13,6 +13,7 @@ public class TaskClass extends TaskModel.Member {
     */
    public TaskClass (TaskModel taskModel, String id, QName qname) {
       taskModel.super(id, qname);
+
    }
 
    /**
@@ -184,13 +185,15 @@ public class TaskClass extends TaskModel.Member {
       public void setName (String name) {
          this.name = name;
       }
-      
-      protected Element toNode (Document document, String slot) {  //CR: note specializing output
-         Element element = document.createElementNS(TaskModel.namespace, slot); //CR: move namespace constant
-         if ( name == null || type == null )  //CR: good to put in some error checking to help yourself!
-            throw new IllegalArgumentException("Name or type of slot is null: "+this);
-         //addAttribute(document, element, "name", name);
-         //addAttribute(document, element, "type", type);
+
+      protected Element toNode (Document document, String slot) {
+         Element element = document.createElementNS(TaskModel.xmlnsValue, slot);
+         if ( name == null || type == null )
+
+            throw new IllegalArgumentException("Name or type of slot is null: "
+               + this);
+         TaskModel.addAttribute(document, element, "name", name);
+         TaskModel.addAttribute(document, element, "type", type);
          return element;
       }
 
@@ -235,25 +238,25 @@ public class TaskClass extends TaskModel.Member {
       /**
        * This function makes the input's DOM element.
        */
-      //@Override
-      public Node toNode (Document document) {
-         Element inputTask = document.createElementNS(
-               TaskModel.xmlnsValue, "input");
+      /*
+       * @Override public Node toNode (Document document) { Element inputTask =
+       * document.createElementNS( TaskModel.xmlnsValue, "input"); Attr
+       * inputNameAttr = document.createAttribute("name");
+       * inputNameAttr.setValue(this.getName());
+       * inputTask.setAttributeNode(inputNameAttr); Attr inputType =
+       * document.createAttribute("type"); inputType.setValue(this.getType());
+       * inputTask.setAttributeNode(inputType); if ( this.getModified() != null
+       * ) { Attr modifiedAttr = document.createAttribute("modified");
+       * modifiedAttr.setValue(this.getModified().getName());
+       * inputTask.setAttributeNode(modifiedAttr); } return inputTask; }
+       */
 
-         Attr inputNameAttr = document.createAttribute("name");
-         inputNameAttr.setValue(this.getName());
-         inputTask.setAttributeNode(inputNameAttr);
-
-         Attr inputType = document.createAttribute("type");
-         inputType.setValue(this.getType());
-         inputTask.setAttributeNode(inputType);
-
-         if ( this.getModified() != null ) {
-            Attr modifiedAttr = document.createAttribute("modified");
-            modifiedAttr.setValue(this.getModified().getName());
-            inputTask.setAttributeNode(modifiedAttr);
-         }
-         return inputTask;
+      public Element toNode (Document document) {
+         Element element = toNode(document, "input");
+         if ( modified != null )
+            TaskModel.addAttribute(document, element, "modified",
+                  modified.getName());
+         return element;
       }
 
       /**
@@ -295,18 +298,15 @@ public class TaskClass extends TaskModel.Member {
       /**
        * This function makes the output's DOM element.
        */
-      public Node toNode (Document document) {
-         Element outputTask = document.createElementNS(
-               TaskModel.xmlnsValue, "output");
-
-         Attr inputNameAttr = document.createAttribute("name");
-         inputNameAttr.setValue(this.getName());
-         outputTask.setAttributeNode(inputNameAttr);
-         Attr inputType = document.createAttribute("type");
-         inputType.setValue(this.getType());
-         outputTask.setAttributeNode(inputType);
-         return outputTask;
-      }
+      /*
+       * @Override public Node toNode (Document document) { Element outputTask =
+       * document.createElementNS( TaskModel.xmlnsValue, "output"); Attr
+       * inputNameAttr = document.createAttribute("name");
+       * inputNameAttr.setValue(this.getName());
+       * outputTask.setAttributeNode(inputNameAttr); Attr inputType =
+       * document.createAttribute("type"); inputType.setValue(this.getType());
+       * outputTask.setAttributeNode(inputType); return outputTask; }
+       */
 
       /**
        * Checks if is equivalent. Checks whether two outputs are equivalent by
@@ -468,8 +468,8 @@ public class TaskClass extends TaskModel.Member {
     */
    public Node toNode (Document document, Set<String> namespaces) {
 
-      Element taskElement = document.createElementNS(
-            TaskModel.xmlnsValue, "task");
+      Element taskElement = document.createElementNS(TaskModel.xmlnsValue,
+            "task");
 
       Attr idTask = document.createAttribute("id");
       idTask.setValue(this.getId());
@@ -482,7 +482,7 @@ public class TaskClass extends TaskModel.Member {
       }
 
       for (TaskClass.Output output : this.getDeclaredOutputs()) {
-         taskElement.appendChild(output.toNode(document));
+         taskElement.appendChild(output.toNode(document, "output"));
       }
 
       for (DecompositionClass subtask : this.getDecompositions()) {
