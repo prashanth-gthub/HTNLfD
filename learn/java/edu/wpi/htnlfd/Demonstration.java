@@ -4,7 +4,7 @@ import edu.wpi.cetask.Task;
 import edu.wpi.disco.*;
 import edu.wpi.disco.lang.Utterance;
 import edu.wpi.htnlfd.model.*;
-import edu.wpi.htnlfd.model.DecompositionClass.Binding;
+import edu.wpi.htnlfd.model.DecompositionClass.*;
 import java.util.*;
 import java.util.Map.Entry;
 import javax.script.*;
@@ -119,7 +119,7 @@ public class Demonstration {
     * demonstrated task is alternative recipe or not. If it is an alternative
     * recipe, it will add it to the it's task. Algorithm: This function checks
     * all of the inputs' binding values to find out whether it should add
-    * another input to this task or not. (It doesn't add inputs to parents.)
+    * another input to this task or not. (It also adds inputs to parents.)
     */
    public boolean addAlternativeRecipe (TaskClass newTask, String input,
          TaskClass task) {
@@ -214,49 +214,125 @@ public class Demonstration {
 
          Map<String, Binding> bindChange = new HashMap<String, Binding>();
          Map<String, String> changed = new HashMap<String, String>();
-         
+
          for (TaskClass.Output out : newTask.getDeclaredOutputs()) {
-            String outputName = newTask
-                  .getDecompositions().get(0).getId()
-               + "_" + out.getName();
-            
-            for(Entry<String, Binding> binding:task.getDecompositions().get(1).getBindings().entrySet()){
-               if(binding.getKey().equals("$this."+out.getName())){
-                  bindChange.put(binding.getKey(), binding.getValue()); 
-                  changed.put(binding.getKey(), "$this."+outputName);
+            String outputName = task.getDecompositions().get(1).getId() + "_"
+               + out.getName();
+
+            for (Entry<String, Binding> binding : task.getDecompositions()
+                  .get(1).getBindings().entrySet()) {
+               if ( binding.getKey().equals("$this." + out.getName()) ) {
+                  bindChange.put(binding.getKey(), binding.getValue());
+                  changed.put(binding.getKey(), "$this." + outputName);
                }
             }
             TaskClass.Output outCC = task.new Output(outputName, out.getType());
             task.addOutput(outCC);
+
+            // output
+            addSlotToParents(task, task.getDecompositions().get(1), taskModel,
+                  false, outputName, out.getType(), null, null);
+
          }
          for (TaskClass.Input in : newTask.getDeclaredInputs()) {
-            String inputName = newTask
-                  .getDecompositions().get(0).getId()
-               + "_" + in.getName();
-            
-            for(Entry<String, Binding> binding:task.getDecompositions().get(1).getBindings().entrySet()){
-               if(binding.getKey().equals("$this."+in.getName())){
-                  bindChange.put(binding.getKey(), binding.getValue());  
-                  changed.put(binding.getKey(), "$this."+inputName);
+            String inputName = task.getDecompositions().get(1).getId() + "_"
+               + in.getName();
+
+            for (Entry<String, Binding> binding : task.getDecompositions()
+                  .get(1).getBindings().entrySet()) {
+               if ( binding.getKey().equals("$this." + in.getName()) ) {
+                  bindChange.put(binding.getKey(), binding.getValue());
+                  changed.put(binding.getKey(), "$this." + inputName);
+               } else if ( binding.getValue().getValue()
+                     .equals("$this." + in.getName()) ) {
+                  binding.getValue().setValue("$this." + inputName);
                }
-               else if(binding.getValue().getValue().equals("$this."+in.getName())){
-                  binding.getValue().setValue("$this."+inputName);                
-             }
             }
-            
-            TaskClass.Input inputCC = task.new Input(inputName, in.getType(), in.getModified());
+
+            TaskClass.Input inputCC = task.new Input(inputName, in.getType(),
+                  in.getModified());
             task.addInput(inputCC);
-         }
-         
-         for(Entry<String, Binding> binding : bindChange.entrySet()){
-            
-            newTask.getDecompositions().get(0).removeBinding(binding.getKey());            
-            newTask.getDecompositions().get(0).addBinding(changed.get(binding.getKey()),binding.getValue());
+            String binding = task.getDecompositions().get(1).getBindings()
+                  .get("$this." + in.getName()).getValue();
+
+            // input
+            boolean binded = addSlotToParents(task, task.getDecompositions()
+                  .get(1), taskModel, true, inputName, in.getType(), binding,
+                  task.getDecompositions().get(1).getId() + "_"
+                     + in.getModified().getName());
+
+            if ( binded ) {
+               task.getDecompositions().get(1)
+                     .removeBinding("$this." + in.getName());
+            }
          }
 
-         // not added input and outputs.
-         // end
+         for (Entry<String, Binding> binding : bindChange.entrySet()) {
+
+            if ( newTask.getDecompositions().get(0)
+                  .removeBinding(binding.getKey()) )
+               newTask
+                     .getDecompositions()
+                     .get(0)
+                     .addBinding(changed.get(binding.getKey()),
+                           binding.getValue());
+         }
+
          return true;
+      }
+      return false;
+
+   }
+
+   /**
+    * Adds the slot to parents. If a subtask is added to one of the child tasks,
+    * this function adds it's input or output to it's parents
+    */
+   public boolean addSlotToParents (TaskClass parentTask,
+         DecompositionClass parentSubtask, TaskModel taskModel, boolean type,
+         String slotName, String slotType, String binding, String modified) {
+      List<Object[]> parents = parentSubtask.findParents(parentTask, null,
+            parentSubtask, taskModel);
+
+      for (Object[] parent : parents) {
+         TaskClass task = (TaskClass) (parent[0]);
+         DecompositionClass subtask = (DecompositionClass) parent[1];
+         Entry<String, Step> step = (Entry<String, Step>) parent[2];
+
+         if ( type ) {
+            String inputPar = step.getKey() + "_" + slotName;
+            TaskClass.Input inputCC = task.new Input(inputPar, slotType,
+                  task.getOutput(step.getKey() + "_" + modified));
+            task.addInput(inputCC);
+
+            subtask.addBinding("$" + step.getKey() + "." + slotName,
+                  subtask.new Binding(inputPar, step.getKey(), "$this."
+                     + inputPar, true));
+         } else {
+            String OutputPar = step.getKey() + "_" + slotName;
+            TaskClass.Output outputCC = task.new Output(OutputPar, slotType);
+            task.addOutput(outputCC);
+
+            subtask.addBinding("$this." + OutputPar, subtask.new Binding(
+                  OutputPar, "this", "$" + step.getKey() + "." + slotName,
+                  false));
+         }
+      }
+
+      if ( type && parents != null && parents.size() != 0 ) {
+         
+         DecompositionClass subtask = (DecompositionClass) parents.get(parents
+               .size() - 1)[1];
+        
+         Entry<String, Step> step = (Entry<String, Step>) parents.get(parents
+               .size() - 1)[2];
+
+         subtask.addBinding("$this." + step.getKey() + "_" + slotName,
+               subtask.new Binding(step.getKey() + "_" + slotName, "this",
+                     binding, true));
+
+         return true;
+
       }
       return false;
 
@@ -473,7 +549,8 @@ public class Demonstration {
    }
 
    /**
-    * Adds the step.
+    * Adds the step. This function adds the specified steps to the subtask of a
+    * task.
     */
    public TaskModel addSteps (Disco disco, String taskName, String subtaskId)
          throws NoSuchMethodException, ScriptException {
@@ -515,6 +592,9 @@ public class Demonstration {
 
    }
 
+   /**
+    * Adds the optional step.
+    */
    public TaskModel addOptionalStep (String taskName, String subtaskId,
          String stepName) {
 
@@ -526,6 +606,9 @@ public class Demonstration {
       return taskModel;
    }
 
+   /**
+    * Adds the alternative recipe.
+    */
    public TaskModel addAlternativeRecipe (Disco disco, String taskName,
          String inputName) throws NoSuchMethodException, ScriptException {
 
@@ -549,6 +632,9 @@ public class Demonstration {
       return taskModel;
    }
 
+   /**
+    * Makes the steps of a subtask completely ordered
+    */
    public TaskModel setOrdered (String taskName, String subtaskId) {
 
       TaskClass task = this.taskModel.getTaskClass(taskName);
@@ -558,6 +644,9 @@ public class Demonstration {
       return taskModel;
    }
 
+   /**
+    * Adds the applicable condition to a subtask.
+    */
    public TaskModel addApplicable (String taskName, String subtaskId,
          String condition) {
 
@@ -568,6 +657,9 @@ public class Demonstration {
       return taskModel;
    }
 
+   /**
+    * Adds the precondition to a task.
+    */
    public TaskModel addPrecondition (String taskName, String precondition) {
 
       TaskClass task = this.taskModel.getTaskClass(taskName);
@@ -576,6 +668,9 @@ public class Demonstration {
       return taskModel;
    }
 
+   /**
+    * Adds the postcondition to a task.
+    */
    public TaskModel addPostcondition (String taskName, String postcondition) {
 
       TaskClass task = this.taskModel.getTaskClass(taskName);
@@ -584,6 +679,9 @@ public class Demonstration {
       return taskModel;
    }
 
+   /**
+    * Adds the output to a task.
+    */
    public TaskModel addOutput (String taskName, String outputName,
          String outputType) {
 
@@ -595,6 +693,9 @@ public class Demonstration {
       return taskModel;
    }
 
+   /**
+    * Adds the input to a task.
+    */
    public TaskModel addInput (String taskName, String inputName, String type,
          String modified) {
 

@@ -1,6 +1,5 @@
 package edu.wpi.htnlfd.model;
 
-
 import edu.wpi.disco.Disco;
 import org.w3c.dom.*;
 import java.util.*;
@@ -63,11 +62,11 @@ public class TaskClass extends TaskModel.Member {
    }
 
    private boolean primitive;
-   
-   private String precondition;
-   private String postcondition; 
 
-   
+   private String precondition;
+
+   private String postcondition;
+
    public String getPrecondition () {
       return precondition;
    }
@@ -119,34 +118,24 @@ public class TaskClass extends TaskModel.Member {
     * the same as the input of demonstrated task, it will return the name of the
     * existed input. If it can't find it, it will add the input to the
     * TaskClass.
-    * @param taskModel 
+    * 
+    * @param taskModel
     */
-   public String addInput (TaskModel taskModel, TaskClass task, String inputName, String inputType,
-         String modified, String inputBindingValue, DecompositionClass subtask,
-         String prefix) {
+   public String addInput (TaskModel taskModel, TaskClass task,
+         String inputName, String inputType, String modified,
+         String inputBindingValue, DecompositionClass subtask, String prefix) {
       boolean contain = false;
       String name = null;
-      for(Input input:task.getDeclaredInputs()){
-         if(!((modified != null) ^ input.getModified()!=null) && input.getType().equals(inputType)){
-            /*for (Entry<String, Binding> bind : subtask.getBindings().entrySet()) {
-              
-               if ( bind.getKey().contains("this")
-                  && bind.getValue().isInputInput()
-                  && !((modified != null) ^ task
-                        .isModified(bind.getValue().getSlot())) ) {
-                  if ( bind.getValue().getValue().equals(inputBindingValue) ) {
-                     contain = true;
-                     name = bind.getKey().substring(6);
-                     return name;
-                  }
-               }
-            }*/
-            String value = subtask.findValueInParents (taskModel, null,
-                  task, subtask,  input.getName());
-            if(value.equals(inputBindingValue)){
+      for (Input input : task.getDeclaredInputs()) {
+         if ( !((modified != null) ^ input.getModified() != null)
+            && input.getType().equals(inputType) ) {
+
+            String value = subtask.findValueInParents(taskModel, null, task,
+                  subtask, input.getName());
+            if ( value.equals(inputBindingValue) ) {
                return input.getName();
             }
-            
+
          }
       }
       if ( contain ) {
@@ -265,19 +254,6 @@ public class TaskClass extends TaskModel.Member {
       /**
        * This function makes the input's DOM element.
        */
-      /*
-       * @Override public Node toNode (Document document) { Element inputTask =
-       * document.createElementNS( TaskModel.xmlnsValue, "input"); Attr
-       * inputNameAttr = document.createAttribute("name");
-       * inputNameAttr.setValue(this.getName());
-       * inputTask.setAttributeNode(inputNameAttr); Attr inputType =
-       * document.createAttribute("type"); inputType.setValue(this.getType());
-       * inputTask.setAttributeNode(inputType); if ( this.getModified() != null
-       * ) { Attr modifiedAttr = document.createAttribute("modified");
-       * modifiedAttr.setValue(this.getModified().getName());
-       * inputTask.setAttributeNode(modifiedAttr); } return inputTask; }
-       */
-
       public Element toNode (Document document) {
          Element element = toNode(document, "input");
          if ( modified != null )
@@ -321,19 +297,6 @@ public class TaskClass extends TaskModel.Member {
       public Output (Output oldOut) {
          super(oldOut.getName(), oldOut.getType());
       }
-
-      /**
-       * This function makes the output's DOM element.
-       */
-      /*
-       * @Override public Node toNode (Document document) { Element outputTask =
-       * document.createElementNS( TaskModel.xmlnsValue, "output"); Attr
-       * inputNameAttr = document.createAttribute("name");
-       * inputNameAttr.setValue(this.getName());
-       * outputTask.setAttributeNode(inputNameAttr); Attr inputType =
-       * document.createAttribute("type"); inputType.setValue(this.getType());
-       * outputTask.setAttributeNode(inputType); return outputTask; }
-       */
 
       /**
        * Checks if is equivalent. Checks whether two outputs are equivalent by
@@ -404,23 +367,14 @@ public class TaskClass extends TaskModel.Member {
 
    private List<DecompositionClass> decompositions = new ArrayList<DecompositionClass>();
 
-   /**
-    * Gets the decompositions.
-    */
    public List<DecompositionClass> getDecompositions () {
       return decompositions;
    }
 
-   /**
-    * Adds the decomposition class.
-    */
    public void addDecompositionClass (DecompositionClass dec) {
       decompositions.add(dec);
    }
 
-   /**
-    * Gets the decomposition.
-    */
    public DecompositionClass getDecomposition (String id) {
       for (DecompositionClass decomp : getDecompositions())
          if ( decomp.getId().equals(id) )
@@ -534,7 +488,11 @@ public class TaskClass extends TaskModel.Member {
       return false;
    }
 
-   public void addOutputsBindings (edu.wpi.cetask.Task step, String stepNameR, DecompositionClass subtask) {
+   /**
+    * Adds the outputs and bindings to a new task.
+    */
+   public void addOutputsBindings (edu.wpi.cetask.Task step, String stepNameR,
+         DecompositionClass subtask) {
 
       for (String outputName : step.getType().getDeclaredOutputNames()) {
 
@@ -543,22 +501,24 @@ public class TaskClass extends TaskModel.Member {
          String bindingSlotValue = null;
          bindingSlotValue = stepNameR + "_" + outputName;
 
-         subtask.addBinding("$this." + bindingSlotValue,
-               subtask.new Binding(bindingSlotValue, "this", bindingSlot,
-                     false));
+         subtask.addBinding("$this." + bindingSlotValue, subtask.new Binding(
+               bindingSlotValue, "this", bindingSlot, false));
          this.addOutput(this.new Output(bindingSlotValue, step.getType()
                .getSlotType(outputName)));
       }
-      
+
    }
 
-   
-   public List<String> addInputsBindings(TaskModel taskModel,edu.wpi.cetask.Task step, String stepNameR, DecompositionClass subtask, Disco disco) throws NoSuchMethodException, ScriptException{
-      
+   /**
+    * Adds the inputs and bindings to a new task.
+    */
+   public List<String> addInputsBindings (TaskModel taskModel,
+         edu.wpi.cetask.Task step, String stepNameR,
+         DecompositionClass subtask, Disco disco) throws NoSuchMethodException,
+         ScriptException {
+
       List<String> inputs = new ArrayList<String>();
-      
-      
-      
+
       for (String inputName : step.getType().getDeclaredInputNames()) {
 
          String bindingSlotvalue = "$" + stepNameR + "." + inputName;
@@ -570,10 +530,10 @@ public class TaskClass extends TaskModel.Member {
 
          String inputBindingValue = (String) inputBinding;
          int inputNum1 = this.getDeclaredInputs().size();
-         String changedName = this.addInput(taskModel,this, inputName, step.getType()
-               .getSlotType(inputName), step.getType()
-               .getModified(inputName), inputBindingValue, subtask,
-               stepNameR);
+         String changedName = this.addInput(taskModel, this, inputName, step
+               .getType().getSlotType(inputName),
+               step.getType().getModified(inputName), inputBindingValue,
+               subtask, stepNameR);
          int inputNum2 = this.getDeclaredInputs().size();
          subtask.addBinding(bindingSlotvalue, subtask.new Binding(inputName,
                stepNameR, "$this." + changedName, true));
@@ -599,16 +559,17 @@ public class TaskClass extends TaskModel.Member {
       }
       return inputs;
    }
-   
-   public Output getOutput(String outName){
-      for(Output out:this.getDeclaredOutputs()){
-         if(out.getName().equals(outName)){
+
+   /**
+    * Gets the output. Finds the output with it's name
+    */
+   public Output getOutput (String outName) {
+      for (Output out : this.getDeclaredOutputs()) {
+         if ( out.getName().equals(outName) ) {
             return out;
          }
       }
       return null;
    }
-   
-   
 
 }

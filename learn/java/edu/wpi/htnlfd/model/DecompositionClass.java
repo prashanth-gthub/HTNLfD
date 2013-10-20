@@ -60,41 +60,26 @@ public class DecompositionClass extends TaskModel.Member {
 
    private List<String> stepNames;
 
-   /**
-    * Gets the step names.
-    */
    public List<String> getStepNames () {
       return Collections.unmodifiableList(stepNames);
    }
 
-   /**
-    * Sets the step names.
-    */
    public void setStepNames (List<String> stepNames) {
       this.stepNames = stepNames;
    }
 
-   /**
-    * Gets the applicable.
-    */
    public String getApplicable () {
       return applicable;
    }
 
    private boolean ordered;
 
-   /**
-    * Checks if is ordered.
-    */
    public boolean isOrdered () {
       return ordered;
    }
 
    private Map<String, Step> steps;
 
-   /**
-    * Gets the steps.
-    */
    public Map<String, Step> getSteps () {
       if ( steps == null ) {
          steps = new HashMap<String, Step>();
@@ -103,7 +88,7 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Adds the step.
+    * Adds the step. Also adds step's name to stepNames
     */
    public void addStep (String name, Step step) {
 
@@ -117,9 +102,6 @@ public class DecompositionClass extends TaskModel.Member {
       stepNames.add(name);
    }
 
-   /**
-    * Gets the step.
-    */
    public Step getStep (String name) {
       if ( steps != null )
          return steps.get(name);
@@ -127,7 +109,7 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * This function makes the DecompositionClass's DOM element recursively.
+    * Makes the DecompositionClass's DOM element recursively.
     */
    public Node toNode (Document document, Set<String> namespaces) {
       Element subtasks = document.createElementNS(TaskModel.xmlnsValue,
@@ -152,8 +134,8 @@ public class DecompositionClass extends TaskModel.Member {
       }
 
       if ( this.getApplicable() != null && this.getApplicable() != "" ) {
-         Element applicable = document.createElementNS(
-               TaskModel.xmlnsValue, "applicable");
+         Element applicable = document.createElementNS(TaskModel.xmlnsValue,
+               "applicable");
          applicable.setTextContent(this.getApplicable());
          subtasks.appendChild(applicable);
       }
@@ -197,51 +179,30 @@ public class DecompositionClass extends TaskModel.Member {
             this.required.add(require);
       }
 
-      /**
-       * Gets the type of taskclass.
-       */
       public TaskClass getType () {
          return type;
       }
 
-      /**
-       * Sets the type of taskclass.
-       */
       public void setType (TaskClass type) {
          this.type = type;
       }
 
-      /**
-       * Gets the min occurs.
-       */
       public int getMinOccurs () {
          return minOccurs;
       }
 
-      /**
-       * Sets the min occurs.
-       */
       public void setMinOccurs (int minOccurs) {
          this.minOccurs = minOccurs;
       }
 
-      /**
-       * Gets the max occurs.
-       */
       public int getMaxOccurs () {
          return maxOccurs;
       }
 
-      /**
-       * Sets the max occurs.
-       */
       public void setMaxOccurs (int maxOccurs) {
          this.maxOccurs = maxOccurs;
       }
 
-      /**
-       * Gets the required.
-       */
       public List<String> getRequired () {
          if ( required == null )
             required = new ArrayList<String>();
@@ -249,7 +210,7 @@ public class DecompositionClass extends TaskModel.Member {
       }
 
       /**
-       * Adds the required.
+       * Adds the required if it hadn't been added.
        */
       public void addRequired (String require) {
          if ( required == null )
@@ -266,12 +227,12 @@ public class DecompositionClass extends TaskModel.Member {
       }
 
       /**
-       * This function makes the step's DOM element.
+       * Makes the step's DOM element.
        */
       public Node toNode (Document document, String stepName,
             Set<String> namespaces) {
-         Element subtaskStep = document.createElementNS(
-               TaskModel.xmlnsValue, "step");
+         Element subtaskStep = document.createElementNS(TaskModel.xmlnsValue,
+               "step");
 
          Attr nameSubtaskStep = document.createAttribute("name");
 
@@ -308,20 +269,20 @@ public class DecompositionClass extends TaskModel.Member {
             subtaskStep.setAttributeNode(stepReq);
             stepReq.setValue(requireStr);
          }
-         
-         if(this.minOccurs!=1){
+
+         if ( this.minOccurs != 1 ) {
             Attr minOccurs = document.createAttribute("minOccurs");
-   
+
             minOccurs.setValue(new Integer(this.minOccurs).toString());
-   
+
             subtaskStep.setAttributeNode(minOccurs);
          }
-         
-         if(this.maxOccurs!=1){
+
+         if ( this.maxOccurs != 1 ) {
             Attr maxOccurs = document.createAttribute("maxOccurs");
-   
+
             maxOccurs.setValue(new Integer(this.maxOccurs).toString());
-   
+
             subtaskStep.setAttributeNode(maxOccurs);
          }
 
@@ -330,7 +291,7 @@ public class DecompositionClass extends TaskModel.Member {
       }
 
       /**
-       * Checks if is equivalent. This function checks for equivalent steps.
+       * Checks for equivalent steps.
        */
       public boolean isEquivalent (Step step, DecompositionClass dec1,
             DecompositionClass dec2, TaskModel taskModel) {
@@ -359,6 +320,10 @@ public class DecompositionClass extends TaskModel.Member {
          return sameOrder;
       }
 
+      /**
+       * Finds goal, if the task is primitive it should be created otherwise it
+       * will be searched in the existed tasks.
+       */
       public TaskClass findGoal (TaskModel taskModel, edu.wpi.cetask.Task step) {
          TaskClass goal = null;
          for (TaskClass goalI : taskModel.getTaskClasses()) {
@@ -399,30 +364,33 @@ public class DecompositionClass extends TaskModel.Member {
                goal.addInput(inputC);
             }
          }
-         
+
          return goal;
-        
+
       }
-      
-      public String findStepName(String stepName){
+
+      /**
+       * Searches for step name. If it exists, a new name will be returned.
+       */
+      public String findStepName (String stepName) {
          int count = 1;
-         
+
          String stepNameFind = Character.toLowerCase(stepName.charAt(0))
-               + (stepName.length() > 1 ? stepName.substring(1) : "");
-         
-         while(true){
-            if(getStep(stepNameFind+count)!=null)
+            + (stepName.length() > 1 ? stepName.substring(1) : "");
+
+         while (true) {
+            if ( getStep(stepNameFind + count) != null )
                count++;
             else
-               return stepNameFind+count;            
+               return stepNameFind + count;
          }
       }
 
    }
 
    /**
-    * Check inputs. This function checks whether two inputs have the same value
-    * in their parents.(This function is called by isEquivalent function)
+    * Checks whether two inputs have the same value in their parents.(This
+    * function is called by isEquivalent function)
     */
    public boolean checkInputs (String stp1, TaskClass type1, String stp2,
          TaskClass type2, DecompositionClass dec1, DecompositionClass dec2,
@@ -449,9 +417,8 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Find value in parents. This function finds value of an input in it's
-    * parents.(from each subtasks' bindings) Assumption: The value of our input
-    * is in it's oldest parent.
+    * Finds value of an input in it's parents.(from each subtasks' bindings)
+    * Assumption: The value of our input is in it's oldest parent.
     */
    @SuppressWarnings("unchecked")
    public String findValueInParents (TaskModel taskModel, String stp,
@@ -484,9 +451,9 @@ public class DecompositionClass extends TaskModel.Member {
 
       List<Object[]> temp = findParents(parentTask, parentStep, parentSubtask,
             taskModel);
-      parentTask = (TaskClass) temp.get(temp.size()-1)[0];
-      parentSubtask = (DecompositionClass) temp.get(temp.size()-1)[1];
-      parentStep = (Entry<String, Step>) temp.get(temp.size()-1)[2];
+      parentTask = (TaskClass) temp.get(temp.size() - 1)[0];
+      parentSubtask = (DecompositionClass) temp.get(temp.size() - 1)[1];
+      parentStep = (Entry<String, Step>) temp.get(temp.size() - 1)[2];
 
       if ( parentSubtask != null ) {
          for (Entry<String, Binding> bind1 : parentSubtask.getBindings()
@@ -505,15 +472,15 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Find root parent. This function finds the last parent(oldest parent) of a
+    * Finds the parents of a
     * TaskClass. (By calling the same function recursively on it's parents.)
     */
    public List<Object[]> findParents (TaskClass parentTask,
          Entry<String, Step> parentStep, DecompositionClass parentSubtask,
          TaskModel taskModel) {
-      
+
       List<Object[]> parents = new ArrayList<Object[]>();
-      
+
       boolean contain = false;
       while (true) {
          contain = false;
@@ -523,20 +490,20 @@ public class DecompositionClass extends TaskModel.Member {
                for (Entry<String, Step> step : subtask.getSteps().entrySet()) {
                   if ( step.getValue().getType().getId()
                         .equals(parentTask.getId()) ) {
-                     
+
                      parentTask = temptask;
                      parentSubtask = subtask;
                      parentStep = step;
-                     
-                     Object[] parent= new Object[3];
-                     
+
+                     Object[] parent = new Object[3];
+
                      parent[0] = temptask;
                      parent[1] = subtask;
-                     parent[2] = step;                  
-                                         
-                     parents.add(parent);                     
+                     parent[2] = step;
+
+                     parents.add(parent);
                      contain = true;
-                     
+
                      break;
                   }
 
@@ -548,23 +515,17 @@ public class DecompositionClass extends TaskModel.Member {
             if ( contain )
                break;
          }
-         if ( !contain ) {            
+         if ( !contain ) {
 
             return parents;
          }
       }
    }
 
-   /**
-    * Gets the step type.
-    */
    public TaskClass getStepType (String name) {
       return steps.get(name).type;
    }
 
-   /**
-    * Sets the ordered.
-    */
    public void setOrdered (boolean ordered) {
       this.ordered = ordered;
    }
@@ -576,9 +537,6 @@ public class DecompositionClass extends TaskModel.Member {
       this.goal = goal;
    }
 
-   /**
-    * Sets the applicable.
-    */
    public void setApplicable (String applicable) {
       this.applicable = applicable;
    }
@@ -593,9 +551,6 @@ public class DecompositionClass extends TaskModel.Member {
 
    private Map<String, Binding> bindings = new HashMap<String, Binding>();
 
-   /**
-    * Gets the bindings.
-    */
    public Map<String, Binding> getBindings () {
       return Collections.unmodifiableMap(bindings); // Collections.unmodifiableMap(
    }
@@ -610,8 +565,10 @@ public class DecompositionClass extends TaskModel.Member {
    /**
     * Removes the binding.
     */
-   public void removeBinding (String key) {
-      bindings.remove(key);
+   public boolean removeBinding (String key) {
+      if ( bindings.remove(key) == null )
+         return false;
+      return true;
    }
 
    public class Binding {
@@ -653,71 +610,40 @@ public class DecompositionClass extends TaskModel.Member {
          // depends ????
       }
 
-      /**
-       * Gets the depends.
-       */
-      public List<Binding> getDepends () {
-         return Collections.unmodifiableList(depends);
-      }
-
-      /**
-       * Gets the value.
-       */
       public String getValue () {
          return value;
       }
 
-      /**
-       * Sets the value.
-       */
       public void setValue (String value) {
          this.value = value;
       }
 
-      /**
-       * Gets the step.
-       */
       public String getStep () {
          return step;
       }
 
-      /**
-       * Sets the step.
-       */
       public void setStep (String step) {
          this.step = step;
       }
 
-      /**
-       * Gets the slot.
-       */
       public String getSlot () {
          return slot;
       }
 
-      /**
-       * Sets the slot.
-       */
       public void setSlot (String slot) {
          this.slot = slot;
       }
 
-      /**
-       * Checks if is input input.
-       */
       public boolean isInputInput () {
          return inputInput;
       }
 
-      /**
-       * Sets the input input.
-       */
       public void setInputInput (boolean inputInput) {
          this.inputInput = inputInput;
       }
 
       /**
-       * This function makes the binding's DOM element.
+       * Makes the binding's DOM element.
        */
       Node toNode (Document document, String name) {
          Element subtaskBinding = document.createElementNS(
@@ -761,7 +687,7 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Adds the ordering. This function adds the ordering constraints according
+    * Adds the ordering constraints according
     * to the flow of inputs and outputs.
     */
    public void addOrdering (TaskModel taskModel) {
@@ -776,15 +702,16 @@ public class DecompositionClass extends TaskModel.Member {
                   && !bindingDep.getValue().getStep()
                         .equals(bindingRef.getValue().getStep()) ) {
 
-                  String valueRef = findValueInParents (taskModel, null,
-                         task, this, bindingRef.getValue().getValue().substring(6));                        
-                        //getBindingValue(bindingRef, this);
+                  String valueRef = findValueInParents(taskModel, null, task,
+                        this, bindingRef.getValue().getValue().substring(6));
+                  // getBindingValue(bindingRef, this);
                   String inputRef = null;
-                  String valueDep = findValueInParents (taskModel, null,
-                        task, this, bindingDep.getValue().getValue().substring(6));
-                        //getBindingValue(bindingDep, this);
+                  String valueDep = findValueInParents(taskModel, null, task,
+                        this, bindingDep.getValue().getValue().substring(6));
+                  // getBindingValue(bindingDep, this);
 
-                  if (valueDep!=null && valueRef!=null && valueDep.equals(valueRef) ) {
+                  if ( valueDep != null && valueRef != null
+                     && valueDep.equals(valueRef) ) {
                      inputRef = bindingRef.getValue().getValue().substring(6);
 
                      for (TaskClass.Input inputs : task.getDeclaredInputs()) {
@@ -813,18 +740,19 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Removes the ordering. This function removes ordering constraints.
+    * Removes ordering constraints.
     */
    public void removeOrdering () {
       this.setOrdered(true);
       for (Entry<String, Step> step : getSteps().entrySet()) {
-         if(step.getValue().required!=null && step.getValue().required.size()!=0)
+         if ( step.getValue().required != null
+            && step.getValue().required.size() != 0 )
             step.getValue().required.clear();
       }
    }
 
    /**
-    * Checks if is equivalent. This function checks for equivalent steps
+    * Checks for equivalent steps
     * recursively.
     */
    public boolean isEquivalent (DecompositionClass dec, TaskModel taskModel) {
@@ -865,7 +793,7 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Removes the binding input. This function removes the binding that is
+    * Removes the binding that is
     * related to an input.
     */
    public void removeBindingInput (String input) {
@@ -890,7 +818,7 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Gets the binding step. This fucntion returns the binding that is related
+    * Gets the binding that is related
     * to a step and an input.
     */
    public Entry<String, Binding> getBindingStep (String stepName,
