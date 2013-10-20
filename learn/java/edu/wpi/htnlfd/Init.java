@@ -15,6 +15,11 @@ public class Init {
    private static Demonstration demonstration = null;
 
    private static DomManipulation DOM = null;
+   
+   private static String filename = "SetTable1";
+   private static String separator = System.getProperty("file.separator");
+   private static String fileName = System.getProperty("user.dir") + separator + filename
+         + ".xml";
 
    /**
     * The main method.(Never called)
@@ -28,18 +33,15 @@ public class Init {
     */
    public static void learn (Disco disco, String taskName) throws Exception {
 
-      String separator = System.getProperty("file.separator");
-      String filename = "SetTable1";
 
       if ( demonstration == null ) {
          demonstration = new Demonstration();
          DOM = new DomManipulation();
       }
 
-      String fileName = System.getProperty("user.dir") + separator + filename
-         + ".xml";
-      List<Task> DemonstratedTasks = demonstration.findDemonstration(disco,
-            taskName);
+      
+      List<Task> DemonstratedTasks = demonstration.findDemonstration(disco
+            );
       try {
          learnedTaskmodel = demonstration.buildTaskModel(disco, taskName,
                DemonstratedTasks, "input1");
@@ -50,12 +52,31 @@ public class Init {
       }
 
    }
+   
+   public static void addSteps (Disco disco, String taskName, String subtask) throws Exception {
+
+      learnedTaskmodel = demonstration.addSteps(disco, taskName, subtask);
+      DOM.writeDOM(fileName, learnedTaskmodel);
+      demonstration.readDOM(disco, fileName);
+   }
+   
+   public static void addOptionalStep (Disco disco, String taskName, String subtask, String stepName) throws Exception {
+
+      learnedTaskmodel = demonstration.addOptionalStep(taskName, subtask, stepName);
+      DOM.writeDOM(fileName, learnedTaskmodel);
+      demonstration.readDOM(disco, fileName);
+   }
 
    /**
     * Prints the learned taskmodel.
     */
-   public void print (PrintStream stream) throws TransformerException {
+   public static void print (PrintStream stream) throws TransformerException {
       DOM.writeDOM(stream, learnedTaskmodel);
+   }
+
+   public static void print () throws TransformerException {
+      PrintStream stream = new PrintStream(System.out);
+      print(stream);
    }
 
    /**

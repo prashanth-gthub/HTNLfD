@@ -46,5 +46,6 @@ eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
 
 task Demonstration
 task Place / PhysObj.DinnerPlate / PhysObj.WaterGlass
+task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")

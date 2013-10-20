@@ -1,6 +1,6 @@
 package edu.wpi.htnlfd.model;
 
-import edu.wpi.htnlfd.model.TaskClass.Input;
+import edu.wpi.htnlfd.model.TaskClass.*;
 import org.w3c.dom.*;
 import java.util.*;
 import java.util.Map.Entry;
@@ -308,6 +308,22 @@ public class DecompositionClass extends TaskModel.Member {
             subtaskStep.setAttributeNode(stepReq);
             stepReq.setValue(requireStr);
          }
+         
+         if(this.minOccurs!=1){
+            Attr minOccurs = document.createAttribute("minOccurs");
+   
+            minOccurs.setValue(new Integer(this.minOccurs).toString());
+   
+            subtaskStep.setAttributeNode(minOccurs);
+         }
+         
+         if(this.maxOccurs!=1){
+            Attr maxOccurs = document.createAttribute("maxOccurs");
+   
+            maxOccurs.setValue(new Integer(this.maxOccurs).toString());
+   
+            subtaskStep.setAttributeNode(maxOccurs);
+         }
 
          namespaces.add(getType().getQname().getNamespaceURI());
          return subtaskStep;
@@ -341,6 +357,65 @@ public class DecompositionClass extends TaskModel.Member {
          }
 
          return sameOrder;
+      }
+
+      public TaskClass findGoal (TaskModel taskModel, edu.wpi.cetask.Task step) {
+         TaskClass goal = null;
+         for (TaskClass goalI : taskModel.getTaskClasses()) {
+            if ( goalI.getId().equals(step.getType().getId()) ) {
+               goal = goalI;
+
+               // goal.setQname(step.getType().getQName());
+               break;
+            }
+         }
+         if ( goal == null ) {
+            goal = new TaskClass(taskModel, step.getType().getId(), step
+                  .getType().getQName());
+
+            for (String out : step.getType().getDeclaredOutputNames()) {
+
+               TaskClass.Output outputTask = goal.new Output(out, step
+                     .getType().getSlotType(out));
+               goal.addOutput(outputTask);
+
+            }
+
+            for (String in : step.getType().getDeclaredInputNames()) {
+
+               TaskClass.Input inputC = null;
+               for (TaskClass.Output out : goal.getDeclaredOutputs()) {
+                  if ( step.getType().getModified(in) != null
+                     && out.getName().equals(step.getType().getModified(in)) ) {
+                     inputC = goal.new Input(in,
+                           step.getType().getSlotType(in), null);
+                     break;
+                  }
+               }
+               if ( inputC == null ) {
+                  inputC = goal.new Input(in, step.getType().getSlotType(in),
+                        null);
+               }
+               goal.addInput(inputC);
+            }
+         }
+         
+         return goal;
+        
+      }
+      
+      public String findStepName(String stepName){
+         int count = 1;
+         
+         String stepNameFind = Character.toLowerCase(stepName.charAt(0))
+               + (stepName.length() > 1 ? stepName.substring(1) : "");
+         
+         while(true){
+            if(getStep(stepNameFind+count)!=null)
+               count++;
+            else
+               return stepNameFind+count;            
+         }
       }
 
    }
@@ -401,17 +476,17 @@ public class DecompositionClass extends TaskModel.Member {
       if ( dec != null && stp == null ) {
          for (Entry<String, Binding> bind1 : dec.getBindings().entrySet()) {
             if ( bind1.getValue().getStep().equals("this")
-               && bind1.getValue().getSlot().contains(inputName) ) {
+               && bind1.getValue().getSlot().equals(inputName) ) { // contains
                return bind1.getValue().getValue();
             }
          }
       }
 
-      List<Object> temp = findRootParent(parentTask, parentStep, parentSubtask,
+      List<Object[]> temp = findParents(parentTask, parentStep, parentSubtask,
             taskModel);
-      parentTask = (TaskClass) temp.get(0);
-      parentSubtask = (DecompositionClass) temp.get(1);
-      parentStep = (Entry<String, Step>) temp.get(2);
+      parentTask = (TaskClass) temp.get(temp.size()-1)[0];
+      parentSubtask = (DecompositionClass) temp.get(temp.size()-1)[1];
+      parentStep = (Entry<String, Step>) temp.get(temp.size()-1)[2];
 
       if ( parentSubtask != null ) {
          for (Entry<String, Binding> bind1 : parentSubtask.getBindings()
@@ -433,9 +508,12 @@ public class DecompositionClass extends TaskModel.Member {
     * Find root parent. This function finds the last parent(oldest parent) of a
     * TaskClass. (By calling the same function recursively on it's parents.)
     */
-   public List<Object> findRootParent (TaskClass parentTask,
+   public List<Object[]> findParents (TaskClass parentTask,
          Entry<String, Step> parentStep, DecompositionClass parentSubtask,
          TaskModel taskModel) {
+      
+      List<Object[]> parents = new ArrayList<Object[]>();
+      
       boolean contain = false;
       while (true) {
          contain = false;
@@ -445,10 +523,20 @@ public class DecompositionClass extends TaskModel.Member {
                for (Entry<String, Step> step : subtask.getSteps().entrySet()) {
                   if ( step.getValue().getType().getId()
                         .equals(parentTask.getId()) ) {
-                     parentStep = step;
+                     
                      parentTask = temptask;
                      parentSubtask = subtask;
+                     parentStep = step;
+                     
+                     Object[] parent= new Object[3];
+                     
+                     parent[0] = temptask;
+                     parent[1] = subtask;
+                     parent[2] = step;                  
+                                         
+                     parents.add(parent);                     
                      contain = true;
+                     
                      break;
                   }
 
@@ -460,13 +548,9 @@ public class DecompositionClass extends TaskModel.Member {
             if ( contain )
                break;
          }
-         if ( !contain ) {
-            ArrayList<Object> temp = new ArrayList<Object>();
-            temp.add(parentTask);
-            temp.add(parentSubtask);
-            temp.add(parentStep);
+         if ( !contain ) {            
 
-            return temp;
+            return parents;
          }
       }
    }
@@ -680,7 +764,7 @@ public class DecompositionClass extends TaskModel.Member {
     * Adds the ordering. This function adds the ordering constraints according
     * to the flow of inputs and outputs.
     */
-   public void addOrdering () {
+   public void addOrdering (TaskModel taskModel) {
       TaskClass task = this.goal;
       for (Entry<String, Binding> bindingDep : this.getBindings().entrySet()) {
          if ( !bindingDep.getKey().contains("this") ) { // bindingDep.getKey().contains(ReferenceFrame)
@@ -692,11 +776,15 @@ public class DecompositionClass extends TaskModel.Member {
                   && !bindingDep.getValue().getStep()
                         .equals(bindingRef.getValue().getStep()) ) {
 
-                  String valueRef = getBindingValue(bindingRef, this);
+                  String valueRef = findValueInParents (taskModel, null,
+                         task, this, bindingRef.getValue().getValue().substring(6));                        
+                        //getBindingValue(bindingRef, this);
                   String inputRef = null;
-                  String valueDep = getBindingValue(bindingDep, this);
+                  String valueDep = findValueInParents (taskModel, null,
+                        task, this, bindingDep.getValue().getValue().substring(6));
+                        //getBindingValue(bindingDep, this);
 
-                  if ( valueDep.equals(valueRef) ) {
+                  if (valueDep!=null && valueRef!=null && valueDep.equals(valueRef) ) {
                      inputRef = bindingRef.getValue().getValue().substring(6);
 
                      for (TaskClass.Input inputs : task.getDeclaredInputs()) {
@@ -730,7 +818,8 @@ public class DecompositionClass extends TaskModel.Member {
    public void removeOrdering () {
       this.setOrdered(true);
       for (Entry<String, Step> step : getSteps().entrySet()) {
-         step.getValue().required.clear();
+         if(step.getValue().required!=null && step.getValue().required.size()!=0)
+            step.getValue().required.clear();
       }
    }
 

@@ -1,5 +1,6 @@
 package edu.wpi.htnlfd;
 
+import edu.wpi.cetask.Task;
 import edu.wpi.disco.*;
 import edu.wpi.disco.lang.Utterance;
 import edu.wpi.htnlfd.model.*;
@@ -28,8 +29,7 @@ public class Demonstration {
     * tasks are in "Demonstration" segment, we can just search for all of
     * segments in that segment.
     */
-   public List<edu.wpi.cetask.Task> findDemonstration (Disco disco,
-         String taskName) {
+   public List<edu.wpi.cetask.Task> findDemonstration (Disco disco) {
       List<edu.wpi.cetask.Task> demonstratedTasks = new ArrayList<edu.wpi.cetask.Task>();
       List<edu.wpi.cetask.Task> demonstratedTasksReversed = new ArrayList<edu.wpi.cetask.Task>();
       Object parent = (disco.getStack().get(0).getChildren().get(disco
@@ -73,9 +73,12 @@ public class Demonstration {
       }
 
       TaskClass newTask = demonstratedTask(disco, taskName, steps);
-      if ( !addAlternativeRecipe(newTask, input) ) {
+      TaskClass task = isAlternativeRecipe(newTask);
+      if ( task != null ) {
+         addAlternativeRecipe(newTask, input, task);
+
+      } else
          this.taskModel.add(newTask);
-      }
 
       transformation.transform(this.taskModel);
 
@@ -118,9 +121,8 @@ public class Demonstration {
     * all of the inputs' binding values to find out whether it should add
     * another input to this task or not. (It doesn't add inputs to parents.)
     */
-   public boolean addAlternativeRecipe (TaskClass newTask, String input) {
-
-      TaskClass task = isAlternativeRecipe(newTask);
+   public boolean addAlternativeRecipe (TaskClass newTask, String input,
+         TaskClass task) {
 
       if ( task != null ) {
 
@@ -210,15 +212,47 @@ public class Demonstration {
             newTask.getDecompositions().get(0).removeBinding(binding.getKey());
          }
 
-         /*
-          * for(TaskClass.Output out : newTask.getDeclaredOutputs()){
-          * TaskClass.Output outCC = task.new
-          * Output(newTask.getDecompositions().get(0).getId()+"_"+out.getName(),
-          * out.getType()); task.addOutput(outCC); } for(TaskClass.Input in :
-          * newTask.getDeclaredInputs()){ TaskClass.Input inputCC = task.new
-          * Input(newTask.getDecompositions().get(0).getId()+"_"+in.getName(),
-          * in.getType(), in.getModified()); task.addInput(inputCC); }
-          */
+         Map<String, Binding> bindChange = new HashMap<String, Binding>();
+         Map<String, String> changed = new HashMap<String, String>();
+         
+         for (TaskClass.Output out : newTask.getDeclaredOutputs()) {
+            String outputName = newTask
+                  .getDecompositions().get(0).getId()
+               + "_" + out.getName();
+            
+            for(Entry<String, Binding> binding:task.getDecompositions().get(1).getBindings().entrySet()){
+               if(binding.getKey().equals("$this."+out.getName())){
+                  bindChange.put(binding.getKey(), binding.getValue()); 
+                  changed.put(binding.getKey(), "$this."+outputName);
+               }
+            }
+            TaskClass.Output outCC = task.new Output(outputName, out.getType());
+            task.addOutput(outCC);
+         }
+         for (TaskClass.Input in : newTask.getDeclaredInputs()) {
+            String inputName = newTask
+                  .getDecompositions().get(0).getId()
+               + "_" + in.getName();
+            
+            for(Entry<String, Binding> binding:task.getDecompositions().get(1).getBindings().entrySet()){
+               if(binding.getKey().equals("$this."+in.getName())){
+                  bindChange.put(binding.getKey(), binding.getValue());  
+                  changed.put(binding.getKey(), "$this."+inputName);
+               }
+               else if(binding.getValue().getValue().equals("$this."+in.getName())){
+                  binding.getValue().setValue("$this."+inputName);                
+             }
+            }
+            
+            TaskClass.Input inputCC = task.new Input(inputName, in.getType(), in.getModified());
+            task.addInput(inputCC);
+         }
+         
+         for(Entry<String, Binding> binding : bindChange.entrySet()){
+            
+            newTask.getDecompositions().get(0).removeBinding(binding.getKey());            
+            newTask.getDecompositions().get(0).addBinding(changed.get(binding.getKey()),binding.getValue());
+         }
 
          // not added input and outputs.
          // end
@@ -249,128 +283,25 @@ public class Demonstration {
                + countSubtask, true, task);
 
       task.addDecompositionClass(subtask);
-      Map<String, Integer> StepNames = new HashMap<String, Integer>();
-
-      Map<String, edu.wpi.cetask.Task> outputs = new HashMap<String, edu.wpi.cetask.Task>();
 
       for (edu.wpi.cetask.Task step : steps) {
 
          String stepName = step.getType().getId();
          // finding step's name
-         int count = 1;
-         Map.Entry<String, Integer> stepEntry = null;
-         for (Map.Entry<String, Integer> entry : StepNames.entrySet()) {
-            if ( stepName.equals(entry.getKey()) ) {
-               entry.setValue(entry.getValue() + 1);
-               stepEntry = entry;
-               count = stepEntry.getValue();
-               break; // breaking because its one to one map
-            }
-         }
 
-         if ( stepEntry == null ) {
-            StepNames.put(stepName, count);
-         }
-         TaskClass goal = null;
-         for (TaskClass goalI : this.taskModel.getTaskClasses()) {
-            if ( goalI.getId().equals(step.getType().getId()) ) {
-               goal = goalI;
+         DecompositionClass.Step stp = subtask.new Step(null, 1, 1, null);
+         String stepNameR = stp.findStepName(stepName);
 
-               // goal.setQname(step.getType().getQName());
-               break;
-            }
-         }
-         if ( goal == null ) {
-            goal = new TaskClass(taskModel, step.getType().getId(), step
-                  .getType().getQName());
+         stp.setType(stp.findGoal(taskModel, step));
 
-            for (String out : step.getType().getDeclaredOutputNames()) {
-
-               TaskClass.Output outputTask = goal.new Output(out, step
-                     .getType().getSlotType(out));
-               goal.addOutput(outputTask);
-
-            }
-
-            for (String in : step.getType().getDeclaredInputNames()) {
-
-               TaskClass.Input inputC = null;
-               for (TaskClass.Output out : goal.getDeclaredOutputs()) {
-                  if ( step.getType().getModified(in) != null
-                     && out.getName().equals(step.getType().getModified(in)) ) {
-                     inputC = goal.new Input(in,
-                           step.getType().getSlotType(in), null);
-                     break;
-                  }
-               }
-               if ( inputC == null ) {
-                  inputC = goal.new Input(in, step.getType().getSlotType(in),
-                        null);
-               }
-               goal.addInput(inputC);
-            }
-         }
-         DecompositionClass.Step stp = subtask.new Step(goal, 1, 1, null);
-         String stepNameR = Character.toLowerCase(stepName.charAt(0))
-            + (stepName.length() > 1 ? stepName.substring(1) : "") + count;
          // stp.setNamespace(step.getType().getNamespace());
          subtask.addStep(stepNameR, stp);
          subtask.setGoal(task);
 
-         for (String outputName : step.getType().getDeclaredOutputNames()) {
+         task.addOutputsBindings(step, stepNameR, subtask);
 
-            String bindingSlot = "$" + stepNameR + "." + outputName;
-
-            String bindingSlotValue = null;
-            bindingSlotValue = stepNameR + "_" + outputName;
-            outputs.put(bindingSlotValue, step);
-
-            subtask.addBinding("$this." + bindingSlotValue,
-                  subtask.new Binding(bindingSlotValue, "this", bindingSlot,
-                        false));
-            task.addOutput(task.new Output(bindingSlotValue, step.getType()
-                  .getSlotType(outputName)));
-         }
-
-         List<String> inputs = new ArrayList<String>();
-         for (String inputName : step.getType().getDeclaredInputNames()) {
-
-            String bindingSlotvalue = "$" + stepNameR + "." + inputName;
-
-            inputs.add(inputName);
-
-            Object inputBinding = (((Invocable) disco.getScriptEngine())
-                  .invokeFunction("find", step.getSlotValue(inputName)));
-
-            String inputBindingValue = (String) inputBinding;
-            int inputNum1 = task.getDeclaredInputs().size();
-            String changedName = task.addInput(task, inputName, step.getType()
-                  .getSlotType(inputName), step.getType()
-                  .getModified(inputName), inputBindingValue, subtask,
-                  stepNameR);
-            int inputNum2 = task.getDeclaredInputs().size();
-            subtask.addBinding(bindingSlotvalue, subtask.new Binding(inputName,
-                  stepNameR, "$this." + changedName, true));
-
-            if ( inputNum1 != inputNum2 ) {
-               subtask.addBinding("$this." + changedName, subtask.new Binding(
-                     changedName, "this", inputBindingValue, true));
-
-               for (int i = task.getDeclaredOutputs().size() - 1; i >= (task
-                     .getDeclaredOutputs().size() - step.getType()
-                     .getDeclaredOutputNames().size()); i--) {
-                  if ( step.getType().getModified(inputName) != null
-                     && task.getDeclaredOutputs().get(i).getName()
-                           .contains(step.getType().getModified(inputName)) ) {
-                     task.getDeclaredInputs()
-                           .get(task.getDeclaredInputs().size() - 1)
-                           .setModified(task.getDeclaredOutputs().get(i));
-                     break;
-                  }
-               }
-            }
-
-         }
+         List<String> inputs = task.addInputsBindings(taskModel, step,
+               stepNameR, subtask, disco);
 
          for (String inputName : inputs) {
 
@@ -383,7 +314,7 @@ public class Demonstration {
       }
 
       // ordering
-      subtask.addOrdering();
+      subtask.addOrdering(taskModel);
 
       return task;
 
@@ -498,6 +429,10 @@ public class Demonstration {
                      step.addRequired(require);
                   }
                }
+
+               if ( subtaskDecomposition.isOptionalStep(stepName) ) {
+                  step.setMinOccurs(0);
+               }
                subtask.addStep(stepName, step);
 
                // step.setNamespace(subtaskDecomposition.getStepType(stepName)
@@ -535,6 +470,143 @@ public class Demonstration {
     */
    public void readDOM (Disco disco, String fileName) {
       this.externalTaskModel = disco.getInteraction().load(fileName);
+   }
+
+   /**
+    * Adds the step.
+    */
+   public TaskModel addSteps (Disco disco, String taskName, String subtaskId)
+         throws NoSuchMethodException, ScriptException {
+      List<Task> steps = findDemonstration(disco);
+      TaskClass task = this.taskModel.getTaskClass(taskName);
+      DecompositionClass subtask = task.getDecomposition(subtaskId);
+
+      for (edu.wpi.cetask.Task step : steps) {
+
+         String stepName = step.getType().getId();
+
+         DecompositionClass.Step stp = subtask.new Step(null, 1, 1, null);
+         String stepNameR = stp.findStepName(stepName);
+
+         stp.setType(stp.findGoal(taskModel, step));
+
+         subtask.addStep(stepNameR, stp);
+         subtask.setGoal(task);
+
+         task.addOutputsBindings(step, stepNameR, subtask);
+
+         List<String> inputs = task.addInputsBindings(taskModel, step,
+               stepNameR, subtask, disco);
+
+         for (String inputName : inputs) {
+
+            for (DecompositionClass sub : subtask.getStep(stepNameR).getType()
+                  .getDecompositions()) {
+               sub.removeBindingInput(inputName);
+            }
+
+         }
+      }
+
+      // ordering
+      subtask.addOrdering(taskModel);
+
+      return taskModel;
+
+   }
+
+   public TaskModel addOptionalStep (String taskName, String subtaskId,
+         String stepName) {
+
+      TaskClass task = this.taskModel.getTaskClass(taskName);
+      DecompositionClass subtask = task.getDecomposition(subtaskId);
+      DecompositionClass.Step step = subtask.getStep(stepName);
+      step.setMinOccurs(0);
+
+      return taskModel;
+   }
+
+   public TaskModel addAlternativeRecipe (Disco disco, String taskName,
+         String inputName) throws NoSuchMethodException, ScriptException {
+
+      List<Task> steps = findDemonstration(disco);
+      TaskClass task = this.taskModel.getTaskClass(taskName);
+      TaskClass newTask = demonstratedTask(disco, taskName, steps);
+      addAlternativeRecipe(newTask, inputName, task);
+
+      return taskModel;
+   }
+
+   public TaskModel addOrderStep (String taskName, String subtaskId,
+         String stepNameDep, String stepNameRef) {
+
+      TaskClass task = this.taskModel.getTaskClass(taskName);
+      DecompositionClass subtask = task.getDecomposition(subtaskId);
+      subtask.setOrdered(false);
+      DecompositionClass.Step step = subtask.getStep(stepNameDep);
+      step.addRequired(stepNameRef);
+
+      return taskModel;
+   }
+
+   public TaskModel setOrdered (String taskName, String subtaskId) {
+
+      TaskClass task = this.taskModel.getTaskClass(taskName);
+      DecompositionClass subtask = task.getDecomposition(subtaskId);
+      subtask.setOrdered(true);
+
+      return taskModel;
+   }
+
+   public TaskModel addApplicable (String taskName, String subtaskId,
+         String condition) {
+
+      TaskClass task = this.taskModel.getTaskClass(taskName);
+      DecompositionClass subtask = task.getDecomposition(subtaskId);
+      subtask.setApplicable(condition);
+
+      return taskModel;
+   }
+
+   public TaskModel addPrecondition (String taskName, String precondition) {
+
+      TaskClass task = this.taskModel.getTaskClass(taskName);
+      task.setPrecondition(precondition);
+
+      return taskModel;
+   }
+
+   public TaskModel addPostcondition (String taskName, String postcondition) {
+
+      TaskClass task = this.taskModel.getTaskClass(taskName);
+      task.setPostcondition(postcondition);
+
+      return taskModel;
+   }
+
+   public TaskModel addOutput (String taskName, String outputName,
+         String outputType) {
+
+      TaskClass task = this.taskModel.getTaskClass(taskName);
+      TaskClass.Output outputC = null;
+      outputC = task.new Output(outputName, outputType);
+      task.addOutput(outputC);
+
+      return taskModel;
+   }
+
+   public TaskModel addInput (String taskName, String inputName, String type,
+         String modified) {
+
+      TaskClass task = this.taskModel.getTaskClass(taskName);
+      TaskClass.Output outputC = null;
+      if ( modified != null && modified != "" )
+         outputC = task.getOutput(modified);
+
+      TaskClass.Input inputC = task.new Input(inputName, type, outputC);
+      task.addInput(inputC);
+
+      return taskModel;
    }
 
 }

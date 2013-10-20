@@ -1,9 +1,10 @@
 package edu.wpi.htnlfd.model;
 
-import edu.wpi.htnlfd.model.DecompositionClass.*;
+
+import edu.wpi.disco.Disco;
 import org.w3c.dom.*;
 import java.util.*;
-import java.util.Map.Entry;
+import javax.script.*;
 import javax.xml.namespace.QName;
 
 public class TaskClass extends TaskModel.Member {
@@ -62,6 +63,26 @@ public class TaskClass extends TaskModel.Member {
    }
 
    private boolean primitive;
+   
+   private String precondition;
+   private String postcondition; 
+
+   
+   public String getPrecondition () {
+      return precondition;
+   }
+
+   public void setPrecondition (String precondition) {
+      this.precondition = precondition;
+   }
+
+   public String getPostcondition () {
+      return postcondition;
+   }
+
+   public void setPostcondition (String postcondition) {
+      this.postcondition = postcondition;
+   }
 
    /**
     * Checks if is primitive.
@@ -98,28 +119,34 @@ public class TaskClass extends TaskModel.Member {
     * the same as the input of demonstrated task, it will return the name of the
     * existed input. If it can't find it, it will add the input to the
     * TaskClass.
+    * @param taskModel 
     */
-   public String addInput (TaskClass task, String inputName, String inputType,
+   public String addInput (TaskModel taskModel, TaskClass task, String inputName, String inputType,
          String modified, String inputBindingValue, DecompositionClass subtask,
          String prefix) {
       boolean contain = false;
       String name = null;
-      for (Entry<String, Binding> bind : subtask.getBindings().entrySet()) {
-         /*
-          * ((inputName.contains(ReferenceFrame) && bind.getKey().contains(
-          * ReferenceFrame)) || (!inputName.contains(ReferenceFrame) && !bind
-          * .getKey().contains(ReferenceFrame)))
-          */
-
-         if ( bind.getKey().contains("this")
-            && bind.getValue().isInputInput()
-            && !((modified != null) ^ task
-                  .isModified(bind.getValue().getSlot())) ) {
-            if ( bind.getValue().getValue().equals(inputBindingValue) ) {
-               contain = true;
-               name = bind.getKey().substring(6);
-               break;
+      for(Input input:task.getDeclaredInputs()){
+         if(!((modified != null) ^ input.getModified()!=null) && input.getType().equals(inputType)){
+            /*for (Entry<String, Binding> bind : subtask.getBindings().entrySet()) {
+              
+               if ( bind.getKey().contains("this")
+                  && bind.getValue().isInputInput()
+                  && !((modified != null) ^ task
+                        .isModified(bind.getValue().getSlot())) ) {
+                  if ( bind.getValue().getValue().equals(inputBindingValue) ) {
+                     contain = true;
+                     name = bind.getKey().substring(6);
+                     return name;
+                  }
+               }
+            }*/
+            String value = subtask.findValueInParents (taskModel, null,
+                  task, subtask,  input.getName());
+            if(value.equals(inputBindingValue)){
+               return input.getName();
             }
+            
          }
       }
       if ( contain ) {
@@ -506,5 +533,82 @@ public class TaskClass extends TaskModel.Member {
       }
       return false;
    }
+
+   public void addOutputsBindings (edu.wpi.cetask.Task step, String stepNameR, DecompositionClass subtask) {
+
+      for (String outputName : step.getType().getDeclaredOutputNames()) {
+
+         String bindingSlot = "$" + stepNameR + "." + outputName;
+
+         String bindingSlotValue = null;
+         bindingSlotValue = stepNameR + "_" + outputName;
+
+         subtask.addBinding("$this." + bindingSlotValue,
+               subtask.new Binding(bindingSlotValue, "this", bindingSlot,
+                     false));
+         this.addOutput(this.new Output(bindingSlotValue, step.getType()
+               .getSlotType(outputName)));
+      }
+      
+   }
+
+   
+   public List<String> addInputsBindings(TaskModel taskModel,edu.wpi.cetask.Task step, String stepNameR, DecompositionClass subtask, Disco disco) throws NoSuchMethodException, ScriptException{
+      
+      List<String> inputs = new ArrayList<String>();
+      
+      
+      
+      for (String inputName : step.getType().getDeclaredInputNames()) {
+
+         String bindingSlotvalue = "$" + stepNameR + "." + inputName;
+
+         inputs.add(inputName);
+
+         Object inputBinding = (((Invocable) disco.getScriptEngine())
+               .invokeFunction("find", step.getSlotValue(inputName)));
+
+         String inputBindingValue = (String) inputBinding;
+         int inputNum1 = this.getDeclaredInputs().size();
+         String changedName = this.addInput(taskModel,this, inputName, step.getType()
+               .getSlotType(inputName), step.getType()
+               .getModified(inputName), inputBindingValue, subtask,
+               stepNameR);
+         int inputNum2 = this.getDeclaredInputs().size();
+         subtask.addBinding(bindingSlotvalue, subtask.new Binding(inputName,
+               stepNameR, "$this." + changedName, true));
+
+         if ( inputNum1 != inputNum2 ) {
+            subtask.addBinding("$this." + changedName, subtask.new Binding(
+                  changedName, "this", inputBindingValue, true));
+
+            for (int i = this.getDeclaredOutputs().size() - 1; i >= (this
+                  .getDeclaredOutputs().size() - step.getType()
+                  .getDeclaredOutputNames().size()); i--) {
+               if ( step.getType().getModified(inputName) != null
+                  && this.getDeclaredOutputs().get(i).getName()
+                        .contains(step.getType().getModified(inputName)) ) {
+                  this.getDeclaredInputs()
+                        .get(this.getDeclaredInputs().size() - 1)
+                        .setModified(this.getDeclaredOutputs().get(i));
+                  break;
+               }
+            }
+         }
+
+      }
+      return inputs;
+   }
+   
+   public Output getOutput(String outName){
+      for(Output out:this.getDeclaredOutputs()){
+         if(out.getName().equals(outName)){
+            return out;
+         }
+      }
+      return null;
+   }
+   
+   
 
 }
