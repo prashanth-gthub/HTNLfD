@@ -17,7 +17,7 @@ public class Demonstration {
    /** The external task model from disco. */
    private edu.wpi.cetask.TaskModel externalTaskModel = null;
 
-   private InputTransformation transformation = new InputTransformation();
+   private InputTransformation inputTransformation = new InputTransformation();
 
    public Demonstration () {
 
@@ -80,7 +80,7 @@ public class Demonstration {
       } else
          this.taskModel.add(newTask);
 
-      transformation.transform(this.taskModel);
+      inputTransformation.transform(this.taskModel);
 
       this.taskModel.isEquivalent();
 
@@ -143,7 +143,7 @@ public class Demonstration {
                   && ((in1.getModified() == null && in2.getModified() == null) || (in1
                         .getModified() != null && in2.getModified() != null)) ) {
                   Entry<String, Binding> bindValue = task.getDecompositions()
-                        .get(0).getBindingStep("this", in1.getName());
+                        .get(0).getBindingValue("this", in1.getName());
 
                   String value = null;
                   if ( bindValue != null ) {
@@ -171,6 +171,9 @@ public class Demonstration {
                                  + in1.getModified().getName());
                         }
                      }
+                     else{
+                        removed1.put("$this." + in2.getName(),null);
+                     }
                   }
                }
             }
@@ -185,7 +188,8 @@ public class Demonstration {
             for (Entry<String, Binding> binding : newTask.getDecompositions()
                   .get(0).getBindings().entrySet()) {
                if ( binding.getValue().getValue().equals(rem.getKey()) ) {
-                  binding.getValue().setValue(bindedInput.get(rem.getKey()));
+                  if(bindedInput.get(rem.getKey())!=null)
+                     binding.getValue().setValue(bindedInput.get(rem.getKey()));
                }
                String valOut = bindedOutput.get(binding.getKey());
                if ( valOut != null ) {

@@ -828,5 +828,17 @@ public class DecompositionClass extends TaskModel.Member {
       }
       return null;
    }
+   
+   public Entry<String, Binding> getBindingValue (String stepName,
+         String inputName) {
+      for (Entry<String, Binding> binding : this.getBindings().entrySet()) {
+         if ( binding.getValue().getStep().equals(stepName)
+            && binding.getKey().equals("$"+stepName+"."+inputName) ) {
+            return binding;
+         }
+      }
+      return null;
+   }
+   
 
 }

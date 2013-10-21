@@ -1,6 +1,6 @@
 package edu.wpi.htnlfd;
 
-import java.io.PrintStream;
+import java.io.*;
 import java.util.*;
 import javax.script.ScriptException;
 import javax.xml.transform.*;
@@ -54,6 +54,8 @@ public class Init {
       }
 
    }
+   
+   
 
    /**
     * Adds the steps to the specified task and subtask.
@@ -158,7 +160,8 @@ public class Init {
       DOM.writeDOM(stream, learnedTaskmodel);
    }
 
-   public static void print () throws TransformerException {
+   public static void print () throws TransformerException, FileNotFoundException {
+      //C:\Users\User\AppData\Local\Temp\Console.test
       PrintStream stream = new PrintStream(System.out);
       print(stream);
    }

@@ -14,10 +14,8 @@
 			$this.object.location.y + $this.referenceFrame.location.y,
 			$this.object.location.z + $this.referenceFrame.location.z);
 		</script>	
-		
-		
-	</task>
 	
+	</task>
 
 	<task id="Demonstration"/>
 	
