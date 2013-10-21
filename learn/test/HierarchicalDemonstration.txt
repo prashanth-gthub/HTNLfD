@@ -1,3 +1,4 @@
+cd ..\..\GitHub\HTNLfD\learn\test
 cd ..\models
 load SetTableDemonstration.xml
 

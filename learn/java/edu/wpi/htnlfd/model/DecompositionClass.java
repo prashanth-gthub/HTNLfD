@@ -685,6 +685,30 @@ public class DecompositionClass extends TaskModel.Member {
       }
       return null;
    }
+   
+   
+   /**
+    * Checks whether one step is before another or not.
+    */
+   public boolean checkStepBefore(String nameDep, String nameRef){
+      
+      boolean contain = false;
+      for(String stepName:this.getStepNames()){
+         if(stepName.equals(nameRef)){
+            contain = true;
+         }
+         
+         if(stepName.equals(nameDep)){
+            if(contain)
+               return true;
+            else
+               return false;
+         }
+         
+      }
+      
+      return false;      
+   }
 
    /**
     * Adds the ordering constraints according to the flow of inputs and outputs.
@@ -699,7 +723,8 @@ public class DecompositionClass extends TaskModel.Member {
                if ( !bindingRef.getKey().contains("this") // &&
                                                           // !bindingRef.getKey().contains(ReferenceFrame)
                   && !bindingDep.getValue().getStep()
-                        .equals(bindingRef.getValue().getStep()) ) {
+                        .equals(bindingRef.getValue().getStep()) 
+                        && checkStepBefore(bindingDep.getValue().getStep(), bindingRef.getValue().getStep())) {
 
                   String valueRef = findValueInParents(taskModel, null, task,
                         this, bindingRef.getValue().getValue().substring(6));
