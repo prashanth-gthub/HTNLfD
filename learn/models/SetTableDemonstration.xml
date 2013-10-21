@@ -4,41 +4,62 @@
 		<input name="referenceFrame" type="PhysObj"/>
 		<input name="object" type="PhysObj" modified="newObject"/>		
 		<output name="newObject" type="PhysObj"/>
+		
 		<binding slot="$this.external" value="false"/>
-		<script> $this.newObject = $this.object; </script>	
+		<!-- <postcondition> success() </postcondition> -->
+		<script> 
+			$this.newObject.name = $this.object.name;
+			$this.newObject.location = new Location(
+			$this.object.location.x + $this.referenceFrame.location.x,
+			$this.object.location.y + $this.referenceFrame.location.y,
+			$this.object.location.z + $this.referenceFrame.location.z);
+		</script>	
+		
+		
 	</task>
 	
 
 	<task id="Demonstration"/>
 
 	<script init="true">
-
+	
+		// define Location class
+		function Location (x,y,z) {
+			this.x = x;
+			this.y = y;
+			this.z = z;
+		}
+		Location.prototype.toString = function () { return "X:"+this.x+" Y:"+this.y+" Z:"+this.z; }
+		
 		// define PhysObj class
 
-		function PhysObj (name) {
+		function PhysObj (name, location) {
 			this.name = name;
+			this.location = location;
 		}
 
-		PhysObj.prototype.toString = function () { return this.name; }
+		PhysObj.prototype.toString = function () { return this.name + " Location: " + this.location.toString(); }
 		function find (obj) { 
 			return "PhysObj."+obj.name; 
 		}
 		
-		PhysObj.DinnerPlate = new PhysObj("DinnerPlate");
-		PhysObj.SaladPlate = new PhysObj("SaladPlate");
-		PhysObj.SoupBowl = new PhysObj("SoupBowl");
+		PhysObj.DinnerPlate = new PhysObj("DinnerPlate", new Location(0,0,0));
+		PhysObj.SaladPlate = new PhysObj("SaladPlate", new Location(0,0,1));
+		PhysObj.SoupBowl = new PhysObj("SoupBowl", new Location(0,0,2));
 			
-		PhysObj.Fork = new PhysObj("Fork");
-		PhysObj.Spoon = new PhysObj("Spoon");
-		PhysObj.Knife = new PhysObj("Knife");
+		PhysObj.Fork = new PhysObj("Fork", new Location(-1,0,0));
+		PhysObj.Spoon = new PhysObj("Spoon", new Location(1,0,0));
+		PhysObj.Knife = new PhysObj("Knife", new Location(2,0,0));
 			
-		PhysObj.WaterGlass = new PhysObj("WaterGlass");
-		PhysObj.WineGlass = new PhysObj("WineGlass");
+		PhysObj.WaterGlass = new PhysObj("WaterGlass", new Location(-1,1,0));
+		PhysObj.WineGlass = new PhysObj("WineGlass", new Location(1,1,0));
 				
-		PhysObj.SquareTable = new PhysObj("SquareTable"); 
-			
-		
-			
+		PhysObj.SquareTable = new PhysObj("SquareTable", new Location(10,10,10)); 
+	
+		function success(){
+			var x=Math.random()*10;
+			return x > 8; 
+		}		
 	</script>
 	
 </taskModel>

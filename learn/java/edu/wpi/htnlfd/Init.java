@@ -2,10 +2,14 @@ package edu.wpi.htnlfd;
 
 import java.io.PrintStream;
 import java.util.*;
+import javax.script.ScriptException;
 import javax.xml.transform.*;
 import edu.wpi.cetask.*;
 import edu.wpi.disco.*;
+import edu.wpi.htnlfd.model.DecompositionClass;
+import edu.wpi.htnlfd.model.TaskClass;
 import edu.wpi.htnlfd.model.TaskModel;
+import edu.wpi.htnlfd.model.TaskClass.*;
 
 public class Init {
 
@@ -44,8 +48,7 @@ public class Init {
       try {
          learnedTaskmodel = demonstration.buildTaskModel(disco, taskName,
                DemonstratedTasks, "input1");
-         DOM.writeDOM(fileName, learnedTaskmodel);
-         demonstration.readDOM(disco, fileName);
+         load(disco);
       } catch (Exception e) {
          e.printStackTrace();
       }
@@ -59,8 +62,7 @@ public class Init {
          throws Exception {
 
       learnedTaskmodel = demonstration.addSteps(disco, taskName, subtask);
-      DOM.writeDOM(fileName, learnedTaskmodel);
-      demonstration.readDOM(disco, fileName);
+      load(disco);
    }
 
    /**
@@ -71,10 +73,84 @@ public class Init {
 
       learnedTaskmodel = demonstration.addOptionalStep(taskName, subtask,
             stepName);
-      DOM.writeDOM(fileName, learnedTaskmodel);
-      demonstration.readDOM(disco, fileName);
+      load(disco);
+   }
+   
+   /**
+    * Adds the alternative recipe.
+    */
+   public static void addAlternativeRecipe (Disco disco, String taskName,
+         String inputName) throws Exception {
+
+      learnedTaskmodel = demonstration.addAlternativeRecipe(disco, taskName, inputName);
+      load(disco);
    }
 
+   public static void addOrderStep (Disco disco, String taskName, String subtaskId,
+         String stepNameDep, String stepNameRef) throws Exception {
+
+      learnedTaskmodel = demonstration.addOrderStep(taskName, subtaskId, stepNameDep, stepNameRef);
+      load(disco);
+   }
+
+   /**
+    * Makes the steps of a subtask completely ordered
+    */
+   public static void setOrdered (Disco disco, String taskName, String subtaskId) throws Exception {
+      learnedTaskmodel = demonstration.setOrdered(taskName, subtaskId);
+      load(disco);
+      
+   }
+
+   /**
+    * Adds the applicable condition to a subtask.
+    */
+   public static void addApplicable (Disco disco, String taskName, String subtaskId,
+         String condition) throws Exception {
+
+      learnedTaskmodel = demonstration.addApplicable(taskName, subtaskId, condition);
+      load(disco);
+   }
+
+   /**
+    * Adds the precondition to a task.
+    */
+   public static void addPrecondition (Disco disco, String taskName, String precondition) throws Exception {
+      learnedTaskmodel = demonstration.addPrecondition(taskName, precondition);
+      load(disco);
+      
+   }
+
+   /**
+    * Adds the postcondition to a task.
+    */
+   public static void addPostcondition (Disco disco, String taskName, String postcondition) throws Exception {
+
+      learnedTaskmodel = demonstration.addPostcondition(taskName, postcondition);
+      load(disco);
+   }
+
+   /**
+    * Adds the output to a task.
+    */
+   public static void addOutput (Disco disco, String taskName, String outputName,
+         String outputType) throws Exception {
+      learnedTaskmodel = demonstration.addOutput(taskName, outputName, outputType);
+      load(disco);
+      
+   }
+
+   /**
+    * Adds the input to a task.
+    */
+   public static void addInput (Disco disco, String taskName, String inputName, String type,
+         String modified) throws Exception {
+      learnedTaskmodel = demonstration.addInput(taskName, inputName, type, modified);
+      load(disco);
+      
+   }
+
+   
    /**
     * Prints the learned taskmodel.
     */
@@ -89,9 +165,12 @@ public class Init {
 
    /**
     * Load learned taskmodel into disco.
+    * @throws Exception 
     */
-   public void load (TaskEngine engine, Properties properties) {
-      // engine.load(learnedTaskmodel.toNode(), null);
+   public static void load (Disco disco) throws Exception {
+       //engine.load(learnedTaskmodel.toNode(), null);
+      DOM.writeDOM(fileName, learnedTaskmodel);
+      demonstration.readDOM(disco, fileName);
    }
 
 }
