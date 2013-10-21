@@ -31,7 +31,6 @@ done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"SetTable")
 
 
-
 task Demonstration
 task  Place / PhysObj.SquareTable / PhysObj.DinnerPlate
 task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl

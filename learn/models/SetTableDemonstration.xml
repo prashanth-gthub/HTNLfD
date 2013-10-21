@@ -6,7 +6,7 @@
 		<output name="newObject" type="PhysObj"/>
 		
 		<binding slot="$this.external" value="false"/>
-		<!-- <postcondition> success() </postcondition> -->
+		<!--<postcondition> success() </postcondition>-->
 		<script> 
 			$this.newObject.name = $this.object.name;
 			$this.newObject.location = new Location(
@@ -20,6 +20,47 @@
 	
 
 	<task id="Demonstration"/>
+	
+	<task id="Reset"> 
+		<script> 
+			PhysObj.DinnerPlate.location.x = 0;
+			PhysObj.DinnerPlate.location.y = 0;
+			PhysObj.DinnerPlate.location.z = 0;
+			
+			PhysObj.SaladPlate.location.x = 0;
+			PhysObj.SaladPlate.location.y = 0;
+			PhysObj.SaladPlate.location.z = 1;
+			
+			PhysObj.SoupBowl.location.x = 0;
+			PhysObj.SoupBowl.location.y = 0;
+			PhysObj.SoupBowl.location.z = 2;
+			
+			PhysObj.Fork.location.x = -1;
+			PhysObj.Fork.location.y = 0;
+			PhysObj.Fork.location.z = 0;
+			
+			PhysObj.Spoon.location.x = 1;
+			PhysObj.Spoon.location.y = 0;
+			PhysObj.Spoon.location.z = 0;
+			
+			PhysObj.Knife.location.x = 2;
+			PhysObj.Knife.location.y = 0;
+			PhysObj.Knife.location.z = 0;
+			
+			PhysObj.WaterGlass.location.x = -1;
+			PhysObj.WaterGlass.location.y = 1;
+			PhysObj.WaterGlass.location.z = 0;
+			
+			PhysObj.WineGlass.location.x = 1;
+			PhysObj.WineGlass.location.y = 1;
+			PhysObj.WineGlass.location.z = 0;
+			
+			PhysObj.SquareTable.location.x = 10;
+			PhysObj.SquareTable.location.y = 10;
+			PhysObj.SquareTable.location.z = 10;
+		</script>	
+		
+	</task>
 
 	<script init="true">
 	
@@ -57,8 +98,8 @@
 		PhysObj.SquareTable = new PhysObj("SquareTable", new Location(10,10,10)); 
 	
 		function success(){
-			var x=Math.random()*10;
-			return x > 8; 
+			var x=Math.random();
+			return x > 0.2; 
 		}		
 	</script>
 	
