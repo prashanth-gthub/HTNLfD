@@ -4,6 +4,7 @@ import edu.wpi.cetask.Task;
 import edu.wpi.disco.*;
 import edu.wpi.disco.lang.Utterance;
 import edu.wpi.htnlfd.model.*;
+import edu.wpi.htnlfd.model.DecompositionClass.Step;
 import edu.wpi.htnlfd.model.DecompositionClass.*;
 import java.util.*;
 import java.util.Map.Entry;
@@ -75,7 +76,11 @@ public class Demonstration {
       TaskClass newTask = demonstratedTask(disco, taskName, steps);
       TaskClass task = isAlternativeRecipe(newTask);
       if ( task != null ) {
-         addAlternativeRecipe(newTask, input, task);
+         TaskClass.Input inputC = task.new Input(input, "boolean", null);
+         task.addInput(inputC);
+         task.getDecompositions().get(0).setApplicable("$this." + input);
+         
+         addAlternativeRecipe(newTask, "!$this." + input, task);
 
       } else
          this.taskModel.add(newTask);
@@ -121,15 +126,14 @@ public class Demonstration {
     * all of the inputs' binding values to find out whether it should add
     * another input to this task or not. (It also adds inputs to parents.)
     */
-   public boolean addAlternativeRecipe (TaskClass newTask, String input,
+   public boolean addAlternativeRecipe (TaskClass newTask, String applicable,
          TaskClass task) {
 
       if ( task != null ) {
 
-         TaskClass.Input inputC = task.new Input(input, "boolean", null);
-         task.addInput(inputC);
-         task.getDecompositions().get(0).setApplicable("$this." + input);
-         newTask.getDecompositions().get(0).setApplicable("!$this." + input);
+         if(applicable!=null && applicable!="")
+            newTask.getDecompositions().get(0).setApplicable(applicable);
+         
          newTask.getDecompositions().get(0)
                .setId(task.getDecompositions().get(0).getId() + "1");
          task.getDecompositions().add(newTask.getDecompositions().get(0));
@@ -172,7 +176,7 @@ public class Demonstration {
                         }
                      }
                      else{
-                        removed1.put("$this." + in2.getName(),null);
+                        //removed1.put("$this." + in2.getName(),null);
                      }
                   }
                }
@@ -253,10 +257,16 @@ public class Demonstration {
                }
             }
 
-            TaskClass.Input inputCC = task.new Input(inputName, in.getType(),
-                  task.getOutput(task.getDecompositions().get(1).getId() + "_"
-                        +
-                        in.getModified().getName()));
+            String modified = null;
+            TaskClass.Output outputModified = null;
+            if(in.getModified()!=null){
+               modified = task.getDecompositions().get(1).getId() + "_"
+                     +
+                     in.getModified().getName();
+                     outputModified = task.getOutput(modified);
+            }
+            TaskClass.Input inputCC = task.new Input(inputName, in.getType(),outputModified)
+                  ;
             task.addInput(inputCC);
             String binding = task.getDecompositions().get(1).getBindings()
                   .get("$this." + in.getName()).getValue();
@@ -264,8 +274,7 @@ public class Demonstration {
             // input
             boolean binded = addSlotToParents(task, task.getDecompositions()
                   .get(1), taskModel, true, inputName, in.getType(), binding,
-                  task.getDecompositions().get(1).getId() + "_"
-                     + in.getModified().getName());
+                  modified);
 
             if ( binded ) {
                task.getDecompositions().get(1)
@@ -512,9 +521,9 @@ public class Demonstration {
                   }
                }
 
-               if ( subtaskDecomposition.isOptionalStep(stepName) ) {
-                  step.setMinOccurs(0);
-               }
+               step.setMinOccurs(subtaskDecomposition.getMinOccursStep(stepName));
+               step.setMaxOccurs(subtaskDecomposition.getMaxOccursStep(stepName));
+
                subtask.addStep(stepName, step);
 
                // step.setNamespace(subtaskDecomposition.getStepType(stepName)
@@ -555,10 +564,10 @@ public class Demonstration {
    }
 
    /**
-    * Adds the step. This function adds the specified steps to the subtask of a
+    * Adds the step. This function adds the specified steps the end of a subtask of a
     * task.
     */
-   public TaskModel addSteps (Disco disco, String taskName, String subtaskId)
+   public TaskModel addSteps (Disco disco, String taskName, String subtaskId, String afterStep)
          throws NoSuchMethodException, ScriptException {
       List<Task> steps = findDemonstration(disco);
       TaskClass task = this.taskModel.getTaskClass(taskName);
@@ -573,7 +582,10 @@ public class Demonstration {
 
          stp.setType(stp.findGoal(taskModel, step));
 
-         subtask.addStep(stepNameR, stp);
+         if(afterStep == null || afterStep == "")
+            subtask.addStep(stepNameR, stp);
+         else
+            subtask.addStep(stepNameR, stp, afterStep);
          subtask.setGoal(task);
 
          task.addOutputsBindings(step, stepNameR, subtask);
@@ -616,16 +628,19 @@ public class Demonstration {
     * Adds the alternative recipe.
     */
    public TaskModel addAlternativeRecipe (Disco disco, String taskName,
-         String inputName) throws NoSuchMethodException, ScriptException {
+         String applicable) throws NoSuchMethodException, ScriptException {
 
       List<Task> steps = findDemonstration(disco);
       TaskClass task = this.taskModel.getTaskClass(taskName);
       TaskClass newTask = demonstratedTask(disco, taskName, steps);
-      addAlternativeRecipe(newTask, inputName, task);
+      addAlternativeRecipe(newTask, applicable, task);
 
       return taskModel;
    }
 
+   /**
+    * Adds an ordering constraint to a step.
+    */
    public TaskModel addOrderStep (String taskName, String subtaskId,
          String stepNameDep, String stepNameRef) {
 
@@ -646,6 +661,10 @@ public class Demonstration {
       TaskClass task = this.taskModel.getTaskClass(taskName);
       DecompositionClass subtask = task.getDecomposition(subtaskId);
       subtask.setOrdered(true);
+      
+      for(Entry<String, Step> step:subtask.getSteps().entrySet()){
+         step.getValue().removeRequired();
+      }
 
       return taskModel;
    }
@@ -677,10 +696,11 @@ public class Demonstration {
    /**
     * Adds the postcondition to a task.
     */
-   public TaskModel addPostcondition (String taskName, String postcondition) {
+   public TaskModel addPostcondition (String taskName, String postcondition, boolean sufficient) {
 
       TaskClass task = this.taskModel.getTaskClass(taskName);
       task.setPostcondition(postcondition);
+      task.setSufficient(sufficient);
 
       return taskModel;
    }

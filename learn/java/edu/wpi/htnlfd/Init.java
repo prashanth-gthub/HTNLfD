@@ -2,14 +2,13 @@ package edu.wpi.htnlfd;
 
 import java.io.*;
 import java.util.*;
-import javax.script.ScriptException;
+
 import javax.xml.transform.*;
 import edu.wpi.cetask.*;
 import edu.wpi.disco.*;
-import edu.wpi.htnlfd.model.DecompositionClass;
-import edu.wpi.htnlfd.model.TaskClass;
+
 import edu.wpi.htnlfd.model.TaskModel;
-import edu.wpi.htnlfd.model.TaskClass.*;
+
 
 public class Init {
 
@@ -54,16 +53,16 @@ public class Init {
       }
 
    }
-   
-   
 
    /**
-    * Adds the steps to the specified task and subtask.
+    * Adds the steps to the specified task and subtask. If it should be added at
+    * the end after should be null or "".
     */
-   public static void addSteps (Disco disco, String taskName, String subtask)
-         throws Exception {
+   public static void addSteps (Disco disco, String taskName, String subtask,
+         String after) throws Exception {
 
-      learnedTaskmodel = demonstration.addSteps(disco, taskName, subtask);
+      learnedTaskmodel = demonstration
+            .addSteps(disco, taskName, subtask, after);
       load(disco);
    }
 
@@ -77,82 +76,91 @@ public class Init {
             stepName);
       load(disco);
    }
-   
+
    /**
     * Adds the alternative recipe.
     */
    public static void addAlternativeRecipe (Disco disco, String taskName,
-         String inputName) throws Exception {
+         String applicable) throws Exception {
 
-      learnedTaskmodel = demonstration.addAlternativeRecipe(disco, taskName, inputName);
+      learnedTaskmodel = demonstration.addAlternativeRecipe(disco, taskName,
+            applicable);
       load(disco);
    }
 
-   public static void addOrderStep (Disco disco, String taskName, String subtaskId,
-         String stepNameDep, String stepNameRef) throws Exception {
+   public static void addOrderStep (Disco disco, String taskName,
+         String subtaskId, String stepNameDep, String stepNameRef)
+         throws Exception {
 
-      learnedTaskmodel = demonstration.addOrderStep(taskName, subtaskId, stepNameDep, stepNameRef);
+      learnedTaskmodel = demonstration.addOrderStep(taskName, subtaskId,
+            stepNameDep, stepNameRef);
       load(disco);
    }
 
    /**
     * Makes the steps of a subtask completely ordered
     */
-   public static void setOrdered (Disco disco, String taskName, String subtaskId) throws Exception {
+   public static void setOrdered (Disco disco, String taskName, String subtaskId)
+         throws Exception {
       learnedTaskmodel = demonstration.setOrdered(taskName, subtaskId);
       load(disco);
-      
+
    }
 
    /**
     * Adds the applicable condition to a subtask.
     */
-   public static void addApplicable (Disco disco, String taskName, String subtaskId,
-         String condition) throws Exception {
+   public static void addApplicable (Disco disco, String taskName,
+         String subtaskId, String condition) throws Exception {
 
-      learnedTaskmodel = demonstration.addApplicable(taskName, subtaskId, condition);
+      learnedTaskmodel = demonstration.addApplicable(taskName, subtaskId,
+            condition);
       load(disco);
    }
 
    /**
     * Adds the precondition to a task.
     */
-   public static void addPrecondition (Disco disco, String taskName, String precondition) throws Exception {
+   public static void addPrecondition (Disco disco, String taskName,
+         String precondition) throws Exception {
       learnedTaskmodel = demonstration.addPrecondition(taskName, precondition);
       load(disco);
-      
+
    }
 
    /**
     * Adds the postcondition to a task.
     */
-   public static void addPostcondition (Disco disco, String taskName, String postcondition) throws Exception {
+   public static void addPostcondition (Disco disco, String taskName,
+         String postcondition, boolean sufficient) throws Exception {
 
-      learnedTaskmodel = demonstration.addPostcondition(taskName, postcondition);
+      learnedTaskmodel = demonstration
+            .addPostcondition(taskName, postcondition, sufficient);
       load(disco);
    }
 
    /**
     * Adds the output to a task.
     */
-   public static void addOutput (Disco disco, String taskName, String outputName,
-         String outputType) throws Exception {
-      learnedTaskmodel = demonstration.addOutput(taskName, outputName, outputType);
+   public static void addOutput (Disco disco, String taskName,
+         String outputName, String outputType) throws Exception {
+      learnedTaskmodel = demonstration.addOutput(taskName, outputName,
+            outputType);
       load(disco);
-      
+
    }
 
    /**
     * Adds the input to a task.
     */
-   public static void addInput (Disco disco, String taskName, String inputName, String type,
-         String modified) throws Exception {
-      learnedTaskmodel = demonstration.addInput(taskName, inputName, type, modified);
+   public static void addInput (Disco disco, String taskName, String inputName,
+         String type, String modified) throws Exception {
+      learnedTaskmodel = demonstration.addInput(taskName, inputName, type,
+            modified);
       load(disco);
-      
+
    }
 
-   
    /**
     * Prints the learned taskmodel.
     */
@@ -160,18 +168,20 @@ public class Init {
       DOM.writeDOM(stream, learnedTaskmodel);
    }
 
-   public static void print () throws TransformerException, FileNotFoundException {
-      //C:\Users\User\AppData\Local\Temp\Console.test
+   public static void print () throws TransformerException,
+         FileNotFoundException {
+      // C:\Users\User\AppData\Local\Temp\Console.test
       PrintStream stream = new PrintStream(System.out);
       print(stream);
    }
 
    /**
     * Load learned taskmodel into disco.
-    * @throws Exception 
+    * 
+    * @throws Exception
     */
    public static void load (Disco disco) throws Exception {
-       //engine.load(learnedTaskmodel.toNode(), null);
+      // engine.load(learnedTaskmodel.toNode(), null);
       DOM.writeDOM(fileName, learnedTaskmodel);
       demonstration.readDOM(disco, fileName);
    }

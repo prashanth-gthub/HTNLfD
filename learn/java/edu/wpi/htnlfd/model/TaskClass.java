@@ -67,6 +67,21 @@ public class TaskClass extends TaskModel.Member {
 
    private String postcondition;
 
+   private boolean sufficient = false;
+   
+   
+
+   public void setSufficient (boolean sufficient) {
+      this.sufficient = sufficient;
+   }
+
+   /**
+    * Returns true iff postcondition is provided and is sufficient.
+    */
+   public boolean isSufficient () {
+      return sufficient;
+   }
+
    public String getPrecondition () {
       return precondition;
    }
@@ -466,11 +481,34 @@ public class TaskClass extends TaskModel.Member {
          taskElement.appendChild(output.toNode(document, "output"));
       }
 
+      if ( this.precondition != null && this.precondition != "" ) {
+         Element prec = document.createElementNS(TaskModel.xmlnsValue,
+               "precondition");
+         prec.setTextContent(precondition);
+         taskElement.appendChild(prec);
+      }
+
+      if ( this.postcondition != null && this.postcondition != "" ) {
+         Element post = document.createElementNS(TaskModel.xmlnsValue,
+               "postcondition");
+         post.setTextContent(postcondition);
+         
+         
+         if(isSufficient()){
+            Attr sufficient = document.createAttribute("sufficient");
+            sufficient.setValue("true");
+            post.setAttributeNode(sufficient);
+         }
+         
+         taskElement.appendChild(post);
+      }
+
       for (DecompositionClass subtask : this.getDecompositions()) {
 
          taskElement.appendChild(subtask.toNode(document, namespaces));
 
       }
+
       return taskElement;
    }
 

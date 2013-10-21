@@ -101,6 +101,27 @@ public class DecompositionClass extends TaskModel.Member {
       steps.put(name, step);
       stepNames.add(name);
    }
+   
+   /**
+    * Adds the step. Also adds step's name to stepNames by considering that the new step
+    * should be after the other step.
+    */
+   public void addStep (String name, Step step, String afterStep) {
+
+      if ( steps == null ) {
+         steps = new HashMap<String, Step>();
+      }
+      if ( stepNames == null ) {
+         stepNames = new ArrayList<String>();
+      }
+      steps.put(name, step);
+      for(int i=0;i<stepNames.size();i++){
+         if(stepNames.get(i).equals(afterStep)){
+            stepNames.add(i+1, name);
+            break;
+         }
+      }
+   }
 
    public Step getStep (String name) {
       if ( steps != null )
@@ -225,6 +246,11 @@ public class DecompositionClass extends TaskModel.Member {
          if ( !contain )
             this.required.add(require);
       }
+      
+      public void removeRequired () {
+         if ( required != null && !this.required.isEmpty())
+            this.required.clear();
+      }
 
       /**
        * Makes the step's DOM element.
@@ -252,7 +278,7 @@ public class DecompositionClass extends TaskModel.Member {
             valueSubtaskStep.setValue(getType().getId());
          subtaskStep.setAttributeNode(valueSubtaskStep);
 
-         String requireStr = null;
+         String requireStr = "";
          if ( required == null )
             required = new ArrayList<String>();
          for (String require : this.required) {
@@ -264,7 +290,7 @@ public class DecompositionClass extends TaskModel.Member {
             }
 
          }
-         if ( requireStr != null ) {
+         if ( requireStr != null &&  requireStr != "") {
             Attr stepReq = document.createAttribute("requires");
             subtaskStep.setAttributeNode(stepReq);
             stepReq.setValue(requireStr);
@@ -577,7 +603,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       private boolean inputInput;
 
-      private List<Binding> depends = new ArrayList<Binding>();
 
       /**
        * Instantiates a new binding.
@@ -606,7 +631,6 @@ public class DecompositionClass extends TaskModel.Member {
          this.step = oldBind.getStep();
          this.value = oldBind.getValue();
          this.inputInput = oldBind.isInputInput();
-         this.depends = new ArrayList<Binding>();
          // depends ????
       }
 
