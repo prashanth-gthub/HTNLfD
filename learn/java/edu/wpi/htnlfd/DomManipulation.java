@@ -40,7 +40,7 @@ public class DomManipulation {
    }
 
    /**
-    * Write dom.
+    * Writes dom to file.
     */
    public void writeDOM (String fileName, TaskModel taskmodel) throws Exception {
 
@@ -75,7 +75,7 @@ public class DomManipulation {
    }
 
    /**
-    * Write dom.
+    * Writes dom to specified stream.
     */
    public void writeDOM (PrintStream stream, TaskModel taskmodel)
          throws TransformerException {

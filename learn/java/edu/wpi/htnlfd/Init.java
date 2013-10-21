@@ -15,11 +15,13 @@ public class Init {
    private static Demonstration demonstration = null;
 
    private static DomManipulation DOM = null;
-   
+
    private static String filename = "SetTable1";
+
    private static String separator = System.getProperty("file.separator");
-   private static String fileName = System.getProperty("user.dir") + separator + filename
-         + ".xml";
+
+   private static String fileName = System.getProperty("user.dir") + separator
+      + filename + ".xml";
 
    /**
     * The main method.(Never called)
@@ -33,15 +35,12 @@ public class Init {
     */
    public static void learn (Disco disco, String taskName) throws Exception {
 
-
       if ( demonstration == null ) {
          demonstration = new Demonstration();
          DOM = new DomManipulation();
       }
 
-      
-      List<Task> DemonstratedTasks = demonstration.findDemonstration(disco
-            );
+      List<Task> DemonstratedTasks = demonstration.findDemonstration(disco);
       try {
          learnedTaskmodel = demonstration.buildTaskModel(disco, taskName,
                DemonstratedTasks, "input1");
@@ -52,17 +51,26 @@ public class Init {
       }
 
    }
-   
-   public static void addSteps (Disco disco, String taskName, String subtask) throws Exception {
+
+   /**
+    * Adds the steps to the specified task and subtask.
+    */
+   public static void addSteps (Disco disco, String taskName, String subtask)
+         throws Exception {
 
       learnedTaskmodel = demonstration.addSteps(disco, taskName, subtask);
       DOM.writeDOM(fileName, learnedTaskmodel);
       demonstration.readDOM(disco, fileName);
    }
-   
-   public static void addOptionalStep (Disco disco, String taskName, String subtask, String stepName) throws Exception {
 
-      learnedTaskmodel = demonstration.addOptionalStep(taskName, subtask, stepName);
+   /**
+    * Makes one step to be optional.
+    */
+   public static void addOptionalStep (Disco disco, String taskName,
+         String subtask, String stepName) throws Exception {
+
+      learnedTaskmodel = demonstration.addOptionalStep(taskName, subtask,
+            stepName);
       DOM.writeDOM(fileName, learnedTaskmodel);
       demonstration.readDOM(disco, fileName);
    }

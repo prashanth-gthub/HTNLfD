@@ -2,12 +2,10 @@ package edu.wpi.htnlfd;
 
 import edu.wpi.htnlfd.model.TaskModel;
 
-
 abstract class Transformation {
 
    /**
-    * Transform.
-    * This function change our taskmodel
+    * Changes taskmodel to another valid taskmodel.
     */
-   abstract void transform(TaskModel taskModel);
+   abstract void transform (TaskModel taskModel);
 }

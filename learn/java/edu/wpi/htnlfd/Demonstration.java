@@ -320,10 +320,10 @@ public class Demonstration {
       }
 
       if ( type && parents != null && parents.size() != 0 ) {
-         
+
          DecompositionClass subtask = (DecompositionClass) parents.get(parents
                .size() - 1)[1];
-        
+
          Entry<String, Step> step = (Entry<String, Step>) parents.get(parents
                .size() - 1)[2];
 

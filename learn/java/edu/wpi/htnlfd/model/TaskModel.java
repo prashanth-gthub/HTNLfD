@@ -11,12 +11,11 @@ public class TaskModel {
    public static final String namespace = "urn:disco.wpi.edu:htnlfd:setTable1";
 
    public static final String namespacePrefix;
-   
+
    static {
       String[] dNSNameArray = namespace.split(":");
       namespacePrefix = dNSNameArray[dNSNameArray.length - 1];
    }
-   
 
    /**
     * Instantiates a new task model.
@@ -38,7 +37,7 @@ public class TaskModel {
    private List<TaskClass> tasks = new ArrayList<TaskClass>();
 
    /**
-    * Gets the task class.
+    * finds the taskclass with it's id.
     */
    public TaskClass getTaskClass (String id) {
       for (TaskClass task : tasks) {
@@ -71,7 +70,7 @@ public class TaskModel {
    }
 
    /**
-    * This function checks for equivalent TaskClass classes recursively.
+    * Checks for equivalent TaskClass classes recursively.
     */
    public boolean isEquivalent () {
       Iterator<TaskClass> iterator = tasks.iterator();
@@ -107,37 +106,22 @@ public class TaskModel {
 
       private QName qname;
 
-      /**
-       * Sets the id.
-       */
       public void setId (String id) {
          this.id = id;
       }
 
-      /**
-       * Sets the qname.
-       */
       public void setQname (QName qname) {
          this.qname = qname;
       }
 
-      /**
-       * Gets the id.
-       */
       public String getId () {
          return id;
       }
 
-      /**
-       * Gets the qname.
-       */
       public QName getQname () {
          return qname;
       }
 
-      /**
-       * Gets the model.
-       */
       public TaskModel getModel () {
          return TaskModel.this;
       }
@@ -145,7 +129,7 @@ public class TaskModel {
    }
 
    /**
-    * This function makes the TaslModel's DOM element recursively.
+    * Makes the TaskModel's DOM element recursively.
     */
    public Node toNode (Document document) {
       Element taskModelElement = null;
@@ -181,8 +165,12 @@ public class TaskModel {
       return taskModelElement;
 
    }
-   
-   static Attr addAttribute (Document document, Element element, String name, String value) {
+
+   /**
+    * Adds an attribute to the element.
+    */
+   static Attr addAttribute (Document document, Element element, String name,
+         String value) {
       Attr attr = document.createAttribute(name);
       attr.setValue(value);
       element.setAttributeNode(attr);

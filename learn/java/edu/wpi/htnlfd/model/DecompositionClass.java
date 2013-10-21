@@ -472,8 +472,8 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Finds the parents of a
-    * TaskClass. (By calling the same function recursively on it's parents.)
+    * Finds the parents of a TaskClass. (By calling the same function
+    * recursively on it's parents.)
     */
    public List<Object[]> findParents (TaskClass parentTask,
          Entry<String, Step> parentStep, DecompositionClass parentSubtask,
@@ -687,8 +687,7 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Adds the ordering constraints according
-    * to the flow of inputs and outputs.
+    * Adds the ordering constraints according to the flow of inputs and outputs.
     */
    public void addOrdering (TaskModel taskModel) {
       TaskClass task = this.goal;
@@ -752,8 +751,7 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Checks for equivalent steps
-    * recursively.
+    * Checks for equivalent steps recursively.
     */
    public boolean isEquivalent (DecompositionClass dec, TaskModel taskModel) {
 
@@ -793,8 +791,7 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Removes the binding that is
-    * related to an input.
+    * Removes the binding that is related to an input.
     */
    public void removeBindingInput (String input) {
       String inputName = input;
@@ -818,8 +815,7 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Gets the binding that is related
-    * to a step and an input.
+    * Gets the binding that is related to a step and an input.
     */
    public Entry<String, Binding> getBindingStep (String stepName,
          String inputName) {

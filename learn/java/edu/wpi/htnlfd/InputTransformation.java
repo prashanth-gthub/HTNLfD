@@ -9,11 +9,9 @@ import java.util.Map.Entry;
 public class InputTransformation extends Transformation {
 
    /*
-    * This fucntion checks all the steps' of a decomposition class, if all of
-    * them have the same input and the TaskClass class doesn't have it, then it
-    * will be added to the TaskClass class.
-    * @see
-    * edu.wpi.htnlfd.Transformation#transform(edu.wpi.htnlfd.model.TaskModel)
+    * Checks all the steps' of a decomposition class, if all of them have the
+    * same input and the TaskClass class doesn't have it, then it will be added
+    * to the TaskClass class.
     */
    public void transform (TaskModel taskModel) {
       Iterator<TaskClass> tasksIterator = taskModel.getTaskClasses().iterator();
