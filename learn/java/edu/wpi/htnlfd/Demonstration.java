@@ -254,7 +254,9 @@ public class Demonstration {
             }
 
             TaskClass.Input inputCC = task.new Input(inputName, in.getType(),
-                  in.getModified());
+                  task.getOutput(task.getDecompositions().get(1).getId() + "_"
+                        +
+                        in.getModified().getName()));
             task.addInput(inputCC);
             String binding = task.getDecompositions().get(1).getBindings()
                   .get("$this." + in.getName()).getValue();

@@ -1,4 +1,3 @@
-cd ..\..\GitHub\HTNLfD\learn\test
 cd ..\models
 load SetTableDemonstration.xml
 
@@ -9,7 +8,7 @@ task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate
 task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
-eval Packages.edu.wpi.htnlfd.Init.print()
+print PlaceDishes
 
 task Demonstration
 task Place / PhysObj.DinnerPlate / PhysObj.Spoon 
@@ -17,12 +16,14 @@ task Place / PhysObj.DinnerPlate / PhysObj.Fork
 task Place / PhysObj.DinnerPlate / PhysObj.Knife
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
+print PlaceSilverware
 
 task Demonstration
 task Place / PhysObj.DinnerPlate / PhysObj.WaterGlass
-task Place / PhysObj.DinnerPlate / PhysObj.WineGlass
+
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")
+print PlaceGlasses
 
 task Demonstration
 task PlaceDishes
@@ -30,6 +31,7 @@ task PlaceSilverware
 task PlaceGlasses
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"SetTable")
+print SetTable
 
 task Reset
 
@@ -38,17 +40,22 @@ task  Place / PhysObj.SquareTable / PhysObj.DinnerPlate
 task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
+print PlaceDishes
 
 task Demonstration
 task Place / PhysObj.DinnerPlate / PhysObj.Spoon 
 task Place / PhysObj.DinnerPlate / PhysObj.Fork
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
+print PlaceSilverware
 
 task Demonstration
 task Place / PhysObj.DinnerPlate / PhysObj.WaterGlass
-task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl
+task Place / PhysObj.DinnerPlate / PhysObj.WineGlass
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")
+print PlaceGlasses
+print SetTable
+
 
 
