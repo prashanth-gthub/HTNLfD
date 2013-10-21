@@ -1,4 +1,4 @@
-    # 17-Oct-2013 11:39:20 AM - TaskEngine 1.4.8 / Disco 1.6.10
+    # 21-Oct-2013 9:51:02 AM - TaskEngine 1.4.8 / Disco 1.6.10
     Welcome to Disco! (Type 'help' for command list)
   > cd ..\..\GitHub\HTNLfD\learn\test
     D:\GitHub\HTNLfD\learn\test
@@ -11,16 +11,16 @@
     User says "Let's achieve Demonstration."
     Agent says "Ok."
   > task Place / PhysObj.SquareTable / PhysObj.DinnerPlate
-    User says "Please execute Place on SquareTable and DinnerPlate."
-    Agent execute Place on SquareTable and DinnerPlate producing DinnerPlate.
+    User says "Please execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:0 Y:0 Z:0."
+    Agent execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10 producing DinnerPlate Location: X:10 Y:10 Z:10.
     Agent says "Ok."
   > task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate
-    User says "Please execute Place on DinnerPlate and SaladPlate."
-    Agent execute Place on DinnerPlate and SaladPlate producing SaladPlate.
+    User says "Please execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:0 Y:0 Z:1."
+    Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:10 Y:10 Z:11 producing SaladPlate Location: X:10 Y:10 Z:11.
     Agent says "Ok."
   > task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl
-    User says "Please execute Place on DinnerPlate and SoupBowl."
-    Agent execute Place on DinnerPlate and SoupBowl producing SoupBowl.
+    User says "Please execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and SoupBowl Location: X:0 Y:0 Z:2."
+    Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and SoupBowl Location: X:10 Y:10 Z:12 producing SoupBowl Location: X:10 Y:10 Z:12.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
@@ -32,16 +32,16 @@
     User says "Let's achieve Demonstration."
     Agent says "Ok."
   > task Place / PhysObj.DinnerPlate / PhysObj.Spoon 
-    User says "Please execute Place on DinnerPlate and Spoon."
-    Agent execute Place on DinnerPlate and Spoon producing Spoon.
+    User says "Please execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and Spoon Location: X:1 Y:0 Z:0."
+    Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and Spoon Location: X:11 Y:10 Z:10 producing Spoon Location: X:11 Y:10 Z:10.
     Agent says "Ok."
   > task Place / PhysObj.DinnerPlate / PhysObj.Fork
-    User says "Please execute Place on DinnerPlate and Fork."
-    Agent execute Place on DinnerPlate and Fork producing Fork.
+    User says "Please execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and Fork Location: X:-1 Y:0 Z:0."
+    Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and Fork Location: X:9 Y:10 Z:10 producing Fork Location: X:9 Y:10 Z:10.
     Agent says "Ok."
   > task Place / PhysObj.DinnerPlate / PhysObj.Knife
-    User says "Please execute Place on DinnerPlate and Knife."
-    Agent execute Place on DinnerPlate and Knife producing Knife.
+    User says "Please execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and Knife Location: X:2 Y:0 Z:0."
+    Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and Knife Location: X:12 Y:10 Z:10 producing Knife Location: X:12 Y:10 Z:10.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
@@ -54,12 +54,12 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     User says "Let's achieve Demonstration."
     Agent says "Ok."
   > task Place / PhysObj.DinnerPlate / PhysObj.WaterGlass
-    User says "Please execute Place on DinnerPlate and WaterGlass."
-    Agent execute Place on DinnerPlate and WaterGlass producing WaterGlass.
+    User says "Please execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and WaterGlass Location: X:-1 Y:1 Z:0."
+    Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and WaterGlass Location: X:9 Y:11 Z:10 producing WaterGlass Location: X:9 Y:11 Z:10.
     Agent says "Ok."
   > task Place / PhysObj.DinnerPlate / PhysObj.WineGlass
-    User says "Please execute Place on DinnerPlate and WineGlass."
-    Agent execute Place on DinnerPlate and WineGlass producing WineGlass.
+    User says "Please execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and WineGlass Location: X:1 Y:1 Z:0."
+    Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and WineGlass Location: X:11 Y:11 Z:10 producing WineGlass Location: X:11 Y:11 Z:10.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
@@ -72,21 +72,21 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     User says "Let's achieve Demonstration."
     Agent says "Ok."
   > task PlaceDishes
-    User says "Let's achieve PlaceDishes on SquareTable and DinnerPlate and DinnerPlate and SaladPlate and SoupBowl."
-    Agent execute Place on SquareTable and DinnerPlate producing DinnerPlate.
-    Agent execute Place on DinnerPlate and SaladPlate producing SaladPlate.
-    Agent execute Place on DinnerPlate and SoupBowl producing SoupBowl.
+    User says "Let's achieve PlaceDishes on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:10 Y:10 Z:11 and SoupBowl Location: X:10 Y:10 Z:12."
+    Agent execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:20 Y:20 Z:20 producing DinnerPlate Location: X:20 Y:20 Z:20.
+    Agent execute Place on DinnerPlate Location: X:20 Y:20 Z:20 and SaladPlate Location: X:30 Y:30 Z:31 producing SaladPlate Location: X:30 Y:30 Z:31.
+    Agent execute Place on DinnerPlate Location: X:20 Y:20 Z:20 and SoupBowl Location: X:30 Y:30 Z:32 producing SoupBowl Location: X:30 Y:30 Z:32.
     Agent says "Ok."
   > task PlaceSilverware
-    User says "Let's achieve PlaceSilverware on DinnerPlate and Spoon and Fork and Knife."
-    Agent execute Place on DinnerPlate and Spoon producing Spoon.
-    Agent execute Place on DinnerPlate and Fork producing Fork.
-    Agent execute Place on DinnerPlate and Knife producing Knife.
+    User says "Let's achieve PlaceSilverware on DinnerPlate Location: X:20 Y:20 Z:20 and Spoon Location: X:11 Y:10 Z:10 and Fork Location: X:9 Y:10 Z:10 and Knife Location: X:12 Y:10 Z:10."
+    Agent execute Place on DinnerPlate Location: X:20 Y:20 Z:20 and Spoon Location: X:31 Y:30 Z:30 producing Spoon Location: X:31 Y:30 Z:30.
+    Agent execute Place on DinnerPlate Location: X:20 Y:20 Z:20 and Fork Location: X:29 Y:30 Z:30 producing Fork Location: X:29 Y:30 Z:30.
+    Agent execute Place on DinnerPlate Location: X:20 Y:20 Z:20 and Knife Location: X:32 Y:30 Z:30 producing Knife Location: X:32 Y:30 Z:30.
     Agent says "Ok."
   > task PlaceGlasses
-    User says "Let's achieve PlaceGlasses on DinnerPlate and WaterGlass and WineGlass."
-    Agent execute Place on DinnerPlate and WaterGlass producing WaterGlass.
-    Agent execute Place on DinnerPlate and WineGlass producing WineGlass.
+    User says "Let's achieve PlaceGlasses on DinnerPlate Location: X:20 Y:20 Z:20 and WaterGlass Location: X:9 Y:11 Z:10 and WineGlass Location: X:11 Y:11 Z:10."
+    Agent execute Place on DinnerPlate Location: X:20 Y:20 Z:20 and WaterGlass Location: X:29 Y:31 Z:30 producing WaterGlass Location: X:29 Y:31 Z:30.
+    Agent execute Place on DinnerPlate Location: X:20 Y:20 Z:20 and WineGlass Location: X:31 Y:31 Z:30 producing WineGlass Location: X:31 Y:31 Z:30.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
@@ -101,12 +101,12 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     User says "Let's achieve Demonstration."
     Agent says "Ok."
   > task  Place / PhysObj.SquareTable / PhysObj.DinnerPlate
-    User says "Please execute Place on SquareTable and DinnerPlate."
-    Agent execute Place on SquareTable and DinnerPlate producing DinnerPlate.
+    User says "Please execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:20 Y:20 Z:20."
+    Agent execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:30 Y:30 Z:30 producing DinnerPlate Location: X:30 Y:30 Z:30.
     Agent says "Ok."
   > task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl
-    User says "Please execute Place on DinnerPlate and SoupBowl."
-    Agent execute Place on DinnerPlate and SoupBowl producing SoupBowl.
+    User says "Please execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:30 Y:30 Z:32."
+    Agent execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:60 Y:60 Z:62 producing SoupBowl Location: X:60 Y:60 Z:62.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
@@ -119,12 +119,12 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     User says "Let's achieve Demonstration."
     Agent says "Ok."
   > task Place / PhysObj.DinnerPlate / PhysObj.Spoon 
-    User says "Please execute Place on DinnerPlate and Spoon."
-    Agent execute Place on DinnerPlate and Spoon producing Spoon.
+    User says "Please execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and Spoon Location: X:31 Y:30 Z:30."
+    Agent execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and Spoon Location: X:61 Y:60 Z:60 producing Spoon Location: X:61 Y:60 Z:60.
     Agent says "Ok."
   > task Place / PhysObj.DinnerPlate / PhysObj.Fork
-    User says "Please execute Place on DinnerPlate and Fork."
-    Agent execute Place on DinnerPlate and Fork producing Fork.
+    User says "Please execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and Fork Location: X:29 Y:30 Z:30."
+    Agent execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and Fork Location: X:59 Y:60 Z:60 producing Fork Location: X:59 Y:60 Z:60.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
@@ -137,8 +137,12 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     User says "Let's achieve Demonstration."
     Agent says "Ok."
   > task Place / PhysObj.DinnerPlate / PhysObj.WaterGlass
-    User says "Please execute Place on DinnerPlate and WaterGlass."
-    Agent execute Place on DinnerPlate and WaterGlass producing WaterGlass.
+    User says "Please execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and WaterGlass Location: X:29 Y:31 Z:30."
+    Agent execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and WaterGlass Location: X:59 Y:61 Z:60 producing WaterGlass Location: X:59 Y:61 Z:60.
+    Agent says "Ok."
+  > task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl
+    User says "Please execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:60 Y:60 Z:62."
+    Agent execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:90 Y:90 Z:92 producing SoupBowl Location: X:90 Y:90 Z:92.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
@@ -146,4 +150,6 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")
 WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
+  > 
+  > 
   > 
