@@ -3,19 +3,20 @@ package edu.wpi.htnlfd;
 import java.util.*;
 import java.util.Map.Entry;
 import edu.wpi.htnlfd.model.*;
+import edu.wpi.htnlfd.model.DecompositionClass.Binding;
 import edu.wpi.htnlfd.model.DecompositionClass.*;
 import edu.wpi.htnlfd.model.TaskClass.*;
 
 public class InputTransformation {
 
    /**
-    * Adds the specified input to the specified parents
+    * Transfer slot bottom-up
     * 
     * @param parents the parents (TaskClass, DecompositionClass, Step)
     * @param type the type: Input or Output
     */
-   void transform (List<Object[]> parents, String slotName, String slotType,
-         String modified, boolean type) {
+   void transformBottomUp (List<Object[]> parents, String slotName,
+         String slotType, String modified, boolean type) {
       for (Object[] parent : parents) {
          TaskClass task = (TaskClass) (parent[0]);
          DecompositionClass subtask = (DecompositionClass) parent[1];
@@ -44,12 +45,46 @@ public class InputTransformation {
 
    }
 
+   /**
+    * Transform slot top-down.
+    * 
+    * @param children the children(TaskClass, DecompositionClass, Step)
+    * @param type the type: Input(+modified output) or Output
+    */
+   void transformTopDown (List<Object[]> children, String slotName, boolean type) {
+      for (Object[] child : children) {
+         TaskClass task = (TaskClass) (child[0]);
+         DecompositionClass subtask = (DecompositionClass) child[1];
+         @SuppressWarnings("unchecked")
+         Entry<String, Step> step = (Entry<String, Step>) child[2];
+
+         if ( type ) {
+            Entry<String, Binding> key = subtask.removeBindingValue("$this."
+               + slotName);
+            task.removeInput(slotName);
+
+            if ( key != null ) {
+               slotName = key.getValue().getSlot();
+            }
+         } else {
+            Entry<String, Binding> value = subtask.removeBindingKey("$"
+               + step.getKey() + "." + slotName);
+            task.removeOutput(slotName);
+
+            if ( value != null ) {
+               slotName = value.getValue().getSlot();
+            }
+         }
+      }
+
+   }
+
    /*
     * Checks all the steps' of a decomposition class, if all of them have the
     * same input and the TaskClass class doesn't have it, then it will be added
     * to the TaskClass class.
     */
-   public void transform (TaskModel taskModel) {
+   public void generalizeInput (TaskModel taskModel) {
       Iterator<TaskClass> tasksIterator = taskModel.getTaskClasses().iterator();
       TaskClass task = null;
 
@@ -102,7 +137,8 @@ public class InputTransformation {
                      subtask.addBinding("$" + step.getKey() + "."
                         + stepsInputs.get(i).getName(), subtask.new Binding(
                            stepsInputs.get(i).getName(), step.getKey(), "this."
-                              + stepsInputs.get(i).getName(), DecompositionClass.Type.InputInput));
+                              + stepsInputs.get(i).getName(),
+                           DecompositionClass.Type.InputInput));
                   }
                }
             }

@@ -8,9 +8,10 @@ import javax.xml.namespace.QName;
 
 public class DecompositionClass extends TaskModel.Member {
 
-   public enum Type { Constant, InputInput, InputOutput, OutputOutput };
+   public enum Type {
+      Constant, InputInput, InputOutput, OutputOutput
+   };
 
-   
    /**
     * Instantiates a new decomposition class.
     */
@@ -602,13 +603,10 @@ public class DecompositionClass extends TaskModel.Member {
 
    public class Binding {
 
-      
-      
       private String value, step, slot;
 
       private Type type;
 
-      
       public Type getType () {
          return type;
       }
@@ -670,7 +668,6 @@ public class DecompositionClass extends TaskModel.Member {
       public void setSlot (String slot) {
          this.slot = slot;
       }
-
 
       /**
        * Makes the binding's DOM element.
@@ -848,14 +845,13 @@ public class DecompositionClass extends TaskModel.Member {
    /**
     * Removes the binding that is related to an input.
     */
-   public void removeBindingInput (String input) {
-      String inputName = input;
+   public void removeBindingInput (String name) {
 
       List<Entry<String, Binding>> removed = new ArrayList<Entry<String, Binding>>();
 
       for (Entry<String, Binding> bind : this.getBindings().entrySet()) {
 
-         if ( bind.getValue().getSlot().contains(inputName)
+         if ( bind.getValue().getSlot().contains(name)
             && !bind.getValue().getValue().contains("this") ) {
             removed.add(bind);
          }
@@ -866,6 +862,51 @@ public class DecompositionClass extends TaskModel.Member {
          this.removeBinding(rem.getKey());
 
       }
+
+   }
+
+   /**
+    * Removes the binding by key.
+    */
+   public Entry<String, Binding> removeBindingKey (String name) {
+
+      Entry<String, Binding> removed = null;
+
+      for (Entry<String, Binding> bind : this.getBindings().entrySet()) {
+
+         if ( bind.getKey().equals(name) ) {
+            removed = bind;
+            break;
+         }
+      }
+      if ( removed != null ) {
+         this.removeBinding(removed.getKey());
+         return removed;
+      }
+      return null;
+
+   }
+
+   /**
+    * Removes the binding by value.
+    */
+   public Entry<String, Binding> removeBindingValue (String value) {
+
+      Entry<String, Binding> removed = null;
+
+      for (Entry<String, Binding> bind : this.getBindings().entrySet()) {
+
+         if ( bind.getValue().getValue().equals(value) ) {
+            removed = bind;
+            break;
+         }
+      }
+
+      if ( removed != null ) {
+         this.removeBinding(removed.getKey());
+         return removed;
+      }
+      return null;
 
    }
 

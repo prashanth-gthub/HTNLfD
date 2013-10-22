@@ -360,6 +360,22 @@ public class TaskClass extends TaskModel.Member {
    }
 
    /**
+    * Removes the input and it's modified output.
+    */
+   public void removeInput (String name) {
+      Iterator<Input> iter = this.declaredInputs.iterator();
+      while (iter.hasNext()) {
+         Input in = iter.next();
+         if ( in.getName().equals(name) ) {
+            iter.remove();
+            if ( in.getModified() != null )
+               this.removeOutput(in.getModified());
+            break;
+         }
+      }
+   }
+
+   /**
     * Adds the output.
     */
    public void addOutput (Output outputTask) {
@@ -376,6 +392,20 @@ public class TaskClass extends TaskModel.Member {
       if ( this.declaredOutputs != null )
          this.declaredOutputs.remove(outputTask);
 
+   }
+
+   /**
+    * Removes the output by name.
+    */
+   public void removeOutput (String name) {
+      Iterator<Output> iter = this.declaredOutputs.iterator();
+      while (iter.hasNext()) {
+         Output out = iter.next();
+         if ( out.getName().equals(name) ) {
+            iter.remove();
+            break;
+         }
+      }
    }
 
    private List<DecompositionClass> decompositions = new ArrayList<DecompositionClass>();
@@ -537,7 +567,8 @@ public class TaskClass extends TaskModel.Member {
          bindingSlotValue = stepNameR + "_" + outputName;
 
          subtask.addBinding("$this." + bindingSlotValue, subtask.new Binding(
-               bindingSlotValue, "this", bindingSlot, DecompositionClass.Type.OutputOutput));
+               bindingSlotValue, "this", bindingSlot,
+               DecompositionClass.Type.OutputOutput));
          this.addOutput(this.new Output(bindingSlotValue, step.getType()
                .getSlotType(outputName)));
       }
@@ -571,11 +602,13 @@ public class TaskClass extends TaskModel.Member {
                subtask, stepNameR);
          int inputNum2 = this.getDeclaredInputs().size();
          subtask.addBinding(bindingSlotvalue, subtask.new Binding(inputName,
-               stepNameR, "$this." + changedName, DecompositionClass.Type.InputInput));
+               stepNameR, "$this." + changedName,
+               DecompositionClass.Type.InputInput));
 
          if ( inputNum1 != inputNum2 ) {
             subtask.addBinding("$this." + changedName, subtask.new Binding(
-                  changedName, "this", inputBindingValue, DecompositionClass.Type.Constant));
+                  changedName, "this", inputBindingValue,
+                  DecompositionClass.Type.Constant));
 
             for (int i = this.getDeclaredOutputs().size() - 1; i >= (this
                   .getDeclaredOutputs().size() - step.getType()

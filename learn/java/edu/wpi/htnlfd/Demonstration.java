@@ -84,7 +84,7 @@ public class Demonstration {
       } else
          this.taskModel.add(newTask);
 
-      inputTransformation.transform(this.taskModel);
+      inputTransformation.generalizeInput(this.taskModel);
 
       this.taskModel.isEquivalent();
 
@@ -306,7 +306,7 @@ public class Demonstration {
       List<Object[]> parents = parentSubtask.findParents(parentTask, null,
             parentSubtask, taskModel);
 
-         this.inputTransformation.transform(parents, slotName, slotType,
+         this.inputTransformation.transformBottomUp(parents, slotName, slotType,
                modified, type);
 
       if ( type && parents != null && parents.size() != 0 ) {
@@ -530,7 +530,7 @@ public class Demonstration {
                if(binding.getValue().inputInput)
                   type = DecompositionClass.Type.InputInput;
                else if(binding.getValue().outputInput)
-                  type = DecompositionClass.Type.InputOutput;
+                  type = DecompositionClass.Type.OutputOutput;
                subtask.addBinding(
                      binding.getKey(),
                      subtask.new Binding(binding.getValue().slot, binding
