@@ -11,6 +11,7 @@ done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
 print PlaceDishes
 
+
 task Demonstration
 task Place / PhysObj.DinnerPlate / PhysObj.Spoon 
 task Place / PhysObj.DinnerPlate / PhysObj.Fork

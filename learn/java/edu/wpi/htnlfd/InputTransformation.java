@@ -1,12 +1,47 @@
 package edu.wpi.htnlfd;
 
-import edu.wpi.htnlfd.model.*;
-import edu.wpi.htnlfd.model.DecompositionClass.*;
-import edu.wpi.htnlfd.model.TaskClass.Input;
 import java.util.*;
 import java.util.Map.Entry;
+import edu.wpi.htnlfd.model.*;
+import edu.wpi.htnlfd.model.DecompositionClass.*;
+import edu.wpi.htnlfd.model.TaskClass.*;
 
 public class InputTransformation extends Transformation {
+
+   /**
+    * Adds the specified input to the specified parents
+    * 
+    * @param parents the parents (TaskClass, DecompositionClass, Step)
+    * @param type the type: Input or Output
+    */
+   void transform (List<Object[]> parents, String slotName, String slotType,
+         String modified, boolean type) {
+      for (Object[] parent : parents) {
+         TaskClass task = (TaskClass) (parent[0]);
+         DecompositionClass subtask = (DecompositionClass) parent[1];
+         Entry<String, Step> step = (Entry<String, Step>) parent[2];
+
+         if ( type ) {
+            String inputPar = step.getKey() + "_" + slotName;
+            TaskClass.Input inputCC = task.new Input(inputPar, slotType,
+                  task.getOutput(step.getKey() + "_" + modified));
+            task.addInput(inputCC);
+
+            subtask.addBinding("$" + step.getKey() + "." + slotName,
+                  subtask.new Binding(inputPar, step.getKey(), "$this."
+                     + inputPar, true));
+         } else {
+            String OutputPar = step.getKey() + "_" + slotName;
+            TaskClass.Output outputCC = task.new Output(OutputPar, slotType);
+            task.addOutput(outputCC);
+
+            subtask.addBinding("$this." + OutputPar, subtask.new Binding(
+                  OutputPar, "this", "$" + step.getKey() + "." + slotName,
+                  false));
+         }
+      }
+
+   }
 
    /*
     * Checks all the steps' of a decomposition class, if all of them have the
@@ -83,5 +118,4 @@ public class InputTransformation extends Transformation {
       }
 
    }
-
 }

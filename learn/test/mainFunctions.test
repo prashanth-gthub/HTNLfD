@@ -12,7 +12,7 @@
     User says "Let's achieve Demonstration."
     Agent says "Ok."
 	### Except SquareTable, location of other objects are relative to their reference frame. For example, location of saladPlate is on the top of 
-	### DinnerPlate so it's location is X:0 Y:0 Z:1.(Assumption)
+	### DinnerPlate so it's location is X:0 Y:0 Z:1.(As\sumption)
 	### Location of reference frame has been added to location of DinnerPLate in the Place task.
   > task Place / PhysObj.SquareTable / PhysObj.DinnerPlate
     User says "Please execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:0 Y:0 Z:0."
@@ -33,7 +33,8 @@
     # Returned 'null'
   > print PlaceDishes
 	### Since we have two kind of reference frame, so we have two referece frame objects.(But since reference frame and object are different 
-	### kind of inputs, one of them has modified attribute so we have two inputs for reference frame and object of the same PhysObj.DinnerPlate.)
+	### kind of inputs(one of them has modified attribute) so we have two inputs for reference frame and object of the same PhysObj.DinnerPlate.)
+	
 	### As we can see place2 step requires place1 step since place2 is after place1 in demonstration and place1 has the same input and output
 	### as place2's input.
 <task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
@@ -91,7 +92,8 @@
 WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
   > print PlaceSilverware
-	### It doesn't have any ordering constraints. And there are bindings to constants in it's subtask.
+	### It doesn't have any ordering constraints. 
+	### There are bindings to constants in it's subtask. After adding it's parent these constant bindings are removed.
 <task id="PlaceSilverware" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
     <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
@@ -181,9 +183,9 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
 WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
   > print SetTable
-	### Added all the steps'(PlaceDishes, PlaceSilverware, PlaceGlasses) inputs and outputs to SetTable.
-	### Added Ordering constraints to PlaceSilverware and PlaceGlasses steps
-	### Added bindings to constant objects in SetTable
+	### All the steps'(PlaceDishes, PlaceSilverware, PlaceGlasses) inputs and outputs are added to SetTable.
+	### Ordering constraints are added to PlaceSilverware and PlaceGlasses steps.
+	### Bindings to constants are added in SetTable and they are removed from their steps' bindings.
 <task id="SetTable" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
     <input name="placeDishes1_place1_referenceFrame" type="PhysObj"/>
     <input modified="placeDishes1_place1_newObject" name="placeDishes1_place1_object" type="PhysObj"/>
@@ -237,7 +239,7 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
 
     Agent says "Ok."
   > 
-  ### Return everything to it's first locations for another demonstration
+  ### Returning everything to it's first locations for another demonstration
   > task Reset
     User says "One of us should execute Reset."
     Agent execute Reset.
@@ -263,6 +265,7 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
   > print PlaceDishes
 	### Alternative recipe is added. Since The inputs and outputs of the second recipe are not different, parent tasks will not change.
+	### Bindings of the added recipe are binded to the existed inputs.
 <task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
     <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
@@ -303,7 +306,7 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
 
     Agent says "Ok."
   > 
-  ### Alternative Recipe for PlaceSilverware
+  ### Alternative recipe for PlaceSilverware
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -411,8 +414,8 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
 
     Agent says "Ok."
   > print SetTable
-	### WineGlass is added to the parent of PlaceGlasses.
-	### Since all three steps of SetTable have "input1", it is added to SetTable. 
+	### WineGlass is added to the parent of PlaceGlasses.(SetTable)
+	### When PlaceGlasses's alternative recipe is added since all three steps of SetTable have "input1", it is added to SetTable. 
 <task id="SetTable" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
     <input name="placeDishes1_place1_referenceFrame" type="PhysObj"/>
     <input modified="placeDishes1_place1_newObject" name="placeDishes1_place1_object" type="PhysObj"/>
@@ -486,7 +489,7 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     User says "Let's achieve SetTable on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:0 Y:0 Z:0 and DinnerPlate Location: X:0 Y:0 Z:0 and SaladPlate Location: X:0 Y:0 Z:1 and SoupBowl Location: X:0 Y:0 Z:2 and Spoon Location: X:1 Y:0 Z:0 and Fork Location: X:-1 Y:0 Z:0 and Knife Location: X:2 Y:0 Z:0 and WaterGlass Location: X:-1 Y:1 Z:0 and WineGlass Location: X:1 Y:1 Z:0."
     Agent says "What is the PlaceDishes input1?"
   > say
-[1] True.
+[1] True.(### Fancy)
 [2] False.
 [3] Let's not achieve PlaceDishes on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:0 Y:0 Z:0 and DinnerPlate Location: X:0 Y:0 Z:0 and SaladPlate Location: X:0 Y:0 Z:1 and SoupBowl Location: X:0 Y:0 Z:2.
 [4] Let's not achieve SetTable on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:0 Y:0 Z:0 and DinnerPlate Location: X:0 Y:0 Z:0 and SaladPlate Location: X:0 Y:0 Z:1 and SoupBowl Location: X:0 Y:0 Z:2 and Spoon Location: X:1 Y:0 Z:0 and Fork Location: X:-1 Y:0 Z:0 and Knife Location: X:2 Y:0 Z:0 and WaterGlass Location: X:-1 Y:1 Z:0 and WineGlass Location: X:1 Y:1 Z:0.
@@ -502,16 +505,18 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
 [14] Let's achieve PlaceDishes on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:0 Y:0 Z:0 and DinnerPlate Location: X:0 Y:0 Z:0 and SaladPlate Location: X:0 Y:0 Z:1 and SoupBowl Location: X:0 Y:0 Z:2.
   >> 1
     User says "True."
+	### Executing PlaceDishes
     Agent execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10 producing DinnerPlate Location: X:10 Y:10 Z:10.
     Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:10 Y:10 Z:11 producing SaladPlate Location: X:10 Y:10 Z:11.
     Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and SoupBowl Location: X:10 Y:10 Z:12 producing SoupBowl Location: X:10 Y:10 Z:12.
+	### Although "input1" is added to SetTable, disco asks for input1 in every steps.(?)
     Agent says "What is the PlaceSilverware input1?"
   > history
 
 [Achieve SetTable on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:10 Y:10 Z:11 and SoupBowl Location: X:10 Y:10 Z:12 and Spoon Location: X:1 Y:0 Z:0 and Fork Location: X:-1 Y:0 Z:0 and Knife Location: X:2 Y:0 Z:0 and WaterGlass Location: X:-1 Y:1 Z:0 and WineGlass Location: X:1 Y:1 Z:0 producing DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:10 Y:10 Z:11 and SoupBowl Location: X:10 Y:10 Z:12] -accepted -live
    User says "Let's achieve SetTable on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:0 Y:0 Z:0 and DinnerPlate Location: X:0 Y:0 Z:0 and SaladPlate Location: X:0 Y:0 Z:1 and SoupBowl Location: X:0 Y:0 Z:2 and Spoon Location: X:1 Y:0 Z:0 and Fork Location: X:-1 Y:0 Z:0 and Knife Location: X:2 Y:0 Z:0 and WaterGlass Location: X:-1 Y:1 Z:0 and WineGlass Location: X:1 Y:1 Z:0."
    [Achieve PlaceDishes on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:10 Y:10 Z:11 and SoupBowl Location: X:10 Y:10 Z:12 and true producing DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:10 Y:10 Z:11 and SoupBowl Location: X:10 Y:10 Z:12] -done
-      [User says the PlaceDishes input1 is true] -done
+      [User says the PlaceDishes input1 is true] -done ### PlaceDishes is done
          Agent says "What is the PlaceDishes input1?"
          User says "True."
       Agent execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10 producing DinnerPlate Location: X:10 Y:10 Z:10.
@@ -539,6 +544,7 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
 [13] Let's achieve PlaceDishes.
   >> 1
     User says "True."
+	### Executing PlaceSilverware
     Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and Spoon Location: X:11 Y:10 Z:10 producing Spoon Location: X:11 Y:10 Z:10.
     Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and Fork Location: X:9 Y:10 Z:10 producing Fork Location: X:9 Y:10 Z:10.
     Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and Knife Location: X:12 Y:10 Z:10 producing Knife Location: X:12 Y:10 Z:10.
@@ -555,7 +561,7 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
       Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:10 Y:10 Z:11 producing SaladPlate Location: X:10 Y:10 Z:11.
       Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and SoupBowl Location: X:10 Y:10 Z:12 producing SoupBowl Location: X:10 Y:10 Z:12.
    [Achieve PlaceSilverware on DinnerPlate Location: X:10 Y:10 Z:10 and Spoon Location: X:11 Y:10 Z:10 and Fork Location: X:9 Y:10 Z:10 and Knife Location: X:12 Y:10 Z:10 and true producing Spoon Location: X:11 Y:10 Z:10 and Fork Location: X:9 Y:10 Z:10 and Knife Location: X:12 Y:10 Z:10] -done
-      [User says the PlaceSilverware input1 is true] -done
+      [User says the PlaceSilverware input1 is true] -done ### PlaceSilverware is done
          Agent says "What is the PlaceSilverware input1?"
          User says "True."
       Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and Spoon Location: X:11 Y:10 Z:10 producing Spoon Location: X:11 Y:10 Z:10.
@@ -582,14 +588,16 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
 [13] Let's achieve PlaceDishes.
   >> 1
     User says "True."
+	### Executing PlaceGlasses
     Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and WaterGlass Location: X:9 Y:11 Z:10 producing WaterGlass Location: X:9 Y:11 Z:10.
+	### SetTable is done
     Agent says "Ok."
   > 
   > history
 
 [Achieve SetTable on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:10 Y:10 Z:11 and SoupBowl Location: X:10 Y:10 Z:12 and Spoon Location: X:11 Y:10 Z:10 and Fork Location: X:9 Y:10 Z:10 and Knife Location: X:12 Y:10 Z:10 and WaterGlass Location: X:9 Y:11 Z:10 and WineGlass Location: X:1 Y:1 Z:0 producing DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:10 Y:10 Z:11 and SoupBowl Location: X:10 Y:10 Z:12 and Spoon Location: X:11 Y:10 Z:10 and Fork Location: X:9 Y:10 Z:10 and Knife Location: X:12 Y:10 Z:10 and WaterGlass Location: X:9 Y:11 Z:10] -accepted -done
    User says "Let's achieve SetTable on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:0 Y:0 Z:0 and DinnerPlate Location: X:0 Y:0 Z:0 and SaladPlate Location: X:0 Y:0 Z:1 and SoupBowl Location: X:0 Y:0 Z:2 and Spoon Location: X:1 Y:0 Z:0 and Fork Location: X:-1 Y:0 Z:0 and Knife Location: X:2 Y:0 Z:0 and WaterGlass Location: X:-1 Y:1 Z:0 and WineGlass Location: X:1 Y:1 Z:0."
-   [Achieve PlaceDishes on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:10 Y:10 Z:11 and SoupBowl Location: X:10 Y:10 Z:12 and true producing DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:10 Y:10 Z:11 and SoupBowl Location: X:10 Y:10 Z:12] -done
+   [Achieve PlaceDishes on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:10 Y:10 Z:11 and SoupBowl Location: X:10 Y:10 Z:12 and true producing DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:10 Y:10 Z:11 and SoupBowl Location: X:10 Y:10 Z:12] -done ### SetTable is done
       [User says the PlaceDishes input1 is true] -done
          Agent says "What is the PlaceDishes input1?"
          User says "True."
@@ -613,4 +621,3 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
   > next
     Agent says "Ok."
   > quit
-    

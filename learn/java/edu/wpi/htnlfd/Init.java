@@ -76,6 +76,16 @@ public class Init {
             stepName);
       load(disco);
    }
+   
+   /**
+    * Makes the step to be repeated
+    */
+   public static void addOptionalStep (Disco disco, String taskName,
+         String subtask, String stepName,int maxOccurs) throws Exception {
+
+      learnedTaskmodel = demonstration.addMaxOccurs(taskName, subtask, stepName, maxOccurs);
+      load(disco);
+   }
 
    /**
     * Adds the alternative recipe.
