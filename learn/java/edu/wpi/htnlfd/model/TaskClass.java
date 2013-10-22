@@ -537,7 +537,7 @@ public class TaskClass extends TaskModel.Member {
          bindingSlotValue = stepNameR + "_" + outputName;
 
          subtask.addBinding("$this." + bindingSlotValue, subtask.new Binding(
-               bindingSlotValue, "this", bindingSlot, false));
+               bindingSlotValue, "this", bindingSlot, DecompositionClass.Type.OutputOutput));
          this.addOutput(this.new Output(bindingSlotValue, step.getType()
                .getSlotType(outputName)));
       }
@@ -571,11 +571,11 @@ public class TaskClass extends TaskModel.Member {
                subtask, stepNameR);
          int inputNum2 = this.getDeclaredInputs().size();
          subtask.addBinding(bindingSlotvalue, subtask.new Binding(inputName,
-               stepNameR, "$this." + changedName, true));
+               stepNameR, "$this." + changedName, DecompositionClass.Type.InputInput));
 
          if ( inputNum1 != inputNum2 ) {
             subtask.addBinding("$this." + changedName, subtask.new Binding(
-                  changedName, "this", inputBindingValue, true));
+                  changedName, "this", inputBindingValue, DecompositionClass.Type.Constant));
 
             for (int i = this.getDeclaredOutputs().size() - 1; i >= (this
                   .getDeclaredOutputs().size() - step.getType()

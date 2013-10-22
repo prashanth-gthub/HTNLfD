@@ -8,6 +8,9 @@ import javax.xml.namespace.QName;
 
 public class DecompositionClass extends TaskModel.Member {
 
+   public enum Type { Constant, InputInput, InputOutput, OutputOutput };
+
+   
    /**
     * Instantiates a new decomposition class.
     */
@@ -599,9 +602,20 @@ public class DecompositionClass extends TaskModel.Member {
 
    public class Binding {
 
+      
+      
       private String value, step, slot;
 
-      private boolean inputInput;
+      private Type type;
+
+      
+      public Type getType () {
+         return type;
+      }
+
+      public void setType (Type type) {
+         this.type = type;
+      }
 
       /**
        * Instantiates a new binding.
@@ -615,11 +629,11 @@ public class DecompositionClass extends TaskModel.Member {
       /**
        * Instantiates a new binding.
        */
-      public Binding (String slot, String step, String value, boolean inputInput) {
+      public Binding (String slot, String step, String value, Type inputInput) {
          this.slot = slot;
          this.step = step;
          this.value = value;
-         this.inputInput = inputInput;
+         this.type = inputInput;
       }
 
       /**
@@ -629,7 +643,7 @@ public class DecompositionClass extends TaskModel.Member {
          this.slot = oldBind.getSlot();
          this.step = oldBind.getStep();
          this.value = oldBind.getValue();
-         this.inputInput = oldBind.isInputInput();
+         this.type = oldBind.getType();
          // depends ????
       }
 
@@ -657,13 +671,6 @@ public class DecompositionClass extends TaskModel.Member {
          this.slot = slot;
       }
 
-      public boolean isInputInput () {
-         return inputInput;
-      }
-
-      public void setInputInput (boolean inputInput) {
-         this.inputInput = inputInput;
-      }
 
       /**
        * Makes the binding's DOM element.
@@ -869,7 +876,7 @@ public class DecompositionClass extends TaskModel.Member {
          String inputName) {
       for (Entry<String, Binding> binding : this.getBindings().entrySet()) {
          if ( binding.getValue().getStep().equals(stepName)
-            && binding.getValue().isInputInput()
+            && binding.getValue().getType().equals(Type.InputInput)
             && binding.getValue().getValue().contains(inputName) ) {
             return binding;
          }

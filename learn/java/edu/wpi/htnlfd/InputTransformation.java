@@ -30,7 +30,7 @@ public class InputTransformation {
 
             subtask.addBinding("$" + step.getKey() + "." + slotName,
                   subtask.new Binding(inputPar, step.getKey(), "$this."
-                     + inputPar, true));
+                     + inputPar, DecompositionClass.Type.InputInput));
          } else {
             String OutputPar = step.getKey() + "_" + slotName;
             TaskClass.Output outputCC = task.new Output(OutputPar, slotType);
@@ -38,7 +38,7 @@ public class InputTransformation {
 
             subtask.addBinding("$this." + OutputPar, subtask.new Binding(
                   OutputPar, "this", "$" + step.getKey() + "." + slotName,
-                  false));
+                  DecompositionClass.Type.OutputOutput));
          }
       }
 
@@ -102,7 +102,7 @@ public class InputTransformation {
                      subtask.addBinding("$" + step.getKey() + "."
                         + stepsInputs.get(i).getName(), subtask.new Binding(
                            stepsInputs.get(i).getName(), step.getKey(), "this."
-                              + stepsInputs.get(i).getName(), true));
+                              + stepsInputs.get(i).getName(), DecompositionClass.Type.InputInput));
                   }
                }
             }

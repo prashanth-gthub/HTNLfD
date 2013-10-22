@@ -320,7 +320,7 @@ public class Demonstration {
 
          subtask.addBinding("$this." + step.getKey() + "_" + slotName,
                subtask.new Binding(step.getKey() + "_" + slotName, "this",
-                     binding, true));
+                     binding, DecompositionClass.Type.Constant));
 
          return true;
 
@@ -525,11 +525,16 @@ public class Demonstration {
 
             for (Entry<String, edu.wpi.cetask.DecompositionClass.Binding> binding : bindingsSubtask) {
 
+               DecompositionClass.Type type = null;
+               
+               if(binding.getValue().inputInput)
+                  type = DecompositionClass.Type.InputInput;
+               else if(binding.getValue().outputInput)
+                  type = DecompositionClass.Type.InputOutput;
                subtask.addBinding(
                      binding.getKey(),
                      subtask.new Binding(binding.getValue().slot, binding
-                           .getValue().step, binding.getValue().value, binding
-                           .getValue().inputInput)); // Error
+                           .getValue().step, binding.getValue().value, type)); // Error
 
             }
 
