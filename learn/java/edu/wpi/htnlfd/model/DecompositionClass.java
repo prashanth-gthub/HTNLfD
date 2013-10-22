@@ -363,7 +363,7 @@ public class DecompositionClass extends TaskModel.Member {
          if ( goal == null ) {
             goal = new TaskClass(taskModel, step.getType().getId(), step
                   .getType().getQName());
-
+            goal.setPrimitive(true);
             for (String out : step.getType().getDeclaredOutputNames()) {
 
                TaskClass.Output outputTask = goal.new Output(out, step

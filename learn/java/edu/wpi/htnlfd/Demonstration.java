@@ -418,6 +418,11 @@ public class Demonstration {
 
          }
 
+         domTask.setPrecondition(task.getPrecondition());
+         domTask.setPostcondition(task.getPostcondition());
+         domTask.setSufficient(task.isSufficient());
+         domTask.setPrimitive(task.isPrimitive());
+         
          for (String inputName : task.getDeclaredInputNames()) {
 
             TaskClass.Input inputTask = null;
