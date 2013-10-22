@@ -15,7 +15,7 @@ public class InputTransformation {
     * @param parents the parents (TaskClass, DecompositionClass, Step)
     * @param type the type: Input or Output
     */
-   void transformBottomUp (List<Object[]> parents, String slotName,
+   void transferBottomUp (List<Object[]> parents, String slotName,
          String slotType, String modified, boolean type) {
       for (Object[] parent : parents) {
          TaskClass task = (TaskClass) (parent[0]);
@@ -46,12 +46,12 @@ public class InputTransformation {
    }
 
    /**
-    * Transform slot top-down.
+    * Transfer slot top-down.
     * 
     * @param children the children(TaskClass, DecompositionClass, Step)
     * @param type the type: Input(+modified output) or Output
     */
-   void transformTopDown (List<Object[]> children, String slotName, boolean type) {
+   void transferTopDown (List<Object[]> children, String slotName, boolean type) {
       for (Object[] child : children) {
          TaskClass task = (TaskClass) (child[0]);
          DecompositionClass subtask = (DecompositionClass) child[1];

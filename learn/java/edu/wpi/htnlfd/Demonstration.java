@@ -306,7 +306,7 @@ public class Demonstration {
       List<Object[]> parents = parentSubtask.findParents(parentTask, null,
             parentSubtask, taskModel);
 
-         this.inputTransformation.transformBottomUp(parents, slotName, slotType,
+         this.inputTransformation.transferBottomUp(parents, slotName, slotType,
                modified, type);
 
       if ( type && parents != null && parents.size() != 0 ) {
