@@ -19,6 +19,7 @@ public class InputTransformation {
       for (Object[] parent : parents) {
          TaskClass task = (TaskClass) (parent[0]);
          DecompositionClass subtask = (DecompositionClass) parent[1];
+         @SuppressWarnings("unchecked")
          Entry<String, Step> step = (Entry<String, Step>) parent[2];
 
          if ( type ) {

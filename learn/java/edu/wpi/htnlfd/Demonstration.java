@@ -306,20 +306,15 @@ public class Demonstration {
       List<Object[]> parents = parentSubtask.findParents(parentTask, null,
             parentSubtask, taskModel);
 
-      for (Object[] parent : parents) {
-         TaskClass task = (TaskClass) (parent[0]);
-         DecompositionClass subtask = (DecompositionClass) parent[1];
-         Entry<String, Step> step = (Entry<String, Step>) parent[2];
-
          this.inputTransformation.transform(parents, slotName, slotType,
                modified, type);
-      }
 
       if ( type && parents != null && parents.size() != 0 ) {
 
          DecompositionClass subtask = (DecompositionClass) parents.get(parents
                .size() - 1)[1];
 
+         @SuppressWarnings("unchecked")
          Entry<String, Step> step = (Entry<String, Step>) parents.get(parents
                .size() - 1)[2];
 
