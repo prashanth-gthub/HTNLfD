@@ -1,0 +1,566 @@
+    # 21-Oct-2013 9:27:34 PM - TaskEngine 1.4.8 / Disco 1.6.10
+    Welcome to Disco! (Type 'help' for command list)
+  > cd ..\..\GitHub\HTNLfD\learn\test
+    D:\GitHub\HTNLfD\learn\test
+  > cd ..\models
+    D:\GitHub\HTNLfD\learn\models
+  > load SetTableDemonstration.xml
+  > 
+  ### Demonstration of PlaceDishes without Placing SaladPlate
+  > task Demonstration
+    User says "Let's achieve Demonstration."
+    Agent says "Ok."
+  > task Place / PhysObj.SquareTable / PhysObj.DinnerPlate
+    User says "Please execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:0 Y:0 Z:0."
+    Agent execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10 producing DinnerPlate Location: X:10 Y:10 Z:10.
+    Agent says "Ok."
+  > task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl
+    User says "Please execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and SoupBowl Location: X:0 Y:0 Z:2."
+    Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and SoupBowl Location: X:10 Y:10 Z:12 producing SoupBowl Location: X:10 Y:10 Z:12.
+    Agent says "Ok."
+  > done Demonstration
+    User says "Achieve Demonstration is done."
+    Agent says "Ok."
+  > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
+    # Returned 'null'
+  > 
+  > print PlaceDishes
+
+<task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+    <input name="place1_referenceFrame" type="PhysObj"/>
+    <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
+    <input name="place2_referenceFrame" type="PhysObj"/>
+    <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
+    <output name="place1_newObject" type="PhysObj"/>
+    <output name="place2_newObject" type="PhysObj"/>
+    <subtasks id="placeDishes1" ordered="false">
+      <step name="place1" task="std:Place"/>
+      <step name="place2" requires="place1" task="std:Place"/>
+      <binding slot="$this.place1_object" value="PhysObj.DinnerPlate"/>
+      <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this.place2_object" value="PhysObj.SoupBowl"/>
+      <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
+      <binding slot="$this.place2_referenceFrame" value="PhysObj.DinnerPlate"/>
+      <binding slot="$this.place1_referenceFrame" value="PhysObj.SquareTable"/>
+      <binding slot="$place2.referenceFrame" value="$this.place2_referenceFrame"/>
+      <binding slot="$this.place2_newObject" value="$place2.newObject"/>
+      <binding slot="$place2.object" value="$this.place2_object"/>
+    </subtasks>
+  </task>
+
+    Agent says "Ok."
+  > 
+  ### Demonstrating SaladPlate to be added to PlaceDishes
+  > task Demonstration
+    User says "Let's achieve Demonstration."
+    Agent says "Ok."
+  > task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate
+    User says "Please execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:0 Y:0 Z:1."
+    Agent execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:10 Y:10 Z:11 producing SaladPlate Location: X:10 Y:10 Z:11.
+    Agent says "Ok."
+  > done Demonstration
+    User says "Achieve Demonstration is done."
+    Agent says "Ok."
+  > eval Packages.edu.wpi.htnlfd.Init.addSteps($disco,"PlaceDishes","placeDishes1","place1")
+WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+    # Returned 'null'
+  > print PlaceDishes
+	### Place task is added to PLaceDishes task
+<task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+    <input name="place1_referenceFrame" type="PhysObj"/>
+    <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
+    <input name="place2_referenceFrame" type="PhysObj"/>
+    <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
+    <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
+    <output name="place1_newObject" type="PhysObj"/>
+    <output name="place2_newObject" type="PhysObj"/>
+    <output name="place3_newObject" type="PhysObj"/>
+    <subtasks id="placeDishes1" ordered="false">
+      <step name="place1" task="std:Place"/>
+      <step name="place3" requires="place1" task="std:Place"/> ###
+      <step name="place2" requires="place1" task="std:Place"/>
+      <binding slot="$place3.referenceFrame" value="$this.place2_referenceFrame"/> ###
+      <binding slot="$this.place1_referenceFrame" value="PhysObj.SquareTable"/>
+      <binding slot="$this.place3_object" value="PhysObj.SaladPlate"/> ###
+      <binding slot="$place2.object" value="$this.place2_object"/>
+      <binding slot="$this.place1_object" value="PhysObj.DinnerPlate"/>
+      <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this.place2_object" value="PhysObj.SoupBowl"/>
+      <binding slot="$this.place3_newObject" value="$place3.newObject"/> ###
+      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
+      <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$this.place2_referenceFrame" value="PhysObj.DinnerPlate"/>
+      <binding slot="$place2.referenceFrame" value="$this.place2_referenceFrame"/>
+      <binding slot="$place3.object" value="$this.place3_object"/> ###
+      <binding slot="$this.place2_newObject" value="$place2.newObject"/>
+    </subtasks>
+  </task>
+
+    Agent says "Ok."
+  > 
+  > 
+  ### Adding input to PlaceDishes task
+  > eval Packages.edu.wpi.htnlfd.Init.addInput ($disco, "PlaceDishes", "input1", "boolean", "")
+WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+    # Returned 'null'
+  > print PlaceDishes
+
+<task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+    <input name="place1_referenceFrame" type="PhysObj"/>
+    <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
+    <input name="place2_referenceFrame" type="PhysObj"/>
+    <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
+    <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
+    <input name="input1" type="boolean"/> ###
+    <output name="place1_newObject" type="PhysObj"/>
+    <output name="place2_newObject" type="PhysObj"/>
+    <output name="place3_newObject" type="PhysObj"/>
+    <subtasks id="placeDishes1" ordered="false">
+      <step name="place1" task="std:Place"/>
+      <step name="place3" requires="place1" task="std:Place"/>
+      <step name="place2" requires="place1" task="std:Place"/>
+      <binding slot="$place3.referenceFrame" value="$this.place2_referenceFrame"/>
+      <binding slot="$this.place1_referenceFrame" value="PhysObj.SquareTable"/>
+      <binding slot="$this.place3_object" value="PhysObj.SaladPlate"/>
+      <binding slot="$place2.object" value="$this.place2_object"/>
+      <binding slot="$this.place1_object" value="PhysObj.DinnerPlate"/>
+      <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this.place2_object" value="PhysObj.SoupBowl"/>
+      <binding slot="$this.place3_newObject" value="$place3.newObject"/>
+      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
+      <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$this.place2_referenceFrame" value="PhysObj.DinnerPlate"/>
+      <binding slot="$place2.referenceFrame" value="$this.place2_referenceFrame"/>
+      <binding slot="$place3.object" value="$this.place3_object"/>
+      <binding slot="$this.place2_newObject" value="$place2.newObject"/>
+    </subtasks>
+  </task>
+
+    Agent says "Ok."
+  > 
+  ### Adding alternative recipe to PlaceDishes task
+  > task Demonstration
+    User says "Let's achieve Demonstration."
+    Agent says "Ok."
+  > task Place / PhysObj.SquareTable / PhysObj.DinnerPlate
+    User says "Please execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10."
+    Agent execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:20 Y:20 Z:20 producing DinnerPlate Location: X:20 Y:20 Z:20.
+    Agent says "Ok."
+  > task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate
+    User says "Please execute Place on DinnerPlate Location: X:20 Y:20 Z:20 and SaladPlate Location: X:10 Y:10 Z:11."
+    Agent execute Place on DinnerPlate Location: X:20 Y:20 Z:20 and SaladPlate Location: X:30 Y:30 Z:31 producing SaladPlate Location: X:30 Y:30 Z:31.
+    Agent says "Ok."
+  > done Demonstration
+    User says "Achieve Demonstration is done."
+    Agent says "Ok."
+	### Add the demonstrated alternative recipe to PlaceDishes task with the applicable condition
+  > eval Packages.edu.wpi.htnlfd.Init.addAlternativeRecipe ($disco,"PlaceDishes","!this.input1")
+WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+    # Returned 'null'
+  > 
+  ### Adding applicable condition to first recipe
+  > eval Packages.edu.wpi.htnlfd.Init.addApplicable ($disco, "PlaceDishes", "placeDishes1", "this.input1")
+WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+    # Returned 'null'
+  > print PlaceDishes
+
+<task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+    <input name="place1_referenceFrame" type="PhysObj"/>
+    <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
+    <input name="place2_referenceFrame" type="PhysObj"/>
+    <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
+    <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
+    <input name="input1" type="boolean"/>
+    <input name="placeDishes11_place1_referenceFrame" type="PhysObj"/>
+    <input modified="placeDishes11_place1_newObject" name="placeDishes11_place1_object" type="PhysObj"/>
+    <input name="placeDishes11_place2_referenceFrame" type="PhysObj"/>
+    <input modified="placeDishes11_place2_newObject" name="placeDishes11_place2_object" type="PhysObj"/>
+    <output name="place1_newObject" type="PhysObj"/>
+    <output name="place2_newObject" type="PhysObj"/>
+    <output name="place3_newObject" type="PhysObj"/>
+    <output name="placeDishes11_place1_newObject" type="PhysObj"/>
+    <output name="placeDishes11_place2_newObject" type="PhysObj"/>
+    <subtasks id="placeDishes1" ordered="false">
+      <step name="place1" task="std:Place"/>
+      <step name="place3" requires="place1" task="std:Place"/>
+      <step name="place2" requires="place1" task="std:Place"/>
+      <applicable>this.input1</applicable>
+      <binding slot="$place3.referenceFrame" value="$this.place2_referenceFrame"/>
+      <binding slot="$this.place1_referenceFrame" value="PhysObj.SquareTable"/>
+      <binding slot="$this.place3_object" value="PhysObj.SaladPlate"/>
+      <binding slot="$place2.object" value="$this.place2_object"/>
+      <binding slot="$this.place1_object" value="PhysObj.DinnerPlate"/>
+      <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this.place2_object" value="PhysObj.SoupBowl"/>
+      <binding slot="$this.place3_newObject" value="$place3.newObject"/>
+      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
+      <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$this.place2_referenceFrame" value="PhysObj.DinnerPlate"/>
+      <binding slot="$place2.referenceFrame" value="$this.place2_referenceFrame"/>
+      <binding slot="$place3.object" value="$this.place3_object"/>
+      <binding slot="$this.place2_newObject" value="$place2.newObject"/>
+    </subtasks>
+	### Alternative Recipe
+    <subtasks id="placeDishes11" ordered="false">
+      <step name="place1" task="std:Place"/>
+      <step name="place2" requires="place1" task="std:Place"/>
+      <applicable>!this.input1</applicable>
+      <binding slot="$this.placeDishes11_place1_referenceFrame" value="PhysObj.SquareTable"/>
+      <binding slot="$place1.referenceFrame" value="$this.placeDishes11_place1_referenceFrame"/>
+      <binding slot="$this.placeDishes11_place1_newObject" value="$place1.newObject"/>
+      <binding slot="$place1.object" value="$this.placeDishes11_place1_object"/>
+      <binding slot="$this.placeDishes11_place2_referenceFrame" value="PhysObj.DinnerPlate"/>
+      <binding slot="$this.placeDishes11_place2_object" value="PhysObj.SaladPlate"/>
+      <binding slot="$this.placeDishes11_place1_object" value="PhysObj.DinnerPlate"/>
+      <binding slot="$place2.referenceFrame" value="$this.placeDishes11_place2_referenceFrame"/>
+      <binding slot="$this.placeDishes11_place2_newObject" value="$place2.newObject"/>
+      <binding slot="$place2.object" value="$this.placeDishes11_place2_object"/>
+    </subtasks>
+  </task>
+
+    Agent says "Ok."
+	### Making place2 step optional
+  > eval Packages.edu.wpi.htnlfd.Init.addOptionalStep ($disco,"PlaceDishes","placeDishes11","place2")
+WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+    # Returned 'null'
+  > print PlaceDishes
+
+<task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+    <input name="place1_referenceFrame" type="PhysObj"/>
+    <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
+    <input name="place2_referenceFrame" type="PhysObj"/>
+    <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
+    <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
+    <input name="input1" type="boolean"/>
+    <input name="placeDishes11_place1_referenceFrame" type="PhysObj"/>
+    <input modified="placeDishes11_place1_newObject" name="placeDishes11_place1_object" type="PhysObj"/>
+    <input name="placeDishes11_place2_referenceFrame" type="PhysObj"/>
+    <input modified="placeDishes11_place2_newObject" name="placeDishes11_place2_object" type="PhysObj"/>
+    <output name="place1_newObject" type="PhysObj"/>
+    <output name="place2_newObject" type="PhysObj"/>
+    <output name="place3_newObject" type="PhysObj"/>
+    <output name="placeDishes11_place1_newObject" type="PhysObj"/>
+    <output name="placeDishes11_place2_newObject" type="PhysObj"/>
+    <subtasks id="placeDishes1" ordered="false">
+      <step name="place1" task="std:Place"/>
+      <step name="place3" requires="place1" task="std:Place"/>
+      <step name="place2" requires="place1" task="std:Place"/>
+      <applicable>this.input1</applicable>
+      <binding slot="$place3.referenceFrame" value="$this.place2_referenceFrame"/>
+      <binding slot="$this.place1_referenceFrame" value="PhysObj.SquareTable"/>
+      <binding slot="$this.place3_object" value="PhysObj.SaladPlate"/>
+      <binding slot="$place2.object" value="$this.place2_object"/>
+      <binding slot="$this.place1_object" value="PhysObj.DinnerPlate"/>
+      <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this.place2_object" value="PhysObj.SoupBowl"/>
+      <binding slot="$this.place3_newObject" value="$place3.newObject"/>
+      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
+      <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$this.place2_referenceFrame" value="PhysObj.DinnerPlate"/>
+      <binding slot="$place2.referenceFrame" value="$this.place2_referenceFrame"/>
+      <binding slot="$place3.object" value="$this.place3_object"/>
+      <binding slot="$this.place2_newObject" value="$place2.newObject"/>
+    </subtasks>
+    <subtasks id="placeDishes11" ordered="false">
+      <step name="place1" task="std:Place"/>
+      <step minOccurs="0" name="place2" requires="place1" task="std:Place"/> ### Optional
+      <applicable>!this.input1</applicable>
+      <binding slot="$this.placeDishes11_place1_referenceFrame" value="PhysObj.SquareTable"/>
+      <binding slot="$place1.referenceFrame" value="$this.placeDishes11_place1_referenceFrame"/>
+      <binding slot="$this.placeDishes11_place1_newObject" value="$place1.newObject"/>
+      <binding slot="$place1.object" value="$this.placeDishes11_place1_object"/>
+      <binding slot="$this.placeDishes11_place2_referenceFrame" value="PhysObj.DinnerPlate"/>
+      <binding slot="$this.placeDishes11_place2_object" value="PhysObj.SaladPlate"/>
+      <binding slot="$this.placeDishes11_place1_object" value="PhysObj.DinnerPlate"/>
+      <binding slot="$place2.referenceFrame" value="$this.placeDishes11_place2_referenceFrame"/>
+      <binding slot="$this.placeDishes11_place2_newObject" value="$place2.newObject"/>
+      <binding slot="$place2.object" value="$this.placeDishes11_place2_object"/>
+    </subtasks>
+  </task>
+
+    Agent says "Ok."
+  > 
+  ### Adding MaxOccurs attribute(loops)
+> eval Packages.edu.wpi.htnlfd.Init.addMaxOccurs ($disco,"PlaceDishes","placeDishes1","place2",3)
+WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
+    # Returned 'null'
+  > print PlaceDishes
+
+<task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+    <input name="place1_referenceFrame" type="PhysObj"/>
+    <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
+    <input name="place2_referenceFrame" type="PhysObj"/>
+    <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
+    <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
+    <input name="input1" type="boolean"/>
+    <input name="placeDishes11_place1_referenceFrame" type="PhysObj"/>
+    <input modified="placeDishes11_place1_newObject" name="placeDishes11_place1_object" type="PhysObj"/>
+    <input name="placeDishes11_place2_referenceFrame" type="PhysObj"/>
+    <input modified="placeDishes11_place2_newObject" name="placeDishes11_place2_object" type="PhysObj"/>
+    <output name="place1_newObject" type="PhysObj"/>
+    <output name="place2_newObject" type="PhysObj"/>
+    <output name="place3_newObject" type="PhysObj"/>
+    <output name="placeDishes11_place1_newObject" type="PhysObj"/>
+    <output name="placeDishes11_place2_newObject" type="PhysObj"/>
+    <subtasks id="placeDishes1" ordered="false">
+      <step name="place1" task="std:Place"/>
+      <step name="place3" requires="place1" task="std:Place"/>
+      <step maxOccurs="3" name="place2" requires="place1" task="std:Place"/> ###
+      <applicable>this.input1</applicable>
+      <binding slot="$place3.referenceFrame" value="$this.place2_referenceFrame"/>
+      <binding slot="$this.place1_referenceFrame" value="PhysObj.SquareTable"/>
+      <binding slot="$this.place3_object" value="PhysObj.SaladPlate"/>
+      <binding slot="$place2.object" value="$this.place2_object"/>
+      <binding slot="$this.place1_object" value="PhysObj.DinnerPlate"/>
+      <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this.place2_object" value="PhysObj.SoupBowl"/>
+      <binding slot="$this.place3_newObject" value="$place3.newObject"/>
+      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
+      <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$this.place2_referenceFrame" value="PhysObj.DinnerPlate"/>
+      <binding slot="$place2.referenceFrame" value="$this.place2_referenceFrame"/>
+      <binding slot="$place3.object" value="$this.place3_object"/>
+      <binding slot="$this.place2_newObject" value="$place2.newObject"/>
+    </subtasks>
+    <subtasks id="placeDishes11" ordered="false">
+      <step name="place1" task="std:Place"/>
+      <step minOccurs="0" name="place2" requires="place1" task="std:Place"/>
+      <applicable>!this.input1</applicable>
+      <binding slot="$this.placeDishes11_place1_referenceFrame" value="PhysObj.SquareTable"/>
+      <binding slot="$place1.referenceFrame" value="$this.placeDishes11_place1_referenceFrame"/>
+      <binding slot="$this.placeDishes11_place1_newObject" value="$place1.newObject"/>
+      <binding slot="$place1.object" value="$this.placeDishes11_place1_object"/>
+      <binding slot="$this.placeDishes11_place2_referenceFrame" value="PhysObj.DinnerPlate"/>
+      <binding slot="$this.placeDishes11_place2_object" value="PhysObj.SaladPlate"/>
+      <binding slot="$this.placeDishes11_place1_object" value="PhysObj.DinnerPlate"/>
+      <binding slot="$place2.referenceFrame" value="$this.placeDishes11_place2_referenceFrame"/>
+      <binding slot="$this.placeDishes11_place2_newObject" value="$place2.newObject"/>
+      <binding slot="$place2.object" value="$this.placeDishes11_place2_object"/>
+    </subtasks>
+  </task>
+
+    Agent says "Ok."
+  > 
+  > 
+  ### Executing PlaceDishes
+  > task PlaceDishes
+    User says "Let's achieve PlaceDishes."
+	### Why disco asks for inputs that are not needed in subtask? (If I add bindings to task what will happen?)
+    Agent says "What is the PlaceDishes place1_referenceFrame?"
+  > say
+[1] Let's achieve PlaceDishes by placeDishes1.
+[2] Let's achieve PlaceDishes by placeDishes11.
+[3] Let's not achieve PlaceDishes.
+[4] Let's achieve Demonstration.
+[5] Let's achieve PlaceDishes.
+[6] Let's achieve PlaceDishes.
+[7] Let's achieve PlaceDishes.
+[8] Let's achieve PlaceDishes.
+[9] Let's achieve PlaceDishes.
+[10] Let's achieve PlaceDishes.
+  >> 1
+    User says "Let's achieve PlaceDishes by placeDishes1."
+    Agent says "What is the PlaceDishes input1?"
+  > say
+[1] True.
+[2] False.
+[3] Let's not achieve PlaceDishes on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:20 Y:20 Z:20 and DinnerPlate Location: X:20 Y:20 Z:20 and SoupBowl Location: X:10 Y:10 Z:12 and SaladPlate Location: X:30 Y:30 Z:31.
+[4] Let's achieve Demonstration.
+[5] Let's achieve PlaceDishes.
+[6] Let's achieve PlaceDishes.
+[7] Let's achieve PlaceDishes.
+[8] Let's achieve PlaceDishes.
+[9] Let's achieve PlaceDishes.
+[10] Let's achieve PlaceDishes.
+  >> 1
+    User says "True."
+    Agent says "What is the PlaceDishes placeDishes11_place1_referenceFrame?"
+  > 
+  > say
+[1] Please execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:20 Y:20 Z:20.
+[2] Let's not achieve PlaceDishes on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:20 Y:20 Z:20 and DinnerPlate Location: X:20 Y:20 Z:20 and SoupBowl Location: X:10 Y:10 Z:12 and SaladPlate Location: X:30 Y:30 Z:31 and true.
+[3] Let's achieve Demonstration.
+[4] Let's achieve PlaceDishes.
+[5] Let's achieve PlaceDishes.
+[6] Let's achieve PlaceDishes.
+[7] Let's achieve PlaceDishes.
+[8] Let's achieve PlaceDishes.
+[9] Let's achieve PlaceDishes.
+  >> 1
+    User says "Please execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:20 Y:20 Z:20."
+    Agent execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:30 Y:30 Z:30 producing DinnerPlate Location: X:30 Y:30 Z:30.
+    Agent says "What is the PlaceDishes placeDishes11_place1_referenceFrame?"
+  > say
+[1] Please execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SaladPlate Location: X:30 Y:30 Z:31.
+[2] Please execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:10 Y:10 Z:12.
+[3] Let's achieve Demonstration.
+[4] Let's achieve PlaceDishes.
+[5] Let's achieve PlaceDishes.
+[6] Let's achieve PlaceDishes.
+[7] Let's achieve PlaceDishes.
+[8] Let's achieve PlaceDishes.
+[9] Let's achieve PlaceDishes.
+  >> 1
+    User says "Please execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SaladPlate Location: X:30 Y:30 Z:31."
+    Agent execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SaladPlate Location: X:60 Y:60 Z:61 producing SaladPlate Location: X:60 Y:60 Z:61.
+    Agent says "What is the PlaceDishes placeDishes11_place1_referenceFrame?"
+  > say
+[1] Please execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:10 Y:10 Z:12.
+[2] Let's achieve Demonstration.
+[3] Let's achieve PlaceDishes.
+[4] Let's achieve PlaceDishes.
+[5] Let's achieve PlaceDishes.
+[6] Let's achieve PlaceDishes.
+[7] Let's achieve PlaceDishes.
+[8] Let's achieve PlaceDishes.
+  >> 1
+    User says "Please execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:10 Y:10 Z:12."
+    Agent execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:40 Y:40 Z:42 producing SoupBowl Location: X:40 Y:40 Z:42.
+    Agent says "Should I execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:40 Y:40 Z:42?"
+  > say
+[1] Yes.
+[2] No.
+[3] Stop achieve PlaceDishes on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:30 Y:30 Z:30 and DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:40 Y:40 Z:42 and SaladPlate Location: X:60 Y:60 Z:61 and true producing DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:40 Y:40 Z:42 and SaladPlate Location: X:60 Y:60 Z:61.
+[4] Let's achieve Demonstration.
+[5] Let's achieve PlaceDishes.
+[6] Let's achieve PlaceDishes.
+[7] Let's achieve PlaceDishes.
+[8] Let's achieve PlaceDishes.
+[9] Let's achieve PlaceDishes.
+[10] Let's achieve PlaceDishes.
+  >> 1
+    User says "Yes."
+    Agent execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:70 Y:70 Z:72 producing SoupBowl Location: X:70 Y:70 Z:72.
+    Agent says "Should I execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:70 Y:70 Z:72?"
+  > sa
+    Invalid command. Type 'help' for commands.
+  > say
+[1] Yes.
+[2] No.
+[3] Stop achieve PlaceDishes on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:30 Y:30 Z:30 and DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:70 Y:70 Z:72 and SaladPlate Location: X:60 Y:60 Z:61 and true producing DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:70 Y:70 Z:72 and SaladPlate Location: X:60 Y:60 Z:61.
+[4] Let's achieve Demonstration.
+[5] Let's achieve PlaceDishes.
+[6] Let's achieve PlaceDishes.
+[7] Let's achieve PlaceDishes.
+[8] Let's achieve PlaceDishes.
+[9] Let's achieve PlaceDishes.
+[10] Let's achieve PlaceDishes.
+  >> 
+  > 1
+    Invalid command. Type 'help' for commands.
+  > say
+[1] Yes.
+[2] No.
+[3] Stop achieve PlaceDishes on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:30 Y:30 Z:30 and DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:70 Y:70 Z:72 and SaladPlate Location: X:60 Y:60 Z:61 and true producing DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:70 Y:70 Z:72 and SaladPlate Location: X:60 Y:60 Z:61.
+[4] Let's achieve Demonstration.
+[5] Let's achieve PlaceDishes.
+[6] Let's achieve PlaceDishes.
+[7] Let's achieve PlaceDishes.
+[8] Let's achieve PlaceDishes.
+[9] Let's achieve PlaceDishes.
+[10] Let's achieve PlaceDishes.
+  >> 1
+    User says "Yes."
+    Agent execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:100 Y:100 Z:102 producing SoupBowl Location: X:100 Y:100 Z:102.
+    Agent says "What is the PlaceDishes placeDishes11_place1_referenceFrame?"
+  > say
+[1] Let's achieve Demonstration.
+[2] Let's achieve PlaceDishes.
+[3] Let's achieve PlaceDishes.
+[4] Let's achieve PlaceDishes.
+[5] Let's achieve PlaceDishes.
+[6] Let's achieve PlaceDishes.
+[7] Let's achieve PlaceDishes.
+  >> 2
+    User says "Let's achieve PlaceDishes."
+    Agent execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:40 Y:40 Z:40 producing DinnerPlate Location: X:40 Y:40 Z:40.
+    Agent execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 producing SoupBowl Location: X:140 Y:140 Z:142.
+    Agent says "What is the PlaceDishes placeDishes11_place1_referenceFrame?"
+  > history
+
+[Achieve Demonstration] -accepted
+   User says "Let's achieve Demonstration."
+   Agent says "Ok."
+   [Agent execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:40 Y:40 Z:40 producing DinnerPlate Location: X:40 Y:40 Z:40] -accepted -done -interruption
+      User says "Please execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:0 Y:0 Z:0."
+      Agent execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:40 Y:40 Z:40 producing DinnerPlate Location: X:40 Y:40 Z:40.
+   Agent says "Ok."
+   [Agent execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 producing SoupBowl Location: X:140 Y:140 Z:142] -accepted -done -interruption
+      User says "Please execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and SoupBowl Location: X:0 Y:0 Z:2."
+      Agent execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 producing SoupBowl Location: X:140 Y:140 Z:142.
+   Agent says "Ok."
+   User says "Achieve Demonstration is done."
+   Agent says "Ok."
+   Agent says "Ok."
+[Achieve Demonstration] -accepted
+   User says "Let's achieve Demonstration."
+   Agent says "Ok."
+   [Agent execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SaladPlate Location: X:60 Y:60 Z:61 producing SaladPlate Location: X:60 Y:60 Z:61] -accepted -done -interruption
+      User says "Please execute Place on DinnerPlate Location: X:10 Y:10 Z:10 and SaladPlate Location: X:0 Y:0 Z:1."
+      Agent execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SaladPlate Location: X:60 Y:60 Z:61 producing SaladPlate Location: X:60 Y:60 Z:61.
+   Agent says "Ok."
+   User says "Achieve Demonstration is done."
+   Agent says "Ok."
+   Agent says "Ok."
+   Agent says "Ok."
+[Achieve Demonstration] -accepted
+   User says "Let's achieve Demonstration."
+   Agent says "Ok."
+   [Agent execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:40 Y:40 Z:40 producing DinnerPlate Location: X:40 Y:40 Z:40] -accepted -done -interruption
+      User says "Please execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:10 Y:10 Z:10."
+      Agent execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:40 Y:40 Z:40 producing DinnerPlate Location: X:40 Y:40 Z:40.
+   Agent says "Ok."
+   [Agent execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SaladPlate Location: X:60 Y:60 Z:61 producing SaladPlate Location: X:60 Y:60 Z:61] -accepted -done -interruption
+      User says "Please execute Place on DinnerPlate Location: X:20 Y:20 Z:20 and SaladPlate Location: X:10 Y:10 Z:11."
+      Agent execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SaladPlate Location: X:60 Y:60 Z:61 producing SaladPlate Location: X:60 Y:60 Z:61.
+   Agent says "Ok."
+   User says "Achieve Demonstration is done."
+   Agent says "Ok."
+   Agent says "Ok."
+   Agent says "Ok."
+   Agent says "Ok."
+[Achieve PlaceDishes on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:40 Y:40 Z:40 and DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 and SaladPlate Location: X:60 Y:60 Z:61 and true producing DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 and SaladPlate Location: X:60 Y:60 Z:61] -accepted -done ### Done
+   User says "Let's achieve PlaceDishes."
+   [User says propose the PlaceDishes place1_referenceFrame] -succeeded
+      Agent says "What is the PlaceDishes place1_referenceFrame?"
+   User says "Let's achieve PlaceDishes by placeDishes1."
+   [User says the PlaceDishes input1 is true] -done
+      Agent says "What is the PlaceDishes input1?"
+      User says "True."
+   [User says propose the PlaceDishes placeDishes11_place1_referenceFrame] -live -stopped
+      Agent says "What is the PlaceDishes placeDishes11_place1_referenceFrame?"
+   [Agent execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:40 Y:40 Z:40 producing DinnerPlate Location: X:40 Y:40 Z:40] -accepted -done
+      User says "Please execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:20 Y:20 Z:20."
+      Agent execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:40 Y:40 Z:40 producing DinnerPlate Location: X:40 Y:40 Z:40.
+   [User says propose the PlaceDishes placeDishes11_place1_referenceFrame] -live -stopped
+      Agent says "What is the PlaceDishes placeDishes11_place1_referenceFrame?"
+   [Agent execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SaladPlate Location: X:60 Y:60 Z:61 producing SaladPlate Location: X:60 Y:60 Z:61] -accepted -done
+      User says "Please execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SaladPlate Location: X:30 Y:30 Z:31."
+      Agent execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SaladPlate Location: X:60 Y:60 Z:61 producing SaladPlate Location: X:60 Y:60 Z:61.
+   [User says propose the PlaceDishes placeDishes11_place1_referenceFrame] -live -stopped
+      Agent says "What is the PlaceDishes placeDishes11_place1_referenceFrame?"
+   [Agent execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 producing SoupBowl Location: X:140 Y:140 Z:142] -accepted -done
+      User says "Please execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:10 Y:10 Z:12."
+      Agent execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 producing SoupBowl Location: X:140 Y:140 Z:142.
+   [Agent execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 producing SoupBowl Location: X:140 Y:140 Z:142] -optional -accepted -done
+      [User says please execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 producing SoupBowl Location: X:140 Y:140 Z:142]
+         Agent says "Should I execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:40 Y:40 Z:42?"
+         User says "Yes."
+      Agent execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 producing SoupBowl Location: X:140 Y:140 Z:142.
+   [Agent execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 producing SoupBowl Location: X:140 Y:140 Z:142] -optional -accepted -done
+      [User says please execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 producing SoupBowl Location: X:140 Y:140 Z:142]
+         Agent says "Should I execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SoupBowl Location: X:70 Y:70 Z:72?"
+         User says "Yes."
+      Agent execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 producing SoupBowl Location: X:140 Y:140 Z:142.
+   [User says propose the PlaceDishes placeDishes11_place1_referenceFrame] -live -stopped
+      Agent says "What is the PlaceDishes placeDishes11_place1_referenceFrame?"
+   [Achieve PlaceDishes on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:40 Y:40 Z:40 and DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 producing DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142] -accepted -done
+      User says "Let's achieve PlaceDishes."
+      Agent execute Place on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:40 Y:40 Z:40 producing DinnerPlate Location: X:40 Y:40 Z:40.
+      Agent execute Place on DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 producing SoupBowl Location: X:140 Y:140 Z:142.
+   [User says propose the PlaceDishes placeDishes11_place1_referenceFrame] -live <-focus
+      [User accept] -live
+         Agent says "What is the PlaceDishes placeDishes11_place1_referenceFrame?"
+
+  > 

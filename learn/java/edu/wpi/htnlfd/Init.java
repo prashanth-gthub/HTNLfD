@@ -77,7 +77,7 @@ public class Init {
    /**
     * Makes the step to be repeated
     */
-   public static void addOptionalStep (Disco disco, String taskName,
+   public static void addMaxOccurs (Disco disco, String taskName,
          String subtask, String stepName, int maxOccurs) throws Exception {
 
       learnedTaskmodel = demonstration.addMaxOccurs(taskName, subtask,
