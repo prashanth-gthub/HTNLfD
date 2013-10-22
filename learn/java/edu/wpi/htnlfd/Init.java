@@ -2,13 +2,10 @@ package edu.wpi.htnlfd;
 
 import java.io.*;
 import java.util.*;
-
 import javax.xml.transform.*;
 import edu.wpi.cetask.*;
 import edu.wpi.disco.*;
-
 import edu.wpi.htnlfd.model.TaskModel;
-
 
 public class Init {
 
@@ -76,14 +73,15 @@ public class Init {
             stepName);
       load(disco);
    }
-   
+
    /**
     * Makes the step to be repeated
     */
    public static void addOptionalStep (Disco disco, String taskName,
-         String subtask, String stepName,int maxOccurs) throws Exception {
+         String subtask, String stepName, int maxOccurs) throws Exception {
 
-      learnedTaskmodel = demonstration.addMaxOccurs(taskName, subtask, stepName, maxOccurs);
+      learnedTaskmodel = demonstration.addMaxOccurs(taskName, subtask,
+            stepName, maxOccurs);
       load(disco);
    }
 
@@ -144,8 +142,8 @@ public class Init {
    public static void addPostcondition (Disco disco, String taskName,
          String postcondition, boolean sufficient) throws Exception {
 
-      learnedTaskmodel = demonstration
-            .addPostcondition(taskName, postcondition, sufficient);
+      learnedTaskmodel = demonstration.addPostcondition(taskName,
+            postcondition, sufficient);
       load(disco);
    }
 

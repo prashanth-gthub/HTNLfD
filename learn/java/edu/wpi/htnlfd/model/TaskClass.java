@@ -68,8 +68,6 @@ public class TaskClass extends TaskModel.Member {
    private String postcondition;
 
    private boolean sufficient = false;
-   
-   
 
    public void setSufficient (boolean sufficient) {
       this.sufficient = sufficient;
@@ -492,14 +490,13 @@ public class TaskClass extends TaskModel.Member {
          Element post = document.createElementNS(TaskModel.xmlnsValue,
                "postcondition");
          post.setTextContent(postcondition);
-         
-         
-         if(isSufficient()){
+
+         if ( isSufficient() ) {
             Attr sufficient = document.createAttribute("sufficient");
             sufficient.setValue("true");
             post.setAttributeNode(sufficient);
          }
-         
+
          taskElement.appendChild(post);
       }
 

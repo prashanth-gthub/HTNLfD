@@ -101,10 +101,10 @@ public class DecompositionClass extends TaskModel.Member {
       steps.put(name, step);
       stepNames.add(name);
    }
-   
+
    /**
-    * Adds the step. Also adds step's name to stepNames by considering that the new step
-    * should be after the other step.
+    * Adds the step. Also adds step's name to stepNames by considering that the
+    * new step should be after the other step.
     */
    public void addStep (String name, Step step, String afterStep) {
 
@@ -115,9 +115,9 @@ public class DecompositionClass extends TaskModel.Member {
          stepNames = new ArrayList<String>();
       }
       steps.put(name, step);
-      for(int i=0;i<stepNames.size();i++){
-         if(stepNames.get(i).equals(afterStep)){
-            stepNames.add(i+1, name);
+      for (int i = 0; i < stepNames.size(); i++) {
+         if ( stepNames.get(i).equals(afterStep) ) {
+            stepNames.add(i + 1, name);
             break;
          }
       }
@@ -246,9 +246,9 @@ public class DecompositionClass extends TaskModel.Member {
          if ( !contain )
             this.required.add(require);
       }
-      
+
       public void removeRequired () {
-         if ( required != null && !this.required.isEmpty())
+         if ( required != null && !this.required.isEmpty() )
             this.required.clear();
       }
 
@@ -290,7 +290,7 @@ public class DecompositionClass extends TaskModel.Member {
             }
 
          }
-         if ( requireStr != null &&  requireStr != "") {
+         if ( requireStr != null && requireStr != "" ) {
             Attr stepReq = document.createAttribute("requires");
             subtaskStep.setAttributeNode(stepReq);
             stepReq.setValue(requireStr);
@@ -603,7 +603,6 @@ public class DecompositionClass extends TaskModel.Member {
 
       private boolean inputInput;
 
-
       /**
        * Instantiates a new binding.
        */
@@ -709,29 +708,28 @@ public class DecompositionClass extends TaskModel.Member {
       }
       return null;
    }
-   
-   
+
    /**
     * Checks whether one step is before another or not.
     */
-   public boolean checkStepBefore(String nameDep, String nameRef){
-      
+   public boolean checkStepBefore (String nameDep, String nameRef) {
+
       boolean contain = false;
-      for(String stepName:this.getStepNames()){
-         if(stepName.equals(nameRef)){
+      for (String stepName : this.getStepNames()) {
+         if ( stepName.equals(nameRef) ) {
             contain = true;
          }
-         
-         if(stepName.equals(nameDep)){
-            if(contain)
+
+         if ( stepName.equals(nameDep) ) {
+            if ( contain )
                return true;
             else
                return false;
          }
-         
+
       }
-      
-      return false;      
+
+      return false;
    }
 
    /**
@@ -747,8 +745,9 @@ public class DecompositionClass extends TaskModel.Member {
                if ( !bindingRef.getKey().contains("this") // &&
                                                           // !bindingRef.getKey().contains(ReferenceFrame)
                   && !bindingDep.getValue().getStep()
-                        .equals(bindingRef.getValue().getStep()) 
-                        && checkStepBefore(bindingDep.getValue().getStep(), bindingRef.getValue().getStep())) {
+                        .equals(bindingRef.getValue().getStep())
+                  && checkStepBefore(bindingDep.getValue().getStep(),
+                        bindingRef.getValue().getStep()) ) {
 
                   String valueRef = findValueInParents(taskModel, null, task,
                         this, bindingRef.getValue().getValue().substring(6));
@@ -877,17 +876,16 @@ public class DecompositionClass extends TaskModel.Member {
       }
       return null;
    }
-   
+
    public Entry<String, Binding> getBindingValue (String stepName,
          String inputName) {
       for (Entry<String, Binding> binding : this.getBindings().entrySet()) {
          if ( binding.getValue().getStep().equals(stepName)
-            && binding.getKey().equals("$"+stepName+"."+inputName) ) {
+            && binding.getKey().equals("$" + stepName + "." + inputName) ) {
             return binding;
          }
       }
       return null;
    }
-   
 
 }

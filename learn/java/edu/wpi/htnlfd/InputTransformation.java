@@ -6,7 +6,7 @@ import edu.wpi.htnlfd.model.*;
 import edu.wpi.htnlfd.model.DecompositionClass.*;
 import edu.wpi.htnlfd.model.TaskClass.*;
 
-public class InputTransformation extends Transformation {
+public class InputTransformation {
 
    /**
     * Adds the specified input to the specified parents
