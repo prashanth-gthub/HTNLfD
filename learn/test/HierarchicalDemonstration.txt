@@ -4,24 +4,23 @@ load SetTableDemonstration.xml
 
 
 task Demonstration
-task Place / PhysObj.SquareTable / PhysObj.DinnerPlate
-task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate
-task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl
+task Place / PhysObj.SquareTable / PhysObj.DinnerPlate / new Location(0,0,0)
+task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate / new Location(0,0,1)
+task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl / new Location(0,0,2)
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
 print PlaceDishes
 
-
 task Demonstration
-task Place / PhysObj.DinnerPlate / PhysObj.Spoon 
-task Place / PhysObj.DinnerPlate / PhysObj.Fork
-task Place / PhysObj.DinnerPlate / PhysObj.Knife
+task Place / PhysObj.DinnerPlate / PhysObj.Spoon / new Location(-1,0,0)
+task Place / PhysObj.DinnerPlate / PhysObj.Fork / new Location(1,0,0)
+task Place / PhysObj.DinnerPlate / PhysObj.Knife / new Location(-2,0,0)
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
 print PlaceSilverware
 
 task Demonstration
-task Place / PhysObj.DinnerPlate / PhysObj.WaterGlass
+task Place / PhysObj.DinnerPlate / PhysObj.WaterGlass / new Location(0,1,0)
 
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")
@@ -35,29 +34,27 @@ done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"SetTable")
 print SetTable
 
-task Reset
+eval Reset()
 
 task Demonstration
-task  Place / PhysObj.SquareTable / PhysObj.DinnerPlate
-task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl
+task  Place / PhysObj.SquareTable / PhysObj.DinnerPlate / new Location(0,0,0)
+task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl / new Location(0,0,2)
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
 print PlaceDishes
 
 task Demonstration
-task Place / PhysObj.DinnerPlate / PhysObj.Spoon 
-task Place / PhysObj.DinnerPlate / PhysObj.Fork
+task Place / PhysObj.DinnerPlate / PhysObj.Spoon / new Location(-1,0,0)
+task Place / PhysObj.DinnerPlate / PhysObj.Fork / new Location(1,0,0)
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
 print PlaceSilverware
 
 task Demonstration
-task Place / PhysObj.DinnerPlate / PhysObj.WaterGlass
-task Place / PhysObj.DinnerPlate / PhysObj.WineGlass
+task Place / PhysObj.DinnerPlate / PhysObj.WaterGlass / new Location(0,1,0)
+task Place / PhysObj.DinnerPlate / PhysObj.WineGlass / new Location(0,-1,0)
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")
 print PlaceGlasses
 print SetTable
-
-
 

@@ -1,13 +1,12 @@
-    # 21-Oct-2013 7:03:01 PM - TaskEngine 1.4.8 / Disco 1.6.10
+#
+# This is an example of checking whether 
+#
+  # 21-Oct-2013 7:03:01 PM - TaskEngine 1.4.8 / Disco 1.6.10
     Welcome to Disco! (Type 'help' for command list)
-  > cd ..\..\GitHub\HTNLfD\learn\test
-    D:\GitHub\HTNLfD\learn\test
-  > cd ..\models
-    D:\GitHub\HTNLfD\learn\models
-  > load SetTableDemonstration.xml
-  > 
-  > 
-  ### Start of first demonstration (PlaceDishes1)
+  > load models/SetTableDemonstration.xml
+#
+# Start of first demonstration (PlaceDishes1)
+#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -28,8 +27,9 @@
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes1")
     # Returned 'null'
-  > 
-  ### Start of second demonstration (PlaceDishes2)
+#
+# Start of second demonstration (PlaceDishes2)
+#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -51,9 +51,11 @@
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes2")
 WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
-  > 
   > print PlaceDishes1
-	### PlaceDishes1 is added to the taskModel
+
+#
+# PlaceDishes1 is added to the taskModel
+#
 <task id="PlaceDishes1" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
     <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
@@ -84,14 +86,15 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     </subtasks>
   </task>
 
-    Agent says "Ok."
-	### PlaceDishes2 is not added to the taskModel since we have the same task(PlaceDishes1) in our taskModel
+#
+# PlaceDishes2 is not added to the taskModel since we have the same task(PlaceDishes1) in our taskModel
+#
   > print PlaceDishes2
 Unkown task or decomposition class.
-    Agent says "Ok."
-  > 
-  ### Start of task demonstration -> This task is the same as PlaceDishes2 but with one difference. The third step has different inputs.
-  ### So it should be added.
+#
+# Start of task demonstration -> This task is the same as PlaceDishes2 but with one difference. The third step has different inputs.
+# So it should be added.
+#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -103,7 +106,7 @@ Unkown task or decomposition class.
     User says "Please execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SaladPlate Location: X:30 Y:30 Z:31."
     Agent execute Place on DinnerPlate Location: X:30 Y:30 Z:30 and SaladPlate Location: X:60 Y:60 Z:61 producing SaladPlate Location: X:60 Y:60 Z:61.
     Agent says "Ok."
-  > task Place / PhysObj.SquareTable / PhysObj.SoupBowl ###
+  > task Place / PhysObj.SquareTable / PhysObj.SoupBowl
     User says "Please execute Place on SquareTable Location: X:10 Y:10 Z:10 and SoupBowl Location: X:30 Y:30 Z:32."
     Agent execute Place on SquareTable Location: X:10 Y:10 Z:10 and SoupBowl Location: X:40 Y:40 Z:42 producing SoupBowl Location: X:40 Y:40 Z:42.
     Agent says "Ok."
@@ -113,9 +116,11 @@ Unkown task or decomposition class.
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes2")
 WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
-  > 
   > print PlaceDishes2
-	### This task is added to our taskmodel
+
+#	
+# This task is added to our taskmodel
+#
 <task id="PlaceDishes2" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
     <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
@@ -146,8 +151,6 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     </subtasks>
   </task>
 
-    Agent says "Ok."
-	
   > print PlaceDishes1
 
 <task id="PlaceDishes1" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
@@ -180,6 +183,5 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     </subtasks>
   </task>
 
-    Agent says "Ok."
-  > 
- 
+  > quit
+    

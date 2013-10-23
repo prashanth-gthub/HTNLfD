@@ -1,0 +1,106 @@
+# An input called location is added to Place task.
+    # 22-Oct-2013 9:05:55 PM - TaskEngine 1.4.8 / Disco 1.6.10
+    Welcome to Disco! (Type 'help' for command list)
+  > cd ..\..\GitHub\HTNLfD\learn\test
+    D:\GitHub\HTNLfD\learn\test
+  > cd ..\models
+    D:\GitHub\HTNLfD\learn\models
+  > load SetTableDemonstration.xml
+  > 
+  > 
+  > task Demonstration
+    User says "Let's achieve Demonstration."
+    Agent says "Ok."
+  > task Place / PhysObj.SquareTable / PhysObj.DinnerPlate / new Location(0,0,0)
+    User says "Please move DinnerPlate from [0, 0, 0]  wrt SquareTable."
+    Agent move DinnerPlate from [10, 10, 10]  to [10, 10, 10] wrt SquareTable.
+    Agent says "Ok."
+  > task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate / new Location(0,0,1)
+    User says "Please move SaladPlate from [0, 0, 1]  wrt DinnerPlate."
+    Agent move SaladPlate from [10, 10, 11]  to [10, 10, 11] wrt DinnerPlate.
+    Agent says "Ok."
+  > task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl / new Location(0,0,2)
+    User says "Please move SoupBowl from [0, 0, 2]  wrt DinnerPlate."
+    Agent move SoupBowl from [10, 10, 12]  to [10, 10, 12] wrt DinnerPlate.
+    Agent says "Ok."
+  > done Demonstration
+    User says "Achieve Demonstration is done."
+    Agent says "Ok."
+  > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
+    # Returned 'null'
+  > print PlaceDishes
+
+<task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+    <input name="place1_referenceFrame" type="PhysObj"/>
+    <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
+    <input name="place1_location" type="Location"/>
+    <input name="place2_referenceFrame" type="PhysObj"/>
+    <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
+    <input name="place2_location" type="Location"/>
+    <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
+    <input name="place3_location" type="Location"/>
+    <output name="place1_newObject" type="PhysObj"/>
+    <output name="place2_newObject" type="PhysObj"/>
+    <output name="place3_newObject" type="PhysObj"/>
+    <subtasks id="placeDishes1" ordered="false">
+      <step name="place1" task="std:Place"/>
+      <step name="place2" requires="place1" task="std:Place"/>
+      <step name="place3" requires="place1" task="std:Place"/>
+      <binding slot="$place3.referenceFrame" value="$this.place2_referenceFrame"/>
+      <binding slot="$this.place1_location" value="new Location(0,0,0)"/>
+      <binding slot="$place1.location" value="$this.place1_location"/>
+      <binding slot="$this.place1_referenceFrame" value="PhysObj.SquareTable"/>
+      <binding slot="$place2.location" value="$this.place2_location"/>
+      <binding slot="$place3.location" value="$this.place3_location"/>
+      <binding slot="$this.place3_object" value="PhysObj.SoupBowl"/>
+      <binding slot="$this.place2_location" value="new Location(0,0,1)"/>
+      <binding slot="$place2.object" value="$this.place2_object"/>
+      <binding slot="$this.place1_object" value="PhysObj.DinnerPlate"/>
+      <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this.place3_newObject" value="$place3.newObject"/>
+      <binding slot="$this.place2_object" value="PhysObj.SaladPlate"/>
+      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
+      <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$this.place2_referenceFrame" value="PhysObj.DinnerPlate"/>
+      <binding slot="$this.place3_location" value="new Location(0,0,2)"/>
+      <binding slot="$place2.referenceFrame" value="$this.place2_referenceFrame"/>
+      <binding slot="$place3.object" value="$this.place3_object"/>
+      <binding slot="$this.place2_newObject" value="$place2.newObject"/>
+    </subtasks>
+  </task>
+
+    Agent says "Ok."
+  > 
+  > task PlaceDishes
+    User says "Let's achieve PlaceDishes on SquareTable and DinnerPlate and [0, 0, 0] and DinnerPlate and SaladPlate and [0, 0, 1] and SoupBowl and [0, 0, 2]."
+# I don't why I have this error
+edu.wpi.cetask.DecompositionClass$Contradiction: placeDishes1: Contradiction involving $place1.location="[0, 0, 0]" and $this.place1_location="[0, 0, 0]" in placeDishes1
+at edu.wpi.cetask.DecompositionClass$Binding.update(DecompositionClass.java:364)
+  > 
+  > 
+  > history
+# Why these tasks have Interruption
+[Achieve Demonstration] -accepted
+   User says "Let's achieve Demonstration."
+   Agent says "Ok."
+   [Agent move DinnerPlate from [10, 10, 10]  to [10, 10, 10] wrt SquareTable] -accepted -done -interruption
+      User says "Please move DinnerPlate from [0, 0, 0]  wrt SquareTable."
+      Agent move DinnerPlate from [10, 10, 10]  to [10, 10, 10] wrt SquareTable.
+   Agent says "Ok."
+   [Agent move SaladPlate from [10, 10, 11]  to [10, 10, 11] wrt DinnerPlate] -accepted -done -interruption
+      User says "Please move SaladPlate from [0, 0, 1]  wrt DinnerPlate."
+      Agent move SaladPlate from [10, 10, 11]  to [10, 10, 11] wrt DinnerPlate.
+   Agent says "Ok."
+   [Agent move SoupBowl from [10, 10, 12]  to [10, 10, 12] wrt DinnerPlate] -accepted -done -interruption
+      User says "Please move SoupBowl from [0, 0, 2]  wrt DinnerPlate."
+      Agent move SoupBowl from [10, 10, 12]  to [10, 10, 12] wrt DinnerPlate.
+   Agent says "Ok."
+   User says "Achieve Demonstration is done."
+   Agent says "Ok."
+   Agent says "Ok."
+[Achieve PlaceDishes on SquareTable and DinnerPlate and [0, 0, 0] and DinnerPlate and SaladPlate and [0, 0, 1] and SoupBowl and [0, 0, 2]] -accepted -live <-focus
+   User says "Let's achieve PlaceDishes on SquareTable and DinnerPlate and [0, 0, 0] and DinnerPlate and SaladPlate and [0, 0, 1] and SoupBowl and [0, 0, 2]."
+edu.wpi.cetask.DecompositionClass$Contradiction: placeDishes1: Contradiction involving $place1.location="[0, 0, 0]" and $this.place1_location="[0, 0, 0]" in placeDishes1
+at edu.wpi.cetask.DecompositionClass$Binding.update(DecompositionClass.java:364)
+  > quit
+    
