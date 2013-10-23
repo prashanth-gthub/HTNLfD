@@ -45,16 +45,16 @@
 				return "new Location("+obj.x+","+obj.y+","+obj.z+")";
 		}
 		function Reset(){
-			PhysObj.DinnerPlate = new PhysObj("DinnerPlate", new Location(0,0,0));
-			PhysObj.SaladPlate = new PhysObj("SaladPlate", new Location(0,0,1));
-			PhysObj.SoupBowl = new PhysObj("SoupBowl", new Location(0,0,2));
+			PhysObj.DinnerPlate = new PhysObj("DinnerPlate", new Location(-10,-10,-10));
+			PhysObj.SaladPlate = new PhysObj("SaladPlate", new Location(-10,-10,-10));
+			PhysObj.SoupBowl = new PhysObj("SoupBowl", new Location(-10,-10,-10));
 				
-			PhysObj.Fork = new PhysObj("Fork", new Location(-1,0,0));
-			PhysObj.Spoon = new PhysObj("Spoon", new Location(1,0,0));
-			PhysObj.Knife = new PhysObj("Knife", new Location(2,0,0));
+			PhysObj.Fork = new PhysObj("Fork", new Location(-10,-10,-10));
+			PhysObj.Spoon = new PhysObj("Spoon", new Location(-10,-10,-10));
+			PhysObj.Knife = new PhysObj("Knife", new Location(-10,-10,-10));
 				
-			PhysObj.WaterGlass = new PhysObj("WaterGlass", new Location(-1,1,0));
-			PhysObj.WineGlass = new PhysObj("WineGlass", new Location(1,1,0));
+			PhysObj.WaterGlass = new PhysObj("WaterGlass", new Location(-10,-10,-10));
+			PhysObj.WineGlass = new PhysObj("WineGlass", new Location(-10,-10,-10));
 					
 			PhysObj.SquareTable = new PhysObj("SquareTable", new Location(10,10,10)); 
 		}
