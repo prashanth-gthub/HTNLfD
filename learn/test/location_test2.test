@@ -1,5 +1,15 @@
-<taskModel xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext" xmlns:std="urn:disco.wpi.edu:htnlfd:std" about="urn:disco.wpi.edu:htnlfd:setTable1">
-  <task id="PlaceDishes">
+    # 23-Oct-2013 10:35:06 AM - TaskEngine 1.4.8 / Disco 1.6.10
+    Welcome to Disco! (Type 'help' for command list)
+  > cd ..\..\GitHub\HTNLfD\learn\test
+    D:\GitHub\HTNLfD\learn\test
+  > cd ..\models
+    D:\GitHub\HTNLfD\learn\models
+  > load SetTableDemonstration.xml
+  > 
+  > load SetTable1.xml
+  > print PlaceDishes
+
+<task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
     <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Location"/>
@@ -37,5 +47,21 @@
       <binding slot="$this.place2_newObject" value="$place2.newObject"/>
     </subtasks>
   </task>
-</taskModel>
 
+    Agent says "Ok."
+  > 
+  > 
+  > task PlaceDishes
+    User says "Let's achieve PlaceDishes on SquareTable and DinnerPlate and [0,0,0] and DinnerPlate and SaladPlate and [0,0,1] and SoupBowl and [0,0,2]."
+edu.wpi.cetask.DecompositionClass$Contradiction: placeDishes1: Contradiction involving $place1.location="[0,0,0]" and $this.place1_location="[0,0,0]" in placeDishes1
+at edu.wpi.cetask.DecompositionClass$Binding.update(DecompositionClass.java:364)
+  > 
+  > history
+
+Agent says "Ok."
+[Achieve PlaceDishes on SquareTable and DinnerPlate and [0,0,0] and DinnerPlate and SaladPlate and [0,0,1] and SoupBowl and [0,0,2]] -accepted -live <-focus
+   User says "Let's achieve PlaceDishes on SquareTable and DinnerPlate and [0,0,0] and DinnerPlate and SaladPlate and [0,0,1] and SoupBowl and [0,0,2]."
+edu.wpi.cetask.DecompositionClass$Contradiction: placeDishes1: Contradiction involving $place1.location="[0,0,0]" and $this.place1_location="[0,0,0]" in placeDishes1
+at edu.wpi.cetask.DecompositionClass$Binding.update(DecompositionClass.java:364)
+  > quit
+    

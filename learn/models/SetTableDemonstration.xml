@@ -28,7 +28,7 @@
 			this.y = y;
 			this.z = z;
 		}
-		Location.prototype.toString = function () { return "["+this.x+", "+this.y+", "+this.z+"]"; }
+		Location.prototype.toString = function () { return "["+this.x+","+this.y+","+this.z+"]"; }
 		
 		// define PhysObj class
 
