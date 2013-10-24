@@ -3,18 +3,17 @@
 	<task id="Place"> 
 		<input name="referenceFrame" type="PhysObj"/>
 		<input name="object" type="PhysObj" modified="newObject"/>	
-		<input name="location" type="Location"/>
+		<input name="location" type="Packages.edu.wpi.htnlfd.table.Location"/>
 		<output name="newObject" type="PhysObj"/>		
 		
 		<binding slot="$this.external" value="false"/>
-		<!--<postcondition> success() </postcondition>-->
+		<!--<postcondition> success() </postcondition> -->
 		<script> 
 			$this.newObject.name = $this.object.name;
 			$this.newObject.location.x = $this.location.x + $this.referenceFrame.location.x;
 			$this.newObject.location.y = $this.location.y + $this.referenceFrame.location.y;
 			$this.newObject.location.z = $this.location.z + $this.referenceFrame.location.z;
-
-		</script>	
+		</script>
 	
 	</task>
 
@@ -22,13 +21,9 @@
 
 	<script init="true">
 	
-		// define Location class
-		function Location (x,y,z) {
-			this.x = x;
-			this.y = y;
-			this.z = z;
+		function location (x,y,z) { 
+			return new Packages.edu.wpi.htnlfd.table.Location(x,y,z); 
 		}
-		Location.prototype.toString = function () { return "["+this.x+","+this.y+","+this.z+"]"; }
 		
 		// define PhysObj class
 
@@ -40,23 +35,21 @@
 		PhysObj.prototype.toString = function () { return this.name; }
 		function find (obj) { 
 			if(obj instanceof PhysObj)
-				return "PhysObj."+obj.name; 
-			else
-				return "new Location("+obj.x+","+obj.y+","+obj.z+")";
+				return "PhysObj."+obj.name;
 		}
 		function Reset(){
-			PhysObj.DinnerPlate = new PhysObj("DinnerPlate", new Location(-10,-10,-10));
-			PhysObj.SaladPlate = new PhysObj("SaladPlate", new Location(-10,-10,-10));
-			PhysObj.SoupBowl = new PhysObj("SoupBowl", new Location(-10,-10,-10));
+			PhysObj.DinnerPlate = new PhysObj("DinnerPlate", location(-10,-10,-10));
+			PhysObj.SaladPlate = new PhysObj("SaladPlate", location(-10,-10,-10));
+			PhysObj.SoupBowl = new PhysObj("SoupBowl", location(-10,-10,-10));
 				
-			PhysObj.Fork = new PhysObj("Fork", new Location(-10,-10,-10));
-			PhysObj.Spoon = new PhysObj("Spoon", new Location(-10,-10,-10));
-			PhysObj.Knife = new PhysObj("Knife", new Location(-10,-10,-10));
+			PhysObj.Fork = new PhysObj("Fork", location(-10,-10,-10));
+			PhysObj.Spoon = new PhysObj("Spoon", location(-10,-10,-10));
+			PhysObj.Knife = new PhysObj("Knife", location(-10,-10,-10));
 				
-			PhysObj.WaterGlass = new PhysObj("WaterGlass", new Location(-10,-10,-10));
-			PhysObj.WineGlass = new PhysObj("WineGlass", new Location(-10,-10,-10));
+			PhysObj.WaterGlass = new PhysObj("WaterGlass", location(-10,-10,-10));
+			PhysObj.WineGlass = new PhysObj("WineGlass", location(-10,-10,-10));
 					
-			PhysObj.SquareTable = new PhysObj("SquareTable", new Location(10,10,10)); 
+			PhysObj.SquareTable = new PhysObj("SquareTable", location(10,10,10)); 
 		}
 		Reset()
 

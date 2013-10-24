@@ -57,6 +57,20 @@ public class DecompositionClass extends TaskModel.Member {
       }
 
    }
+   
+   public String findDecompositionName (String DecName) {
+      int count = 1;
+
+      String decNameFind = Character.toLowerCase(DecName.charAt(0))
+         + (DecName.length() > 1 ? DecName.substring(1) : "");
+
+      while (true) {
+         if ( goal.getDecomposition(decNameFind + count) != null )
+            count++;
+         else
+            return decNameFind + count;
+      }
+   }
 
    private TaskClass goal;
 
@@ -125,6 +139,11 @@ public class DecompositionClass extends TaskModel.Member {
             break;
          }
       }
+   }
+   
+   public void removeStep(String name){
+      steps.remove(name);
+      stepNames.remove(name);
    }
 
    public Step getStep (String name) {
@@ -251,9 +270,13 @@ public class DecompositionClass extends TaskModel.Member {
             this.required.add(require);
       }
 
-      public void removeRequired () {
+      public void removeRequireds () {
          if ( required != null && !this.required.isEmpty() )
             this.required.clear();
+      }
+      
+      public void removeRequired (String require) {
+         this.required.remove(require);
       }
 
       /**
@@ -323,8 +346,7 @@ public class DecompositionClass extends TaskModel.Member {
       /**
        * Checks for equivalent steps.
        */
-      public boolean isEquivalent (Step step, DecompositionClass dec1,
-            DecompositionClass dec2, TaskModel taskModel) {
+      public boolean isEquivalent (Step step) {
          boolean sameOrder = false;
          if ( this.getType().getId().equals(step.getType().getId())
             && this.getType().getQname().getNamespaceURI()
@@ -503,7 +525,8 @@ public class DecompositionClass extends TaskModel.Member {
 
    /**
     * Finds the parents of a TaskClass. (By calling the same function
-    * recursively on it's parents.)
+    * recursively on it's parents.) 
+    * It returns just one tree.(I should correct it.)
     */
    public List<Object[]> findParents (TaskClass parentTask,
          Entry<String, Step> parentStep, DecompositionClass parentSubtask,
@@ -817,7 +840,7 @@ public class DecompositionClass extends TaskModel.Member {
             boolean contain = false;
             for (int j = 0; j < temp2.size(); j++) {
                Step step2 = dec.getStep(temp2.get(j));
-               if ( step1.isEquivalent(step2, this, dec, taskModel) ) {
+               if ( step1.isEquivalent(step2) ) {
 
                   if ( checkInputs(temp1.get(i), step1.getType(), temp2.get(j),
                         step2.getType(), this, dec, taskModel) ) {

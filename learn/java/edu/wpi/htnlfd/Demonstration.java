@@ -4,6 +4,9 @@ import edu.wpi.cetask.Task;
 import edu.wpi.disco.*;
 import edu.wpi.disco.lang.Utterance;
 import edu.wpi.htnlfd.model.*;
+import edu.wpi.htnlfd.model.DecompositionClass.Step;
+import edu.wpi.htnlfd.model.TaskClass.Input;
+import edu.wpi.htnlfd.model.TaskClass.Output;
 import edu.wpi.htnlfd.model.DecompositionClass.*;
 import java.util.*;
 import java.util.Map.Entry;
@@ -81,8 +84,12 @@ public class Demonstration {
 
          addAlternativeRecipe(newTask, "!$this." + input, task);
 
-      } else
+      } else {
          this.taskModel.add(newTask);
+         optionals(this.taskModel);
+      }
+
+      // findLoop(newTask);
 
       inputTransformation.generalizeInput(this.taskModel);
 
@@ -111,6 +118,7 @@ public class Demonstration {
             return null;
 
          if ( task.getId().equals(newTask.getId()) ) {
+
             return task;
 
          }
@@ -133,8 +141,12 @@ public class Demonstration {
          if ( applicable != null && applicable != "" )
             newTask.getDecompositions().get(0).setApplicable(applicable);
 
-         newTask.getDecompositions().get(0)
-               .setId(task.getDecompositions().get(0).getId() + "1");
+         newTask
+               .getDecompositions()
+               .get(0)
+               .setId(
+                     task.getDecompositions().get(0)
+                           .findDecompositionName(task.getId()));
          task.getDecompositions().add(newTask.getDecompositions().get(0));
 
          Map<String, Binding> removed1 = new HashMap<String, Binding>();
@@ -306,8 +318,8 @@ public class Demonstration {
       List<Object[]> parents = parentSubtask.findParents(parentTask, null,
             parentSubtask, taskModel);
 
-         this.inputTransformation.transferBottomUp(parents, slotName, slotType,
-               modified, type);
+      this.inputTransformation.transferBottomUp(parents, slotName, slotType,
+            modified, type);
 
       if ( type && parents != null && parents.size() != 0 ) {
 
@@ -417,7 +429,7 @@ public class Demonstration {
          domTask.setPostcondition(task.getPostcondition());
          domTask.setSufficient(task.isSufficient());
          domTask.setPrimitive(task.isPrimitive());
-         
+
          for (String inputName : task.getDeclaredInputNames()) {
 
             TaskClass.Input inputTask = null;
@@ -526,10 +538,10 @@ public class Demonstration {
             for (Entry<String, edu.wpi.cetask.DecompositionClass.Binding> binding : bindingsSubtask) {
 
                DecompositionClass.Type type = null;
-               
-               if(binding.getValue().inputInput)
+
+               if ( binding.getValue().inputInput )
                   type = DecompositionClass.Type.InputInput;
-               else if(binding.getValue().outputInput)
+               else if ( binding.getValue().outputInput )
                   type = DecompositionClass.Type.OutputOutput;
                subtask.addBinding(
                      binding.getKey(),
@@ -665,7 +677,7 @@ public class Demonstration {
       subtask.setOrdered(true);
 
       for (Entry<String, Step> step : subtask.getSteps().entrySet()) {
-         step.getValue().removeRequired();
+         step.getValue().removeRequireds();
       }
 
       return taskModel;
@@ -737,6 +749,211 @@ public class Demonstration {
       task.addInput(inputC);
 
       return taskModel;
+   }
+
+   /**
+    * Finds whether there is a loop in the steps of the task or not by searching
+    * for more than one consecutive same step.
+    */
+   public void findLoop (TaskClass task) {
+
+      for (DecompositionClass dec : task.getDecompositions()) {
+         Map<Step, List<Step>> steps = new HashMap<Step, List<Step>>();
+         Map<Step, List<String>> names = new HashMap<Step, List<String>>();
+
+         {
+            int i = dec.getStepNames().size() - 1;
+            // Finding more than one consecutive same steps
+            while (i > 0) {
+               int j = i - 1;
+               while (j >= 0) {
+                  Step stepO1 = dec.getStep(dec.getStepNames().get(i));
+                  Step stepO2 = dec.getStep(dec.getStepNames().get(j));
+
+                  DecompositionClass.Step step1 = dec.new Step(stepO1);
+                  DecompositionClass.Step step2 = dec.new Step(stepO2);
+                  step1.removeRequired(dec.getStepNames().get(j));
+
+                  boolean contain = false;
+                  if ( step1.isEquivalent(step2) ) {
+                     if ( dec.checkInputs(dec.getStepNames().get(i),
+                           step1.getType(), dec.getStepNames().get(j),
+                           step2.getType(), dec, dec, taskModel) ) {
+
+                        for (Entry<Step, List<Step>> step : steps.entrySet()) {
+                           if ( step.getKey().equals(stepO1) ) {
+                              steps.get(stepO1).add(stepO2);
+                              names.get(stepO1).add(dec.getStepNames().get(j));
+                              contain = true;
+                              break;
+                           } else {
+                              for (Step st : step.getValue()) {
+                                 if ( st.equals(stepO1) ) {
+                                    step.getValue().add(stepO2);
+                                    names.get(step.getKey()).add(
+                                          dec.getStepNames().get(j));
+                                    contain = true;
+                                    break;
+                                 }
+                              }
+                              if ( contain ) {
+                                 break;
+                              }
+                           }
+                        }
+
+                        if ( contain ) {
+                           ;
+                        } else {
+                           List<Step> listStep = new ArrayList<Step>();
+                           listStep.add(stepO2);
+                           steps.put(stepO1, listStep);
+
+                           List<String> listName = new ArrayList<String>();
+                           listName.add(dec.getStepNames().get(i));
+                           listName.add(dec.getStepNames().get(j));
+                           names.put(stepO1, listName);
+
+                        }
+
+                        i = j;
+                        j = i - 1;
+
+                     } else {
+                        i = i - 1;
+                        j = j - 1;
+                        break;
+                     }
+
+                  } else {
+                     i = i - 1;
+                     j = j - 1;
+                     break;
+                  }
+
+               }
+            }
+
+         }
+         // removing extra steps and their bindings and inputs/outputs
+         for (Entry<Step, List<Step>> step : steps.entrySet()) {
+            List<String> list = names.get(step.getKey());
+            int maxOccurs = list.size();
+            step.getValue().get(maxOccurs - 2).setMaxOccurs(maxOccurs);
+            for (int i = 0; i < list.size() - 1; i++) {
+               String stepName = list.get(i);
+               Step removeStep = dec.getStep(stepName);
+               for (Input in : removeStep.getType().getDeclaredInputs()) {
+                  dec.removeBinding("$" + stepName + "." + in.getName());
+               }
+               for (Output out : removeStep.getType().getDeclaredOutputs()) {
+                  Entry<String, Binding> binding = dec.removeBindingValue("$"
+                     + stepName + "." + out.getName());
+                  task.removeOutput(binding.getValue().getSlot());
+               }
+
+               dec.removeStep(stepName);
+
+            }
+         }
+      }
+
+   }
+
+   /**
+    * Checks for optional steps between two DecompositionClass. Checks whether
+    * one of the DecompositionClass Classes is the subset of the other
+    * DecompositionClass.
+    */
+   public DecompositionClass checkOptional (DecompositionClass task1,
+         DecompositionClass task2) {
+      // Checking subset
+
+      if ( task1 != null && task2 != null ) {
+         DecompositionClass subtask = null;
+         DecompositionClass supertask = null;
+         if ( task1.getStepNames().size() > task2.getStepNames().size() ) {
+            supertask = task1;
+            subtask = task2;
+         } else {
+            // return null; // just one direction
+            supertask = task2;
+            subtask = task1;
+         }
+
+         ArrayList<String> temp1 = new ArrayList<String>(subtask.getStepNames());
+         ArrayList<String> temp2 = new ArrayList<String>(
+               supertask.getStepNames());
+         ArrayList<String> optionals = new ArrayList<String>(
+               supertask.getStepNames());
+
+         for (int i = 0; i < temp1.size(); i++) {
+            Step step1 = subtask.getStep(temp1.get(i));
+            int where = -1;
+            boolean contain = false;
+            for (int j = 0; j < temp2.size(); j++) {
+               Step step2 = supertask.getStep(temp2.get(j));
+               if ( step1.isEquivalent(step2) ) {
+
+                  if ( subtask.checkInputs(temp1.get(i), step1.getType(),
+                        temp2.get(j), step2.getType(), subtask, supertask,
+                        taskModel) ) {
+
+                     where = j;
+                     contain = true;
+                     break;
+                  }
+               }
+            }
+
+            if ( contain ) {
+               temp2.remove(where);
+               optionals.remove(where);
+            } else
+               return null;
+         }
+         System.out.println(optionals);
+         for (String opt : optionals) {
+            supertask.getStep(opt).setMinOccurs(0);
+         }
+
+         return subtask;
+      }
+      return null;
+   }
+
+   /**
+    * Checks for optional steps between two DecompositionClass
+    */
+   public void optionals (TaskModel taskModel) {
+      Iterator<TaskClass> iterator1 = taskModel.getTaskClasses().iterator();
+      Iterator<TaskClass> iterator2 = taskModel.getTaskClasses().iterator();
+      TaskClass remove = null;
+      DecompositionClass decRemove = null;
+      while (iterator1.hasNext()) {
+         TaskClass next1 = iterator1.next();
+         while (iterator2.hasNext()) {
+            TaskClass next2 = iterator2.next();
+            if ( !next1.equals(next2) ) {
+               for (DecompositionClass dec1 : next1.getDecompositions()) {
+                  for (DecompositionClass dec2 : next2.getDecompositions()) {
+
+                     decRemove = checkOptional(dec1, dec2);
+                     if ( decRemove != null )
+                        remove = decRemove.getGoal();
+                  }
+               }
+            }
+         }
+      }
+
+      if ( remove != null && decRemove != null ) {
+         if ( remove.getDecompositions().size() == 1 )
+            taskModel.remove(remove);
+         else
+            remove.removeDecompositionClass(decRemove);
+      }
+
    }
 
 }

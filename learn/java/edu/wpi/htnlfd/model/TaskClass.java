@@ -1,6 +1,7 @@
 package edu.wpi.htnlfd.model;
 
 import edu.wpi.disco.Disco;
+import edu.wpi.htnlfd.table.*;
 import org.w3c.dom.*;
 import java.util.*;
 import javax.script.*;
@@ -136,7 +137,7 @@ public class TaskClass extends TaskModel.Member {
     */
    public String addInput (TaskModel taskModel, TaskClass task,
          String inputName, String inputType, String modified,
-         String inputBindingValue, DecompositionClass subtask, String prefix) {
+         Object inputBindingValue, DecompositionClass subtask, String prefix) {
       boolean contain = false;
       String name = null;
       for (Input input : task.getDeclaredInputs()) {
@@ -417,6 +418,10 @@ public class TaskClass extends TaskModel.Member {
    public void addDecompositionClass (DecompositionClass dec) {
       decompositions.add(dec);
    }
+   
+   public void removeDecompositionClass (DecompositionClass dec) {
+      decompositions.remove(dec);
+   }
 
    public DecompositionClass getDecomposition (String id) {
       for (DecompositionClass decomp : getDecompositions())
@@ -591,10 +596,19 @@ public class TaskClass extends TaskModel.Member {
 
          inputs.add(inputName);
 
-         Object inputBinding = (((Invocable) disco.getScriptEngine())
+         Object inputBinding = null;
+         String inputBindingValue = null;
+         
+         inputBinding = (((Invocable) disco.getScriptEngine())
                .invokeFunction("find", step.getSlotValue(inputName)));
 
-         String inputBindingValue = (String) inputBinding;
+         if(inputBinding == null){
+            inputBinding = step.getSlotValue(inputName);
+            inputBindingValue = ((ApplicationSpecificClass)inputBinding).find();
+         }
+         else
+            inputBindingValue = (String) inputBinding;
+
          int inputNum1 = this.getDeclaredInputs().size();
          String changedName = this.addInput(taskModel, this, inputName, step
                .getType().getSlotType(inputName),
@@ -607,7 +621,7 @@ public class TaskClass extends TaskModel.Member {
 
          if ( inputNum1 != inputNum2 ) {
             subtask.addBinding("$this." + changedName, subtask.new Binding(
-                  changedName, "this", inputBindingValue,
+                  changedName, "this",inputBindingValue,
                   DecompositionClass.Type.Constant));
 
             for (int i = this.getDeclaredOutputs().size() - 1; i >= (this

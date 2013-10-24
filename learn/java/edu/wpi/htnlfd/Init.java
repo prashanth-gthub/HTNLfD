@@ -193,5 +193,10 @@ public class Init {
       DOM.writeDOM(fileName, learnedTaskmodel);
       demonstration.readDOM(disco, fileName);
    }
+   public static void printTasks(){
+      for(edu.wpi.htnlfd.model.TaskClass task:learnedTaskmodel.getTaskClasses()){
+         System.out.println(task.getId());
+      }
+   }
 
 }
