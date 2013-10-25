@@ -13,8 +13,8 @@
     <output name="place3_newObject" type="PhysObj"/>
     <subtasks id="placeSilverware1">
       <step name="place1" task="std:Place"/>
-      <step minOccurs="0" name="place2" task="std:Place"/>
-      <step minOccurs="0" name="place3" task="std:Place"/>
+      <step name="place2" task="std:Place"/>
+      <step name="place3" task="std:Place"/>
       <applicable>$this.input1</applicable>
       <binding slot="$place3.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>

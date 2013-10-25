@@ -448,23 +448,28 @@ public class DecompositionClass extends TaskModel.Member {
          TaskClass type2, DecompositionClass dec1, DecompositionClass dec2,
          TaskModel taskModel) {
       for (Input in1 : type1.getDeclaredInputs()) {
+         boolean contain = false;
          for (Input in2 : type2.getDeclaredInputs()) {
-            if ( in1.getName().equals(in2.getName()) ) {
+            
+            if ( !((in1.getModified() != null) ^ in2.getModified() != null)
+                  && (in1.getType().equals(in2.getType()))  ) { //in1.getName().equals(in2.getName())
+               
                String value1 = findValueInParents(taskModel, stp1, type1, dec1,
                      in1.getName());
                String value2 = findValueInParents(taskModel, stp2, type2, dec2,
                      in2.getName());
-               if ( value1 != null && value2 != null && !value1.equals(value2) ) {
-                  return false;
-
-               } else if ( (value1 != null && value2 == null)
-                  || (value1 == null && value2 != null) ) {
-                  return false;
+               if ( value1 != null && value2 != null && value1.equals(value2) ) {
+                  // ???? removing the input
+                  contain = true;
+                  break;
                }
 
             }
          }
+         if(!contain)
+            return false;
       }
+
       return true;
    }
 

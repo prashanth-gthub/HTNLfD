@@ -1,4 +1,5 @@
-package edu.wpi.htnlfd.table;
+package edu.wpi.htnlfd;
+
 
 public abstract class ApplicationSpecificClass {
 

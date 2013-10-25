@@ -3,6 +3,8 @@ package edu.wpi.htnlfd;
 import edu.wpi.htnlfd.model.*;
 import org.w3c.dom.*;
 import java.io.*;
+import java.util.Map.Entry;
+import java.util.*;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
@@ -15,6 +17,7 @@ public class DomManipulation {
    private DocumentBuilder builder;
 
    private Document document;
+   Properties properties = new Properties();
 
    /**
     * Instantiates a new dom manipulation.
@@ -36,7 +39,7 @@ public class DomManipulation {
     * Builds the dom.
     */
    public Node buildDOM (TaskModel taskmodel) {
-      return taskmodel.toNode(document);
+      return taskmodel.toNode(document,properties);
    }
 
    /**
@@ -47,7 +50,7 @@ public class DomManipulation {
       // Writing document into xml file
       document = builder.newDocument();
       DOMSource domSource = new DOMSource(document);
-      File demonstrationFile = new File(fileName);
+      File demonstrationFile = new File(fileName+".xml");
       if ( !demonstrationFile.exists() )
          demonstrationFile.createNewFile();
 
@@ -59,7 +62,7 @@ public class DomManipulation {
          Transformer transformer = tf.newTransformer();
 
          buildDOM(taskmodel);
-
+         writeProperties(fileName);
          // Adding indentation and omitting xml declaration
          transformer.setOutputProperty(OutputKeys.INDENT, "yes");
          transformer.setOutputProperty(
@@ -92,7 +95,7 @@ public class DomManipulation {
 
          Document doc = builder.newDocument();
          DOMSource domSource = new DOMSource(doc);
-         taskmodel.toNode(doc);
+         taskmodel.toNode(doc,properties);
 
          transformer.transform(domSource, new StreamResult(stream));
       } catch (TransformerConfigurationException e) {
@@ -101,6 +104,27 @@ public class DomManipulation {
          throw e;
       }
 
+   }
+   
+   /**
+    * Write properties file.
+    */
+   public void writeProperties(String fileName) throws IOException{
+      File demonstrationFile = new File(fileName+".properties");
+      if ( !demonstrationFile.exists() )
+         demonstrationFile.createNewFile();
+
+      try (FileOutputStream fileOutputStream = new FileOutputStream(
+            demonstrationFile, false)) {
+         for(Entry<Object, Object> property:properties.entrySet()){
+            byte[] contentInBytes = ((String)property.getKey()+" = " + (String)property.getValue()+"\n").getBytes();            
+            fileOutputStream.write(contentInBytes);
+         }
+      } catch (FileNotFoundException e) {
+         throw e;
+      } catch (IOException e) {
+         throw e;
+      }
    }
 
 }

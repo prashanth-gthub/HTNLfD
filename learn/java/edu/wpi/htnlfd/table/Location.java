@@ -1,10 +1,12 @@
 package edu.wpi.htnlfd.table;
 
+import edu.wpi.htnlfd.ApplicationSpecificClass;
+
 public class Location extends ApplicationSpecificClass{
 
-   public int x;
-   public int y;
-   public int z;
+   public final int x;
+   public final int y;
+   public final int z;
    public Location (int x, int y, int z) {
       super();
       this.x = x;

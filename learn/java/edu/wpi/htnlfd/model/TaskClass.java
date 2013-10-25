@@ -1,7 +1,8 @@
 package edu.wpi.htnlfd.model;
 
+
 import edu.wpi.disco.Disco;
-import edu.wpi.htnlfd.table.*;
+import edu.wpi.htnlfd.ApplicationSpecificClass;
 import org.w3c.dom.*;
 import java.util.*;
 import javax.script.*;
@@ -232,6 +233,7 @@ public class TaskClass extends TaskModel.Member {
    public class Input extends Slot {
 
       private Output modified;
+      private boolean optional = false;
 
       /**
        * Instantiates a new input.
@@ -251,6 +253,15 @@ public class TaskClass extends TaskModel.Member {
          this.modified = modified;
       }
 
+      
+      public boolean isOptional () {
+         return optional;
+      }
+
+      public void setOptional (boolean optional) {
+         this.optional = optional;
+      }
+
       /**
        * Gets the modified.
        */
@@ -268,11 +279,13 @@ public class TaskClass extends TaskModel.Member {
       /**
        * This function makes the input's DOM element.
        */
-      public Element toNode (Document document) {
+      public Element toNode (Document document,Properties properties) {
          Element element = toNode(document, "input");
          if ( modified != null )
             TaskModel.addAttribute(document, element, "modified",
                   modified.getName());
+         if(optional)
+            properties.put(getId()+"."+this.getName()+"@optional", "true");
          return element;
       }
 
@@ -494,8 +507,9 @@ public class TaskClass extends TaskModel.Member {
 
    /**
     * This function makes the TaskClass's DOM element recursively.
+    * @param properties 
     */
-   public Node toNode (Document document, Set<String> namespaces) {
+   public Node toNode (Document document, Set<String> namespaces, Properties properties) {
 
       Element taskElement = document.createElementNS(TaskModel.xmlnsValue,
             "task");
@@ -506,7 +520,7 @@ public class TaskClass extends TaskModel.Member {
 
       for (TaskClass.Input input : this.getDeclaredInputs()) {
 
-         taskElement.appendChild(input.toNode(document));
+         taskElement.appendChild(input.toNode(document,properties));
 
       }
 

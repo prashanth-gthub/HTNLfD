@@ -10,9 +10,9 @@
 		<!--<postcondition> success() </postcondition> -->
 		<script> 
 			$this.newObject.name = $this.object.name;
-			$this.newObject.location.x = $this.location.x + $this.referenceFrame.location.x;
-			$this.newObject.location.y = $this.location.y + $this.referenceFrame.location.y;
-			$this.newObject.location.z = $this.location.z + $this.referenceFrame.location.z;
+			$this.newObject.location = location($this.location.x + $this.referenceFrame.location.x
+			,$this.location.y + $this.referenceFrame.location.y
+			,$this.location.z + $this.referenceFrame.location.z);
 		</script>
 	
 	</task>

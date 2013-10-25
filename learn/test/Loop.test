@@ -1,4 +1,5 @@
-# In this example we will see loops (MaxOccurs)
+# In this example we will see MaxOccurs
+# This is for placing 3 DinnerPlate on the Table.
     # 24-Oct-2013 2:40:58 PM - TaskEngine 1.4.8 / Disco 1.6.10
     Welcome to Disco! (Type 'help' for command list)
   > cd ..\..\GitHub\HTNLfD\learn\test
@@ -119,7 +120,7 @@ at edu.wpi.cetask.Shell.processTask(Shell.java:512)
    Agent says "Ok."
 [Achieve PlaceDishes on SquareTable and DinnerPlate and [0,0,0] producing DinnerPlate] -accepted -done
    User says "Let's achieve PlaceDishes on SquareTable and DinnerPlate and [0,0,0]."
-   Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
+   Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.\
    [Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable] -optional -accepted -done
       [User says please move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable]
          Agent says "Should I move DinnerPlate from [10,10,10]  wrt SquareTable?"
@@ -132,5 +133,3 @@ at edu.wpi.cetask.Shell.processTask(Shell.java:512)
       Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
       Agent says "Ok."
 
-  > quit
-    

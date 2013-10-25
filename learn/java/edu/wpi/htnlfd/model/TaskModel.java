@@ -130,8 +130,9 @@ public class TaskModel {
 
    /**
     * Makes the TaskModel's DOM element recursively.
+    * @param properties 
     */
-   public Node toNode (Document document) {
+   public Node toNode (Document document, Properties properties) {
       Element taskModelElement = null;
 
       taskModelElement = document.createElementNS(TaskModel.xmlnsValue,
@@ -149,7 +150,7 @@ public class TaskModel {
       // namespaces.add("urn:disco.wpi.edu:htnlfd:std");
       for (TaskClass task : tasks) {
 
-         taskModelElement.appendChild(task.toNode(document, namespaces));
+         taskModelElement.appendChild(task.toNode(document, namespaces,properties));
       }
 
       for (String namespaceOfTasks : namespaces) {

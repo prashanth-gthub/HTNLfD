@@ -21,7 +21,7 @@ public class Init {
    private static String separator = System.getProperty("file.separator");
 
    private static String fileName = System.getProperty("user.dir") + separator
-      + filename + ".xml";
+      + filename;
 
    /**
     * The main method.(Never called)

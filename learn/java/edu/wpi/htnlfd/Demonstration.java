@@ -153,6 +153,7 @@ public class Demonstration {
          Map<String, String> bindedInput = new HashMap<String, String>();
          Map<String, String> bindedOutput = new HashMap<String, String>();
          for (TaskClass.Input in1 : task.getDeclaredInputs()) {
+            boolean contain = false;
             for (TaskClass.Input in2 : newTask.getDeclaredInputs()) {
                if ( in1.getType().equals(in2.getType())
                   && ((in1.getModified() == null && in2.getModified() == null) || (in1
@@ -172,6 +173,7 @@ public class Demonstration {
                                  task.getDecompositions().get(0), in1.getName());
                   if ( newTask.getDecompositions().get(0).getBindings()
                         .get("$this." + in2.getName()).getValue().equals(value) ) {
+                     contain = true;
                      if ( bindValue == null ) {
                         removed1.put("$this." + in2.getName(),
                               newTask.getDecompositions().get(0).getBindings()
@@ -190,6 +192,10 @@ public class Demonstration {
                      }
                   }
                }
+            }
+            if(!contain){
+               // if they are not the same, the input is optional
+               in1.setOptional(true);
             }
          }
 
@@ -276,6 +282,7 @@ public class Demonstration {
             }
             TaskClass.Input inputCC = task.new Input(inputName, in.getType(),
                   outputModified);
+            inputCC.setOptional(true);
             task.addInput(inputCC);
             String binding = task.getDecompositions().get(1).getBindings()
                   .get("$this." + in.getName()).getValue();
@@ -491,6 +498,7 @@ public class Demonstration {
                                        .getModified(in)) ) {
                            inputC = taskType.new Input(in, subtaskDecomposition
                                  .getStepType(stepName).getSlotType(in), null);
+                           
                            break;
                         }
                      }
@@ -498,6 +506,10 @@ public class Demonstration {
                         inputC = taskType.new Input(in, subtaskDecomposition
                               .getStepType(stepName).getSlotType(in), null);
                      }
+                     
+                     String optional = task.getProperty(task.getId()+"."+in+"@optional");
+                     if(Boolean.parseBoolean(optional))
+                        inputC.setOptional(true);
                      taskType.addInput(inputC);
                   }
 
@@ -560,7 +572,7 @@ public class Demonstration {
     * "load" function)
     */
    public void readDOM (Disco disco, String fileName) {
-      this.externalTaskModel = disco.getInteraction().load(fileName);
+      this.externalTaskModel = disco.getInteraction().load(fileName+".xml");
    }
 
    /**
@@ -950,8 +962,10 @@ public class Demonstration {
       if ( remove != null && decRemove != null ) {
          if ( remove.getDecompositions().size() == 1 )
             taskModel.remove(remove);
-         else
+         else{
             remove.removeDecompositionClass(decRemove);
+            // removing from parents
+         }
       }
 
    }
