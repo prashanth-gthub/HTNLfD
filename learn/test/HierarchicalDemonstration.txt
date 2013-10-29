@@ -1,5 +1,4 @@
-cd ..\..\GitHub\HTNLfD\learn\test
-cd ..\models
+cd models
 load SetTableDemonstration.xml
 
 task Demonstration
@@ -55,3 +54,4 @@ done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")
 print PlaceGlasses
 print SetTable
+

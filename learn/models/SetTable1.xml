@@ -15,7 +15,7 @@
       <step name="place1" task="std:Place"/>
       <step name="place2" task="std:Place"/>
       <step name="place3" task="std:Place"/>
-      <applicable>$this.input1</applicable>
+      <applicable>this.input1</applicable>
       <binding slot="$place3.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$this.place3_newObject" value="$place3.newObject"/>
@@ -32,7 +32,7 @@
     <subtasks id="placeSilverware2">
       <step name="place1" task="std:Place"/>
       <step name="place2" task="std:Place"/>
-      <applicable>!$this.input1</applicable>
+      <applicable>!this.input1</applicable>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$this.place1_newObject" value="$place1.newObject"/>
       <binding slot="$place1.object" value="$this.place1_object"/>
@@ -137,7 +137,7 @@
     <output name="placeGlasses2_place2_newObject" type="PhysObj"/>
     <subtasks id="placeGlasses1">
       <step name="place1" task="std:Place"/>
-      <applicable>$this.input1</applicable>
+      <applicable>this.input1</applicable>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$place1.object" value="$this.place1_object"/>
       <binding slot="$this.place1_newObject" value="$place1.newObject"/>
@@ -146,7 +146,7 @@
     <subtasks id="placeGlasses2">
       <step name="place1" task="std:Place"/>
       <step name="place2" task="std:Place"/>
-      <applicable>!$this.input1</applicable>
+      <applicable>!this.input1</applicable>
       <binding slot="$place1.location" value="$this.place1_location"/>
       <binding slot="$place2.location" value="$this.placeGlasses2_place2_location"/>
       <binding slot="$place2.object" value="$this.placeGlasses2_place2_object"/>
@@ -174,7 +174,7 @@
       <step name="place1" task="std:Place"/>
       <step name="place2" requires="place1" task="std:Place"/>
       <step name="place3" requires="place1" task="std:Place"/>
-      <applicable>$this.input1</applicable>
+      <applicable>this.input1</applicable>
       <binding slot="$place3.referenceFrame" value="$this.place2_referenceFrame"/>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$this.place3_newObject" value="$place3.newObject"/>
@@ -191,7 +191,7 @@
     <subtasks id="placeDishes2" ordered="false">
       <step name="place1" task="std:Place"/>
       <step name="place2" requires="place1" task="std:Place"/>
-      <applicable>!$this.input1</applicable>
+      <applicable>!this.input1</applicable>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$this.place3_newObject" value="$place2.newObject"/>
       <binding slot="$this.place1_newObject" value="$place1.newObject"/>

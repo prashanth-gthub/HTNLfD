@@ -43,7 +43,7 @@ public class Init {
       List<Task> DemonstratedTasks = demonstration.findDemonstration(disco);
       try {
          learnedTaskmodel = demonstration.buildTaskModel(disco, taskName,
-               DemonstratedTasks, "input1");
+               DemonstratedTasks);
          load(disco);
       } catch (Exception e) {
          e.printStackTrace();

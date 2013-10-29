@@ -594,6 +594,8 @@ public class DecompositionClass extends TaskModel.Member {
    public void setGoal (TaskClass goal) {
       this.goal = goal;
    }
+   
+   
 
    public void setApplicable (String applicable) {
       this.applicable = applicable;

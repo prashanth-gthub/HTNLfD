@@ -1,0 +1,30 @@
+cd models
+load SetTableDemonstration.xml
+
+task Demonstration
+task Place / PhysObj.SquareTable / PhysObj.DinnerPlate / location(0,0,0)
+task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate / location(0,0,1)
+task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl / location(0,0,2)
+done Demonstration
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes1")
+print PlaceDishes1
+
+
+task Demonstration
+task Place / PhysObj.SquareTable / PhysObj.DinnerPlate / location(0,0,0)
+task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate / location(0,0,1)
+task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl / location(0,0,2)
+done Demonstration
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes2")
+print PlaceDishes2
+
+
+task Demonstration
+task Place / PhysObj.SquareTable / PhysObj.DinnerPlate / location(0,0,0)
+task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate / location(0,0,1)
+task Place / PhysObj.SquareTable / PhysObj.SoupBowl / location(0,0,2)
+done Demonstration
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes2")
+print PlaceDishes2
+
+print PlaceDishes1

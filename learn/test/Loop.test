@@ -1,5 +1,7 @@
+#
 # In this example we will see MaxOccurs
-# This is for placing 3 DinnerPlate on the Table.
+# This is for placing 3 DinnerPlate on the Table. 
+#
     # 24-Oct-2013 2:40:58 PM - TaskEngine 1.4.8 / Disco 1.6.10
     Welcome to Disco! (Type 'help' for command list)
   > cd ..\..\GitHub\HTNLfD\learn\test
@@ -10,8 +12,10 @@
   > 
   > task Demonstration
     User says "Let's achieve Demonstration."
-    Agent says "Ok."
-# In this demonstration we have three steps that are exactly the same in their type and inputs and ordering constraints
+    Agent says "Ok." 
+#
+# In this demonstration we have three steps that are exactly the same in their type and inputs and ordering constraints 
+#
   > task Place / PhysObj.SquareTable / PhysObj.DinnerPlate / location(0,0,0)
     User says "Please move DinnerPlate from [-10,-10,-10]  wrt SquareTable."
     Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
@@ -35,8 +39,10 @@
     <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
-    <output name="place1_newObject" type="PhysObj"/>
-# Instead of adding three steps with the same inputs and outputs, we have just one step with MaxOccurs attribute
+    <output name="place1_newObject" type="PhysObj"/> 
+#
+# Instead of adding three steps with the same inputs and outputs, we have just one step with MaxOccurs attribute 
+#
     <subtasks id="placeDishes1" ordered="false">
       <step maxOccurs="3" name="place1" task="std:Place"/>
       <binding slot="$this.place1_location" value="location(0,0,0)"/>

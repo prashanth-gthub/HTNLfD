@@ -6,13 +6,17 @@ import javax.xml.namespace.QName;
 
 public class TaskModel {
 
+   /** Saves different versions of TaskModel. */
+   public static List<TaskModel> taskmodels = new ArrayList<TaskModel>();
+
    public static final String xmlnsValue = "http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext";
 
-   public static final String namespace = "urn:disco.wpi.edu:htnlfd:setTable1";
+   public static final String namespace;
 
    public static final String namespacePrefix;
 
    static {
+      namespace = "urn:disco.wpi.edu:htnlfd:setTable1";
       String[] dNSNameArray = namespace.split(":");
       namespacePrefix = dNSNameArray[dNSNameArray.length - 1];
    }
@@ -21,7 +25,13 @@ public class TaskModel {
     * Instantiates a new task model.
     */
    public TaskModel () {
+      /*
+       * int count = 1; if(taskmodels.size() == 0) count = 1; else{ String nameS
+       * = taskmodels.get(taskmodels.size()-1).namespacePrefix; nameS =
+       * nameS.replaceAll("[^0-9]*", ""); count = Integer.parseInt(nameS)+1; }
+       */
 
+      taskmodels.add(this);
    }
 
    /**
@@ -130,7 +140,8 @@ public class TaskModel {
 
    /**
     * Makes the TaskModel's DOM element recursively.
-    * @param properties 
+    * 
+    * @param properties
     */
    public Node toNode (Document document, Properties properties) {
       Element taskModelElement = null;
@@ -150,7 +161,8 @@ public class TaskModel {
       // namespaces.add("urn:disco.wpi.edu:htnlfd:std");
       for (TaskClass task : tasks) {
 
-         taskModelElement.appendChild(task.toNode(document, namespaces,properties));
+         taskModelElement.appendChild(task.toNode(document, namespaces,
+               properties));
       }
 
       for (String namespaceOfTasks : namespaces) {

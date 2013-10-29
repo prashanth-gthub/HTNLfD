@@ -1,13 +1,16 @@
 package edu.wpi.htnlfd;
 
+import edu.wpi.cetask.Plan;
 import edu.wpi.cetask.Task;
 import edu.wpi.disco.*;
-import edu.wpi.disco.lang.Utterance;
+import edu.wpi.disco.lang.*;
 import edu.wpi.htnlfd.model.*;
 import edu.wpi.htnlfd.model.DecompositionClass.Step;
 import edu.wpi.htnlfd.model.TaskClass.Input;
 import edu.wpi.htnlfd.model.TaskClass.Output;
 import edu.wpi.htnlfd.model.DecompositionClass.*;
+import edu.wpi.htnlfd.table.TableKnowledgeBase;
+import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 import javax.script.*;
@@ -21,6 +24,8 @@ public class Demonstration {
    private edu.wpi.cetask.TaskModel externalTaskModel = null;
 
    private InputTransformation inputTransformation = new InputTransformation();
+
+   private KnowledgeBase KB = new TableKnowledgeBase();
 
    public Demonstration () {
 
@@ -66,10 +71,12 @@ public class Demonstration {
     * learned tasks, and adds them to the taskmodel. Algorithm: Calling all
     * "demonstratedTask" and "learnedTaskmodel" and "addAlternativeRecipe"
     * functions.
+    * 
+    * @throws IOException
     */
    public TaskModel buildTaskModel (Disco disco, String taskName,
-         List<edu.wpi.cetask.Task> steps, String input)
-         throws NoSuchMethodException, ScriptException {
+         List<edu.wpi.cetask.Task> steps) throws NoSuchMethodException,
+         ScriptException, IOException {
       taskModel = new TaskModel();
       if ( this.externalTaskModel != null ) {
          learnedTaskmodel();
@@ -78,18 +85,23 @@ public class Demonstration {
       TaskClass newTask = demonstratedTask(disco, taskName, steps);
       TaskClass task = isAlternativeRecipe(newTask);
       if ( task != null ) {
-         TaskClass.Input inputC = task.new Input(input, "boolean", null);
-         task.addInput(inputC);
-         task.getDecompositions().get(0).setApplicable("$this." + input);
-
-         addAlternativeRecipe(newTask, "!$this." + input, task);
+         // disco.getInteraction().getSystem().getAgenda();
+         // TaskEngine.addTop (Task task)
+         // Propose is a kind of Utterance
+         // Object value = null ;
+         // edu.wpi.cetask.Task askQ = new Propose.What(disco, null,
+         // steps.get(0),
+         // "Alternative Recipe", value);
+         // Plan plan = disco.addTop (askQ);
+         String applicable = KB.getApplicable(task, newTask);
+         addAlternativeRecipe(newTask, applicable, task);
 
       } else {
          this.taskModel.add(newTask);
          optionals(this.taskModel);
       }
 
-      // findLoop(newTask);
+      findLoop(newTask);
 
       inputTransformation.generalizeInput(this.taskModel);
 
@@ -193,7 +205,7 @@ public class Demonstration {
                   }
                }
             }
-            if(!contain){
+            if ( !contain ) {
                // if they are not the same, the input is optional
                in1.setOptional(true);
             }
@@ -498,7 +510,7 @@ public class Demonstration {
                                        .getModified(in)) ) {
                            inputC = taskType.new Input(in, subtaskDecomposition
                                  .getStepType(stepName).getSlotType(in), null);
-                           
+
                            break;
                         }
                      }
@@ -506,9 +518,10 @@ public class Demonstration {
                         inputC = taskType.new Input(in, subtaskDecomposition
                               .getStepType(stepName).getSlotType(in), null);
                      }
-                     
-                     String optional = task.getProperty(task.getId()+"."+in+"@optional");
-                     if(Boolean.parseBoolean(optional))
+
+                     String optional = task.getProperty(task.getId() + "." + in
+                        + "@optional");
+                     if ( Boolean.parseBoolean(optional) )
                         inputC.setOptional(true);
                      taskType.addInput(inputC);
                   }
@@ -572,7 +585,7 @@ public class Demonstration {
     * "load" function)
     */
    public void readDOM (Disco disco, String fileName) {
-      this.externalTaskModel = disco.getInteraction().load(fileName+".xml");
+      this.externalTaskModel = disco.getInteraction().load(fileName + ".xml");
    }
 
    /**
@@ -962,9 +975,84 @@ public class Demonstration {
       if ( remove != null && decRemove != null ) {
          if ( remove.getDecompositions().size() == 1 )
             taskModel.remove(remove);
-         else{
+         else {
             remove.removeDecompositionClass(decRemove);
             // removing from parents
+         }
+      }
+
+   }
+
+   /**
+    * Checks equality of two DecompositionClass without considering their
+    * bindings' value.
+    */
+   public boolean equalityDec (DecompositionClass dec1, DecompositionClass dec2) {
+
+      ArrayList<String> dec1Steps = new ArrayList<String>(dec1.getStepNames());
+      ArrayList<String> dec2Steps = new ArrayList<String>(dec2.getStepNames());
+
+      if ( dec1Steps.size() == dec2Steps.size() ) {
+         for (int i = 0; i < dec1Steps.size(); i++) {
+            Step step1 = dec1.getStep(dec1Steps.get(i));
+            int where = -1;
+            boolean contain = false;
+            for (int j = 0; j < dec2Steps.size(); j++) {
+               Step step2 = dec2.getStep(dec2Steps.get(j));
+               if ( step1.isEquivalent(step2) ) {
+                  where = j;
+                  contain = true;
+                  break;
+               }
+            }
+
+            if ( !contain )
+               return false;
+            else
+               dec2Steps.remove(where);
+         }
+      } else
+         return false;
+      return true;
+   }
+
+   /**
+    * Checks equality of two tasks and their DecompositionClasses. It will do
+    * nothing if they are equal.
+    */
+   public void equality () {
+      Iterator<TaskClass> iterator1 = taskModel.getTaskClasses().iterator();
+      Iterator<TaskClass> iterator2 = taskModel.getTaskClasses().iterator();
+      TaskClass remove = null;
+      DecompositionClass decRemove = null;
+      while (iterator1.hasNext()) {
+         TaskClass next1 = iterator1.next();
+         while (iterator2.hasNext()) {
+            TaskClass next2 = iterator2.next();
+            if ( !next1.equals(next2) ) {
+               for (DecompositionClass dec1 : next1.getDecompositions()) {
+                  for (DecompositionClass dec2 : next2.getDecompositions()) {
+                     if ( equalityDec(dec1, dec2) ) {
+                        decRemove = dec2;
+                        System.out.println("----------" + dec1.getId());
+                        System.out.println(dec2.getId());
+                        if ( decRemove != null )
+                           remove = decRemove.getGoal();
+                     }
+                  }
+               }
+            }
+         }
+      }
+
+      if ( remove != null && decRemove != null ) {
+         if ( remove.getDecompositions().size() == 1 )
+            ;
+         // taskModel.remove(remove);
+         else {
+            ;
+            // remove.removeDecompositionClass(decRemove);
+            // remove bindings or add binding to the upper class
          }
       }
 

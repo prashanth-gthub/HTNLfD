@@ -7,7 +7,7 @@
     D:\GitHub\HTNLfD\learn\models
   > load SetTableDemonstration.xml
   > 
-  ### Demonstration of PlaceDishes without Placing SaladPlate
+# Demonstration of PlaceDishes without Placing SaladPlate
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -52,7 +52,7 @@
 
     Agent says "Ok."
   > 
-  ### Demonstrating SaladPlate to be added to PlaceDishes
+# Demonstrating SaladPlate to be added to PlaceDishes
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -67,7 +67,7 @@
 WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
   > print PlaceDishes
-	### Place task is added to PLaceDishes task
+# Place task is added to PLaceDishes task
 <task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
     <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
@@ -347,7 +347,7 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
   ### Executing PlaceDishes
   > task PlaceDishes
     User says "Let's achieve PlaceDishes."
-	### Why disco asks for inputs that are not needed in subtask? (If I add bindings to task what will happen?)
+	# Why disco asks for inputs that are not needed in subtask? (If I add bindings to task what will happen?)
     Agent says "What is the PlaceDishes place1_referenceFrame?"
   > say
 [1] Let's achieve PlaceDishes by placeDishes1.
@@ -521,7 +521,7 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
    Agent says "Ok."
    Agent says "Ok."
    Agent says "Ok."
-[Achieve PlaceDishes on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:40 Y:40 Z:40 and DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 and SaladPlate Location: X:60 Y:60 Z:61 and true producing DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 and SaladPlate Location: X:60 Y:60 Z:61] -accepted -done ### Done
+[Achieve PlaceDishes on SquareTable Location: X:10 Y:10 Z:10 and DinnerPlate Location: X:40 Y:40 Z:40 and DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 and SaladPlate Location: X:60 Y:60 Z:61 and true producing DinnerPlate Location: X:40 Y:40 Z:40 and SoupBowl Location: X:140 Y:140 Z:142 and SaladPlate Location: X:60 Y:60 Z:61] -accepted -done 
    User says "Let's achieve PlaceDishes."
    [User says propose the PlaceDishes place1_referenceFrame] -succeeded
       Agent says "What is the PlaceDishes place1_referenceFrame?"

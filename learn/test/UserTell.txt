@@ -1,0 +1,50 @@
+cd models
+load SetTableDemonstration.xml
+
+task Demonstration
+task Place / PhysObj.SquareTable / PhysObj.DinnerPlate / location(0,0,0)
+task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl / location(0,0,2)
+done Demonstration
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
+print PlaceDishes
+
+task Demonstration
+task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate / location(0,0,1)
+done Demonstration
+eval Packages.edu.wpi.htnlfd.Init.addSteps($disco,"PlaceDishes","placeDishes1","place1")
+print PlaceDishes
+
+eval Packages.edu.wpi.htnlfd.Init.addInput ($disco, "PlaceDishes", "input1", "boolean", "")
+print PlaceDishes
+
+task Demonstration
+task Place / PhysObj.SquareTable / PhysObj.DinnerPlate / location(0,0,0)
+task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate / location(0,0,1)
+done Demonstration
+eval Packages.edu.wpi.htnlfd.Init.addAlternativeRecipe ($disco,"PlaceDishes","!this.input1")
+
+eval Packages.edu.wpi.htnlfd.Init.addApplicable ($disco, "PlaceDishes", "placeDishes1", "this.input1")
+print PlaceDishes
+
+task PlaceDishes
+say
+1
+
+eval Packages.edu.wpi.htnlfd.Init.addOptionalStep ($disco,"PlaceDishes","placeDishes2","place2")
+print PlaceDishes
+
+eval Packages.edu.wpi.htnlfd.Init.addMaxOccurs ($disco,"PlaceDishes","placeDishes1","place2",3)
+print PlaceDishes
+
+eval Packages.edu.wpi.htnlfd.Init.addOrderStep ($disco,"PlaceDishes","placeDishes1","place2","place3")
+print PlaceDishes
+
+eval Packages.edu.wpi.htnlfd.Init.setOrdered ($disco,"PlaceDishes","placeDishes1")
+print PlaceDishes
+
+eval Packages.edu.wpi.htnlfd.Init.addPrecondition ($disco, "PlaceDishes","this.input1")
+print PlaceDishes
+
+eval Packages.edu.wpi.htnlfd.Init.addPostcondition ($disco, "PlaceDishes","this.input1",true)
+print PlaceDishes
+

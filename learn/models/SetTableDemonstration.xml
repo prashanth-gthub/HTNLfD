@@ -7,8 +7,8 @@
 		<output name="newObject" type="PhysObj"/>		
 		
 		<binding slot="$this.external" value="false"/>
-		<!--<postcondition> success() </postcondition> -->
-		<script> 
+		<!--Packages.java.lang.System.out.println($this.object.location);-->
+		<script> 			
 			$this.newObject.name = $this.object.name;
 			$this.newObject.location = location($this.location.x + $this.referenceFrame.location.x
 			,$this.location.y + $this.referenceFrame.location.y
