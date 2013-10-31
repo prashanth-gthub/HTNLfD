@@ -127,6 +127,16 @@ public class TaskClass extends TaskModel.Member {
       }
       return false;
    }
+   
+   public Input getInput(String id){
+      for (Input input : this.getDeclaredInputs()) {
+         if ( input.getName().equals(id) ) {
+            return input;
+         }
+      }
+      return null;
+   }
+   
 
    /**
     * Adds the input. This function checks the input value of a task; if it is

@@ -1,4 +1,4 @@
-cd models
+cd ..\..\GitHub\HTNLfD\learn\models
 load SetTableDemonstration.xml
 
 task Demonstration
@@ -38,13 +38,21 @@ task  Place / PhysObj.SquareTable / PhysObj.DinnerPlate / location(0,0,0)
 task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl / location(0,0,2)
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
+next
+next
+next
+eval Packages.edu.wpi.htnlfd.Init.answerQuestion($disco,"PlaceDishes","Fancy")
 print PlaceDishes
+
+
 
 task Demonstration
 task Place / PhysObj.DinnerPlate / PhysObj.Spoon / location(-1,0,0)
 task Place / PhysObj.DinnerPlate / PhysObj.Fork / location(1,0,0)
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
+eval Packages.edu.wpi.htnlfd.Init.answerQuestion($disco,"PlaceSilverware","Fancy")
+
 print PlaceSilverware
 
 task Demonstration
@@ -52,6 +60,8 @@ task Place / PhysObj.DinnerPlate / PhysObj.WaterGlass / location(0,1,0)
 task Place / PhysObj.DinnerPlate / PhysObj.WineGlass / location(0,-1,0)
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")
+eval Packages.edu.wpi.htnlfd.Init.answerQuestion($disco,"PlaceGlasses","Fancy")
 print PlaceGlasses
 print SetTable
 
+quit

@@ -4,6 +4,7 @@ import edu.wpi.cetask.Plan;
 import edu.wpi.cetask.Task;
 import edu.wpi.disco.*;
 import edu.wpi.disco.lang.*;
+import edu.wpi.htnlfd.Ask.LearnAgent;
 import edu.wpi.htnlfd.model.*;
 import edu.wpi.htnlfd.model.DecompositionClass.Step;
 import edu.wpi.htnlfd.model.TaskClass.Input;
@@ -26,6 +27,16 @@ public class Demonstration {
    private InputTransformation inputTransformation = new InputTransformation();
 
    private KnowledgeBase KB = new TableKnowledgeBase();
+   
+   private LearnAgent LAgent = new LearnAgent("Anahita");
+   
+   private String defaultInputName = "input1";
+   
+   public static Interaction interaction = null;
+   
+   static{
+      
+   }
 
    public Demonstration () {
 
@@ -85,16 +96,20 @@ public class Demonstration {
       TaskClass newTask = demonstratedTask(disco, taskName, steps);
       TaskClass task = isAlternativeRecipe(newTask);
       if ( task != null ) {
-         // disco.getInteraction().getSystem().getAgenda();
-         // TaskEngine.addTop (Task task)
-         // Propose is a kind of Utterance
-         // Object value = null ;
-         // edu.wpi.cetask.Task askQ = new Propose.What(disco, null,
-         // steps.get(0),
-         // "Alternative Recipe", value);
-         // Plan plan = disco.addTop (askQ);
-         String applicable = KB.getApplicable(task, newTask);
+
+         //String applicable = KB.getApplicable(task, newTask);
+
+         String input = defaultInputName;
+         String applicable = "!this." + input;
+         if ( task.getDecompositions().get(0).getApplicable() == null ) {
+            task.getDecompositions().get(0).setApplicable("this." + input);
+         }
+      
+         TaskClass.Input inputC = task.new Input(input, "boolean", null);
+         task.addInput(inputC);
+         
          addAlternativeRecipe(newTask, applicable, task);
+         askQuestion();
 
       } else {
          this.taskModel.add(newTask);
@@ -106,7 +121,9 @@ public class Demonstration {
       inputTransformation.generalizeInput(this.taskModel);
 
       this.taskModel.isEquivalent();
-
+      
+      
+      
       return this.taskModel;
    }
 
@@ -676,6 +693,18 @@ public class Demonstration {
 
       return taskModel;
    }
+   
+   public TaskModel answerQuestion(String taskName, String input){
+      TaskClass task = taskModel.getTaskClass(taskName);
+      Input in = task.getInput(defaultInputName);
+      in.setName(input);
+      for(DecompositionClass dec:task.getDecompositions()){
+         dec.setApplicable(dec.getApplicable().replace(defaultInputName, input));
+      }
+      defaultInputName = input;
+      
+      return taskModel;
+   }
 
    /**
     * Adds an ordering constraint to a step.
@@ -1056,6 +1085,17 @@ public class Demonstration {
          }
       }
 
+   }
+   
+   void askQuestion(){
+      
+      interaction = new Interaction(
+            new LearnAgent("agent"), 
+            new User("user"),
+            null);
+      interaction.start(true);
+      LAgent.respondIf(interaction, false);
+      interaction.cleanup();
    }
 
 }

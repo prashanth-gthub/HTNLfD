@@ -168,6 +168,13 @@ public class Init {
       load(disco);
 
    }
+   
+   
+   public static void answerQuestion (Disco disco, String taskName, String input) throws Exception{
+
+      learnedTaskmodel = demonstration.answerQuestion(taskName,input);
+      load(disco);
+   }
 
    /**
     * Prints the learned taskmodel.
