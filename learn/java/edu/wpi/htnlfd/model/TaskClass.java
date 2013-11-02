@@ -678,4 +678,11 @@ public class TaskClass extends TaskModel.Member {
       return null;
    }
 
+   public void changeNameSpace (TaskClass newTask) {
+  
+      this.setQname(newTask.getQname());
+      
+   }
+   
+
 }

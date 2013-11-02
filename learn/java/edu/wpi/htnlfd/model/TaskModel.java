@@ -11,26 +11,38 @@ public class TaskModel {
 
    public static final String xmlnsValue = "http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext";
 
-   public static final String namespace;
+   public String namespace;
 
-   public static final String namespacePrefix;
+   public static String namespacePrefix;
 
    static {
-      namespace = "urn:disco.wpi.edu:htnlfd:setTable1";
-      String[] dNSNameArray = namespace.split(":");
-      namespacePrefix = dNSNameArray[dNSNameArray.length - 1];
+      
    }
 
    /**
     * Instantiates a new task model.
     */
    public TaskModel () {
-      /*
-       * int count = 1; if(taskmodels.size() == 0) count = 1; else{ String nameS
-       * = taskmodels.get(taskmodels.size()-1).namespacePrefix; nameS =
-       * nameS.replaceAll("[^0-9]*", ""); count = Integer.parseInt(nameS)+1; }
-       */
 
+      namespace = "urn:disco.wpi.edu:htnlfd:setTable";
+      
+      int count = 1;
+      if ( taskmodels.size() == 0 ){         
+         count = 1;
+      }
+      else {
+         String nameS = taskmodels.get(taskmodels.size() - 1).namespacePrefix;
+         nameS = nameS.replaceAll("[^0-9]*", "");
+         count = Integer.parseInt(nameS) + 1;
+         
+      }
+
+      //count = 1;
+      
+      namespace = namespace + count;
+      String[] dNSNameArray = namespace.split(":");
+      namespacePrefix = dNSNameArray[dNSNameArray.length - 1];
+      
       taskmodels.add(this);
    }
 
@@ -151,7 +163,7 @@ public class TaskModel {
       document.appendChild(taskModelElement);
 
       Attr about = document.createAttribute("about");
-      about.setValue(TaskModel.namespace);
+      about.setValue(this.namespace);
       taskModelElement.setAttributeNode(about);
       Attr xmlns = document.createAttribute("xmlns");
       xmlns.setValue(TaskModel.xmlnsValue);
