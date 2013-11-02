@@ -91,7 +91,7 @@ public class Demonstration {
       }
 
       TaskClass newTask = demonstratedTask(disco, taskName, steps);
-      TaskClass task = isAlternativeRecipe(newTask);
+      TaskClass task = null;//isAlternativeRecipe(newTask);
       if ( task != null ) {
 
          //String applicable = KB.getApplicable(task, newTask);
@@ -112,15 +112,20 @@ public class Demonstration {
 
       } else {
          this.taskModel.add(newTask);
-         optionals(this.taskModel);
+         //optionals(this.taskModel);
       }
 
-      findLoop(newTask);
+      //findLoop(newTask);
 
       //inputTransformation.generalizeInput(this.taskModel);
 
-      this.taskModel.isEquivalent();
+      //this.taskModel.isEquivalent();
       
+      if(taskModel.getTaskClasses().size()>=2){
+         Graph graph= new Graph();
+         graph.addGraph(taskModel.getTaskClasses().get(0), taskModel.getTaskClasses().get(0).getDecompositions().get(0),
+               taskModel.getTaskClasses().get(1), taskModel.getTaskClasses().get(1).getDecompositions().get(0), taskModel);
+      }
       return this.taskModel;
    }
 
@@ -873,7 +878,7 @@ public class Demonstration {
                   step1.removeRequired(dec.getStepNames().get(j));
 
                   boolean contain = false;
-                  if ( step1.isEquivalent(step2) ) {
+                  if ( step1.isEquivalent(step2, taskModel) ) {
                      if ( dec.checkInputs(dec.getStepNames().get(i),
                            step1.getType(), dec.getStepNames().get(j),
                            step2.getType(), dec, dec, taskModel) ) {
@@ -991,7 +996,7 @@ public class Demonstration {
             boolean contain = false;
             for (int j = 0; j < temp2.size(); j++) {
                Step step2 = supertask.getStep(temp2.get(j));
-               if ( step1.isEquivalent(step2) ) {
+               if ( step1.isEquivalent(step2, taskModel ) ) {
 
                   if ( subtask.checkInputs(temp1.get(i), step1.getType(),
                         temp2.get(j), step2.getType(), subtask, supertask,
@@ -1072,7 +1077,7 @@ public class Demonstration {
             boolean contain = false;
             for (int j = 0; j < dec2Steps.size(); j++) {
                Step step2 = dec2.getStep(dec2Steps.get(j));
-               if ( step1.isEquivalent(step2) ) {
+               if ( step1.isEquivalent(step2, taskModel) ) {
                   where = j;
                   contain = true;
                   break;

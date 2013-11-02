@@ -345,8 +345,9 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Checks for equivalent steps.
+       * @param taskModel TODO
        */
-      public boolean isEquivalent (Step step) {
+      public boolean isEquivalent (Step step, TaskModel taskModel) {
          boolean sameOrder = false;
          if ( this.getType().getId().equals(step.getType().getId())
             && this.getType().getQname().getNamespaceURI()
@@ -359,19 +360,65 @@ public class DecompositionClass extends TaskModel.Member {
             if ( this.required != null && step.required != null
                && this.required.size() == step.required.size() ) {
                // Assuming that order of required list doesn't matter
-               Collections.sort(this.required);
-               Collections.sort(step.required);
-               if ( (this.required == null && step.required == null)
-                  || (this.required != null && step.required != null && this.required
-                        .equals(step.required)) ) {
+               //Collections.sort(this.required);
+               //Collections.sort(step.required);
+               if (this.required == null && step.required == null){
                   sameOrder = true;
+               }
+               else  if ((this.required != null && step.required != null)) {
+                  // && this.required.equals(step.required))
+                  if(this.isEquivalentSteps(taskModel, this.required, getDecomposition(), step.required, step.getDecompositionClass())){                     
+                     sameOrder = true;
+                  }
                }
             }
          }
 
          return sameOrder;
       }
+      
+      public boolean isEquivalentSteps(TaskModel taskModel, List<String> steps1, DecompositionClass dec1, 
+            List<String> steps2, DecompositionClass dec2){
+         ArrayList<String> temp1 = new ArrayList<String>(steps1);
+         ArrayList<String> temp2 = new ArrayList<String>(steps2);
 
+         if ( temp1.size() == temp2.size() ) {
+            for (int i = 0; i < temp1.size(); i++) {
+               Step step1 = dec1.getStep(temp1.get(i));
+               int where = -1;
+               boolean contain = false;
+               for (int j = 0; j < temp2.size(); j++) {
+                  Step step2 = dec2.getStep(temp2.get(j));
+                  if ( step1.isEquivalent(step2, taskModel) ) {
+
+                     if ( checkInputs(temp1.get(i), step1.getType(), temp2.get(j),
+                           step2.getType(), dec1, dec2, taskModel) ) {
+
+                        where = j;
+                        contain = true;
+                        break;
+                     } else
+                        return false;
+                  }
+               }
+               if ( !contain )
+                  return false;
+               else
+                  temp2.remove(where);
+            }
+
+            // Check Bindings if steps are the same
+
+            return true;
+         }
+         return false;
+      }
+      
+      public DecompositionClass getDecompositionClass(){
+         return getDecomposition();
+      }
+
+      
       /**
        * Finds goal, if the task is primitive it should be created otherwise it
        * will be searched in the existed tasks.
@@ -484,7 +531,7 @@ public class DecompositionClass extends TaskModel.Member {
       if ( dec != null && stp != null ) {
          for (Entry<String, Binding> bind1 : dec.getBindings().entrySet()) {
             if ( bind1.getValue().getStep().equals(stp)
-               && bind1.getValue().getSlot().contains(inputName) ) {
+               && inputName.contains(bind1.getValue().getSlot()) ) {
                String tem = getBindingValue(bind1, dec);
                if ( tem != null )
                   return tem;
@@ -580,6 +627,10 @@ public class DecompositionClass extends TaskModel.Member {
       }
    }
 
+   DecompositionClass getDecomposition(){
+      return this;
+   }
+   
    public TaskClass getStepType (String name) {
       return steps.get(name).type;
    }
@@ -847,7 +898,7 @@ public class DecompositionClass extends TaskModel.Member {
             boolean contain = false;
             for (int j = 0; j < temp2.size(); j++) {
                Step step2 = dec.getStep(temp2.get(j));
-               if ( step1.isEquivalent(step2) ) {
+               if ( step1.isEquivalent(step2, taskModel) ) {
 
                   if ( checkInputs(temp1.get(i), step1.getType(), temp2.get(j),
                         step2.getType(), this, dec, taskModel) ) {
