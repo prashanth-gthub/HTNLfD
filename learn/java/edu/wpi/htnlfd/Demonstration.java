@@ -1,6 +1,5 @@
 package edu.wpi.htnlfd;
 
-import edu.wpi.cetask.Plan;
 import edu.wpi.cetask.Task;
 import edu.wpi.disco.*;
 import edu.wpi.disco.lang.*;
@@ -91,7 +90,7 @@ public class Demonstration {
       }
 
       TaskClass newTask = demonstratedTask(disco, taskName, steps);
-      TaskClass task = null;//isAlternativeRecipe(newTask);
+      TaskClass task = isAlternativeRecipe(newTask);
       if ( task != null ) {
 
          //String applicable = KB.getApplicable(task, newTask);
@@ -112,20 +111,20 @@ public class Demonstration {
 
       } else {
          this.taskModel.add(newTask);
-         //optionals(this.taskModel);
+         optionals(this.taskModel);
       }
 
-      //findLoop(newTask);
+      findLoop(newTask);
 
       //inputTransformation.generalizeInput(this.taskModel);
 
-      //this.taskModel.isEquivalent();
+      this.taskModel.isEquivalent();
       
-      if(taskModel.getTaskClasses().size()>=2){
+      /*if(taskModel.getTaskClasses().size()>=5){
          Graph graph= new Graph();
-         graph.addGraph(taskModel.getTaskClasses().get(0), taskModel.getTaskClasses().get(0).getDecompositions().get(0),
-               taskModel.getTaskClasses().get(1), taskModel.getTaskClasses().get(1).getDecompositions().get(0), taskModel);
-      }
+         graph.addGraph(taskModel.getTaskClasses().get(3), taskModel.getTaskClasses().get(3).getDecompositions().get(0),
+               taskModel.getTaskClasses().get(4), taskModel.getTaskClasses().get(4).getDecompositions().get(0), taskModel);
+      }*/
       return this.taskModel;
    }
 
@@ -536,7 +535,7 @@ public class Demonstration {
                                  subtaskDecomposition.getStepType(stepName)
                                        .getModified(in)) ) {
                            inputC = taskType.new Input(in, subtaskDecomposition
-                                 .getStepType(stepName).getSlotType(in), null);
+                                 .getStepType(stepName).getSlotType(in), out);
 
                            break;
                         }

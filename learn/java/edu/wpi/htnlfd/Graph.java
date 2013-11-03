@@ -30,8 +30,12 @@ public class Graph {
 
       public boolean isEquivalent (Node comp, TaskModel taskModel) {
          if(this.step.isEquivalent(comp.step, taskModel)){  
-            if(this.decompositions.get(0).checkInputs (this.stepNames.get(0), this.tasks.get(0),
-                  comp.stepNames.get(0), comp.tasks.get(0), this.decompositions.get(0), comp.decompositions.get(0),
+            Map.Entry<String,Step> entry1 =
+                  new AbstractMap.SimpleEntry<String, Step>(this.stepNames.get(0), this.step);
+            Map.Entry<String,Step> entry2 =
+                  new AbstractMap.SimpleEntry<String, Step>(comp.stepNames.get(0), comp.step);
+            if(this.decompositions.get(0).checkStepInputs (entry1, this.tasks.get(0),
+                  entry2, comp.tasks.get(0), this.decompositions.get(0), comp.decompositions.get(0),
                   taskModel))
                      return true;
          }         
@@ -45,17 +49,28 @@ public class Graph {
       List<Node> nodes1 = new ArrayList<Node>();
       List<Node> nodes2 =  new ArrayList<Node>();
       
-      for(String stepName:dec1.getStepNames()){
-         Node newNode1 = new Node(dec1.getStep(stepName), task1, dec1, stepName);
-         nodes1.add(newNode1);
-      }
+      getNodes(task1, dec1, taskModel, nodes1);
       
-      for(String stepName:dec2.getStepNames()){
-         Node newNode2 = new Node(dec2.getStep(stepName), task2, dec2, stepName);
-         nodes2.add(newNode2);
-      }
+      getNodes(task2, dec2, taskModel, nodes2);
       
       findLCS(nodes1,nodes2,taskModel);
+      
+   }
+   
+   public void getNodes(TaskClass task, DecompositionClass dec, TaskModel taskModel, List<Node> nodes){
+      
+      
+      for(String stepName:dec.getStepNames()){
+         if(taskModel.getTaskClass(dec.getStep(stepName).getType().getId()) == null){
+            Node newNode1 = new Node(dec.getStep(stepName), task, dec, stepName);
+            nodes.add(newNode1);
+         }
+         else{
+            // Which DecompositionClass
+            getNodes(dec.getStep(stepName).getType(), dec.getStep(stepName).getType().getDecompositions().get(0)
+                  , taskModel, nodes);
+         }
+      }
       
    }
    
@@ -70,8 +85,9 @@ public class Graph {
       // compute length of LCS and all subproblems via dynamic programming
       for (int i = M-1; i >= 0; i--) {
           for (int j = N-1; j >= 0; j--) {
-              if (x.get(i).isEquivalent(y.get(j),taskModel))
+              if (x.get(i).isEquivalent(y.get(j),taskModel)){
                   opt[i][j] = opt[i+1][j+1] + 1;
+              }
               else 
                   opt[i][j] = Math.max(opt[i+1][j], opt[i][j+1]);
           }
@@ -81,8 +97,8 @@ public class Graph {
       int i = 0, j = 0;
       while(i < M && j < N) {
           if (x.get(i).isEquivalent(y.get(j),taskModel)) {      
-             System.out.println(x.get(i).stepNames.get(0));
-             System.out.println(y.get(j).stepNames.get(0));
+             System.out.println(x.get(i).stepNames.get(0)+ " "+ x.get(i).tasks.get(0).getId());
+             System.out.println(y.get(j).stepNames.get(0)+ " "+ y.get(j).tasks.get(0).getId());
               i++;
               j++;
           }

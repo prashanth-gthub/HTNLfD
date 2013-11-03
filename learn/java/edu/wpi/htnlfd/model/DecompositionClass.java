@@ -390,9 +390,13 @@ public class DecompositionClass extends TaskModel.Member {
                for (int j = 0; j < temp2.size(); j++) {
                   Step step2 = dec2.getStep(temp2.get(j));
                   if ( step1.isEquivalent(step2, taskModel) ) {
-
-                     if ( checkInputs(temp1.get(i), step1.getType(), temp2.get(j),
-                           step2.getType(), dec1, dec2, taskModel) ) {
+                     Map.Entry<String,Step> entry1 =
+                           new AbstractMap.SimpleEntry<String, Step>(temp1.get(i), step1);
+                     Map.Entry<String,Step> entry2 =
+                           new AbstractMap.SimpleEntry<String, Step>(temp2.get(j), step2);
+                     
+                     if ( checkStepInputs(entry1, dec1.getGoal(), entry2,
+                           dec2.getGoal(), dec1, dec2, taskModel) ) {
 
                         where = j;
                         contain = true;
@@ -452,7 +456,7 @@ public class DecompositionClass extends TaskModel.Member {
                   if ( step.getType().getModified(in) != null
                      && out.getName().equals(step.getType().getModified(in)) ) {
                      inputC = goal.new Input(in,
-                           step.getType().getSlotType(in), null);
+                           step.getType().getSlotType(in), out);
                      break;
                   }
                }
@@ -488,7 +492,7 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
-    * Checks whether two inputs have the same value in their parents.(This
+    * Checks whether each two inputs have the same value in their parents.(This
     * function is called by isEquivalent function)
     */
    public boolean checkInputs (String stp1, TaskClass type1, String stp2,
@@ -520,6 +524,50 @@ public class DecompositionClass extends TaskModel.Member {
       return true;
    }
 
+   
+   public boolean checkStepInputs (Entry<String,Step> stp1, TaskClass type1, Entry<String,Step> stp2,
+         TaskClass type2, DecompositionClass dec1, DecompositionClass dec2,
+         TaskModel taskModel) {
+      for (Input in1 : stp1.getValue().getType().getDeclaredInputs()) {
+         boolean contain = false;
+         for (Input in2 : stp2.getValue().getType().getDeclaredInputs()) {
+            
+            if ( !((in1.getModified() != null) ^ in2.getModified() != null)
+                  && (in1.getType().equals(in2.getType()))  ) { //in1.getName().equals(in2.getName())
+               String in1Name = null;
+               String in2Name = null;
+               for(Entry<String, Binding> binding:dec1.getBindings().entrySet()){
+                  if(binding.getValue().getStep().equals(stp1.getKey()) && binding.getValue().getSlot().equals(in1.getName())){
+                     in1Name = binding.getValue().getValue().substring(6);
+                     break;
+                  }
+               }
+               for(Entry<String, Binding> binding:dec2.getBindings().entrySet()){
+                  if(binding.getValue().getStep().equals(stp2.getKey()) && binding.getValue().getSlot().equals(in2.getName())){
+                     in2Name = binding.getValue().getValue().substring(6);
+                     break;
+                  }
+               }
+               
+               String value1 = findValueInParents(taskModel, stp1.getKey(), type1, dec1,
+                     in1Name);
+               String value2 = findValueInParents(taskModel, stp2.getKey(), type2, dec2,
+                     in2Name);
+               if ( value1 != null && value2 != null && value1.equals(value2) ) {
+                  // ???? removing the input
+                  contain = true;
+                  break;
+               }
+
+            }
+         }
+         if(!contain)
+            return false;
+      }
+
+      return true;
+   }
+   
    /**
     * Finds value of an input in it's parents.(from each subtasks' bindings)
     * Assumption: The value of our input is in it's oldest parent.
