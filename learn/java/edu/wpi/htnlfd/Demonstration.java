@@ -30,6 +30,8 @@ public class Demonstration {
    
    private String defaultInputName = "input1";
    
+   Graph graph= new Graph();
+   
    static{
       
    }
@@ -119,12 +121,11 @@ public class Demonstration {
       //inputTransformation.generalizeInput(this.taskModel);
 
       //this.taskModel.isEquivalent();
+
+         
+         graph.addGraph(newTask, newTask.getDecompositions().get(0),
+                taskModel);
       
-      if(taskModel.getTaskClasses().size()>=5){
-         Graph graph= new Graph();
-         graph.addGraph(taskModel.getTaskClasses().get(3), taskModel.getTaskClasses().get(3).getDecompositions().get(0),
-               taskModel.getTaskClasses().get(4), taskModel.getTaskClasses().get(4).getDecompositions().get(0), taskModel);
-      }
       return this.taskModel;
    }
 
