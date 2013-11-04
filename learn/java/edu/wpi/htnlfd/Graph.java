@@ -1,6 +1,7 @@
 package edu.wpi.htnlfd;
 
 import java.util.*;
+import edu.wpi.htnlfd.Graph.Node;
 import edu.wpi.htnlfd.model.DecompositionClass.Step;
 import edu.wpi.htnlfd.model.*;
 
@@ -71,8 +72,27 @@ public class Graph {
       if(graph == null){
          graph = nodes;         
       }
-      else
-         merge(graph, nodes, taskModel);
+      else{
+         
+         Iterator<Node> it = roots.iterator();
+         while(it.hasNext()){
+            Node root = it.next();
+            List<Node> nodesR = new ArrayList<Node>();
+            Node temp = root;
+            nodesR.add(temp);
+            while(temp.childs.size()!=0){
+               nodesR.add(temp.childs.get(0));
+               temp = temp.childs.get(0);
+            }
+            if(!nodes.equals(nodesR)){
+               boolean rem = merge(nodesR, nodes, taskModel);
+               if(!rem){
+                  it.remove();
+               }
+            }
+               
+         }
+      }
       
       for(Node node:nodes){
          // add to graph
@@ -151,14 +171,24 @@ public class Graph {
 
    }
 
-   void merge(List<Node> x, List<Node> y, TaskModel taskModel){
+   boolean merge(List<Node> x, List<Node> y, TaskModel taskModel){
       
       int M = x.size();
       int N = y.size();
       int[][] opt = new int[M + 1][N + 1];
       
       int LCS = findLCS (x, y, taskModel, opt);
-      
+      if(LCS == x.size()){      
+         if(!matches(x,y, LCS, taskModel))
+            return false;
+
+      }
+      else if(LCS == y.size()){
+         if(!matches(y,x, LCS, taskModel)){
+            return false;
+         }
+      }
+
       System.out.println("LCS = "+LCS);
       int i = 0, j = 0;
       while (i < M && j < N) {
@@ -191,6 +221,7 @@ public class Graph {
             }
          }
       }
+      return true;
       
    }
    public int findLCS (List<Node> x, List<Node> y, TaskModel taskModel, int[][] opt) {
@@ -259,6 +290,38 @@ public class Graph {
       if(!contain){
          graph.add(node);
       }
+   }
+   
+   void removeRoot(Node node){
+      Iterator<Node> it = roots.iterator();
+      while(it.hasNext()){
+         Node root = it.next();
+         if(root.equals(node)){
+            it.remove();
+            break;
+         }
+      }
+   }
+   
+   boolean matches(List<Node> x, List<Node> y, int LCS, TaskModel taskModel){
+      boolean contain = true;
+      for(int i=0;i<y.size()-LCS+1;i++){
+         List<Node> sublist = y.subList(i, i+LCS);
+         contain = true;
+         for(int j=0;j<LCS;j++){               
+            if(!x.get(j).isEquivalent(sublist.get(j), taskModel)){
+               contain = false;
+               break;
+            }
+         }
+         if(contain)
+            break;
+         
+      }
+      if(contain)
+         return false;
+      
+      return true;
    }
 
 }
