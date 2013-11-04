@@ -7,6 +7,7 @@ task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate / location(0,0,1)
 task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl / location(0,0,2)
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
+
 print PlaceDishes urn:disco.wpi.edu:htnlfd:setTable1
 
 task Demonstration
@@ -28,7 +29,16 @@ task PlaceDishes urn:disco.wpi.edu:htnlfd:setTable3
 task PlaceSilverware urn:disco.wpi.edu:htnlfd:setTable3
 task PlaceGlasses urn:disco.wpi.edu:htnlfd:setTable3
 done Demonstration
-eval Packages.edu.wpi.htnlfd.Init.learn($disco,"SetTable")
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"SetTable1")
+
+task Demonstration
+task PlaceDishes urn:disco.wpi.edu:htnlfd:setTable3
+
+task PlaceGlasses urn:disco.wpi.edu:htnlfd:setTable3
+done Demonstration
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"SetTable2")
+
+
 print SetTable urn:disco.wpi.edu:htnlfd:setTable4
 
 eval Reset()
