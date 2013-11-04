@@ -48,6 +48,4 @@ public class Location extends ApplicationSpecificClass{
    }
    
    
-   
-   
 }

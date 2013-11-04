@@ -92,7 +92,7 @@ public class Demonstration {
       }
 
       TaskClass newTask = demonstratedTask(disco, taskName, steps);
-      TaskClass task = null;//isAlternativeRecipe(newTask);
+      TaskClass task = isAlternativeRecipe(newTask);
       if ( task != null ) {
 
          //String applicable = KB.getApplicable(task, newTask);
@@ -113,18 +113,18 @@ public class Demonstration {
 
       } else {
          this.taskModel.add(newTask);
-         //optionals(this.taskModel);
+         optionals(this.taskModel);
       }
 
-      //findLoop(newTask);
+      findLoop(newTask);
 
       //inputTransformation.generalizeInput(this.taskModel);
 
-      //this.taskModel.isEquivalent();
+      this.taskModel.isEquivalent();
 
          
-         graph.addGraph(newTask, newTask.getDecompositions().get(0),
-                taskModel);
+         //graph.addGraph(newTask, newTask.getDecompositions().get(0),
+           //     taskModel);
       
       return this.taskModel;
    }
@@ -328,7 +328,7 @@ public class Demonstration {
                      .removeBinding("$this." + in.getName());
             }
          }
-
+         
          for (Entry<String, Binding> binding : bindChange.entrySet()) {
 
             if ( newTask.getDecompositions().get(0)
@@ -1138,7 +1138,7 @@ public class Demonstration {
    
    void askQuestion(Disco disco){
       
-      LAgent.respondIf(disco.getInteraction(), true);
+      LAgent.respondIf(disco.getInteraction(), false);
 
    }
    

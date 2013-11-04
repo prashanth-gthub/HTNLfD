@@ -1,20 +1,31 @@
 <taskModel about="urn:disco.wpi.edu:htnlfd:std" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
 
-	<task id="Place"> 
-		<input name="referenceFrame" type="PhysObj"/>
-		<input name="object" type="PhysObj" modified="newObject"/>	
+	<task id="Place">
+
+		<input name="object" type="PhysObj" modified="newObject"/>
+
 		<input name="location" type="Packages.edu.wpi.htnlfd.table.Location"/>
-		<output name="newObject" type="PhysObj"/>		
-		
+
+		<input name="referenceFrame" type="PhysObj"/>
+
+		<output name="newObject" type="PhysObj"/>
+
 		<binding slot="$this.external" value="false"/>
-		<!--Packages.java.lang.System.out.println($this.object.location);-->
-		<script> 			
-			$this.newObject.name = $this.object.name;
-			$this.newObject.location = location($this.location.x + $this.referenceFrame.location.x
-			,$this.location.y + $this.referenceFrame.location.y
-			,$this.location.z + $this.referenceFrame.location.z);
+
+		<postcondition>
+
+			($this.newObject == undefined || $this.object == undefined || $this.referenceFrame == undefined) ? null :
+
+							 $this.newObject.location.equals(location_plus($this.location, $this.referenceFrame.location))
+
+		</postcondition>
+
+		<script>
+
+			$this.newObject.location = location_plus($this.location, $this.referenceFrame.location);
+
 		</script>
-	
+
 	</task>
 
 	<task id="Demonstration"/>
@@ -52,6 +63,12 @@
 			PhysObj.SquareTable = new PhysObj("SquareTable", location(10,10,10)); 
 		}
 		Reset()
+		
+		function location_plus (loc1, loc2) {
+
+			return location(loc1.x+loc2.x, loc1.y+loc2.y, loc1.z+loc2.z);
+
+		}
 
 	</script>
 	

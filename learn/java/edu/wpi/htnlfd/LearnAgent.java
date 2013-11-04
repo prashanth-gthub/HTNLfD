@@ -10,7 +10,7 @@ public class LearnAgent extends Agent {
    
    public LearnAgent (String name) { super(name); }
    
-   private boolean once = false;
+   private boolean once = true;
    
    public static void main (String[] args) {
       new Interaction(
@@ -25,7 +25,7 @@ public class LearnAgent extends Agent {
       if ( !once ) { 
          // logic goes in if above to decide when to ask question based on state of learned
          // model and Disco
-         once = true;
+         once = false;
          
          return Agenda.newItem(new Say(interaction.getDisco(), false, "What is the name of altrenative recipe?"), null);
       }
