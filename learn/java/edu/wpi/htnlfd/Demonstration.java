@@ -91,13 +91,15 @@ public class Demonstration {
          learnedTaskmodel();
       }
 
-      TaskClass newTask = demonstratedTask(disco, taskName, steps);
+      TaskClass newTask = demonstratedTask(disco, taskName, steps);      
+      findLoop(newTask);
+      
       TaskClass task = isAlternativeRecipe(newTask);
       if ( task != null ) {
 
          //String applicable = KB.getApplicable(task, newTask);
 
-         String input = defaultInputName;
+         /*String input = defaultInputName;
          String applicable = "!this." + input;
          if ( task.getDecompositions().get(0).getApplicable() == null ) {
             task.getDecompositions().get(0).setApplicable("this." + input);
@@ -109,23 +111,21 @@ public class Demonstration {
          addAlternativeRecipe(newTask, applicable, task);
          askQuestion(disco);
          
-         task.changeNameSpace(newTask);
+         task.changeNameSpace(newTask);*/
+         //task.getDecompositions().get(0).getSteps().get("place2").setMinOccurs(0);
+         graph.addGraph(task,taskModel, newTask);
 
       } else {
          this.taskModel.add(newTask);
-         optionals(this.taskModel);
+         //optionals(this.taskModel);
       }
 
-      findLoop(newTask);
+      
 
       //inputTransformation.generalizeInput(this.taskModel);
 
       this.taskModel.isEquivalent();
 
-         
-         //graph.addGraph(newTask, newTask.getDecompositions().get(0),
-           //     taskModel);
-      
       return this.taskModel;
    }
 

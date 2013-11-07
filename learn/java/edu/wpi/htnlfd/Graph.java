@@ -1,15 +1,11 @@
 package edu.wpi.htnlfd;
-
 import java.util.*;
-import edu.wpi.htnlfd.Graph.Node;
 import edu.wpi.htnlfd.model.DecompositionClass.Step;
 import edu.wpi.htnlfd.model.*;
 
 public class Graph {
 
-   List<Node> graph;
-
-   List<Node> roots = new ArrayList<Node>();
+   Node startNode = new Node();
 
    public class Node {
 
@@ -21,7 +17,7 @@ public class Graph {
 
       List<DecompositionClass> decompositions = new ArrayList<DecompositionClass>();;
 
-      List<String> stepNames = new ArrayList<String>();;
+      List<String> stepNames = new ArrayList<String>();
 
       List<Node> childs = new ArrayList<Node>();
 
@@ -36,8 +32,15 @@ public class Graph {
          this.stepNames.add(stepName);
       }
 
+      public Node () {
+         // TODO Auto-generated constructor stub
+      }
+
       public boolean isEquivalent (Node comp, TaskModel taskModel) {
-         if ( this.step.isEquivalent(comp.step, taskModel) ) {
+         if(this.equals(comp)){
+            return true;
+         }
+         if (this.step!=null && comp.step!=null && this.step.isEquivalent(comp.step, taskModel) ) {
             Map.Entry<String, Step> entry1 = new AbstractMap.SimpleEntry<String, Step>(
                   this.stepNames.get(0), this.step);
             Map.Entry<String, Step> entry2 = new AbstractMap.SimpleEntry<String, Step>(
@@ -53,178 +56,220 @@ public class Graph {
 
    }
 
-   public void addGraph(TaskClass task, DecompositionClass dec,
-          TaskModel taskModel){
-      List<Node> nodes = new ArrayList<Node>();
+   public void addGraph (TaskClass task, TaskModel taskModel, TaskClass newTask) {
+
+      List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
+      List<Node> newNodes = new ArrayList<Node>();
+      List<Node> nodesP = new ArrayList<Node>();
+
+
+      nodesP.add(startNode);
+      getNodes(task, taskModel, nodesP);
+
+      findPathes(nodesLists);
       
-      getNodes(task, dec, taskModel, nodes);
+      newNodes.add(startNode);   // it should be here
+      getNodes(newTask, taskModel, newNodes);
       
-      for(int i=0;i<nodes.size();i++){
-         
-         if(i-1>=0)
-            nodes.get(i).parents.add(nodes.get(i-1));
-         else
-            roots.add(nodes.get(i));
-         if(i+1<nodes.size())
-            nodes.get(i).childs.add(nodes.get(i+1));
-      }
-      
-      if(graph == null){
-         graph = nodes;         
-      }
-      else{
-         
-         Iterator<Node> it = roots.iterator();
-         while(it.hasNext()){
-            Node root = it.next();
-            List<Node> nodesR = new ArrayList<Node>();
-            Node temp = root;
-            nodesR.add(temp);
-            while(temp.childs.size()!=0){
-               nodesR.add(temp.childs.get(0));
-               temp = temp.childs.get(0);
-            }
-            if(!nodes.equals(nodesR)){
-               boolean rem = merge(nodesR, nodes, taskModel);
-               if(!rem){
-                  it.remove();
-               }
-            }
-               
+      for (ArrayList<Node> nodL : nodesLists) {
+         for (Node node : nodL) {
+            printNode(node);
          }
       }
-      
-      for(Node node:nodes){
-         // add to graph
-         getNode(node);
+      int max = 0;
+      int[][] maxSolution = null;
+      List<Node> chosenNodes = null;
+
+      for (int i = 0; i < nodesLists.size(); i++) {
+         List<Node> nodes = nodesLists.get(i);
+         int M = nodes.size()-1;
+         int N = newNodes.size()-1;
+         int[][] opt = new int[M + 1][N + 1];
+
+         int LCS = findLCS(nodes.subList(1, nodes.size()), newNodes.subList(1, newNodes.size()), taskModel,
+               opt);
+         if ( max < LCS ) {
+            chosenNodes = nodes;
+            maxSolution = opt;
+            max = LCS;
+         }
+         System.out.println("LCS = " + LCS);
       }
-      
-      bfs();
-   }
-   public void test (TaskClass task1, DecompositionClass dec1,
-         TaskClass task2, DecompositionClass dec2, TaskModel taskModel) {
 
-      List<Node> nodes1 = new ArrayList<Node>();
-      List<Node> nodes2 = new ArrayList<Node>();
-      getNodes(task1, dec1, taskModel, nodes1);
+      merge(chosenNodes.subList(1, chosenNodes.size()), newNodes.subList(1, newNodes.size()), taskModel,
+            maxSolution);
 
-      getNodes(task2, dec2, taskModel, nodes2);
-
-      merge(nodes1, nodes2, taskModel);
-      
-      bfs();
-
+      bfs(chosenNodes);
    }
 
-   public void bfs () {
+   void findPathes (List<ArrayList<Node>> nodesLists) {
+      List<Node> newNodes = new ArrayList<Node>();
+      nodesLists.add((ArrayList<Node>) newNodes);
+      newNodes.add(startNode);
+      branch(nodesLists, newNodes, startNode);
+   }
 
-      for(Node root:roots){
-         System.out.println(".......................");
-         Queue<Node> queue = new LinkedList<Node>();
-         queue.add(root);
-         printNode(root);
-         root.visited = true;
-         while (!queue.isEmpty()) {
-            Node node = (Node) queue.remove();
-   
-            for (Node childNode : node.childs) {
-               if ( !childNode.visited ) {
-                  childNode.visited = true;
-                  printNode(childNode);
-                  queue.add(childNode);
-               }
+   void branch (List<ArrayList<Node>> nodesLists, List<Node> nodes, Node root) {
+
+      if ( root.childs.size() == 1 ) {
+         nodes.add(root.childs.get(0));
+         branch(nodesLists, nodes, root.childs.get(0));
+      } else if ( root.childs.size() > 1 ) {
+         int size = nodes.size();
+         nodes.add(root.childs.get(0));
+         branch(nodesLists, nodes, root.childs.get(0));
+
+         for (int i = 1; i < root.childs.size(); i++) {
+
+            List<Node> newNodes = new ArrayList<Node>(nodes.subList(0, size));
+            nodesLists.add((ArrayList<Node>) newNodes);
+            newNodes.add(root.childs.get(i));
+            branch(nodesLists, newNodes, root.childs.get(i));
+
+         }
+      }
+
+   }
+
+   public void bfs (List<Node> nodes) {
+
+      System.out.println("...........................");
+      Queue<Node> queue = new LinkedList<Node>();
+      Node root = nodes.get(1);
+      printNode(root);
+      queue.add(root);
+      root.visited = true;
+      while (!queue.isEmpty()) {
+         Node node = (Node) queue.remove();
+
+         for (Node childNode : node.childs) {
+            if ( !childNode.visited ) {
+               childNode.visited = true;
+               printNode(childNode);
+               queue.add(childNode);
             }
          }
-         
-         for(Node node:graph){
-            node.visited = false;
-         }
-         
       }
-      
+
+      for (Node nod : nodes) {
+         nod.visited = false;
+      }
+
    }
 
    public void printNode (Node root) {
       System.out.println("-----------------");
-      for(int i=0;i<root.stepNames.size();i++){
+      if(root.stepNames == null)
+         return;
+      for (int i = 0; i < root.stepNames.size(); i++) {
          System.out.println(root.stepNames.get(i) + " "
             + root.tasks.get(i).getId());
       }
       System.out.println("-----------------");
    }
 
-   public void getNodes (TaskClass task, DecompositionClass dec,
-         TaskModel taskModel, List<Node> nodes) {
+   public void getNodes (TaskClass task, TaskModel taskModel, List<Node> nodes) {
 
-      for (String stepName : dec.getStepNames()) {
-         if ( taskModel.getTaskClass(dec.getStep(stepName).getType().getId()) == null ) {
+      
+      for (DecompositionClass dec : task.getDecompositions()) {
+
+         for (String stepName : dec.getStepNames()) {
             Node newNode1 = new Node(dec.getStep(stepName), task, dec, stepName);
-            
             nodes.add(newNode1);
-            
-         } else {
-            // Which DecompositionClass
-            getNodes(dec.getStep(stepName).getType(), dec.getStep(stepName)
-                  .getType().getDecompositions().get(0), taskModel, nodes);
          }
       }
 
+      for (int i = 0; i < nodes.size(); i++) {
+
+         if ( i - 1 >= 0 ) {
+            nodes.get(i).parents.add(nodes.get(i - 1));
+            if ( nodes.get(i - 1).stepNames.size() != 0
+               && nodes.get(i).stepNames.size() != 0
+               && !nodes.get(i).decompositions.get(0).isOptionalStep(
+                     nodes.get(i).stepNames.get(0))
+               && nodes.get(i - 1).decompositions.get(0).isOptionalStep(
+                     nodes.get(i - 1).stepNames.get(0)) ) {
+               int j = i - 1;
+               while (nodes.get(j).decompositions.get(0).isOptionalStep(
+                     nodes.get(j).stepNames.get(0))) {
+                  j = j - 1;
+               }
+
+               nodes.get(i).parents.add(nodes.get(j));
+               nodes.get(j).childs.add(nodes.get(i));
+            }
+         }
+
+         if ( i + 1 < nodes.size() )
+            nodes.get(i).childs.add(nodes.get(i + 1));
+
+      }
    }
 
-   boolean merge(List<Node> x, List<Node> y, TaskModel taskModel){
-      
+   void merge (List<Node> x, List<Node> y, TaskModel taskModel, int[][] opt) {
+
       int M = x.size();
       int N = y.size();
-      int[][] opt = new int[M + 1][N + 1];
-      
-      int LCS = findLCS (x, y, taskModel, opt);
-      if(LCS == x.size()){      
-         if(!matches(x,y, LCS, taskModel))
-            return false;
 
-      }
-      else if(LCS == y.size()){
-         if(!matches(y,x, LCS, taskModel)){
-            return false;
-         }
-      }
-
-      System.out.println("LCS = "+LCS);
       int i = 0, j = 0;
+      List<Node> newNodes = new ArrayList<Node>(x);
+      
       while (i < M && j < N) {
          if ( x.get(i).isEquivalent(y.get(j), taskModel) ) {
 
-            x.get(i).tasks.add(y.get(j).tasks.get(0));
+            /*x.get(i).tasks.add(y.get(j).tasks.get(0));
             x.get(i).decompositions.add(y.get(j).decompositions.get(0));
             x.get(i).stepNames.add(y.get(j).stepNames.get(0));
 
             if ( j - 1 >= 0 ) {
-               x.get(i).parents.add(y.get(j - 1));
-               y.get(j - 1).childs.add(x.get(i));
+               if(y.get(j - 1).stepNames!=null){
+                  if(!x.get(i).parents.contains(y.get(j - 1)))
+                     x.get(i).parents.add(y.get(j - 1));
+                  if(!y.get(j - 1).childs.contains(x.get(i)))
+                     y.get(j - 1).childs.add(x.get(i));
+               }
             }
-            if(i==0 && j==0){
-               roots.remove(roots.size()-1);
-            }
+            y.set(j, x.get(i));*/
 
-            y.set(j, x.get(i));
-
+            newNodes.set(i, y.get(j));
+            
             i++;
             j++;
          } else {
 
             if ( opt[i + 1][j] >= opt[i][j + 1] ) {
+               newNodes.set(i, null);
                i++;
             } else {
 
-               //graph.add(y.get(j));
                j++;
             }
          }
       }
-      return true;
       
+      for(int k=0;k<newNodes.size();k++){
+         if(newNodes.get(k)!=null){
+            
+            x.get(k).tasks.add(newNodes.get(k).tasks.get(0));
+            x.get(k).decompositions.add(newNodes.get(k).decompositions.get(0));
+            x.get(k).stepNames.add(newNodes.get(k).stepNames.get(0));
+   
+            if(!x.get(k).parents.contains(newNodes.get(k).parents.get(0))) 
+               x.get(k).parents.add(newNodes.get(k).parents.get(0));
+            if(!newNodes.get(k).parents.get(0).childs.contains(x.get(k))){
+               newNodes.get(k).parents.get(0).childs.add(x.get(k));
+               newNodes.get(k).parents.get(0).childs.remove(newNodes.get(k));
+            }
+            if(newNodes.get(k).childs.size()>0 && k+1<newNodes.size() && newNodes.get(k+1)==null  && !x.get(k).childs.contains(newNodes.get(k).childs.get(0))) 
+               x.get(k).childs.add(newNodes.get(k).childs.get(0));
+         }
+
+      }
+ 
    }
-   public int findLCS (List<Node> x, List<Node> y, TaskModel taskModel, int[][] opt) {
+
+   public int findLCS (List<Node> x, List<Node> y, TaskModel taskModel,
+         int[][] opt) {
 
       int M = x.size();
       int N = y.size();
@@ -233,6 +278,7 @@ public class Graph {
          for (int j = N - 1; j >= 0; j--) {
             if ( x.get(i).isEquivalent(y.get(j), taskModel) ) {
                opt[i][j] = opt[i + 1][j + 1] + 1;
+               
             } else
                opt[i][j] = Math.max(opt[i + 1][j], opt[i][j + 1]);
          }
@@ -256,10 +302,10 @@ public class Graph {
       return LCS;
    }
 
-   public void dfs () {
+   public void dfs (Node root) {
 
       Stack<Node> stack = new Stack<Node>();
-      Node root = roots.get(0);
+
       stack.push(root);
       root.visited = true;
       printNode(root);
@@ -278,50 +324,4 @@ public class Graph {
       }
       // Clear visited property of nodes
    }
-   
-   void getNode(Node node){
-      boolean contain = false;
-      for(Node n:graph){
-         if(n.equals(node)){
-            contain = true;
-            break;
-         }
-      }
-      if(!contain){
-         graph.add(node);
-      }
-   }
-   
-   void removeRoot(Node node){
-      Iterator<Node> it = roots.iterator();
-      while(it.hasNext()){
-         Node root = it.next();
-         if(root.equals(node)){
-            it.remove();
-            break;
-         }
-      }
-   }
-   
-   boolean matches(List<Node> x, List<Node> y, int LCS, TaskModel taskModel){
-      boolean contain = true;
-      for(int i=0;i<y.size()-LCS+1;i++){
-         List<Node> sublist = y.subList(i, i+LCS);
-         contain = true;
-         for(int j=0;j<LCS;j++){               
-            if(!x.get(j).isEquivalent(sublist.get(j), taskModel)){
-               contain = false;
-               break;
-            }
-         }
-         if(contain)
-            break;
-         
-      }
-      if(contain)
-         return false;
-      
-      return true;
-   }
-
 }
