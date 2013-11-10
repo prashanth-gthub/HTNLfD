@@ -112,7 +112,7 @@ public class Graph {
       bfs(chosenNodes.subList(1, chosenNodes.size()));
 
       optional(taskModel);
-      //alternativeRecipe(taskModel);
+      // alternativeRecipe(taskModel);
    }
 
    void findPathes (List<ArrayList<Node>> nodesLists) {
@@ -242,10 +242,9 @@ public class Graph {
 
       int i = 0, j = 0;
       List<Node> newNodes = new ArrayList<Node>();
-      for(int k=0;k<M;k++){
+      for (int k = 0; k < M; k++) {
          newNodes.add(null);
       }
-
 
       while (i < M && j < N) {
          if ( x.get(i).isEquivalent(y.get(j), taskModel) ) {
@@ -257,7 +256,7 @@ public class Graph {
          } else {
 
             if ( opt[i + 1][j] >= opt[i][j + 1] ) {
-               //newNodes.set(i, null);
+               // newNodes.set(i, null);
                i++;
             } else {
 
@@ -269,10 +268,10 @@ public class Graph {
       for (int k = 0; k < newNodes.size(); k++) {
          if ( newNodes.get(k) != null ) {
 
-            if(k==0){
+            if ( k == 0 ) {
                startNode.childs.remove(1);
             }
-            
+
             x.get(k).tasks.add(newNodes.get(k).tasks.get(0));
             x.get(k).decompositions.add(newNodes.get(k).decompositions.get(0));
             x.get(k).stepNames.add(newNodes.get(k).stepNames.get(0));
@@ -281,7 +280,8 @@ public class Graph {
             boolean contain = false;
             for (int l = 0; l < k; l++) {
                if ( newNodes.get(l) != null ) {
-                  if ( newNodes.get(k).parents.get(0).step.equals(newNodes.get(l).step) ) {
+                  if ( newNodes.get(k).parents.get(0).step.equals(newNodes
+                        .get(l).step) ) {
                      contain = true;
                      if ( !x.get(k).parents.contains(x.get(l)) ) {
                         x.get(k).parents.add(x.get(l));
@@ -301,22 +301,24 @@ public class Graph {
             }
 
             if ( newNodes.get(k).childs.size() > 0
-               && !x.get(k).childs.contains(newNodes.get(k).childs.get(0)) ){
+               && !x.get(k).childs.contains(newNodes.get(k).childs.get(0)) ) {
                boolean contain1 = false;
-               for(int v=k+1;v<M;v++){
-                  if(newNodes.get(v)!=null && newNodes.get(v).step!=null && newNodes.get(v).step.equals(newNodes.get(k).childs.get(0).step)){
+               for (int v = k + 1; v < M; v++) {
+                  if ( newNodes.get(v) != null
+                     && newNodes.get(v).step != null
+                     && newNodes.get(v).step.equals(newNodes.get(k).childs
+                           .get(0).step) ) {
                      x.get(k).childs.add(x.get(v));
-                     if(!x.get(v).parents.contains(x.get(k)))
+                     if ( !x.get(v).parents.contains(x.get(k)) )
                         x.get(v).parents.add(x.get(k));
                      contain1 = true;
                      break;
                   }
                }
-               if(!contain1)
+               if ( !contain1 )
                   x.get(k).childs.add(newNodes.get(k).childs.get(0));
             }
-            
-            
+
          }
 
       }
@@ -356,8 +358,9 @@ public class Graph {
       }
       return LCS;
    }
-   
-   public int[][] findAlternativeRecipe (List<Node> x, List<Node> y, TaskModel taskModel) {
+
+   public int[][] findAlternativeRecipe (List<Node> x, List<Node> y,
+         TaskModel taskModel) {
 
       int M = x.size();
       int N = y.size();
@@ -371,41 +374,44 @@ public class Graph {
       while (i < M && j < N) {
          if ( x.get(i).isEquivalent(y.get(j), taskModel) ) {
             startF = i;
-            startS = j;       
+            startS = j;
             i++;
             j++;
-         } 
-         else 
+         } else
             break;
       }
-      i = M-1;
-      j = N-1;
-      while (i >=0 && j >=0) {
+      i = M - 1;
+      j = N - 1;
+      while (i >= 0 && j >= 0) {
          if ( x.get(i).isEquivalent(y.get(j), taskModel) ) {
             endF = i;
-            endS = j;       
+            endS = j;
             i--;
             j--;
-         } 
-         else 
+         } else
             break;
       }
-      i = startF+1;
-      j = startS+1;
-      while(i<endF && j< endS){
-         if ( x.get(i).isEquivalent(y.get(j), taskModel) ) {
-            interval[0][0] = -1;
-            interval[0][1] = -1;
-            interval[1][0] = -1;
-            interval[1][1] = -1;
-            return interval;
-         }
+      i = startF + 1;
+      j = startS + 1;
+
+      int M1 = x.size();
+      int N1 = y.size();
+      int[][] opt = new int[M1 + 1][N1 + 1];
+
+      int LCS = findLCS(x, y, taskModel, opt);
+      if ( LCS != startF + x.size() - endF + 1 ) {
+         interval[0][0] = -1;
+         interval[0][1] = -1;
+         interval[1][0] = -1;
+         interval[1][1] = -1;
+         return interval;
       }
+
       interval[0][0] = startF;
       interval[0][1] = endF;
       interval[1][0] = startS;
       interval[1][1] = endS;
-      
+
       return interval;
    }
 
@@ -492,37 +498,46 @@ public class Graph {
       findPathes(nodesLists);
       for (ArrayList<Node> nodes1 : nodesLists) {
          for (ArrayList<Node> nodes2 : nodesLists) {
-            if(!nodes1.equals(nodes2)){         
-               int[][] interval = findAlternativeRecipe (nodes1.subList(1, nodes1.size()), nodes2.subList(1, nodes2.size()), taskModel);
-               if(interval[0][0] == interval[0][1]-1){
-                  for(int i=interval[1][0]+2;i<interval[1][1]+1;i++){
+            if ( !nodes1.equals(nodes2) ) {
+               int[][] interval = findAlternativeRecipe(
+                     nodes1.subList(1, nodes1.size()),
+                     nodes2.subList(1, nodes2.size()), taskModel);
+               if ( interval[0][0] == interval[0][1] - 1 ) {
+                  for (int i = interval[1][0] + 2; i < interval[1][1] + 1; i++) {
                      nodes2.get(i).step.setMinOccurs(0);
                   }
-               }
-               else if(interval[1][0] == interval[1][1]-1){
-                  for(int i=interval[0][0]+2;i<interval[0][1]+1;i++){
+               } else if ( interval[1][0] == interval[1][1] - 1 ) {
+                  for (int i = interval[0][0] + 2; i < interval[0][1] + 1; i++) {
                      nodes1.get(i).step.setMinOccurs(0);
                   }
                }
             }
-            
+
          }
       }
 
    }
-   
-   void alternativeRecipe(TaskModel taskModel){
+
+   void alternativeRecipe (TaskModel taskModel) {
       List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
 
       findPathes(nodesLists);
       for (ArrayList<Node> nodes1 : nodesLists) {
          for (ArrayList<Node> nodes2 : nodesLists) {
-            if(!nodes1.equals(nodes2)){
-                    int[][] interval = findAlternativeRecipe (nodes1.subList(1, nodes1.size()), nodes2.subList(1, nodes2.size()), taskModel);
+            if ( !nodes1.equals(nodes2) ) {
+               int[][] interval = findAlternativeRecipe(
+                     nodes1.subList(1, nodes1.size()),
+                     nodes2.subList(1, nodes2.size()), taskModel);
+               
+               for (int i = interval[1][0] + 2; i < interval[1][1] + 1; i++) {
+                  nodes2.get(i).step.setMinOccurs(0);
+               }
+               
             }
             
+
          }
       }
    }
-   
+
 }

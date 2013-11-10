@@ -15,8 +15,8 @@
     <output name="place4_newObject" type="PhysObj"/>
     <subtasks id="placeDishes1" ordered="false">
       <step name="place1" task="std:Place"/>
-      <step minOccurs="0" name="place2" requires="place1" task="std:Place"/>
-      <step minOccurs="0" name="place3" requires="place1" task="std:Place"/>
+      <step name="place2" requires="place1" task="std:Place"/>
+      <step name="place3" requires="place1" task="std:Place"/>
       <step name="place4" requires="place1" task="std:Place"/>
       <binding slot="$place4.referenceFrame" value="$this.place2_referenceFrame"/>
       <binding slot="$place3.referenceFrame" value="$this.place2_referenceFrame"/>
