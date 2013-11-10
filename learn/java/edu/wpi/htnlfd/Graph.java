@@ -30,11 +30,11 @@ public class Graph {
             String stepName) {
          super();
          this.step = step;
-         if(task!=null)
+         if ( task != null )
             this.tasks.add(task);
-         if(decomposition!=null)
+         if ( decomposition != null )
             this.decompositions.add(decomposition);
-         if(stepName!=null)
+         if ( stepName != null )
             this.stepNames.add(stepName);
       }
 
@@ -110,8 +110,8 @@ public class Graph {
             maxSolution);
 
       bfs(chosenNodes);
-      
-      optional ();
+
+      optional();
    }
 
    void findPathes (List<ArrayList<Node>> nodesLists) {
@@ -134,21 +134,19 @@ public class Graph {
          for (int i = 1; i < root.childs.size(); i++) {
 
             List<Node> newNodes = new ArrayList<Node>();
-            for(int k=0;k<size;k++){
+            for (int k = 0; k < size; k++) {
                Node node = nodes.get(k);
                Node temp = null;
-               if(node.step!=null){
-                  temp = new Node(node.step, node.tasks.get(0), node.decompositions.get(0)
-                     , node.stepNames.get(0));
-               }
-               else{
-                  temp = new Node(node.step,null, null
-                        , null);
+               if ( node.step != null ) {
+                  temp = new Node(node.step, node.tasks.get(0),
+                        node.decompositions.get(0), node.stepNames.get(0));
+               } else {
+                  temp = new Node(node.step, null, null, null);
                }
                temp.parents.addAll(node.parents);
                temp.childs.addAll(node.childs);
                newNodes.add(temp);
-               
+
             }
             nodesLists.add((ArrayList<Node>) newNodes);
             newNodes.add(root.childs.get(i));
@@ -163,7 +161,7 @@ public class Graph {
 
       System.out.println("...........................");
       Queue<Node> queue = new LinkedList<Node>();
-      Node root = nodes.get(1);
+      Node root = nodes.get(0);
       printNode(root);
       queue.add(root);
       root.visited = true;
@@ -241,7 +239,20 @@ public class Graph {
       int N = y.size();
 
       int i = 0, j = 0;
-      List<Node> newNodes = new ArrayList<Node>(x);
+      List<Node> newNodes = new ArrayList<Node>();
+      for (int k = 0; k < x.size(); k++) {
+         Node node = x.get(k);
+         Node temp = null;
+         if ( node.step != null ) {
+            temp = new Node(node.step, node.tasks.get(0),
+                  node.decompositions.get(0), node.stepNames.get(0));
+         } else {
+            temp = new Node(node.step, null, null, null);
+         }
+         temp.parents.addAll(node.parents);
+         temp.childs.addAll(node.childs);
+         newNodes.add(temp);
+      }
 
       while (i < M && j < N) {
          if ( x.get(i).isEquivalent(y.get(j), taskModel) ) {
@@ -280,12 +291,29 @@ public class Graph {
             x.get(k).decompositions.add(newNodes.get(k).decompositions.get(0));
             x.get(k).stepNames.add(newNodes.get(k).stepNames.get(0));
 
-            if ( !x.get(k).parents.contains(newNodes.get(k).parents.get(0)) )
-               x.get(k).parents.add(newNodes.get(k).parents.get(0));
-            if ( !newNodes.get(k).parents.get(0).childs.contains(x.get(k)) ) {
-               newNodes.get(k).parents.get(0).childs.add(x.get(k));
-               newNodes.get(k).parents.get(0).childs.remove(newNodes.get(k));
+            // adding parents
+            boolean contain = false;
+            for (int l = 0; l < k; l++) {
+               if ( newNodes.get(l) != null ) {
+                  if ( newNodes.get(k).parents.get(0).step.equals(newNodes.get(l).step) ) {
+                     contain = true;
+                     if ( !x.get(k).parents.contains(x.get(l)) ) {
+                        x.get(k).parents.add(x.get(l));
+                     }
+                     break;
+                  }
+               }
             }
+            if ( !contain ) {
+               if ( !x.get(k).parents.contains(newNodes.get(k).parents.get(0)) ) {
+                  x.get(k).parents.add(newNodes.get(k).parents.get(0));
+               }
+               if ( !newNodes.get(k).parents.get(0).childs.contains(x.get(k)) ) {
+                  newNodes.get(k).parents.get(0).childs.add(x.get(k));
+                  newNodes.get(k).parents.get(0).childs.remove(newNodes.get(k));
+               }
+            }
+
             if ( newNodes.get(k).childs.size() > 0 && k + 1 < newNodes.size()
                && newNodes.get(k + 1) == null
                && !x.get(k).childs.contains(newNodes.get(k).childs.get(0)) )
@@ -385,17 +413,15 @@ public class Graph {
       for (int i = 0; i < dem.size(); i++) {
          if ( !nodes.contains(dem.get(i)) ) {
             List<Node> newNodes = new ArrayList<Node>();
-            for(Node node:nodes){
-               if(node.step!=null){
-                  Node temp = new Node(node.step, node.tasks.get(0), node.decompositions.get(0)
-                        , node.stepNames.get(0));
+            for (Node node : nodes) {
+               if ( node.step != null ) {
+                  Node temp = new Node(node.step, node.tasks.get(0),
+                        node.decompositions.get(0), node.stepNames.get(0));
                   temp.parents.addAll(node.parents);
                   temp.childs.addAll(node.childs);
                   newNodes.add(temp);
-               }
-               else{
-                  Node temp = new Node(node.step, null, null
-                        , null);
+               } else {
+                  Node temp = new Node(node.step, null, null, null);
                   temp.parents.addAll(node.parents);
                   temp.childs.addAll(node.childs);
                   newNodes.add(temp);
@@ -422,23 +448,22 @@ public class Graph {
                   for (Node par2 : node1.parents) {
                      if ( !par1.equals(par2) ) {
                         if ( (par1.level < par2.level
-                           && par1.childs.contains(node1) && nodes1.get(j - 1)
+                            && nodes1.get(j - 1)
                               .equals(par2))
                            || par2.level < par1.level
-                           && par2.childs.contains(node1)
+                           
                            && nodes1.get(j - 1).equals(par1) ) {
                            int i = j - 1;
                            Node parent = nodes1.get(i);
-                           Node dest = (par1.level < par2.level)?par1:par2;
-                           while (parent.step!=null && dest.step!=null &&
-                                 !parent.step.equals(dest.step) 
-                              && i !=-1 ) {                              
+                           Node dest = (par1.level < par2.level) ? par1 : par2;
+                           while (parent.step != null && dest.step != null
+                              && !parent.step.equals(dest.step) && i != -1) {
                               parent = nodes1.get(i);
                               i--;
 
                            }
                            if ( i != -1 ) {
-                              for (int k = i + 1; k < j; k++) {
+                              for (int k = i + 2; k < j; k++) {
                                  nodes1.get(k).step.setMinOccurs(0);
                               }
                            }
