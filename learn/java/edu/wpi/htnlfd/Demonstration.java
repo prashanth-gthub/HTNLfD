@@ -8,7 +8,7 @@ import edu.wpi.htnlfd.model.DecompositionClass.Step;
 import edu.wpi.htnlfd.model.TaskClass.Input;
 import edu.wpi.htnlfd.model.TaskClass.Output;
 import edu.wpi.htnlfd.model.DecompositionClass.*;
-import edu.wpi.htnlfd.table.TableKnowledgeBase;
+//import edu.wpi.htnlfd.table.TableKnowledgeBase;
 import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
@@ -24,7 +24,7 @@ public class Demonstration {
 
    private InputTransformation inputTransformation = new InputTransformation();
 
-   private KnowledgeBase KB = new TableKnowledgeBase();
+   //private KnowledgeBase KB = new TableKnowledgeBase();
    
    private LearnAgent LAgent = new LearnAgent("Anahita");
    
@@ -92,7 +92,7 @@ public class Demonstration {
       }
 
       TaskClass newTask = demonstratedTask(disco, taskName, steps);      
-      findLoop(newTask);
+      //findLoop(newTask); ///
       
       TaskClass task = isAlternativeRecipe(newTask);
       if ( task != null ) {
@@ -113,6 +113,7 @@ public class Demonstration {
          
          task.changeNameSpace(newTask);*/
          //task.getDecompositions().get(0).getSteps().get("place2").setMinOccurs(0);
+         newTask.setId(newTask.getId()+"1");
          graph.addGraph(task,taskModel, newTask);
 
       } else {
