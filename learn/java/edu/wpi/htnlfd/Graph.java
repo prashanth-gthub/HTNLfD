@@ -109,9 +109,10 @@ public class Graph {
             chosenDemNodes.subList(1, chosenDemNodes.size()), taskModel,
             maxSolution);
 
-      bfs(chosenNodes);
+      bfs(chosenNodes.subList(1, chosenNodes.size()));
 
-      optional();
+      optional(taskModel);
+      //alternativeRecipe(taskModel);
    }
 
    void findPathes (List<ArrayList<Node>> nodesLists) {
@@ -119,6 +120,7 @@ public class Graph {
       nodesLists.add((ArrayList<Node>) newNodes);
       newNodes.add(startNode);
       branch(nodesLists, newNodes, startNode);
+
    }
 
    void branch (List<ArrayList<Node>> nodesLists, List<Node> nodes, Node root) {
@@ -240,33 +242,13 @@ public class Graph {
 
       int i = 0, j = 0;
       List<Node> newNodes = new ArrayList<Node>();
-      for (int k = 0; k < x.size(); k++) {
-         Node node = x.get(k);
-         Node temp = null;
-         if ( node.step != null ) {
-            temp = new Node(node.step, node.tasks.get(0),
-                  node.decompositions.get(0), node.stepNames.get(0));
-         } else {
-            temp = new Node(node.step, null, null, null);
-         }
-         temp.parents.addAll(node.parents);
-         temp.childs.addAll(node.childs);
-         newNodes.add(temp);
+      for(int k=0;k<M;k++){
+         newNodes.add(null);
       }
+
 
       while (i < M && j < N) {
          if ( x.get(i).isEquivalent(y.get(j), taskModel) ) {
-
-            /*
-             * x.get(i).tasks.add(y.get(j).tasks.get(0));
-             * x.get(i).decompositions.add(y.get(j).decompositions.get(0));
-             * x.get(i).stepNames.add(y.get(j).stepNames.get(0)); if ( j - 1 >=
-             * 0 ) { if(y.get(j - 1).stepNames!=null){
-             * if(!x.get(i).parents.contains(y.get(j - 1)))
-             * x.get(i).parents.add(y.get(j - 1)); if(!y.get(j -
-             * 1).childs.contains(x.get(i))) y.get(j - 1).childs.add(x.get(i));
-             * } } y.set(j, x.get(i));
-             */
 
             newNodes.set(i, y.get(j));
 
@@ -275,7 +257,7 @@ public class Graph {
          } else {
 
             if ( opt[i + 1][j] >= opt[i][j + 1] ) {
-               newNodes.set(i, null);
+               //newNodes.set(i, null);
                i++;
             } else {
 
@@ -287,6 +269,10 @@ public class Graph {
       for (int k = 0; k < newNodes.size(); k++) {
          if ( newNodes.get(k) != null ) {
 
+            if(k==0){
+               startNode.childs.remove(1);
+            }
+            
             x.get(k).tasks.add(newNodes.get(k).tasks.get(0));
             x.get(k).decompositions.add(newNodes.get(k).decompositions.get(0));
             x.get(k).stepNames.add(newNodes.get(k).stepNames.get(0));
@@ -314,10 +300,23 @@ public class Graph {
                }
             }
 
-            if ( newNodes.get(k).childs.size() > 0 && k + 1 < newNodes.size()
-               && newNodes.get(k + 1) == null
-               && !x.get(k).childs.contains(newNodes.get(k).childs.get(0)) )
-               x.get(k).childs.add(newNodes.get(k).childs.get(0));
+            if ( newNodes.get(k).childs.size() > 0
+               && !x.get(k).childs.contains(newNodes.get(k).childs.get(0)) ){
+               boolean contain1 = false;
+               for(int v=k+1;v<M;v++){
+                  if(newNodes.get(v)!=null && newNodes.get(v).step!=null && newNodes.get(v).step.equals(newNodes.get(k).childs.get(0).step)){
+                     x.get(k).childs.add(x.get(v));
+                     if(!x.get(v).parents.contains(x.get(k)))
+                        x.get(v).parents.add(x.get(k));
+                     contain1 = true;
+                     break;
+                  }
+               }
+               if(!contain1)
+                  x.get(k).childs.add(newNodes.get(k).childs.get(0));
+            }
+            
+            
          }
 
       }
@@ -356,6 +355,58 @@ public class Graph {
          }
       }
       return LCS;
+   }
+   
+   public int[][] findAlternativeRecipe (List<Node> x, List<Node> y, TaskModel taskModel) {
+
+      int M = x.size();
+      int N = y.size();
+      int[][] interval = new int[2][2];
+
+      int i = 0, j = 0;
+      int startF = -1;
+      int endF = -1;
+      int startS = -1;
+      int endS = -1;
+      while (i < M && j < N) {
+         if ( x.get(i).isEquivalent(y.get(j), taskModel) ) {
+            startF = i;
+            startS = j;       
+            i++;
+            j++;
+         } 
+         else 
+            break;
+      }
+      i = M-1;
+      j = N-1;
+      while (i >=0 && j >=0) {
+         if ( x.get(i).isEquivalent(y.get(j), taskModel) ) {
+            endF = i;
+            endS = j;       
+            i--;
+            j--;
+         } 
+         else 
+            break;
+      }
+      i = startF+1;
+      j = startS+1;
+      while(i<endF && j< endS){
+         if ( x.get(i).isEquivalent(y.get(j), taskModel) ) {
+            interval[0][0] = -1;
+            interval[0][1] = -1;
+            interval[1][0] = -1;
+            interval[1][1] = -1;
+            return interval;
+         }
+      }
+      interval[0][0] = startF;
+      interval[0][1] = endF;
+      interval[1][0] = startS;
+      interval[1][1] = endS;
+      
+      return interval;
    }
 
    public void dfs (Node root) {
@@ -434,47 +485,44 @@ public class Graph {
 
    }
 
-   void optional () {
+   void optional (TaskModel taskModel) {
 
       List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
 
       findPathes(nodesLists);
       for (ArrayList<Node> nodes1 : nodesLists) {
-         bfs(nodes1);
-         for (int j = 0; j < nodes1.size(); j++) {
-            Node node1 = nodes1.get(j);
-            if ( node1.parents != null && node1.parents.size() > 1 ) {
-               for (Node par1 : node1.parents) {
-                  for (Node par2 : node1.parents) {
-                     if ( !par1.equals(par2) ) {
-                        if ( (par1.level < par2.level
-                            && nodes1.get(j - 1)
-                              .equals(par2))
-                           || par2.level < par1.level
-                           
-                           && nodes1.get(j - 1).equals(par1) ) {
-                           int i = j - 1;
-                           Node parent = nodes1.get(i);
-                           Node dest = (par1.level < par2.level) ? par1 : par2;
-                           while (parent.step != null && dest.step != null
-                              && !parent.step.equals(dest.step) && i != -1) {
-                              parent = nodes1.get(i);
-                              i--;
-
-                           }
-                           if ( i != -1 ) {
-                              for (int k = i + 2; k < j; k++) {
-                                 nodes1.get(k).step.setMinOccurs(0);
-                              }
-                           }
-                        }
-                     }
+         for (ArrayList<Node> nodes2 : nodesLists) {
+            if(!nodes1.equals(nodes2)){         
+               int[][] interval = findAlternativeRecipe (nodes1.subList(1, nodes1.size()), nodes2.subList(1, nodes2.size()), taskModel);
+               if(interval[0][0] == interval[0][1]-1){
+                  for(int i=interval[1][0]+2;i<interval[1][1]+1;i++){
+                     nodes2.get(i).step.setMinOccurs(0);
+                  }
+               }
+               else if(interval[1][0] == interval[1][1]-1){
+                  for(int i=interval[0][0]+2;i<interval[0][1]+1;i++){
+                     nodes1.get(i).step.setMinOccurs(0);
                   }
                }
             }
+            
          }
-
       }
 
    }
+   
+   void alternativeRecipe(TaskModel taskModel){
+      List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
+
+      findPathes(nodesLists);
+      for (ArrayList<Node> nodes1 : nodesLists) {
+         for (ArrayList<Node> nodes2 : nodesLists) {
+            if(!nodes1.equals(nodes2)){
+                    int[][] interval = findAlternativeRecipe (nodes1.subList(1, nodes1.size()), nodes2.subList(1, nodes2.size()), taskModel);
+            }
+            
+         }
+      }
+   }
+   
 }
