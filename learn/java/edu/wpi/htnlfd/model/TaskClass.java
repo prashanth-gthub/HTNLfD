@@ -538,8 +538,6 @@ public class TaskClass extends TaskModel.Member {
 
    /**
     * This function makes the TaskClass's DOM element recursively.
-    * 
-    * @param properties
     */
    public Node toNode (Document document, Set<String> namespaces,
          Properties properties) {
@@ -701,12 +699,18 @@ public class TaskClass extends TaskModel.Member {
       return null;
    }
 
+   /**
+    * Changes namespace of the specified task.
+    */
    public void changeNameSpace (TaskClass newTask) {
 
       this.setQname(newTask.getQname());
 
    }
    
+   /**
+    * Finds a new task name.
+    */
    public String findTaskName (String taskName, TaskModel taskModel) {
       int count = 1;
 
@@ -718,6 +722,9 @@ public class TaskClass extends TaskModel.Member {
       }
    }
 
+   /**
+    * Adds an internal task.
+    */
    public TaskClass addInternalTask (TaskModel taskModel,
          DecompositionClass decccc1, List<Step> steps) {
       String taskName = findTaskName("_Temp",taskModel); // internal
@@ -885,15 +892,25 @@ public class TaskClass extends TaskModel.Member {
          }
       }
       for(String rm:removeSteps){
-         decccc1.removeStep(rm);
+         if(decccc1.getStep(rm)!=null){
+            for (Entry<String, Binding> rmB : removeBindings) {
+               if(rmB.getValue().getStep().equals(rm) || rmB.getValue().getValue().contains("$"+rm+".")){
+                  decccc1.removeBinding(rmB.getKey());
+                  for (Entry<String, Binding> add : addBindings.entrySet()) {
+                     if(add.getKey().equals(rmB.getKey()) || add.getValue().getValue().equals(rmB.getValue().getValue()))
+                        decccc1.addBinding(add.getKey(), add.getValue());
+                  }
+               }
+               
+            }
+ 
+            decccc1.removeStep(rm);
+         }
+         
       }
       
-      for (Entry<String, Binding> rm : removeBindings) {
-         decccc1.removeBinding(rm.getKey());
-      }
-      for (Entry<String, Binding> add : addBindings.entrySet()) {
-         decccc1.addBinding(add.getKey(), add.getValue());
-      }
+      
+      
 
       return taskI;
    }

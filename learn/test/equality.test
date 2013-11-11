@@ -1,49 +1,38 @@
-#
-# This is an example of checking whether two tasks are equal
-#
-    # 28-Oct-2013 11:54:23 PM - TaskEngine 1.5.1 / Disco 1.7.1
+    # 11-Nov-2013 3:33:41 PM - TaskEngine 1.5.1 / Disco 1.7.1
     Welcome to Disco! (Type 'help' for command list)
-  > cd ..\..\GitHub\HTNLfD\learn
-    D:\GitHub\HTNLfD\learn
-  > source test\equality.txt
   > cd models
+    D:\GitHub\HTNLfD\learn\models
   > load SetTableDemonstration.xml
   > 
-#
-# Start of first demonstration (PlaceDishes1)
-#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
-  > task Place / PhysObj.SquareTable / PhysObj.DinnerPlate / location(0,0,0)
-    User says "Please move DinnerPlate from [-10,-10,-10]  wrt SquareTable."
-    Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
+  > task Place / PhysObj.DinnerPlate / location(0,0,0) / PhysObj.SquareTable
+    User says "Please place DinnerPlate at [0,0,0] wrt SquareTable."
+    Agent place DinnerPlate at [0,0,0] wrt SquareTable.
     Agent says "Ok."
-  > task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate / location(0,0,1)
-    User says "Please move SaladPlate from [-10,-10,-10]  wrt DinnerPlate."
-    Agent move SaladPlate from [10,10,11]  to [10,10,11] wrt DinnerPlate.
+  > task Place / PhysObj.SaladPlate / location(0,0,1) / PhysObj.DinnerPlate
+    User says "Please place SaladPlate at [0,0,1] wrt DinnerPlate."
+    Agent place SaladPlate at [0,0,1] wrt DinnerPlate.
     Agent says "Ok."
-  > task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl / location(0,0,2)
-    User says "Please move SoupBowl from [-10,-10,-10]  wrt DinnerPlate."
-    Agent move SoupBowl from [10,10,12]  to [10,10,12] wrt DinnerPlate.
+  > task Place / PhysObj.SoupBowl / location(0,0,2) / PhysObj.DinnerPlate
+    User says "Please place SoupBowl at [0,0,2] wrt DinnerPlate."
+    Agent place SoupBowl at [0,0,2] wrt DinnerPlate.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes1")
     # Returned 'null'
-  > print PlaceDishes1
+  > print PlaceDishes1 urn:disco.wpi.edu:htnlfd:setTable1
 
-#
-# PlaceDishes1 is added to the taskModel
-#
 <task id="PlaceDishes1" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-    <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
-    <input name="place2_referenceFrame" type="PhysObj"/>
+    <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
     <input name="place2_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
+    <input name="place2_referenceFrame" type="PhysObj"/>
     <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
     <input name="place3_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
     <output name="place1_newObject" type="PhysObj"/>
@@ -60,8 +49,8 @@
       <binding slot="$place2.location" value="$this.place2_location"/>
       <binding slot="$place3.location" value="$this.place3_location"/>
       <binding slot="$this.place3_object" value="PhysObj.SoupBowl"/>
-      <binding slot="$this.place2_location" value="location(0,0,1)"/>
       <binding slot="$place2.object" value="$this.place2_object"/>
+      <binding slot="$this.place2_location" value="location(0,0,1)"/>
       <binding slot="$this.place1_object" value="PhysObj.DinnerPlate"/>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$this.place3_newObject" value="$place3.newObject"/>
@@ -78,73 +67,59 @@
 
   > 
   > 
-#
-# Start of second demonstration (PlaceDishes2)
-#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
-  > task Place / PhysObj.SquareTable / PhysObj.DinnerPlate / location(0,0,0)
-    User says "Please move DinnerPlate from [10,10,10]  wrt SquareTable."
-    Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
+  > task Place / PhysObj.DinnerPlate / location(0,0,0) / PhysObj.SquareTable
+    User says "Please place DinnerPlate at [0,0,0] wrt SquareTable."
+    Agent place DinnerPlate at [0,0,0] wrt SquareTable.
     Agent says "Ok."
-  > task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate / location(0,0,1)
-    User says "Please move SaladPlate from [10,10,11]  wrt DinnerPlate."
-    Agent move SaladPlate from [10,10,11]  to [10,10,11] wrt DinnerPlate.
+  > task Place / PhysObj.SaladPlate / location(0,0,1) / PhysObj.DinnerPlate
+    User says "Please place SaladPlate at [0,0,1] wrt DinnerPlate."
+    Agent place SaladPlate at [0,0,1] wrt DinnerPlate.
     Agent says "Ok."
-  > task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl / location(0,0,2)
-    User says "Please move SoupBowl from [10,10,12]  wrt DinnerPlate."
-    Agent move SoupBowl from [10,10,12]  to [10,10,12] wrt DinnerPlate.
+  > task Place / PhysObj.SoupBowl / location(0,0,2) / PhysObj.DinnerPlate
+    User says "Please place SoupBowl at [0,0,2] wrt DinnerPlate."
+    Agent place SoupBowl at [0,0,2] wrt DinnerPlate.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes2")
-WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
-  > print PlaceDishes2
-#
-# PlaceDishes2 is not added to the taskModel since we have the same task(PlaceDishes1) in our taskModel
-#
+  > print PlaceDishes2 urn:disco.wpi.edu:htnlfd:setTable2
 Unkown task or decomposition class.
   > 
   > 
-#
-# Start of task demonstration -> This task is the same as PlaceDishes2 but with one difference. The third step has different inputs.
-# So it should be added.
-#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
-  > task Place / PhysObj.SquareTable / PhysObj.DinnerPlate / location(0,0,0)
-    User says "Please move DinnerPlate from [10,10,10]  wrt SquareTable."
-    Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
+  > task Place / PhysObj.DinnerPlate / location(0,0,0) / PhysObj.SquareTable
+    User says "Please place DinnerPlate at [0,0,0] wrt SquareTable."
+    Agent place DinnerPlate at [0,0,0] wrt SquareTable.
     Agent says "Ok."
-  > task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate / location(0,0,1)
-    User says "Please move SaladPlate from [10,10,11]  wrt DinnerPlate."
-    Agent move SaladPlate from [10,10,11]  to [10,10,11] wrt DinnerPlate.
+  > task Place / PhysObj.SaladPlate / location(0,0,1) / PhysObj.DinnerPlate
+    User says "Please place SaladPlate at [0,0,1] wrt DinnerPlate."
+    Agent place SaladPlate at [0,0,1] wrt DinnerPlate.
     Agent says "Ok."
-  > task Place / PhysObj.SquareTable / PhysObj.SoupBowl / location(0,0,2)
-    User says "Please move SoupBowl from [10,10,12]  wrt SquareTable."
-    Agent move SoupBowl from [10,10,12]  to [10,10,12] wrt SquareTable.
+  > task Place / PhysObj.SoupBowl / location(0,0,2) / PhysObj.SquareTable
+    User says "Please place SoupBowl at [0,0,2] wrt SquareTable."
+    Agent place SoupBowl at [0,0,2] wrt SquareTable.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes2")
-WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
-  > print PlaceDishes2
-#	
-# This task is added to our taskmodel
-#
+  > print PlaceDishes2 urn:disco.wpi.edu:htnlfd:setTable3
+
 <task id="PlaceDishes2" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-    <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
-    <input name="place2_referenceFrame" type="PhysObj"/>
+    <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
     <input name="place2_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
+    <input name="place2_referenceFrame" type="PhysObj"/>
     <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
     <input name="place3_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
     <output name="place1_newObject" type="PhysObj"/>
@@ -161,8 +136,8 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
       <binding slot="$place2.location" value="$this.place2_location"/>
       <binding slot="$place3.location" value="$this.place3_location"/>
       <binding slot="$this.place3_object" value="PhysObj.SoupBowl"/>
-      <binding slot="$this.place2_location" value="location(0,0,1)"/>
       <binding slot="$place2.object" value="$this.place2_object"/>
+      <binding slot="$this.place2_location" value="location(0,0,1)"/>
       <binding slot="$this.place1_object" value="PhysObj.DinnerPlate"/>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$this.place3_newObject" value="$place3.newObject"/>
@@ -178,15 +153,15 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
   </task>
 
   > 
-  > print PlaceDishes1
+  > print PlaceDishes1 urn:disco.wpi.edu:htnlfd:setTable3
 
 <task id="PlaceDishes1" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-    <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
-    <input name="place2_referenceFrame" type="PhysObj"/>
+    <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
     <input name="place2_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
+    <input name="place2_referenceFrame" type="PhysObj"/>
     <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
     <input name="place3_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
     <output name="place1_newObject" type="PhysObj"/>
@@ -203,8 +178,8 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
       <binding slot="$place2.location" value="$this.place2_location"/>
       <binding slot="$place3.location" value="$this.place3_location"/>
       <binding slot="$this.place3_object" value="PhysObj.SoupBowl"/>
-      <binding slot="$this.place2_location" value="location(0,0,1)"/>
       <binding slot="$place2.object" value="$this.place2_object"/>
+      <binding slot="$this.place2_location" value="location(0,0,1)"/>
       <binding slot="$this.place1_object" value="PhysObj.DinnerPlate"/>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$this.place3_newObject" value="$place3.newObject"/>
@@ -220,4 +195,5 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
   </task>
 
   > 
-  > quit
+  > 
+  > 

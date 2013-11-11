@@ -1,40 +1,38 @@
-    # 24-Oct-2013 3:10:00 PM - TaskEngine 1.4.8 / Disco 1.6.10
+    # 11-Nov-2013 3:28:32 PM - TaskEngine 1.5.1 / Disco 1.7.1
     Welcome to Disco! (Type 'help' for command list)
-  > cd ..\..\GitHub\HTNLfD\learn\test
-    D:\GitHub\HTNLfD\learn\test
-  > cd ..\models
+  > cd models
     D:\GitHub\HTNLfD\learn\models
   > load SetTableDemonstration.xml
   > 
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
-  > task Place / PhysObj.SquareTable / PhysObj.DinnerPlate / location(0,0,0)
-    User says "Please move DinnerPlate from [-10,-10,-10]  wrt SquareTable."
-    Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
+  > task Place / PhysObj.DinnerPlate / location(0,0,0) / PhysObj.SquareTable
+    User says "Please place DinnerPlate at [0,0,0] wrt SquareTable."
+    Agent place DinnerPlate at [0,0,0] wrt SquareTable.
     Agent says "Ok."
-  > task Place / PhysObj.DinnerPlate / PhysObj.SaladPlate / location(0,0,1)
-    User says "Please move SaladPlate from [-10,-10,-10]  wrt DinnerPlate."
-    Agent move SaladPlate from [10,10,11]  to [10,10,11] wrt DinnerPlate.
+  > task Place / PhysObj.SaladPlate / location(0,0,1) / PhysObj.DinnerPlate
+    User says "Please place SaladPlate at [0,0,1] wrt DinnerPlate."
+    Agent place SaladPlate at [0,0,1] wrt DinnerPlate.
     Agent says "Ok."
-  > task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl / location(0,0,2)
-    User says "Please move SoupBowl from [-10,-10,-10]  wrt DinnerPlate."
-    Agent move SoupBowl from [10,10,12]  to [10,10,12] wrt DinnerPlate.
+  > task Place / PhysObj.SoupBowl / location(0,0,2) / PhysObj.DinnerPlate
+    User says "Please place SoupBowl at [0,0,2] wrt DinnerPlate."
+    Agent place SoupBowl at [0,0,2] wrt DinnerPlate.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
     # Returned 'null'
-  > print PlaceDishes
+  > print PlaceDishes urn:disco.wpi.edu:htnlfd:setTable1
 
 <task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-    <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
-    <input name="place2_referenceFrame" type="PhysObj"/>
+    <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
     <input name="place2_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
+    <input name="place2_referenceFrame" type="PhysObj"/>
     <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
     <input name="place3_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
     <output name="place1_newObject" type="PhysObj"/>
@@ -51,8 +49,8 @@
       <binding slot="$place2.location" value="$this.place2_location"/>
       <binding slot="$place3.location" value="$this.place3_location"/>
       <binding slot="$this.place3_object" value="PhysObj.SoupBowl"/>
-      <binding slot="$this.place2_location" value="location(0,0,1)"/>
       <binding slot="$place2.object" value="$this.place2_object"/>
+      <binding slot="$this.place2_location" value="location(0,0,1)"/>
       <binding slot="$this.place1_object" value="PhysObj.DinnerPlate"/>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$this.place3_newObject" value="$place3.newObject"/>
@@ -67,35 +65,33 @@
     </subtasks>
   </task>
 
-    Agent says "Ok."
   > 
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
-  > task Place / PhysObj.DinnerPlate / PhysObj.Spoon / location(-1,0,0)
-    User says "Please move Spoon from [-10,-10,-10]  wrt DinnerPlate."
-    Agent move Spoon from [9,10,10]  to [9,10,10] wrt DinnerPlate.
+  > task Place / PhysObj.Spoon / location(-1,0,0) / PhysObj.DinnerPlate
+    User says "Please place Spoon at [-1,0,0] wrt DinnerPlate."
+    Agent place Spoon at [-1,0,0] wrt DinnerPlate.
     Agent says "Ok."
-  > task Place / PhysObj.DinnerPlate / PhysObj.Fork / location(1,0,0)
-    User says "Please move Fork from [-10,-10,-10]  wrt DinnerPlate."
-    Agent move Fork from [11,10,10]  to [11,10,10] wrt DinnerPlate.
+  > task Place / PhysObj.Fork / location(1,0,0) / PhysObj.DinnerPlate
+    User says "Please place Fork at [1,0,0] wrt DinnerPlate."
+    Agent place Fork at [1,0,0] wrt DinnerPlate.
     Agent says "Ok."
-  > task Place / PhysObj.DinnerPlate / PhysObj.Knife / location(-2,0,0)
-    User says "Please move Knife from [-10,-10,-10]  wrt DinnerPlate."
-    Agent move Knife from [8,10,10]  to [8,10,10] wrt DinnerPlate.
+  > task Place / PhysObj.Knife / location(-2,0,0) / PhysObj.DinnerPlate
+    User says "Please place Knife at [-2,0,0] wrt DinnerPlate."
+    Agent place Knife at [-2,0,0] wrt DinnerPlate.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
-WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
-  > print PlaceSilverware
+  > print PlaceSilverware urn:disco.wpi.edu:htnlfd:setTable2
 
 <task id="PlaceSilverware" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-    <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
+    <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
     <input name="place2_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
     <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
@@ -114,8 +110,8 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
       <binding slot="$place2.location" value="$this.place2_location"/>
       <binding slot="$place3.location" value="$this.place3_location"/>
       <binding slot="$this.place3_object" value="PhysObj.Knife"/>
-      <binding slot="$this.place2_location" value="location(1,0,0)"/>
       <binding slot="$place2.object" value="$this.place2_object"/>
+      <binding slot="$this.place2_location" value="location(1,0,0)"/>
       <binding slot="$this.place1_object" value="PhysObj.Spoon"/>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$this.place3_newObject" value="$place3.newObject"/>
@@ -129,27 +125,25 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     </subtasks>
   </task>
 
-    Agent says "Ok."
   > 
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
-  > task Place / PhysObj.DinnerPlate / PhysObj.WaterGlass / location(0,1,0)
-    User says "Please move WaterGlass from [-10,-10,-10]  wrt DinnerPlate."
-    Agent move WaterGlass from [10,11,10]  to [10,11,10] wrt DinnerPlate.
+  > task Place / PhysObj.WaterGlass / location(0,1,0) / PhysObj.DinnerPlate
+    User says "Please place WaterGlass at [0,1,0] wrt DinnerPlate."
+    Agent place WaterGlass at [0,1,0] wrt DinnerPlate.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")
-WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
-  > print PlaceGlasses
+  > print PlaceGlasses urn:disco.wpi.edu:htnlfd:setTable3
 
 <task id="PlaceGlasses" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-    <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
+    <input name="place1_referenceFrame" type="PhysObj"/>
     <output name="place1_newObject" type="PhysObj"/>
     <subtasks id="placeGlasses1">
       <step name="place1" task="std:Place"/>
@@ -163,42 +157,40 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     </subtasks>
   </task>
 
-    Agent says "Ok."
   > 
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
-  > task PlaceDishes
-    User says "Let's achieve PlaceDishes on SquareTable and DinnerPlate and [0,0,0] and DinnerPlate and SaladPlate and [0,0,1] and SoupBowl and [0,0,2]."
-    Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
-    Agent move SaladPlate from [10,10,11]  to [10,10,11] wrt DinnerPlate.
-    Agent move SoupBowl from [10,10,12]  to [10,10,12] wrt DinnerPlate.
+  > task PlaceDishes urn:disco.wpi.edu:htnlfd:setTable3
+    User says "Let's achieve {urn:disco.wpi.edu:htnlfd:setTable3}PlaceDishes on DinnerPlate and [0,0,0] and SquareTable and SaladPlate and [0,0,1] and DinnerPlate and SoupBowl and [0,0,2]."
+    Agent place DinnerPlate at [0,0,0] wrt SquareTable.
+    Agent place SaladPlate at [0,0,1] wrt DinnerPlate.
+    Agent place SoupBowl at [0,0,2] wrt DinnerPlate.
     Agent says "Ok."
-  > task PlaceSilverware
-    User says "Let's achieve PlaceSilverware on DinnerPlate and Spoon and [-1,0,0] and Fork and [1,0,0] and Knife and [-2,0,0]."
-    Agent move Spoon from [9,10,10]  to [9,10,10] wrt DinnerPlate.
-    Agent move Fork from [11,10,10]  to [11,10,10] wrt DinnerPlate.
-    Agent move Knife from [8,10,10]  to [8,10,10] wrt DinnerPlate.
+  > task PlaceSilverware urn:disco.wpi.edu:htnlfd:setTable3
+    User says "Let's achieve {urn:disco.wpi.edu:htnlfd:setTable3}PlaceSilverware on Spoon and [-1,0,0] and DinnerPlate and Fork and [1,0,0] and Knife and [-2,0,0]."
+    Agent place Spoon at [-1,0,0] wrt DinnerPlate.
+    Agent place Fork at [1,0,0] wrt DinnerPlate.
+    Agent place Knife at [-2,0,0] wrt DinnerPlate.
     Agent says "Ok."
-  > task PlaceGlasses
-    User says "Let's achieve PlaceGlasses on DinnerPlate and WaterGlass and [0,1,0]."
-    Agent move WaterGlass from [10,11,10]  to [10,11,10] wrt DinnerPlate.
+  > task PlaceGlasses urn:disco.wpi.edu:htnlfd:setTable3
+    User says "Let's achieve PlaceGlasses on WaterGlass and [0,1,0] and DinnerPlate."
+    Agent place WaterGlass at [0,1,0] wrt DinnerPlate.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"SetTable")
-WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
-  > print SetTable
+  > print SetTable urn:disco.wpi.edu:htnlfd:setTable4
 
 <task id="SetTable" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-    <input name="placeDishes1_place1_referenceFrame" type="PhysObj"/>
     <input modified="placeDishes1_place1_newObject" name="placeDishes1_place1_object" type="PhysObj"/>
     <input name="placeDishes1_place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
-    <input name="placeDishes1_place2_referenceFrame" type="PhysObj"/>
+    <input name="placeDishes1_place1_referenceFrame" type="PhysObj"/>
     <input modified="placeDishes1_place2_newObject" name="placeDishes1_place2_object" type="PhysObj"/>
     <input name="placeDishes1_place2_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
+    <input name="placeDishes1_place2_referenceFrame" type="PhysObj"/>
     <input modified="placeDishes1_place3_newObject" name="placeDishes1_place3_object" type="PhysObj"/>
     <input name="placeDishes1_place3_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
     <input modified="placeSilverware1_place1_newObject" name="placeSilverware1_place1_object" type="PhysObj"/>
@@ -217,9 +209,9 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     <output name="placeSilverware1_place3_newObject" type="PhysObj"/>
     <output name="placeGlasses1_place1_newObject" type="PhysObj"/>
     <subtasks id="setTable1" ordered="false">
-      <step name="placeDishes1" task="PlaceDishes"/>
-      <step name="placeSilverware1" requires="placeDishes1" task="PlaceSilverware"/>
-      <step name="placeGlasses1" requires="placeDishes1" task="PlaceGlasses"/>
+      <step name="placeDishes1" task="setTable3:PlaceDishes"/>
+      <step name="placeSilverware1" requires="placeDishes1" task="setTable3:PlaceSilverware"/>
+      <step name="placeGlasses1" requires="placeDishes1" task="setTable3:PlaceGlasses"/>
       <binding slot="$this.placeDishes1_place3_object" value="PhysObj.SoupBowl"/>
       <binding slot="$placeSilverware1.place1_referenceFrame" value="$this.placeDishes1_place2_referenceFrame"/>
       <binding slot="$placeDishes1.place2_object" value="$this.placeDishes1_place2_object"/>
@@ -248,8 +240,8 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
       <binding slot="$this.placeDishes1_place2_newObject" value="$placeDishes1.place2_newObject"/>
       <binding slot="$this.placeGlasses1_place1_object" value="PhysObj.WaterGlass"/>
       <binding slot="$this.placeGlasses1_place1_newObject" value="$placeGlasses1.place1_newObject"/>
-      <binding slot="$this.placeDishes1_place1_object" value="PhysObj.DinnerPlate"/>
       <binding slot="$placeDishes1.place2_location" value="$this.placeDishes1_place2_location"/>
+      <binding slot="$this.placeDishes1_place1_object" value="PhysObj.DinnerPlate"/>
       <binding slot="$this.placeDishes1_place3_location" value="location(0,0,2)"/>
       <binding slot="$this.placeDishes1_place3_newObject" value="$placeDishes1.place3_newObject"/>
       <binding slot="$this.placeSilverware1_place1_object" value="PhysObj.Spoon"/>
@@ -264,7 +256,6 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     </subtasks>
   </task>
 
-    Agent says "Ok."
   > 
   > eval Reset()
     # Returned 'null'
@@ -272,32 +263,33 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
-  > task  Place / PhysObj.SquareTable / PhysObj.DinnerPlate / location(0,0,0)
-    User says "Please move DinnerPlate from [-10,-10,-10]  wrt SquareTable."
-    Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
+  > task  Place / PhysObj.DinnerPlate / location(0,0,0) / PhysObj.SquareTable
+    User says "Please place DinnerPlate at [0,0,0] wrt SquareTable."
+    Agent place DinnerPlate at [0,0,0] wrt SquareTable.
     Agent says "Ok."
-  > task Place / PhysObj.DinnerPlate / PhysObj.SoupBowl / location(0,0,2)
-    User says "Please move SoupBowl from [-10,-10,-10]  wrt DinnerPlate."
-    Agent move SoupBowl from [10,10,12]  to [10,10,12] wrt DinnerPlate.
+  > task Place / PhysObj.SoupBowl / location(0,0,2) / PhysObj.DinnerPlate
+    User says "Please place SoupBowl at [0,0,2] wrt DinnerPlate."
+    Agent place SoupBowl at [0,0,2] wrt DinnerPlate.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
-WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
-  > print PlaceDishes
+  > eval Packages.edu.wpi.htnlfd.Init.answerQuestion($disco,"PlaceDishes","Fancy")
+    # Returned 'null'
+  > print PlaceDishes urn:disco.wpi.edu:htnlfd:setTable6
 
 <task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-    <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
-    <input name="place2_referenceFrame" type="PhysObj"/>
+    <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
     <input name="place2_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
+    <input name="place2_referenceFrame" type="PhysObj"/>
     <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
     <input name="place3_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
-    <input name="input1" type="boolean"/>
+    <input name="Fancy" type="boolean"/>
     <output name="place1_newObject" type="PhysObj"/>
     <output name="place2_newObject" type="PhysObj"/>
     <output name="place3_newObject" type="PhysObj"/>
@@ -305,7 +297,7 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
       <step name="place1" task="std:Place"/>
       <step name="place2" requires="place1" task="std:Place"/>
       <step name="place3" requires="place1" task="std:Place"/>
-      <applicable>$this.input1</applicable>
+      <applicable>this.Fancy</applicable>
       <binding slot="$place3.referenceFrame" value="$this.place2_referenceFrame"/>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$this.place3_newObject" value="$place3.newObject"/>
@@ -322,56 +314,57 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     <subtasks id="placeDishes2" ordered="false">
       <step name="place1" task="std:Place"/>
       <step name="place2" requires="place1" task="std:Place"/>
-      <applicable>!$this.input1</applicable>
-      <binding slot="$place1.location" value="$this.place1_location"/>
-      <binding slot="$place2.location" value="$this.place3_location"/>
-      <binding slot="$place2.object" value="$this.place3_object"/>
+      <applicable>!this.Fancy</applicable>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$this.place3_newObject" value="$place2.newObject"/>
       <binding slot="$this.place1_newObject" value="$place1.newObject"/>
       <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$place1.location" value="$this.place1_location"/>
       <binding slot="$place2.referenceFrame" value="$this.place2_referenceFrame"/>
+      <binding slot="$place2.location" value="$this.place3_location"/>
+      <binding slot="$place2.object" value="$this.place3_object"/>
     </subtasks>
   </task>
 
-    Agent says "Ok."
+  > 
   > 
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
-  > task Place / PhysObj.DinnerPlate / PhysObj.Spoon / location(-1,0,0)
-    User says "Please move Spoon from [-10,-10,-10]  wrt DinnerPlate."
-    Agent move Spoon from [9,10,10]  to [9,10,10] wrt DinnerPlate.
+  > task Place / PhysObj.Spoon / location(-1,0,0) / PhysObj.DinnerPlate
+    User says "Please place Spoon at [-1,0,0] wrt DinnerPlate."
+    Agent place Spoon at [-1,0,0] wrt DinnerPlate.
     Agent says "Ok."
-  > task Place / PhysObj.DinnerPlate / PhysObj.Fork / location(1,0,0)
-    User says "Please move Fork from [-10,-10,-10]  wrt DinnerPlate."
-    Agent move Fork from [11,10,10]  to [11,10,10] wrt DinnerPlate.
+  > task Place / PhysObj.Fork / location(1,0,0) / PhysObj.DinnerPlate
+    User says "Please place Fork at [1,0,0] wrt DinnerPlate."
+    Agent place Fork at [1,0,0] wrt DinnerPlate.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
-WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
-  > print PlaceSilverware
+  > eval Packages.edu.wpi.htnlfd.Init.answerQuestion($disco,"PlaceSilverware","Fancy")
+    # Returned 'null'
+  > print PlaceSilverware urn:disco.wpi.edu:htnlfd:setTable8
 
 <task id="PlaceSilverware" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-    <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
+    <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
     <input name="place2_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
     <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
     <input name="place3_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
-    <input name="input1" type="boolean"/>
+    <input name="Fancy" type="boolean"/>
     <output name="place1_newObject" type="PhysObj"/>
     <output name="place2_newObject" type="PhysObj"/>
     <output name="place3_newObject" type="PhysObj"/>
     <subtasks id="placeSilverware1">
       <step name="place1" task="std:Place"/>
-      <step minOccurs="0" name="place2" task="std:Place"/>
-      <step minOccurs="0" name="place3" task="std:Place"/>
-      <applicable>$this.input1</applicable>
+      <step name="place2" task="std:Place"/>
+      <step name="place3" task="std:Place"/>
+      <applicable>this.Fancy</applicable>
       <binding slot="$place3.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$this.place3_newObject" value="$place3.newObject"/>
@@ -388,51 +381,51 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     <subtasks id="placeSilverware2">
       <step name="place1" task="std:Place"/>
       <step name="place2" task="std:Place"/>
-      <applicable>!$this.input1</applicable>
-      <binding slot="$place1.location" value="$this.place1_location"/>
-      <binding slot="$place2.location" value="$this.place2_location"/>
-      <binding slot="$place2.object" value="$this.place2_object"/>
+      <applicable>!this.Fancy</applicable>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
-      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
       <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
+      <binding slot="$place1.location" value="$this.place1_location"/>
       <binding slot="$place2.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$place2.location" value="$this.place2_location"/>
       <binding slot="$this.place2_newObject" value="$place2.newObject"/>
+      <binding slot="$place2.object" value="$this.place2_object"/>
     </subtasks>
   </task>
 
-    Agent says "Ok."
   > 
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
-  > task Place / PhysObj.DinnerPlate / PhysObj.WaterGlass / location(0,1,0)
-    User says "Please move WaterGlass from [-10,-10,-10]  wrt DinnerPlate."
-    Agent move WaterGlass from [10,11,10]  to [10,11,10] wrt DinnerPlate.
+  > task Place / PhysObj.WaterGlass / location(0,1,0) / PhysObj.DinnerPlate
+    User says "Please place WaterGlass at [0,1,0] wrt DinnerPlate."
+    Agent place WaterGlass at [0,1,0] wrt DinnerPlate.
     Agent says "Ok."
-  > task Place / PhysObj.DinnerPlate / PhysObj.WineGlass / location(0,-1,0)
-    User says "Please move WineGlass from [-10,-10,-10]  wrt DinnerPlate."
-    Agent move WineGlass from [10,9,10]  to [10,9,10] wrt DinnerPlate.
+  > task Place / PhysObj.WineGlass / location(0,-1,0) / PhysObj.DinnerPlate
+    User says "Please place WineGlass at [0,-1,0] wrt DinnerPlate."
+    Agent place WineGlass at [0,-1,0] wrt DinnerPlate.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")
-WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     # Returned 'null'
-  > print PlaceGlasses
+  > eval Packages.edu.wpi.htnlfd.Init.answerQuestion($disco,"PlaceGlasses","Fancy")
+    # Returned 'null'
+  > print PlaceGlasses urn:disco.wpi.edu:htnlfd:setTable9
 
 <task id="PlaceGlasses" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-    <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
-    <input name="input1" type="boolean"/>
+    <input name="place1_referenceFrame" type="PhysObj"/>
+    <input name="Fancy" type="boolean"/>
     <input modified="placeGlasses2_place2_newObject" name="placeGlasses2_place2_object" type="PhysObj"/>
     <input name="placeGlasses2_place2_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
     <output name="place1_newObject" type="PhysObj"/>
     <output name="placeGlasses2_place2_newObject" type="PhysObj"/>
     <subtasks id="placeGlasses1">
       <step name="place1" task="std:Place"/>
-      <applicable>$this.input1</applicable>
+      <applicable>this.Fancy</applicable>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$place1.object" value="$this.place1_object"/>
       <binding slot="$this.place1_newObject" value="$place1.newObject"/>
@@ -441,28 +434,27 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     <subtasks id="placeGlasses2">
       <step name="place1" task="std:Place"/>
       <step name="place2" task="std:Place"/>
-      <applicable>!$this.input1</applicable>
-      <binding slot="$place1.location" value="$this.place1_location"/>
-      <binding slot="$place2.location" value="$this.placeGlasses2_place2_location"/>
-      <binding slot="$place2.object" value="$this.placeGlasses2_place2_object"/>
+      <applicable>!this.Fancy</applicable>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
-      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
       <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
+      <binding slot="$place1.location" value="$this.place1_location"/>
       <binding slot="$place2.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$place2.location" value="$this.placeGlasses2_place2_location"/>
       <binding slot="$this.placeGlasses2_place2_newObject" value="$place2.newObject"/>
+      <binding slot="$place2.object" value="$this.placeGlasses2_place2_object"/>
     </subtasks>
   </task>
 
-    Agent says "Ok."
-  > print SetTable
+  > print SetTable urn:disco.wpi.edu:htnlfd:setTable9
 
 <task id="SetTable" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-    <input name="placeDishes1_place1_referenceFrame" type="PhysObj"/>
     <input modified="placeDishes1_place1_newObject" name="placeDishes1_place1_object" type="PhysObj"/>
     <input name="placeDishes1_place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
-    <input name="placeDishes1_place2_referenceFrame" type="PhysObj"/>
+    <input name="placeDishes1_place1_referenceFrame" type="PhysObj"/>
     <input modified="placeDishes1_place2_newObject" name="placeDishes1_place2_object" type="PhysObj"/>
     <input name="placeDishes1_place2_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
+    <input name="placeDishes1_place2_referenceFrame" type="PhysObj"/>
     <input modified="placeDishes1_place3_newObject" name="placeDishes1_place3_object" type="PhysObj"/>
     <input name="placeDishes1_place3_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
     <input modified="placeSilverware1_place1_newObject" name="placeSilverware1_place1_object" type="PhysObj"/>
@@ -475,7 +467,6 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     <input name="placeGlasses1_place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
     <input modified="placeGlasses1_placeGlasses2_place2_newObject" name="placeGlasses1_placeGlasses2_place2_object" type="PhysObj"/>
     <input name="placeGlasses1_placeGlasses2_place2_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
-    <input name="input1" type="boolean"/>
     <output name="placeDishes1_place1_newObject" type="PhysObj"/>
     <output name="placeDishes1_place2_newObject" type="PhysObj"/>
     <output name="placeDishes1_place3_newObject" type="PhysObj"/>
@@ -485,65 +476,220 @@ WARNING: redefining task model urn:disco.wpi.edu:htnlfd:setTable1
     <output name="placeGlasses1_place1_newObject" type="PhysObj"/>
     <output name="placeGlasses1_placeGlasses2_place2_newObject" type="PhysObj"/>
     <subtasks id="setTable1" ordered="false">
-      <step name="placeDishes1" task="PlaceDishes"/>
-      <step name="placeSilverware1" requires="placeDishes1" task="PlaceSilverware"/>
+      <step name="placeDishes1" task="setTable8:PlaceDishes"/>
+      <step name="placeSilverware1" requires="placeDishes1" task="setTable8:PlaceSilverware"/>
       <step name="placeGlasses1" requires="placeDishes1" task="PlaceGlasses"/>
       <binding slot="$this.placeDishes1_place3_object" value="PhysObj.SoupBowl"/>
       <binding slot="$placeSilverware1.place1_referenceFrame" value="$this.placeDishes1_place2_referenceFrame"/>
-      <binding slot="$placeDishes1.input1" value="this.input1"/>
+      <binding slot="$placeDishes1.place2_object" value="$this.placeDishes1_place2_object"/>
+      <binding slot="$this.placeSilverware1_place3_location" value="location(-2,0,0)"/>
+      <binding slot="$this.placeSilverware1_place1_newObject" value="$placeSilverware1.place1_newObject"/>
       <binding slot="$this.placeGlasses1_placeGlasses2_place2_object" value="PhysObj.WineGlass"/>
       <binding slot="$this.placeSilverware1_place1_location" value="location(-1,0,0)"/>
       <binding slot="$placeGlasses1.place1_location" value="$this.placeGlasses1_place1_location"/>
       <binding slot="$placeDishes1.place1_location" value="$this.placeDishes1_place1_location"/>
       <binding slot="$this.placeDishes1_place1_referenceFrame" value="PhysObj.SquareTable"/>
-      <binding slot="$placeSilverware1.input1" value="this.input1"/>
+      <binding slot="$this.placeGlasses1_place1_location" value="location(0,1,0)"/>
+      <binding slot="$placeDishes1.place1_referenceFrame" value="$this.placeDishes1_place1_referenceFrame"/>
+      <binding slot="$placeDishes1.place3_object" value="$this.placeDishes1_place3_object"/>
+      <binding slot="$this.placeGlasses1_placeGlasses2_place2_newObject" value="$placeGlasses1.placeGlasses2_place2_newObject"/>
+      <binding slot="$placeSilverware1.place3_location" value="$this.placeSilverware1_place3_location"/>
       <binding slot="$this.placeDishes1_place1_newObject" value="$placeDishes1.place1_newObject"/>
       <binding slot="$this.placeDishes1_place2_referenceFrame" value="PhysObj.DinnerPlate"/>
       <binding slot="$placeSilverware1.place2_location" value="$this.placeSilverware1_place2_location"/>
+      <binding slot="$this.placeDishes1_place2_object" value="PhysObj.SaladPlate"/>
       <binding slot="$this.placeSilverware1_place2_location" value="location(1,0,0)"/>
       <binding slot="$placeGlasses1.placeGlasses2_place2_object" value="$this.placeGlasses1_placeGlasses2_place2_object"/>
-      <binding slot="$this.placeSilverware1_place2_newObject" value="$placeSilverware1.place2_newObject"/>
-      <binding slot="$placeSilverware1.place1_object" value="$this.placeSilverware1_place1_object"/>
-      <binding slot="$placeSilverware1.place3_object" value="$this.placeSilverware1_place3_object"/>
-      <binding slot="$placeGlasses1.place1_referenceFrame" value="$this.placeDishes1_place2_referenceFrame"/>
-      <binding slot="$placeSilverware1.place2_object" value="$this.placeSilverware1_place2_object"/>
-      <binding slot="$this.placeGlasses1_placeGlasses2_place2_location" value="location(0,-1,0)"/>
-      <binding slot="$placeGlasses1.input1" value="this.input1"/>
-      <binding slot="$this.placeDishes1_place1_object" value="PhysObj.DinnerPlate"/>
-      <binding slot="$this.placeSilverware1_place2_object" value="PhysObj.Fork"/>
-      <binding slot="$this.placeSilverware1_place3_object" value="PhysObj.Knife"/>
-      <binding slot="$this.placeDishes1_place2_location" value="location(0,0,1)"/>
-      <binding slot="$this.placeDishes1_place1_location" value="location(0,0,0)"/>
-      <binding slot="$placeDishes1.place2_object" value="$this.placeDishes1_place2_object"/>
-      <binding slot="$this.placeSilverware1_place3_location" value="location(-2,0,0)"/>
-      <binding slot="$this.placeSilverware1_place1_newObject" value="$placeSilverware1.place1_newObject"/>
-      <binding slot="$placeDishes1.place3_object" value="$this.placeDishes1_place3_object"/>
-      <binding slot="$placeDishes1.place1_referenceFrame" value="$this.placeDishes1_place1_referenceFrame"/>
-      <binding slot="$this.placeGlasses1_place1_location" value="location(0,1,0)"/>
-      <binding slot="$this.placeGlasses1_placeGlasses2_place2_newObject" value="$placeGlasses1.placeGlasses2_place2_newObject"/>
-      <binding slot="$placeSilverware1.place3_location" value="$this.placeSilverware1_place3_location"/>
-      <binding slot="$this.placeDishes1_place2_object" value="PhysObj.SaladPlate"/>
       <binding slot="$placeGlasses1.place1_object" value="$this.placeGlasses1_place1_object"/>
+      <binding slot="$this.placeSilverware1_place2_newObject" value="$placeSilverware1.place2_newObject"/>
+      <binding slot="$placeSilverware1.place3_object" value="$this.placeSilverware1_place3_object"/>
+      <binding slot="$placeSilverware1.place1_object" value="$this.placeSilverware1_place1_object"/>
+      <binding slot="$placeGlasses1.place1_referenceFrame" value="$this.placeDishes1_place2_referenceFrame"/>
       <binding slot="$placeDishes1.place3_location" value="$this.placeDishes1_place3_location"/>
+      <binding slot="$this.placeGlasses1_placeGlasses2_place2_location" value="location(0,-1,0)"/>
+      <binding slot="$placeSilverware1.place2_object" value="$this.placeSilverware1_place2_object"/>
       <binding slot="$this.placeDishes1_place2_newObject" value="$placeDishes1.place2_newObject"/>
-      <binding slot="$this.placeGlasses1_place1_newObject" value="$placeGlasses1.place1_newObject"/>
       <binding slot="$this.placeGlasses1_place1_object" value="PhysObj.WaterGlass"/>
-      <binding slot="$this.placeDishes1_place3_location" value="location(0,0,2)"/>
+      <binding slot="$this.placeGlasses1_place1_newObject" value="$placeGlasses1.place1_newObject"/>
       <binding slot="$placeDishes1.place2_location" value="$this.placeDishes1_place2_location"/>
+      <binding slot="$this.placeDishes1_place1_object" value="PhysObj.DinnerPlate"/>
+      <binding slot="$this.placeDishes1_place3_location" value="location(0,0,2)"/>
       <binding slot="$this.placeDishes1_place3_newObject" value="$placeDishes1.place3_newObject"/>
       <binding slot="$this.placeSilverware1_place1_object" value="PhysObj.Spoon"/>
       <binding slot="$placeDishes1.place1_object" value="$this.placeDishes1_place1_object"/>
+      <binding slot="$this.placeSilverware1_place2_object" value="PhysObj.Fork"/>
       <binding slot="$placeSilverware1.place1_location" value="$this.placeSilverware1_place1_location"/>
+      <binding slot="$this.placeSilverware1_place3_object" value="PhysObj.Knife"/>
       <binding slot="$this.placeSilverware1_place3_newObject" value="$placeSilverware1.place3_newObject"/>
+      <binding slot="$this.placeDishes1_place2_location" value="location(0,0,1)"/>
       <binding slot="$placeDishes1.place2_referenceFrame" value="$this.placeDishes1_place2_referenceFrame"/>
+      <binding slot="$this.placeDishes1_place1_location" value="location(0,0,0)"/>
       <binding slot="$placeGlasses1.placeGlasses2_place2_location" value="$this.placeGlasses1_placeGlasses2_place2_location"/>
     </subtasks>
   </task>
 
+  > 
+  > task SetTable urn:disco.wpi.edu:htnlfd:setTable9
+    User says "Let's achieve {urn:disco.wpi.edu:htnlfd:setTable9}SetTable on DinnerPlate and [0,0,0] and SquareTable and SaladPlate and [0,0,1] and DinnerPlate and SoupBowl and [0,0,2] and Spoon and [-1,0,0] and Fork and [1,0,0] and Knife and [-2,0,0] and WaterGlass and [0,1,0] and WineGlass and [0,-1,0]."
+    Agent says "What is the {urn:disco.wpi.edu:htnlfd:setTable8}PlaceDishes Fancy?"
+  > 
+  > 
+  > say
+[1] True.
+[2] False.
+[3] Let's not achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceDishes on DinnerPlate and [0,0,0] and SquareTable and SaladPlate and [0,0,1] and DinnerPlate and SoupBowl and [0,0,2].
+[4] Let's not achieve {urn:disco.wpi.edu:htnlfd:setTable9}SetTable on DinnerPlate and [0,0,0] and SquareTable and SaladPlate and [0,0,1] and DinnerPlate and SoupBowl and [0,0,2] and Spoon and [-1,0,0] and Fork and [1,0,0] and Knife and [-2,0,0] and WaterGlass and [0,1,0] and WineGlass and [0,-1,0].
+[5] Let's achieve Demonstration.
+[6] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable1}PlaceDishes.
+[7] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable2}PlaceDishes.
+[8] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable2}PlaceSilverware.
+[9] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable4}PlaceDishes.
+[10] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable4}SetTable.
+[11] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable5}SetTable.
+[12] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable6}PlaceSilverware.
+[13] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable6}SetTable.
+[14] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable7}SetTable.
+[15] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceGlasses.
+[16] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}SetTable.
+[17] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceSilverware.
+[18] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceGlasses.
+[19] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}SetTable.
+[20] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceDishes.
+  >> 1
+    User says "True."
+    Agent says "How shall we achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceDishes on DinnerPlate and [0,0,0] and SquareTable and SaladPlate and [0,0,1] and DinnerPlate and SoupBowl and [0,0,2] and true?"
+  > say
+[1] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceDishes on DinnerPlate and [0,0,0] and SquareTable and SaladPlate and [0,0,1] and DinnerPlate and SoupBowl and [0,0,2] and true by placeDishes1.
+[2] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceDishes on DinnerPlate and [0,0,0] and SquareTable and SaladPlate and [0,0,1] and DinnerPlate and SoupBowl and [0,0,2] and true by placeDishes2.
+[3] Let's not achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceDishes on DinnerPlate and [0,0,0] and SquareTable and SaladPlate and [0,0,1] and DinnerPlate and SoupBowl and [0,0,2] and true.
+[4] Let's not achieve {urn:disco.wpi.edu:htnlfd:setTable9}SetTable on DinnerPlate and [0,0,0] and SquareTable and SaladPlate and [0,0,1] and DinnerPlate and SoupBowl and [0,0,2] and Spoon and [-1,0,0] and Fork and [1,0,0] and Knife and [-2,0,0] and WaterGlass and [0,1,0] and WineGlass and [0,-1,0].
+[5] Let's achieve Demonstration.
+[6] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable1}PlaceDishes.
+[7] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable2}PlaceDishes.
+[8] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable2}PlaceSilverware.
+[9] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable4}PlaceDishes.
+[10] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable4}SetTable.
+[11] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable5}SetTable.
+[12] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable6}PlaceSilverware.
+[13] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable6}SetTable.
+[14] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable7}SetTable.
+[15] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceGlasses.
+[16] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}SetTable.
+[17] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceSilverware.
+[18] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceGlasses.
+[19] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}SetTable.
+[20] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceDishes.
+  >> 1
+    User says "Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceDishes on DinnerPlate and [0,0,0] and SquareTable and SaladPlate and [0,0,1] and DinnerPlate and SoupBowl and [0,0,2] and true by placeDishes1."
+    Agent place DinnerPlate at [0,0,0] wrt SquareTable.
+    Agent place SaladPlate at [0,0,1] wrt DinnerPlate.
+    Agent place SoupBowl at [0,0,2] wrt DinnerPlate.
+    Agent says "What is the {urn:disco.wpi.edu:htnlfd:setTable8}PlaceSilverware Fancy?"
+  > say
+[1] True.
+[2] False.
+[3] I don't want to specify Fancy for {urn:disco.wpi.edu:htnlfd:setTable8}PlaceSilverware.
+[4] Let's not achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceSilverware on Spoon and [-1,0,0] and DinnerPlate and Fork and [1,0,0] and Knife and [-2,0,0].
+[5] Let's achieve Demonstration.
+[6] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable1}PlaceDishes.
+[7] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable2}PlaceDishes.
+[8] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable2}PlaceSilverware.
+[9] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable4}PlaceDishes.
+[10] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable4}SetTable.
+[11] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable5}SetTable.
+[12] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable6}PlaceSilverware.
+[13] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable6}SetTable.
+[14] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable7}SetTable.
+[15] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceGlasses.
+[16] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}SetTable.
+[17] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceSilverware.
+[18] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceGlasses.
+[19] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}SetTable.
+[20] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceDishes.
+  >> 1
+    User says "True."
+    Agent says "How shall we achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceSilverware on Spoon and [-1,0,0] and DinnerPlate and Fork and [1,0,0] and Knife and [-2,0,0] and true?"
+  > say
+[1] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceSilverware on Spoon and [-1,0,0] and DinnerPlate and Fork and [1,0,0] and Knife and [-2,0,0] and true by placeSilverware1.
+[2] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceSilverware on Spoon and [-1,0,0] and DinnerPlate and Fork and [1,0,0] and Knife and [-2,0,0] and true by placeSilverware2.
+[3] Let's not achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceSilverware on Spoon and [-1,0,0] and DinnerPlate and Fork and [1,0,0] and Knife and [-2,0,0] and true.
+[4] Stop achieve {urn:disco.wpi.edu:htnlfd:setTable9}SetTable on DinnerPlate and [0,0,0] and SquareTable and SaladPlate and [0,0,1] and DinnerPlate and SoupBowl and [0,0,2] and Spoon and [-1,0,0] and Fork and [1,0,0] and Knife and [-2,0,0] and WaterGlass and [0,1,0] and WineGlass and [0,-1,0] producing DinnerPlate and SaladPlate and SoupBowl.
+[5] Let's achieve Demonstration.
+[6] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable1}PlaceDishes.
+[7] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable2}PlaceDishes.
+[8] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable2}PlaceSilverware.
+[9] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable4}PlaceDishes.
+[10] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable4}SetTable.
+[11] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable5}SetTable.
+[12] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable6}PlaceSilverware.
+[13] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable6}SetTable.
+[14] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable7}SetTable.
+[15] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceGlasses.
+[16] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}SetTable.
+[17] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceSilverware.
+[18] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceGlasses.
+[19] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}SetTable.
+[20] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceDishes.
+  >> 1
+    User says "Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceSilverware on Spoon and [-1,0,0] and DinnerPlate and Fork and [1,0,0] and Knife and [-2,0,0] and true by placeSilverware1."
+    Agent place Spoon at [-1,0,0] wrt DinnerPlate.
+    Agent place Fork at [1,0,0] wrt DinnerPlate.
+    Agent place Knife at [-2,0,0] wrt DinnerPlate.
+    Agent says "What is the {urn:disco.wpi.edu:htnlfd:setTable9}PlaceGlasses Fancy?"
+  > 
+  > 
+  > say
+[1] True.
+[2] False.
+[3] I don't want to specify Fancy for {urn:disco.wpi.edu:htnlfd:setTable9}PlaceGlasses.
+[4] Let's not achieve {urn:disco.wpi.edu:htnlfd:setTable9}PlaceGlasses on WaterGlass and [0,1,0] and DinnerPlate and a boolean and WineGlass and [0,-1,0].
+[5] Let's achieve Demonstration.
+[6] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable1}PlaceDishes.
+[7] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable2}PlaceDishes.
+[8] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable2}PlaceSilverware.
+[9] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable4}PlaceDishes.
+[10] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable4}SetTable.
+[11] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable5}SetTable.
+[12] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable6}PlaceSilverware.
+[13] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable6}SetTable.
+[14] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable7}SetTable.
+[15] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceGlasses.
+[16] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}SetTable.
+[17] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceSilverware.
+[18] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceGlasses.
+[19] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}SetTable.
+[20] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceDishes.
+  >> 1
+    User says "True."
+    Agent says "How shall we achieve {urn:disco.wpi.edu:htnlfd:setTable9}PlaceGlasses on WaterGlass and [0,1,0] and DinnerPlate and true and WineGlass and [0,-1,0]?"
+  > say
+[1] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable9}PlaceGlasses on WaterGlass and [0,1,0] and DinnerPlate and true and WineGlass and [0,-1,0] by placeGlasses1.
+[2] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable9}PlaceGlasses on WaterGlass and [0,1,0] and DinnerPlate and true and WineGlass and [0,-1,0] by placeGlasses2.
+[3] Let's not achieve {urn:disco.wpi.edu:htnlfd:setTable9}PlaceGlasses on WaterGlass and [0,1,0] and DinnerPlate and true and WineGlass and [0,-1,0].
+[4] Stop achieve {urn:disco.wpi.edu:htnlfd:setTable9}SetTable on DinnerPlate and [0,0,0] and SquareTable and SaladPlate and [0,0,1] and DinnerPlate and SoupBowl and [0,0,2] and Spoon and [-1,0,0] and Fork and [1,0,0] and Knife and [-2,0,0] and WaterGlass and [0,1,0] and WineGlass and [0,-1,0] producing DinnerPlate and SaladPlate and SoupBowl and Spoon and Fork and Knife.
+[5] Let's achieve Demonstration.
+[6] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable1}PlaceDishes.
+[7] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable2}PlaceDishes.
+[8] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable2}PlaceSilverware.
+[9] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable4}PlaceDishes.
+[10] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable4}SetTable.
+[11] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable5}SetTable.
+[12] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable6}PlaceSilverware.
+[13] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable6}SetTable.
+[14] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable7}SetTable.
+[15] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceGlasses.
+[16] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}SetTable.
+[17] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceSilverware.
+[18] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceGlasses.
+[19] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}SetTable.
+[20] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceDishes.
+  >> 1
+    User says "Let's achieve {urn:disco.wpi.edu:htnlfd:setTable9}PlaceGlasses on WaterGlass and [0,1,0] and DinnerPlate and true and WineGlass and [0,-1,0] by placeGlasses1."
+    Agent place WaterGlass at [0,1,0] wrt DinnerPlate.
     Agent says "Ok."
   > 
+  > next
+    Agent says "Ok."
   > 
-  > 
-  > 
-  > 
-  > 
+  > quit
+    

@@ -1,32 +1,23 @@
-#
-# In this example we will see MaxOccurs
-# This is for placing 3 DinnerPlate on the Table. 
-#
-    # 24-Oct-2013 2:40:58 PM - TaskEngine 1.4.8 / Disco 1.6.10
+    # 11-Nov-2013 3:42:39 PM - TaskEngine 1.5.1 / Disco 1.7.1
     Welcome to Disco! (Type 'help' for command list)
-  > cd ..\..\GitHub\HTNLfD\learn\test
-    D:\GitHub\HTNLfD\learn\test
-  > cd ..\models
+  > cd models
     D:\GitHub\HTNLfD\learn\models
   > load SetTableDemonstration.xml
   > 
   > task Demonstration
     User says "Let's achieve Demonstration."
-    Agent says "Ok." 
-#
-# In this demonstration we have three steps that are exactly the same in their type and inputs and ordering constraints 
-#
-  > task Place / PhysObj.SquareTable / PhysObj.DinnerPlate / location(0,0,0)
-    User says "Please move DinnerPlate from [-10,-10,-10]  wrt SquareTable."
-    Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
     Agent says "Ok."
-  > task Place / PhysObj.SquareTable / PhysObj.DinnerPlate / location(0,0,0)
-    User says "Please move DinnerPlate from [10,10,10]  wrt SquareTable."
-    Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
+  > task Place / PhysObj.DinnerPlate / location(0,0,0) / PhysObj.SquareTable
+    User says "Please place DinnerPlate at [0,0,0] wrt SquareTable."
+    Agent place DinnerPlate at [0,0,0] wrt SquareTable.
     Agent says "Ok."
-  > task Place / PhysObj.SquareTable / PhysObj.DinnerPlate / location(0,0,0)
-    User says "Please move DinnerPlate from [10,10,10]  wrt SquareTable."
-    Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
+  > task Place / PhysObj.DinnerPlate / location(0,0,0) / PhysObj.SquareTable
+    User says "Please place DinnerPlate at [0,0,0] wrt SquareTable."
+    Agent place DinnerPlate at [0,0,0] wrt SquareTable.
+    Agent says "Ok."
+  > task Place / PhysObj.DinnerPlate / location(0,0,0) / PhysObj.SquareTable
+    User says "Please place DinnerPlate at [0,0,0] wrt SquareTable."
+    Agent place DinnerPlate at [0,0,0] wrt SquareTable.
     Agent says "Ok."
   > done Demonstration
     User says "Achieve Demonstration is done."
@@ -36,13 +27,10 @@
   > print PlaceDishes
 
 <task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-    <input name="place1_referenceFrame" type="PhysObj"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
-    <output name="place1_newObject" type="PhysObj"/> 
-#
-# Instead of adding three steps with the same inputs and outputs, we have just one step with MaxOccurs attribute 
-#
+    <input name="place1_referenceFrame" type="PhysObj"/>
+    <output name="place1_newObject" type="PhysObj"/>
     <subtasks id="placeDishes1" ordered="false">
       <step maxOccurs="3" name="place1" task="std:Place"/>
       <binding slot="$this.place1_location" value="location(0,0,0)"/>
@@ -55,87 +43,30 @@
     </subtasks>
   </task>
 
-    Agent says "Ok."
   > 
-  > history
-
-[Achieve Demonstration] -accepted <-focus
-   User says "Let's achieve Demonstration."
-   Agent says "Ok."
-   [Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable] -accepted -done -interruption
-      User says "Please move DinnerPlate from [-10,-10,-10]  wrt SquareTable."
-      Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
-   Agent says "Ok."
-   [Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable] -accepted -done -interruption
-      User says "Please move DinnerPlate from [10,10,10]  wrt SquareTable."
-      Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
-   Agent says "Ok."
-   [Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable] -accepted -done -interruption
-      User says "Please move DinnerPlate from [10,10,10]  wrt SquareTable."
-      Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
-   Agent says "Ok."
-   User says "Achieve Demonstration is done."
-   Agent says "Ok."
-   Agent says "Ok."
-
-  > task SetTable
-java.lang.IllegalArgumentException: Unknown task id SetTable
-at edu.wpi.cetask.Shell.processTask(Shell.java:512)
   > task PlaceDishes
-    User says "Let's achieve PlaceDishes on SquareTable and DinnerPlate and [0,0,0]."
-    Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
-    Agent says "Should I move DinnerPlate from [10,10,10]  wrt SquareTable?"
+    User says "Let's achieve PlaceDishes on DinnerPlate and [0,0,0] and SquareTable."
+    Agent place DinnerPlate at [0,0,0] wrt SquareTable.
+    Agent says "Should I place DinnerPlate at [0,0,0] wrt SquareTable?"
   > say
 [1] Yes.
 [2] No.
-[3] Stop achieve PlaceDishes on SquareTable and DinnerPlate and [0,0,0] producing DinnerPlate.
+[3] Stop achieve PlaceDishes on DinnerPlate and [0,0,0] and SquareTable producing DinnerPlate.
 [4] Let's achieve Demonstration.
   >> 1
     User says "Yes."
-    Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
-    Agent says "Should I move DinnerPlate from [10,10,10]  wrt SquareTable?"
+    Agent place DinnerPlate at [0,0,0] wrt SquareTable.
+    Agent says "Should I place DinnerPlate at [0,0,0] wrt SquareTable?"
   > say
 [1] Yes.
 [2] No.
-[3] Stop achieve PlaceDishes on SquareTable and DinnerPlate and [0,0,0] producing DinnerPlate.
+[3] Stop achieve PlaceDishes on DinnerPlate and [0,0,0] and SquareTable producing DinnerPlate.
 [4] Let's achieve Demonstration.
   >> 1
     User says "Yes."
-    Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
+    Agent place DinnerPlate at [0,0,0] wrt SquareTable.
     Agent says "Ok."
-  > 
-  > history
-
-[Achieve Demonstration] -accepted
-   User says "Let's achieve Demonstration."
-   Agent says "Ok."
-   [Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable] -accepted -done -interruption
-      User says "Please move DinnerPlate from [-10,-10,-10]  wrt SquareTable."
-      Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
-   Agent says "Ok."
-   [Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable] -accepted -done -interruption
-      User says "Please move DinnerPlate from [10,10,10]  wrt SquareTable."
-      Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
-   Agent says "Ok."
-   [Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable] -accepted -done -interruption
-      User says "Please move DinnerPlate from [10,10,10]  wrt SquareTable."
-      Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
-   Agent says "Ok."
-   User says "Achieve Demonstration is done."
-   Agent says "Ok."
-   Agent says "Ok."
-[Achieve PlaceDishes on SquareTable and DinnerPlate and [0,0,0] producing DinnerPlate] -accepted -done
-   User says "Let's achieve PlaceDishes on SquareTable and DinnerPlate and [0,0,0]."
-   Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.\
-   [Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable] -optional -accepted -done
-      [User says please move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable]
-         Agent says "Should I move DinnerPlate from [10,10,10]  wrt SquareTable?"
-         User says "Yes."
-      Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
-   [Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable] -optional -accepted -done <-focus
-      [User says please move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable]
-         Agent says "Should I move DinnerPlate from [10,10,10]  wrt SquareTable?"
-         User says "Yes."
-      Agent move DinnerPlate from [10,10,10]  to [10,10,10] wrt SquareTable.
-      Agent says "Ok."
-
+  > say
+[1] Let's achieve Demonstration.
+[2] Let's achieve PlaceDishes on DinnerPlate and [0,0,0] and SquareTable producing DinnerPlate.
+  >> quit

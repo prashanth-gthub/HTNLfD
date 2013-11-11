@@ -92,14 +92,14 @@ public class Demonstration {
       }
 
       TaskClass newTask = demonstratedTask(disco, taskName, steps);      
-      //findLoop(newTask); ///
+      findLoop(newTask); ///
       
       TaskClass task = isAlternativeRecipe(newTask);
       if ( task != null ) {
 
          //String applicable = KB.getApplicable(task, newTask);
 
-         /*String input = defaultInputName;
+         String input = defaultInputName;
          String applicable = "!this." + input;
          if ( task.getDecompositions().get(0).getApplicable() == null ) {
             task.getDecompositions().get(0).setApplicable("this." + input);
@@ -109,23 +109,21 @@ public class Demonstration {
          task.addInput(inputC);
          
          addAlternativeRecipe(newTask, applicable, task);
-         askQuestion(disco);
+         //askQuestion(disco);
          
-         task.changeNameSpace(newTask);*/
-         //task.getDecompositions().get(0).getSteps().get("place2").setMinOccurs(0);
-         newTask.setId(newTask.getId()+"1");
-         graph.addGraph(this,task,taskModel, newTask);
+         task.changeNameSpace(newTask);
+         //graph.addGraph(this,task,taskModel, newTask);
 
       } else {
          this.taskModel.add(newTask);
-         //optionals(this.taskModel);
+         optionals(this.taskModel);
       }
 
       
 
       //inputTransformation.generalizeInput(this.taskModel);
 
-      //this.taskModel.isEquivalent();
+      this.taskModel.isEquivalent();
 
       return this.taskModel;
    }
@@ -1137,12 +1135,9 @@ public class Demonstration {
 
    }
    
-   void askQuestion(Disco disco){
-      
-      LAgent.respondIf(disco.getInteraction(), false);
-
-   }
-   
+   /**
+    * Gets the new taskmodel.
+    */
    void getNewTaskModel(){
       taskModel = new TaskModel();
       if ( this.externalTaskModel != null ) {

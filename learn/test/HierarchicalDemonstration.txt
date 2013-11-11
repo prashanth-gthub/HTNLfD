@@ -58,3 +58,5 @@ eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")
 eval Packages.edu.wpi.htnlfd.Init.answerQuestion($disco,"PlaceGlasses","Fancy")
 print PlaceGlasses urn:disco.wpi.edu:htnlfd:setTable9
 print SetTable urn:disco.wpi.edu:htnlfd:setTable9
+
+task SetTable urn:disco.wpi.edu:htnlfd:setTable9

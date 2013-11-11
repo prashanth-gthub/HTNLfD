@@ -40,9 +40,11 @@ public class Graph {
       }
 
       public Node () {
-         // TODO Auto-generated constructor stub
       }
 
+      /**
+       * Checks if two nodes are equivalent.
+       */
       public boolean isEquivalent (Node comp, TaskModel taskModel) {
          if ( this.equals(comp) ) {
             return true;
@@ -64,7 +66,11 @@ public class Graph {
 
    }
 
-   public void addGraph (Demonstration demonstration, TaskClass task, TaskModel taskModel, TaskClass newTask) {
+   /**
+    * Main function to merge two taskclasses.
+    */
+   public void addGraph (Demonstration demonstration, TaskClass task,
+         TaskModel taskModel, TaskClass newTask) {
 
       List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
       List<Node> newNodes = new ArrayList<Node>();
@@ -113,9 +119,12 @@ public class Graph {
       bfs(chosenNodes.subList(1, chosenNodes.size()));
 
       optional(taskModel);
-      alternativeRecipe(demonstration,taskModel,task,newTask);
+      alternativeRecipe(demonstration, taskModel, task, newTask);
    }
 
+   /**
+    * Finds pathes.
+    */
    void findPathes (List<ArrayList<Node>> nodesLists) {
       List<Node> newNodes = new ArrayList<Node>();
       nodesLists.add((ArrayList<Node>) newNodes);
@@ -124,6 +133,9 @@ public class Graph {
 
    }
 
+   /**
+    * Finds pathes with a recursive function.
+    */
    void branch (List<ArrayList<Node>> nodesLists, List<Node> nodes, Node root) {
 
       if ( root.childs.size() == 1 ) {
@@ -160,6 +172,9 @@ public class Graph {
 
    }
 
+   /**
+    * Breath first search.
+    */
    public void bfs (List<Node> nodes) {
 
       System.out.println("...........................");
@@ -188,6 +203,9 @@ public class Graph {
 
    }
 
+   /**
+    * Prints the node.
+    */
    public void printNode (Node root) {
       System.out.println("-----------------");
       if ( root.stepNames == null )
@@ -199,6 +217,9 @@ public class Graph {
       System.out.println("-----------------");
    }
 
+   /**
+    * Converts TaskClass to Node.
+    */
    public void getNodes (TaskClass task, TaskModel taskModel, List<Node> nodes) {
 
       for (DecompositionClass dec : task.getDecompositions()) {
@@ -236,6 +257,9 @@ public class Graph {
       }
    }
 
+   /**
+    * Merges two different demonstrations.
+    */
    void merge (List<Node> x, List<Node> y, TaskModel taskModel, int[][] opt) {
 
       int M = x.size();
@@ -326,6 +350,9 @@ public class Graph {
 
    }
 
+   /**
+    * Finds longest comment sequence.
+    */
    public int findLCS (List<Node> x, List<Node> y, TaskModel taskModel,
          int[][] opt) {
 
@@ -360,6 +387,9 @@ public class Graph {
       return LCS;
    }
 
+   /**
+    * Find alternative recipe.
+    */
    public int[][] findAlternativeRecipe (List<Node> x, List<Node> y,
          TaskModel taskModel) {
 
@@ -416,6 +446,9 @@ public class Graph {
       return interval;
    }
 
+   /**
+    * Depth first search
+    */
    public void dfs (Node root) {
 
       Stack<Node> stack = new Stack<Node>();
@@ -439,10 +472,16 @@ public class Graph {
       // Clear visited property of nodes
    }
 
+   /**
+    * Gives combinations of the nodes by considering their ordering constraints.
+    */
    void giveCombinations (List<ArrayList<Node>> nodesLists, List<Node> dem) {
       combination(nodesLists, dem, new ArrayList<Node>());
    }
 
+   /**
+    * Recursive function for finding combinations.
+    */
    void combination (List<ArrayList<Node>> nodesLists, List<Node> dem,
          List<Node> nodes) {
 
@@ -492,6 +531,9 @@ public class Graph {
 
    }
 
+   /**
+    * Searches for optional steps, and changes their optional attribute.
+    */
    void optional (TaskModel taskModel) {
 
       List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
@@ -519,7 +561,11 @@ public class Graph {
 
    }
 
-   void alternativeRecipe (Demonstration demonstration, TaskModel taskModel, TaskClass task, TaskClass newTask) {
+   /**
+    * Searches for alternative recipes and adds them.
+    */
+   void alternativeRecipe (Demonstration demonstration, TaskModel taskModel,
+         TaskClass task, TaskClass newTask) {
       List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
 
       findPathes(nodesLists);
@@ -528,35 +574,44 @@ public class Graph {
          for (ArrayList<Node> nodes2 : nodesLists) {
             if ( !nodes1.equals(nodes2) ) {
                boolean contain = false;
-               for(int i=0;i<pairs.size();i=i+1){
-                  if(pairs.get(i).equals(nodes2) && pairs.get(i+1).equals(nodes1)){
+               for (int i = 0; i < pairs.size(); i = i + 1) {
+                  if ( pairs.get(i).equals(nodes2)
+                     && pairs.get(i + 1).equals(nodes1) ) {
                      contain = true;
                      break;
                   }
                }
-               
-               
-               if(!contain){      
+
+               if ( !contain ) {
                   pairs.add(nodes1);
                   pairs.add(nodes2);
-               
+
                   int[][] interval = findAlternativeRecipe(
                         nodes1.subList(1, nodes1.size()),
                         nodes2.subList(1, nodes2.size()), taskModel);
                   List<Step> steps = new ArrayList<Step>();
-                  if ( (interval[0][0] != interval[0][1] - 1) && ( interval[1][0] != interval[1][1] - 1 ) ) {
+                  List<Step> stepsAlt = new ArrayList<Step>();
+                  if ( (interval[0][0] != interval[0][1] - 1)
+                     && (interval[1][0] != interval[1][1] - 1) ) {
                      for (int i = interval[0][0] + 2; i < interval[0][1] + 1; i++) {
-                        steps.add(nodes1.get(i).step);   
+                        steps.add(nodes1.get(i).step);
                      }
-                     TaskClass intTask = task.addInternalTask(taskModel, task.getDecompositions().get(0),steps); ////////
+                     TaskClass intTask = task.addInternalTask(taskModel, task
+                           .getDecompositions().get(0), steps); // //////
                      taskModel.add(intTask);
+                       
+                     for (int i = interval[1][0] + 2; i < interval[1][1] + 1; i++) {
+                        stepsAlt.add(nodes2.get(i).step);
+                     }
                      
-                     //TaskClass intTask = task.addInternalTask(taskModel, task.getDecompositions().get(0),stepnames); ////////
+                     TaskClass recipeTask = task.addInternalTask(taskModel, task
+                           .getDecompositions().get(0), stepsAlt); 
+                     // adding binding to constant
+                     demonstration.addAlternativeRecipe(intTask, null, recipeTask);
                   }
                }
-               
+
             }
-            
 
          }
       }
