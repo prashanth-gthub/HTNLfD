@@ -1,10 +1,12 @@
 package edu.wpi.htnlfd.model;
 
-
 import edu.wpi.disco.Disco;
 import edu.wpi.htnlfd.ApplicationSpecificClass;
+import edu.wpi.htnlfd.model.DecompositionClass.Binding;
+import edu.wpi.htnlfd.model.DecompositionClass.Step;
 import org.w3c.dom.*;
 import java.util.*;
+import java.util.Map.Entry;
 import javax.script.*;
 import javax.xml.namespace.QName;
 
@@ -65,11 +67,25 @@ public class TaskClass extends TaskModel.Member {
 
    private boolean primitive;
 
+   private boolean internal = false;
+
    private String precondition;
 
    private String postcondition;
 
    private boolean sufficient = false;
+
+   public boolean isInternal () {
+      return internal;
+   }
+
+   /**
+    * Sets the internal. It means that this is an intermediate goal and the name
+    * doesn't have any meaning to the user.
+    */
+   public void setInternal (boolean internal) {
+      this.internal = internal;
+   }
 
    public void setSufficient (boolean sufficient) {
       this.sufficient = sufficient;
@@ -127,8 +143,8 @@ public class TaskClass extends TaskModel.Member {
       }
       return false;
    }
-   
-   public Input getInput(String id){
+
+   public Input getInput (String id) {
       for (Input input : this.getDeclaredInputs()) {
          if ( input.getName().equals(id) ) {
             return input;
@@ -136,7 +152,6 @@ public class TaskClass extends TaskModel.Member {
       }
       return null;
    }
-   
 
    /**
     * Adds the input. This function checks the input value of a task; if it is
@@ -238,11 +253,17 @@ public class TaskClass extends TaskModel.Member {
          return element;
       }
 
+      public String getChangedName (String newName, String stepName,
+            String stepNameNew) {
+         return newName.replaceFirst(stepName, stepNameNew);
+      }
+
    }
 
    public class Input extends Slot {
 
       private Output modified;
+
       private boolean optional = false;
 
       /**
@@ -263,7 +284,6 @@ public class TaskClass extends TaskModel.Member {
          this.modified = modified;
       }
 
-      
       public boolean isOptional () {
          return optional;
       }
@@ -289,13 +309,14 @@ public class TaskClass extends TaskModel.Member {
       /**
        * This function makes the input's DOM element.
        */
-      public Element toNode (Document document,Properties properties) {
+      public Element toNode (Document document, Properties properties) {
          Element element = toNode(document, "input");
          if ( modified != null )
             TaskModel.addAttribute(document, element, "modified",
                   modified.getName());
-         if(optional)
-            properties.put(getId()+"."+this.getName()+"@optional", "true");
+         if ( optional )
+            properties
+                  .put(getId() + "." + this.getName() + "@optional", "true");
          return element;
       }
 
@@ -441,7 +462,7 @@ public class TaskClass extends TaskModel.Member {
    public void addDecompositionClass (DecompositionClass dec) {
       decompositions.add(dec);
    }
-   
+
    public void removeDecompositionClass (DecompositionClass dec) {
       decompositions.remove(dec);
    }
@@ -517,9 +538,11 @@ public class TaskClass extends TaskModel.Member {
 
    /**
     * This function makes the TaskClass's DOM element recursively.
-    * @param properties 
+    * 
+    * @param properties
     */
-   public Node toNode (Document document, Set<String> namespaces, Properties properties) {
+   public Node toNode (Document document, Set<String> namespaces,
+         Properties properties) {
 
       Element taskElement = document.createElementNS(TaskModel.xmlnsValue,
             "task");
@@ -530,7 +553,7 @@ public class TaskClass extends TaskModel.Member {
 
       for (TaskClass.Input input : this.getDeclaredInputs()) {
 
-         taskElement.appendChild(input.toNode(document,properties));
+         taskElement.appendChild(input.toNode(document, properties));
 
       }
 
@@ -622,15 +645,15 @@ public class TaskClass extends TaskModel.Member {
 
          Object inputBinding = null;
          String inputBindingValue = null;
-         
-         inputBinding = (((Invocable) disco.getScriptEngine())
-               .invokeFunction("find", step.getSlotValue(inputName)));
 
-         if(inputBinding == null){
+         inputBinding = (((Invocable) disco.getScriptEngine()).invokeFunction(
+               "find", step.getSlotValue(inputName)));
+
+         if ( inputBinding == null ) {
             inputBinding = step.getSlotValue(inputName);
-            inputBindingValue = ((ApplicationSpecificClass)inputBinding).find();
-         }
-         else
+            inputBindingValue = ((ApplicationSpecificClass) inputBinding)
+                  .find();
+         } else
             inputBindingValue = (String) inputBinding;
 
          int inputNum1 = this.getDeclaredInputs().size();
@@ -645,7 +668,7 @@ public class TaskClass extends TaskModel.Member {
 
          if ( inputNum1 != inputNum2 ) {
             subtask.addBinding("$this." + changedName, subtask.new Binding(
-                  changedName, "this",inputBindingValue,
+                  changedName, "this", inputBindingValue,
                   DecompositionClass.Type.Constant));
 
             for (int i = this.getDeclaredOutputs().size() - 1; i >= (this
@@ -679,10 +702,134 @@ public class TaskClass extends TaskModel.Member {
    }
 
    public void changeNameSpace (TaskClass newTask) {
-  
+
       this.setQname(newTask.getQname());
-      
+
    }
-   
+
+   public TaskClass addInternalTask (TaskModel taskModel,
+         DecompositionClass decccc1, List<Step> steps) {
+
+      // creating task
+      internal = true;
+      String taskName = "Temp";
+      TaskClass taskI = new TaskClass(taskModel, taskName, new QName(
+            taskModel.namespace, taskName));
+
+      int countSubtask = taskI.getDecompositions().size() + 1;
+      DecompositionClass subtask = new DecompositionClass(taskModel,
+            Character.toLowerCase(taskName.charAt(0))
+               + (taskName.length() > 1 ? taskName.substring(1) : "")
+               + countSubtask, true, taskI);
+
+      subtask.setGoal(taskI);
+      subtask.setQname(new QName(taskModel.namespace, subtask.getId()));
+      taskI.addDecompositionClass(subtask);
+      List<String> prevStepNames = new ArrayList<String>();
+      for (int j=0;j<steps.size();j++) {
+         Step step = steps.get(j);
+         if(step.getRequired()!=null && step.getRequired().size()!=0){
+            // adding requires
+            for(int f=0;f<j;f++){
+               if(step.getRequired().contains(steps.get(f))){
+                  step.addRequired(prevStepNames.get(f));
+               }
+            }
+         }
+         DecompositionClass dec = step.getDecompositionClass();
+         String stepName = null;
+         for (Entry<String, Step> st : dec.getSteps().entrySet()) {
+            if ( st.getValue().equals(step) ) {
+               stepName = st.getKey();
+            }
+         }
+         
+         DecompositionClass.Step stp = subtask.new Step(null,
+               step.getMinOccurs(), step.getMinOccurs(), null);
+         String stepNameNew = stp.findStepName(step.getType().getId());
+         
+         prevStepNames.add(stepNameNew);
+         stp.setType(step.getType());
+
+         subtask.addStep(stepNameNew, stp);
+
+         for (Entry<String, Binding> bind : dec.getBindings().entrySet()) {
+            if ( bind.getValue().getStep().equals(stepName) ) {
+              
+               for (Input in : dec.getGoal().getDeclaredInputs()) {
+                  if ( in.getName()
+                        .equals(
+                              bind.getValue()
+                                    .getValue()
+                                    .substring(6,
+                                          bind.getValue().getValue().length())) ) {
+                     TaskClass.Input inputT = taskI.new Input(null,
+                           in.getType(), in.getModified());
+                     inputT.setName(inputT.getChangedName(in.getName(),
+                           stepName, stepNameNew));
+                     
+                     taskI.addInput(inputT);
+                     
+                     subtask.addBinding("$"+stepNameNew+"."+bind.getValue().getSlot()
+                           ,
+                           subtask.new Binding(bind.getValue().getSlot()
+                                 , stepNameNew,
+                                 "$this." + inputT.getName(),
+                                 bind.getValue().getType()));
+                     
+                     break;
+
+                  }
+               }
+
+            }
+         }
+
+         for (Entry<String, Binding> bind : dec.getBindings().entrySet()) {
+            if ( bind.getValue().getValue().contains("$" + stepName + ".") ) {
+
+               for (Output out : dec.getGoal().getDeclaredOutputs()) {
+                  if ( out.getName().equals(bind.getValue().getSlot()) ) {
+
+                     TaskClass.Output outputT = taskI.new Output(null,
+                           out.getType());
+
+                     for (Input in : taskI.getDeclaredInputs()) {
+                        if ( in.getModified() != null
+                           && in.getModified().getName().equals(out.getName()) ) {
+                           in.setModified(outputT);
+                           break;
+                        }
+                     }
+                     outputT.setName(outputT.getChangedName(out.getName(),
+                           stepName, stepNameNew));
+
+                     taskI.addOutput(outputT);
+
+                     subtask.addBinding(
+                           "$this." + outputT.getName(),
+                           subtask.new Binding(bind.getValue().getSlot()
+                                 .replaceFirst(stepName, stepNameNew), "this",
+                                 "$"
+                                    + stepNameNew
+                                    + "."
+                                    + bind.getValue().getValue()
+                                          .substring(stepName.length() + 2),
+                                 bind.getValue().getType()));
+
+                     break;
+                  }
+               }
+            }
+         }
+
+      }
+
+      //subtask.addOrdering(taskModel);
+
+      // removing internal tasks data from task + add ordering
+
+      return taskI;
+   }
 
 }

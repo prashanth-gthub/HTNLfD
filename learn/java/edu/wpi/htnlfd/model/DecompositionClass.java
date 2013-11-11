@@ -57,7 +57,7 @@ public class DecompositionClass extends TaskModel.Member {
       }
 
    }
-   
+
    public String findDecompositionName (String DecName) {
       int count = 1;
 
@@ -140,8 +140,8 @@ public class DecompositionClass extends TaskModel.Member {
          }
       }
    }
-   
-   public void removeStep(String name){
+
+   public void removeStep (String name) {
       steps.remove(name);
       stepNames.remove(name);
    }
@@ -274,7 +274,7 @@ public class DecompositionClass extends TaskModel.Member {
          if ( required != null && !this.required.isEmpty() )
             this.required.clear();
       }
-      
+
       public void removeRequired (String require) {
          this.required.remove(require);
       }
@@ -345,6 +345,7 @@ public class DecompositionClass extends TaskModel.Member {
 
       /**
        * Checks for equivalent steps.
+       * 
        * @param taskModel TODO
        */
       public boolean isEquivalent (Step step, TaskModel taskModel) {
@@ -360,14 +361,15 @@ public class DecompositionClass extends TaskModel.Member {
             if ( this.required != null && step.required != null
                && this.required.size() == step.required.size() ) {
                // Assuming that order of required list doesn't matter
-               //Collections.sort(this.required);
-               //Collections.sort(step.required);
-               if (this.required == null && step.required == null){
+               // Collections.sort(this.required);
+               // Collections.sort(step.required);
+               if ( this.required == null && step.required == null ) {
                   sameOrder = true;
-               }
-               else  if ((this.required != null && step.required != null)) {
+               } else if ( (this.required != null && step.required != null) ) {
                   // && this.required.equals(step.required))
-                  if(this.isEquivalentSteps(taskModel, this.required, getDecomposition(), step.required, step.getDecompositionClass())){                     
+                  if ( this.isEquivalentSteps(taskModel, this.required,
+                        getDecomposition(), step.required,
+                        step.getDecompositionClass()) ) {
                      sameOrder = true;
                   }
                }
@@ -376,9 +378,10 @@ public class DecompositionClass extends TaskModel.Member {
 
          return sameOrder;
       }
-      
-      public boolean isEquivalentSteps(TaskModel taskModel, List<String> steps1, DecompositionClass dec1, 
-            List<String> steps2, DecompositionClass dec2){
+
+      public boolean isEquivalentSteps (TaskModel taskModel,
+            List<String> steps1, DecompositionClass dec1, List<String> steps2,
+            DecompositionClass dec2) {
          ArrayList<String> temp1 = new ArrayList<String>(steps1);
          ArrayList<String> temp2 = new ArrayList<String>(steps2);
 
@@ -390,11 +393,11 @@ public class DecompositionClass extends TaskModel.Member {
                for (int j = 0; j < temp2.size(); j++) {
                   Step step2 = dec2.getStep(temp2.get(j));
                   if ( step1.isEquivalent(step2, taskModel) ) {
-                     Map.Entry<String,Step> entry1 =
-                           new AbstractMap.SimpleEntry<String, Step>(temp1.get(i), step1);
-                     Map.Entry<String,Step> entry2 =
-                           new AbstractMap.SimpleEntry<String, Step>(temp2.get(j), step2);
-                     
+                     Map.Entry<String, Step> entry1 = new AbstractMap.SimpleEntry<String, Step>(
+                           temp1.get(i), step1);
+                     Map.Entry<String, Step> entry2 = new AbstractMap.SimpleEntry<String, Step>(
+                           temp2.get(j), step2);
+
                      if ( checkStepInputs(entry1, dec1.getGoal(), entry2,
                            dec2.getGoal(), dec1, dec2, taskModel) ) {
 
@@ -417,12 +420,11 @@ public class DecompositionClass extends TaskModel.Member {
          }
          return false;
       }
-      
-      public DecompositionClass getDecompositionClass(){
+
+      public DecompositionClass getDecompositionClass () {
          return getDecomposition();
       }
 
-      
       /**
        * Finds goal, if the task is primitive it should be created otherwise it
        * will be searched in the existed tasks.
@@ -489,6 +491,11 @@ public class DecompositionClass extends TaskModel.Member {
          }
       }
 
+      public void changeName (String stepName, String newName, List<Entry<String, Binding>> bindings) {
+
+
+      }
+
    }
 
    /**
@@ -501,10 +508,10 @@ public class DecompositionClass extends TaskModel.Member {
       for (Input in1 : type1.getDeclaredInputs()) {
          boolean contain = false;
          for (Input in2 : type2.getDeclaredInputs()) {
-            
+
             if ( !((in1.getModified() != null) ^ in2.getModified() != null)
-                  && (in1.getType().equals(in2.getType()))  ) { //in1.getName().equals(in2.getName())
-               
+               && (in1.getType().equals(in2.getType())) ) { // in1.getName().equals(in2.getName())
+
                String value1 = findValueInParents(taskModel, stp1, type1, dec1,
                      in1.getName());
                String value2 = findValueInParents(taskModel, stp2, type2, dec2,
@@ -517,42 +524,45 @@ public class DecompositionClass extends TaskModel.Member {
 
             }
          }
-         if(!contain)
+         if ( !contain )
             return false;
       }
 
       return true;
    }
 
-   
-   public boolean checkStepInputs (Entry<String,Step> stp1, TaskClass type1, Entry<String,Step> stp2,
-         TaskClass type2, DecompositionClass dec1, DecompositionClass dec2,
-         TaskModel taskModel) {
+   public boolean checkStepInputs (Entry<String, Step> stp1, TaskClass type1,
+         Entry<String, Step> stp2, TaskClass type2, DecompositionClass dec1,
+         DecompositionClass dec2, TaskModel taskModel) {
       for (Input in1 : stp1.getValue().getType().getDeclaredInputs()) {
          boolean contain = false;
          for (Input in2 : stp2.getValue().getType().getDeclaredInputs()) {
-            
+
             if ( !((in1.getModified() != null) ^ in2.getModified() != null)
-                  && (in1.getType().equals(in2.getType()))  ) { //in1.getName().equals(in2.getName())
+               && (in1.getType().equals(in2.getType())) ) { // in1.getName().equals(in2.getName())
                String in1Name = null;
                String in2Name = null;
-               for(Entry<String, Binding> binding:dec1.getBindings().entrySet()){
-                  if(binding.getValue().getStep().equals(stp1.getKey()) && binding.getValue().getSlot().equals(in1.getName())){
+               for (Entry<String, Binding> binding : dec1.getBindings()
+                     .entrySet()) {
+                  if ( binding.getValue().getStep().equals(stp1.getKey())
+                     && binding.getValue().getSlot().equals(in1.getName()) ) {
                      in1Name = binding.getValue().getValue().substring(6);
                      break;
                   }
                }
-               for(Entry<String, Binding> binding:dec2.getBindings().entrySet()){
-                  if(binding.getValue().getStep().equals(stp2.getKey()) && binding.getValue().getSlot().equals(in2.getName())){
+               for (Entry<String, Binding> binding : dec2.getBindings()
+                     .entrySet()) {
+                  if ( binding.getValue().getStep().equals(stp2.getKey())
+                     && binding.getValue().getSlot().equals(in2.getName()) ) {
                      in2Name = binding.getValue().getValue().substring(6);
                      break;
                   }
                }
-               
-               String value1 = findValueInParents(taskModel, stp1.getKey(), type1, dec1,
-                     in1Name);
-               String value2 = findValueInParents(taskModel, stp2.getKey(), type2, dec2,
-                     in2Name);
+
+               String value1 = findValueInParents(taskModel, stp1.getKey(),
+                     type1, dec1, in1Name);
+               String value2 = findValueInParents(taskModel, stp2.getKey(),
+                     type2, dec2, in2Name);
                if ( value1 != null && value2 != null && value1.equals(value2) ) {
                   // ???? removing the input
                   contain = true;
@@ -561,13 +571,13 @@ public class DecompositionClass extends TaskModel.Member {
 
             }
          }
-         if(!contain)
+         if ( !contain )
             return false;
       }
 
       return true;
    }
-   
+
    /**
     * Finds value of an input in it's parents.(from each subtasks' bindings)
     * Assumption: The value of our input is in it's oldest parent.
@@ -625,8 +635,8 @@ public class DecompositionClass extends TaskModel.Member {
 
    /**
     * Finds the parents of a TaskClass. (By calling the same function
-    * recursively on it's parents.) 
-    * It returns just one tree.(I should correct it.)
+    * recursively on it's parents.) It returns just one tree.(I should correct
+    * it.)
     */
    public List<Object[]> findParents (TaskClass parentTask,
          Entry<String, Step> parentStep, DecompositionClass parentSubtask,
@@ -675,10 +685,10 @@ public class DecompositionClass extends TaskModel.Member {
       }
    }
 
-   DecompositionClass getDecomposition(){
+   DecompositionClass getDecomposition () {
       return this;
    }
-   
+
    public TaskClass getStepType (String name) {
       return steps.get(name).type;
    }
@@ -693,8 +703,6 @@ public class DecompositionClass extends TaskModel.Member {
    public void setGoal (TaskClass goal) {
       this.goal = goal;
    }
-   
-   
 
    public void setApplicable (String applicable) {
       this.applicable = applicable;
@@ -1052,6 +1060,22 @@ public class DecompositionClass extends TaskModel.Member {
          }
       }
       return null;
+   }
+
+   /**
+    * Gets bindings that are related to the specified step.
+    */
+   public List<Entry<String, Binding>> getBindingStep (String stepName) {
+      List<Entry<String, Binding>> bindings = new ArrayList<Entry<String, Binding>>();
+      for (Entry<String, Binding> binding : this.getBindings().entrySet()) {
+         if ( binding.getValue().getStep().equals(stepName) ) {
+            bindings.add(binding);
+         }
+         if ( binding.getValue().getValue().contains("$" + stepName + ".") ) {
+            bindings.add(binding);
+         }
+      }
+      return bindings;
    }
 
    public Entry<String, Binding> getBindingValue (String stepName,

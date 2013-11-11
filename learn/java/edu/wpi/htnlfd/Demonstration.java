@@ -114,7 +114,7 @@ public class Demonstration {
          task.changeNameSpace(newTask);*/
          //task.getDecompositions().get(0).getSteps().get("place2").setMinOccurs(0);
          newTask.setId(newTask.getId()+"1");
-         graph.addGraph(task,taskModel, newTask);
+         graph.addGraph(this,task,taskModel, newTask);
 
       } else {
          this.taskModel.add(newTask);
@@ -125,7 +125,7 @@ public class Demonstration {
 
       //inputTransformation.generalizeInput(this.taskModel);
 
-      this.taskModel.isEquivalent();
+      //this.taskModel.isEquivalent();
 
       return this.taskModel;
    }
@@ -1149,5 +1149,7 @@ public class Demonstration {
          learnedTaskmodel();
       }
    }
+   
+   
 
 }

@@ -45,4 +45,26 @@
       <binding slot="$this.place4_location" value="location(0,0,2)"/>
     </subtasks>
   </task>
+  <task id="Temp">
+    <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
+    <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
+    <input name="place1_referenceFrame" type="PhysObj"/>
+    <input name="place2_referenceFrame" type="PhysObj"/>
+    <input name="place2_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
+    <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
+    <output name="place1_newObject" type="PhysObj"/>
+    <output name="place2_newObject" type="PhysObj"/>
+    <subtasks id="temp1">
+      <step name="place1" task="std:Place"/>
+      <step name="place2" task="std:Place"/>
+      <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
+      <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$place1.location" value="$this.place1_location"/>
+      <binding slot="$place2.referenceFrame" value="$this.place2_referenceFrame"/>
+      <binding slot="$place2.location" value="$this.place2_location"/>
+      <binding slot="$this.place2_newObject" value="$place2.newObject"/>
+      <binding slot="$place2.object" value="$this.place2_object"/>
+    </subtasks>
+  </task>
 </taskModel>

@@ -1,6 +1,7 @@
 package edu.wpi.htnlfd;
 
 import java.util.*;
+import edu.wpi.htnlfd.Graph.Node;
 import edu.wpi.htnlfd.model.DecompositionClass.Step;
 import edu.wpi.htnlfd.model.*;
 
@@ -63,7 +64,7 @@ public class Graph {
 
    }
 
-   public void addGraph (TaskClass task, TaskModel taskModel, TaskClass newTask) {
+   public void addGraph (Demonstration demonstration, TaskClass task, TaskModel taskModel, TaskClass newTask) {
 
       List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
       List<Node> newNodes = new ArrayList<Node>();
@@ -112,7 +113,7 @@ public class Graph {
       bfs(chosenNodes.subList(1, chosenNodes.size()));
 
       optional(taskModel);
-      // alternativeRecipe(taskModel);
+      alternativeRecipe(demonstration,taskModel,task,newTask);
    }
 
    void findPathes (List<ArrayList<Node>> nodesLists) {
@@ -518,19 +519,40 @@ public class Graph {
 
    }
 
-   void alternativeRecipe (TaskModel taskModel) {
+   void alternativeRecipe (Demonstration demonstration, TaskModel taskModel, TaskClass task, TaskClass newTask) {
       List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
 
       findPathes(nodesLists);
+      List<ArrayList<Node>> pairs = new ArrayList<ArrayList<Node>>();
       for (ArrayList<Node> nodes1 : nodesLists) {
          for (ArrayList<Node> nodes2 : nodesLists) {
             if ( !nodes1.equals(nodes2) ) {
-               int[][] interval = findAlternativeRecipe(
-                     nodes1.subList(1, nodes1.size()),
-                     nodes2.subList(1, nodes2.size()), taskModel);
+               boolean contain = false;
+               for(int i=0;i<pairs.size();i=i+1){
+                  if(pairs.get(i).equals(nodes2) && pairs.get(i+1).equals(nodes1)){
+                     contain = true;
+                     break;
+                  }
+               }
                
-               for (int i = interval[1][0] + 2; i < interval[1][1] + 1; i++) {
-                  nodes2.get(i).step.setMinOccurs(0);
+               
+               if(!contain){      
+                  pairs.add(nodes1);
+                  pairs.add(nodes2);
+               
+                  int[][] interval = findAlternativeRecipe(
+                        nodes1.subList(1, nodes1.size()),
+                        nodes2.subList(1, nodes2.size()), taskModel);
+                  List<Step> steps = new ArrayList<Step>();
+                  if ( (interval[0][0] != interval[0][1] - 1) && ( interval[1][0] != interval[1][1] - 1 ) ) {
+                     for (int i = interval[0][0] + 2; i < interval[0][1] + 1; i++) {
+                        steps.add(nodes1.get(i).step);   
+                     }
+                     TaskClass intTask = task.addInternalTask(taskModel, task.getDecompositions().get(0),steps); ////////
+                     taskModel.add(intTask);
+                     
+                     //TaskClass intTask = task.addInternalTask(taskModel, task.getDecompositions().get(0),stepnames); ////////
+                  }
                }
                
             }
