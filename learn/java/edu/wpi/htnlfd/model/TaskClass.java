@@ -706,15 +706,43 @@ public class TaskClass extends TaskModel.Member {
       this.setQname(newTask.getQname());
 
    }
+   
+   public String findTaskName (String taskName, TaskModel taskModel) {
+      int count = 1;
+
+      while (true) {
+         if ( taskModel.getTaskClass(taskName + count) != null )
+            count++;
+         else
+            return taskName + count;
+      }
+   }
 
    public TaskClass addInternalTask (TaskModel taskModel,
          DecompositionClass decccc1, List<Step> steps) {
+      String taskName = findTaskName("_Temp",taskModel); // internal
+      
+      TaskClass taskI = new TaskClass(taskModel, taskName, new QName(
+            taskModel.namespace, taskName));
+
+      // /////
+      List<Entry<String, Binding>> removeBindings = new ArrayList<Entry<String, Binding>>();
+      Map<String, Binding> addBindings = new HashMap<String, Binding>();
+      // adding new step to task
+      DecompositionClass.Step taskStp = decccc1.new Step(taskI, 1, 1, null);
+      String stepNameTask = taskStp.findStepName (taskName);
+      
+      for (int i = 0; i < decccc1.getStepNames().size(); i++) {
+         if ( decccc1.getStep(decccc1.getStepNames().get(i)).equals(
+               steps.get(0)) ) {
+            decccc1.addStep(stepNameTask, taskStp,
+                  decccc1.getStepNames().get(i - 1));
+            break;
+         }
+      }
 
       // creating task
       internal = true;
-      String taskName = "Temp";
-      TaskClass taskI = new TaskClass(taskModel, taskName, new QName(
-            taskModel.namespace, taskName));
 
       int countSubtask = taskI.getDecompositions().size() + 1;
       DecompositionClass subtask = new DecompositionClass(taskModel,
@@ -726,12 +754,12 @@ public class TaskClass extends TaskModel.Member {
       subtask.setQname(new QName(taskModel.namespace, subtask.getId()));
       taskI.addDecompositionClass(subtask);
       List<String> prevStepNames = new ArrayList<String>();
-      for (int j=0;j<steps.size();j++) {
+      for (int j = 0; j < steps.size(); j++) {
          Step step = steps.get(j);
-         if(step.getRequired()!=null && step.getRequired().size()!=0){
+         if ( step.getRequired() != null && step.getRequired().size() != 0 ) {
             // adding requires
-            for(int f=0;f<j;f++){
-               if(step.getRequired().contains(steps.get(f))){
+            for (int f = 0; f < j; f++) {
+               if ( step.getRequired().contains(steps.get(f)) ) {
                   step.addRequired(prevStepNames.get(f));
                }
             }
@@ -743,11 +771,11 @@ public class TaskClass extends TaskModel.Member {
                stepName = st.getKey();
             }
          }
-         
+
          DecompositionClass.Step stp = subtask.new Step(null,
                step.getMinOccurs(), step.getMinOccurs(), null);
          String stepNameNew = stp.findStepName(step.getType().getId());
-         
+
          prevStepNames.add(stepNameNew);
          stp.setType(step.getType());
 
@@ -755,7 +783,7 @@ public class TaskClass extends TaskModel.Member {
 
          for (Entry<String, Binding> bind : dec.getBindings().entrySet()) {
             if ( bind.getValue().getStep().equals(stepName) ) {
-              
+
                for (Input in : dec.getGoal().getDeclaredInputs()) {
                   if ( in.getName()
                         .equals(
@@ -767,20 +795,24 @@ public class TaskClass extends TaskModel.Member {
                            in.getType(), in.getModified());
                      inputT.setName(inputT.getChangedName(in.getName(),
                            stepName, stepNameNew));
-                     
+
                      taskI.addInput(inputT);
-                     
-                     subtask.addBinding("$"+stepNameNew+"."+bind.getValue().getSlot()
-                           ,
-                           subtask.new Binding(bind.getValue().getSlot()
-                                 , stepNameNew,
-                                 "$this." + inputT.getName(),
-                                 bind.getValue().getType()));
-                     
+
+                     subtask.addBinding("$" + stepNameNew + "."
+                        + bind.getValue().getSlot(), subtask.new Binding(bind
+                           .getValue().getSlot(), stepNameNew, "$this."
+                        + inputT.getName(), bind.getValue().getType()));
+
+                     addBindings.put("$"+ stepNameTask + "." + inputT.getName(), dec.new Binding(inputT.getName(), stepNameTask,
+                           bind.getValue().getValue(), bind.getValue()
+                                 .getType()));
+
                      break;
 
                   }
                }
+
+               removeBindings.add(bind);
 
             }
          }
@@ -817,17 +849,51 @@ public class TaskClass extends TaskModel.Member {
                                           .substring(stepName.length() + 2),
                                  bind.getValue().getType()));
 
+                     addBindings.put(
+                           bind.getKey(),
+                           dec.new Binding(bind.getValue().getSlot(), bind
+                                 .getValue().getStep(), "$"
+                              + stepNameTask
+                              + "."
+                              + bind.getValue().getSlot()
+                                    .replaceFirst(stepName, stepNameNew), bind
+                                 .getValue().getType()));
+
                      break;
                   }
                }
+
+               removeBindings.add(bind);
             }
          }
 
       }
 
-      //subtask.addOrdering(taskModel);
+      // subtask.addOrdering(taskModel);
 
       // removing internal tasks data from task + add ordering
+      
+      List<String> removeSteps = new ArrayList<String>();
+      
+      for (int i = 0; i < decccc1.getStepNames().size(); i++) {
+         for (int j = 0; j < steps.size(); j++) {
+            if ( decccc1.getStep(decccc1.getStepNames().get(i)).equals(
+                  steps.get(j)) ) {
+               removeSteps.add(decccc1.getStepNames().get(i));
+               break;
+            }
+         }
+      }
+      for(String rm:removeSteps){
+         decccc1.removeStep(rm);
+      }
+      
+      for (Entry<String, Binding> rm : removeBindings) {
+         decccc1.removeBinding(rm.getKey());
+      }
+      for (Entry<String, Binding> add : addBindings.entrySet()) {
+         decccc1.addBinding(add.getKey(), add.getValue());
+      }
 
       return taskI;
    }

@@ -491,10 +491,7 @@ public class DecompositionClass extends TaskModel.Member {
          }
       }
 
-      public void changeName (String stepName, String newName, List<Entry<String, Binding>> bindings) {
-
-
-      }
+  
 
    }
 
