@@ -1,9 +1,15 @@
+#
+# This is an example of hierarchy, ordering, inputs/outputs, and alternative recipe
+#
     # 11-Nov-2013 3:28:32 PM - TaskEngine 1.5.1 / Disco 1.7.1
     Welcome to Disco! (Type 'help' for command list)
   > cd models
     D:\GitHub\HTNLfD\learn\models
   > load SetTableDemonstration.xml
   > 
+#
+# Start of first demonstration (PlaceDishes)
+#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -25,11 +31,18 @@
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
     # Returned 'null'
   > print PlaceDishes urn:disco.wpi.edu:htnlfd:setTable1
-
+#
+# We have two referece frame objects(DinnerPlate and SquareTable) so we have both of them in our objects.
+# As we can see place2 step requires place1 step since place2 is after place1 in demonstration and place1 has the same input and output
+# as place2's input. 
+#
 <task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
     <input name="place1_referenceFrame" type="PhysObj"/>
+#
+# Since reference frame objects of place2 and place3 are the same, we just have one input here. 
+#
     <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
     <input name="place2_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
     <input name="place2_referenceFrame" type="PhysObj"/>
@@ -42,7 +55,13 @@
       <step name="place1" task="std:Place"/>
       <step name="place2" requires="place1" task="std:Place"/>
       <step name="place3" requires="place1" task="std:Place"/>
+#
+# Since place1 has an modified input that has DinnerPlate and place has an input of DinnerPlate so place2 needs place1 and they should be odered. 
+#
       <binding slot="$place3.referenceFrame" value="$this.place2_referenceFrame"/>
+#
+# GREAT. BECAUSE WAS DINNERPLATE IN BOTH. 
+#
       <binding slot="$this.place1_location" value="location(0,0,0)"/>
       <binding slot="$place1.location" value="$this.place1_location"/>
       <binding slot="$this.place1_referenceFrame" value="PhysObj.SquareTable"/>
@@ -62,9 +81,14 @@
       <binding slot="$place2.referenceFrame" value="$this.place2_referenceFrame"/>
       <binding slot="$place3.object" value="$this.place3_object"/>
       <binding slot="$this.place2_newObject" value="$place2.newObject"/>
+#
+# These bindings are "raising" inputs and outputs. 
+#
     </subtasks>
   </task>
-
+#
+# Start of second demonstration (PlaceSilverware) 
+#
   > 
   > task Demonstration
     User says "Let's achieve Demonstration."
@@ -87,7 +111,10 @@
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
     # Returned 'null'
   > print PlaceSilverware urn:disco.wpi.edu:htnlfd:setTable2
-
+#
+# It doesn't have any ordering constraints. 
+# There are bindings to constants in it's subtask. After adding it's parent these constant bindings are removed. 
+#
 <task id="PlaceSilverware" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
@@ -100,6 +127,9 @@
     <output name="place2_newObject" type="PhysObj"/>
     <output name="place3_newObject" type="PhysObj"/>
     <subtasks id="placeSilverware1">
+#
+# These steps are not ordered since they don't have flow of inputs and outputs 
+#
       <step name="place1" task="std:Place"/>
       <step name="place2" task="std:Place"/>
       <step name="place3" task="std:Place"/>
@@ -122,10 +152,16 @@
       <binding slot="$place2.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$place3.object" value="$this.place3_object"/>
       <binding slot="$this.place2_newObject" value="$place2.newObject"/>
+#
+# Same reference frame and raising logic as before 
+#
     </subtasks>
   </task>
 
   > 
+#
+# Start of third demonstration (PlaceGlasses)   
+#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -158,6 +194,9 @@
   </task>
 
   > 
+#
+# Start of demonstration (SetTable) 
+#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -183,7 +222,11 @@
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"SetTable")
     # Returned 'null'
   > print SetTable urn:disco.wpi.edu:htnlfd:setTable4
-
+#
+# All the steps'(PlaceDishes, PlaceSilverware, PlaceGlasses) inputs and outputs are added to SetTable.
+# Ordering constraints are added to PlaceSilverware and PlaceGlasses steps.
+# Bindings to constants are added in SetTable and they are removed from their steps' bindings. 
+#
 <task id="SetTable" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
     <input modified="placeDishes1_place1_newObject" name="placeDishes1_place1_object" type="PhysObj"/>
     <input name="placeDishes1_place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
@@ -212,6 +255,9 @@
       <step name="placeDishes1" task="setTable3:PlaceDishes"/>
       <step name="placeSilverware1" requires="placeDishes1" task="setTable3:PlaceSilverware"/>
       <step name="placeGlasses1" requires="placeDishes1" task="setTable3:PlaceGlasses"/>
+#
+# We have the same thing here, since placeDishes1 has a modified input and placeSilverware1 has an input, they should be ordered. 
+#
       <binding slot="$this.placeDishes1_place3_object" value="PhysObj.SoupBowl"/>
       <binding slot="$placeSilverware1.place1_referenceFrame" value="$this.placeDishes1_place2_referenceFrame"/>
       <binding slot="$placeDishes1.place2_object" value="$this.placeDishes1_place2_object"/>
@@ -226,6 +272,9 @@
       <binding slot="$placeDishes1.place3_object" value="$this.placeDishes1_place3_object"/>
       <binding slot="$placeSilverware1.place3_location" value="$this.placeSilverware1_place3_location"/>
       <binding slot="$this.placeDishes1_place1_newObject" value="$placeDishes1.place1_newObject"/>
+#
+# We have DinnerPlate for reference frame 
+#
       <binding slot="$this.placeDishes1_place2_referenceFrame" value="PhysObj.DinnerPlate"/>
       <binding slot="$placeSilverware1.place2_location" value="$this.placeSilverware1_place2_location"/>
       <binding slot="$this.placeDishes1_place2_object" value="PhysObj.SaladPlate"/>
@@ -257,9 +306,15 @@
   </task>
 
   > 
+#
+# Returning everything to it's first locations for another demonstration 
+#
   > eval Reset()
     # Returned 'null'
   > 
+#
+# Alternative Recipe for PlaceDishes 
+#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -275,11 +330,17 @@
     User says "Achieve Demonstration is done."
     Agent says "Ok."
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
+#
+# By just considering the task's name, we understood that it is alternative recipe 
+#
     # Returned 'null'
   > eval Packages.edu.wpi.htnlfd.Init.answerQuestion($disco,"PlaceDishes","Fancy")
     # Returned 'null'
   > print PlaceDishes urn:disco.wpi.edu:htnlfd:setTable6
-
+#
+# Alternative recipe is added. Since The inputs and outputs of the second recipe are not different, parent tasks will not change.
+# Bindings of the added recipe are binded to the existed inputs. 
+#
 <task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
@@ -328,6 +389,9 @@
 
   > 
   > 
+#
+# Alternative recipe for PlaceSilverware 
+#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -394,6 +458,9 @@
   </task>
 
   > 
+#
+# Alternative Recipe for PlaceGlasses. 
+#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -413,7 +480,9 @@
   > eval Packages.edu.wpi.htnlfd.Init.answerQuestion($disco,"PlaceGlasses","Fancy")
     # Returned 'null'
   > print PlaceGlasses urn:disco.wpi.edu:htnlfd:setTable9
-
+#
+# Since the alternative recipe for PlaceGlasses has an extra input and output, it should be added to SetTable.   
+#
 <task id="PlaceGlasses" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
@@ -447,7 +516,11 @@
   </task>
 
   > print SetTable urn:disco.wpi.edu:htnlfd:setTable9
-
+#
+# WineGlass is added to the parent of PlaceGlasses.(SetTable)
+# When PlaceGlasses's alternative recipe is added since all three steps of SetTable have "input1" (same name and same type)
+# , it is added to SetTable. 
+#
 <task id="SetTable" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
     <input modified="placeDishes1_place1_newObject" name="placeDishes1_place1_object" type="PhysObj"/>
     <input name="placeDishes1_place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
@@ -579,12 +652,18 @@
 [18] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceGlasses.
 [19] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}SetTable.
 [20] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceDishes.
+#
+# Executing PlaceDishes 
+#
   >> 1
     User says "Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceDishes on DinnerPlate and [0,0,0] and SquareTable and SaladPlate and [0,0,1] and DinnerPlate and SoupBowl and [0,0,2] and true by placeDishes1."
     Agent place DinnerPlate at [0,0,0] wrt SquareTable.
     Agent place SaladPlate at [0,0,1] wrt DinnerPlate.
     Agent place SoupBowl at [0,0,2] wrt DinnerPlate.
     Agent says "What is the {urn:disco.wpi.edu:htnlfd:setTable8}PlaceSilverware Fancy?"
+#
+# Although "input1" is added to SetTable, disco asks for input1 in every steps.(?) 
+#
   > say
 [1] True.
 [2] False.
@@ -631,6 +710,9 @@
 [19] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}SetTable.
 [20] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceDishes.
   >> 1
+#
+# Executing PlaceSilverware 
+#
     User says "Let's achieve {urn:disco.wpi.edu:htnlfd:setTable8}PlaceSilverware on Spoon and [-1,0,0] and DinnerPlate and Fork and [1,0,0] and Knife and [-2,0,0] and true by placeSilverware1."
     Agent place Spoon at [-1,0,0] wrt DinnerPlate.
     Agent place Fork at [1,0,0] wrt DinnerPlate.
@@ -659,6 +741,9 @@
 [18] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceGlasses.
 [19] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}SetTable.
 [20] Let's achieve {urn:disco.wpi.edu:htnlfd:setTable10}PlaceDishes.
+#
+# Executing PlaceGlasses 
+#
   >> 1
     User says "True."
     Agent says "How shall we achieve {urn:disco.wpi.edu:htnlfd:setTable9}PlaceGlasses on WaterGlass and [0,1,0] and DinnerPlate and true and WineGlass and [0,-1,0]?"

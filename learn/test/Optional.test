@@ -1,9 +1,15 @@
+#
+# In this example we will see optional steps (MinOccurs) 
+#
     # 11-Nov-2013 3:47:23 PM - TaskEngine 1.5.1 / Disco 1.7.1
     Welcome to Disco! (Type 'help' for command list)
   > cd models
     D:\GitHub\HTNLfD\learn\models
   > load SetTableDemonstration.xml
   > 
+#
+# First demonstration of PlaceDishes 
+#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -38,6 +44,9 @@
     <output name="place1_newObject" type="PhysObj"/>
     <output name="place2_newObject" type="PhysObj"/>
     <output name="place3_newObject" type="PhysObj"/>
+#
+# We don't have any optional steps here 
+#
     <subtasks id="placeDishes11" ordered="false">
       <step name="place1" task="std:Place"/>
       <step name="place2" requires="place1" task="std:Place"/>
@@ -67,6 +76,9 @@
 
   > 
   > 
+#
+# Second demonstration of PlaceDishes without Placing SoupBowl 
+#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -84,7 +96,9 @@
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes2")
     # Returned 'null'
   > print PlaceDishes1 urn:disco.wpi.edu:htnlfd:setTable2
-
+#
+# Printing the first task 
+#
 <task id="PlaceDishes1" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
@@ -100,6 +114,9 @@
     <subtasks id="placeDishes11" ordered="false">
       <step name="place1" task="std:Place"/>
       <step name="place2" requires="place1" task="std:Place"/>
+#
+# Optional step (minOccurs=0) 
+#
       <step minOccurs="0" name="place3" requires="place1" task="std:Place"/>
       <binding slot="$place3.referenceFrame" value="$this.place2_referenceFrame"/>
       <binding slot="$this.place1_location" value="location(0,0,0)"/>
@@ -125,6 +142,9 @@
   </task>
 
   > 
+#
+# Executing PlaceDishes1 
+#
   > task PlaceDishes
 java.lang.IllegalArgumentException: Unknown task id PlaceDishes
 at edu.wpi.cetask.Shell.processTask(Shell.java:525)
@@ -133,6 +153,9 @@ at edu.wpi.cetask.Shell.processTask(Shell.java:525)
     User says "Let's achieve {urn:disco.wpi.edu:htnlfd:setTable2}PlaceDishes1 on DinnerPlate and [0,0,0] and SquareTable and SaladPlate and [0,0,1] and DinnerPlate and SoupBowl and [0,0,2]."
     Agent place DinnerPlate at [0,0,0] wrt SquareTable.
     Agent place SaladPlate at [0,0,1] wrt DinnerPlate.
+#
+# Optional Step 
+#
     Agent says "Should I place SoupBowl at [0,0,2] wrt DinnerPlate?"
   > 
   > say

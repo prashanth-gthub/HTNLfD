@@ -1,9 +1,16 @@
+#
+# In this example we will see MaxOccurs
+# This is for placing 3 DinnerPlate on the Table. 
+#
     # 11-Nov-2013 3:42:39 PM - TaskEngine 1.5.1 / Disco 1.7.1
     Welcome to Disco! (Type 'help' for command list)
   > cd models
     D:\GitHub\HTNLfD\learn\models
   > load SetTableDemonstration.xml
   > 
+#
+# In this demonstration we have three steps that are exactly the same in their type and inputs and ordering constraints 
+#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -32,6 +39,9 @@
     <input name="place1_referenceFrame" type="PhysObj"/>
     <output name="place1_newObject" type="PhysObj"/>
     <subtasks id="placeDishes1" ordered="false">
+#
+# Instead of adding three steps with the same inputs and outputs, we have just one step with MaxOccurs attribute 
+#
       <step maxOccurs="3" name="place1" task="std:Place"/>
       <binding slot="$this.place1_location" value="location(0,0,0)"/>
       <binding slot="$place1.location" value="$this.place1_location"/>

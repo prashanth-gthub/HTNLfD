@@ -1,9 +1,15 @@
+#
+# This is an example of checking whether two tasks are equal
+#
     # 11-Nov-2013 3:33:41 PM - TaskEngine 1.5.1 / Disco 1.7.1
     Welcome to Disco! (Type 'help' for command list)
   > cd models
     D:\GitHub\HTNLfD\learn\models
   > load SetTableDemonstration.xml
   > 
+#
+# Start of first demonstration (PlaceDishes1)
+#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -25,7 +31,9 @@
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes1")
     # Returned 'null'
   > print PlaceDishes1 urn:disco.wpi.edu:htnlfd:setTable1
-
+#
+# PlaceDishes1 is added to the taskModel
+#
 <task id="PlaceDishes1" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
@@ -67,6 +75,9 @@
 
   > 
   > 
+#
+# Start of second demonstration (PlaceDishes2)
+#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -88,9 +99,16 @@
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes2")
     # Returned 'null'
   > print PlaceDishes2 urn:disco.wpi.edu:htnlfd:setTable2
+#
+# PlaceDishes2 is not added to the taskModel since we have the same task(PlaceDishes1) in our taskModel
+#
 Unkown task or decomposition class.
   > 
   > 
+#
+# Start of task demonstration -> This task is the same as PlaceDishes2 but with one difference. The third step has different inputs.
+# So it should be added.
+#
   > task Demonstration
     User says "Let's achieve Demonstration."
     Agent says "Ok."
@@ -112,7 +130,9 @@ Unkown task or decomposition class.
   > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes2")
     # Returned 'null'
   > print PlaceDishes2 urn:disco.wpi.edu:htnlfd:setTable3
-
+#	
+# This task is added to our taskmodel
+#
 <task id="PlaceDishes2" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
