@@ -107,7 +107,7 @@ public class Graph {
                maxSolution = opt;
                max = LCS;
             }
-            System.out.println("LCS = " + LCS);
+            //System.out.println("LCS = " + LCS);
          }
       }
 
@@ -115,7 +115,7 @@ public class Graph {
             chosenDemNodes.subList(1, chosenDemNodes.size()), taskModel,
             maxSolution);
 
-      bfs(chosenNodes.subList(1, chosenNodes.size()));
+      //bfs(chosenNodes.subList(1, chosenNodes.size()));
 
       optional(taskModel);
       alternativeRecipe(demonstration, taskModel, task, newTask);
@@ -176,7 +176,7 @@ public class Graph {
     */
    public void bfs (List<Node> nodes) {
 
-      System.out.println("...........................");
+      //System.out.println("...........................");
       Queue<Node> queue = new LinkedList<Node>();
       Node root = nodes.get(0);
       printNode(root);
