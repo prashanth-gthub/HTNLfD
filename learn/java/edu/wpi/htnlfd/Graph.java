@@ -599,15 +599,16 @@ public class Graph {
                      TaskClass intTask = task.addInternalTask(taskModel, task
                            .getDecompositions().get(0), steps); // //////
                      taskModel.add(intTask);
-                       
+
                      for (int i = interval[1][0] + 2; i < interval[1][1] + 1; i++) {
                         stepsAlt.add(nodes2.get(i).step);
                      }
-                     
-                     TaskClass recipeTask = task.addInternalTask(taskModel, task
-                           .getDecompositions().get(0), stepsAlt); 
+
+                     TaskClass recipeTask = task.addInternalTask(taskModel,
+                           task.getDecompositions().get(0), stepsAlt);
                      // adding binding to constant
-                     demonstration.addAlternativeRecipe(intTask, null, recipeTask);
+                     demonstration.addAlternativeRecipe(intTask, null,
+                           recipeTask);
                   }
                }
 

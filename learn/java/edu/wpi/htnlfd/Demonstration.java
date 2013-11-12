@@ -24,16 +24,16 @@ public class Demonstration {
 
    private InputTransformation inputTransformation = new InputTransformation();
 
-   //private KnowledgeBase KB = new TableKnowledgeBase();
-   
+   // private KnowledgeBase KB = new TableKnowledgeBase();
+
    private LearnAgent LAgent = new LearnAgent("Anahita");
-   
+
    private String defaultInputName = "input1";
-   
-   Graph graph= new Graph();
-   
-   static{
-      
+
+   Graph graph = new Graph();
+
+   static {
+
    }
 
    public Demonstration () {
@@ -91,37 +91,35 @@ public class Demonstration {
          learnedTaskmodel();
       }
 
-      TaskClass newTask = demonstratedTask(disco, taskName, steps);      
-      findLoop(newTask); ///
-      
+      TaskClass newTask = demonstratedTask(disco, taskName, steps);
+      findLoop(newTask); // /
+
       TaskClass task = isAlternativeRecipe(newTask);
       if ( task != null ) {
 
-         //String applicable = KB.getApplicable(task, newTask);
+         // String applicable = KB.getApplicable(task, newTask);
 
          String input = defaultInputName;
          String applicable = "!this." + input;
          if ( task.getDecompositions().get(0).getApplicable() == null ) {
             task.getDecompositions().get(0).setApplicable("this." + input);
          }
-      
+
          TaskClass.Input inputC = task.new Input(input, "boolean", null);
          task.addInput(inputC);
-         
+
          addAlternativeRecipe(newTask, applicable, task);
-         //askQuestion(disco);
-         
+         // askQuestion(disco);
+
          task.changeNameSpace(newTask);
-         //graph.addGraph(this,task,taskModel, newTask);
+         // graph.addGraph(this,task,taskModel, newTask);
 
       } else {
          this.taskModel.add(newTask);
          optionals(this.taskModel);
       }
 
-      
-
-      //inputTransformation.generalizeInput(this.taskModel);
+      // inputTransformation.generalizeInput(this.taskModel);
 
       this.taskModel.isEquivalent();
 
@@ -327,7 +325,7 @@ public class Demonstration {
                      .removeBinding("$this." + in.getName());
             }
          }
-         
+
          for (Entry<String, Binding> binding : bindChange.entrySet()) {
 
             if ( newTask.getDecompositions().get(0)
@@ -390,8 +388,8 @@ public class Demonstration {
          List<edu.wpi.cetask.Task> steps) throws NoSuchMethodException,
          ScriptException {
       TaskClass task = null;
-      task = new TaskClass(taskModel, taskName, new QName(
-            taskModel.namespace, taskName));
+      task = new TaskClass(taskModel, taskName, new QName(taskModel.namespace,
+            taskName));
 
       int countSubtask = task.getDecompositions().size() + 1;
       DecompositionClass subtask = new DecompositionClass(taskModel,
@@ -483,12 +481,12 @@ public class Demonstration {
                inputTask = domTask.new Input(inputName,
                      task.getSlotType(inputName), null);
             }
-            
+
             String optional = task.getProperty(task.getId() + "." + inputName
-                  + "@optional");
-               if ( Boolean.parseBoolean(optional) )
-                  inputTask.setOptional(true);
-               
+               + "@optional");
+            if ( Boolean.parseBoolean(optional) )
+               inputTask.setOptional(true);
+
             domTask.addInput(inputTask);
          }
 
@@ -604,19 +602,21 @@ public class Demonstration {
          }
 
       }
-      for(TaskClass mytask:taskModel.getTaskClasses()){
-         for(DecompositionClass dec:mytask.getDecompositions()){
-            for(String stepName:dec.getStepNames()){
+      for (TaskClass mytask : taskModel.getTaskClasses()) {
+         for (DecompositionClass dec : mytask.getDecompositions()) {
+            for (String stepName : dec.getStepNames()) {
                Step step = dec.getStep(stepName);
-               if(step.getType().getDecompositions() == null || step.getType().getDecompositions().size() == 0){
-                  TaskClass taskCl = taskModel.getTaskClass(step.getType().getId());
-                  if(taskCl!=null)
+               if ( step.getType().getDecompositions() == null
+                  || step.getType().getDecompositions().size() == 0 ) {
+                  TaskClass taskCl = taskModel.getTaskClass(step.getType()
+                        .getId());
+                  if ( taskCl != null )
                      step.setType(taskCl);
                }
             }
          }
       }
-      
+
    }
 
    /**
@@ -633,9 +633,9 @@ public class Demonstration {
     */
    public TaskModel addSteps (Disco disco, String taskName, String subtaskId,
          String afterStep) throws NoSuchMethodException, ScriptException {
-      
+
       getNewTaskModel();
-      
+
       List<Task> steps = findDemonstration(disco);
       TaskClass task = this.taskModel.getTaskClass(taskName);
       DecompositionClass subtask = task.getDecomposition(subtaskId);
@@ -684,7 +684,7 @@ public class Demonstration {
          String stepName) {
 
       getNewTaskModel();
-      
+
       TaskClass task = this.taskModel.getTaskClass(taskName);
       DecompositionClass subtask = task.getDecomposition(subtaskId);
       DecompositionClass.Step step = subtask.getStep(stepName);
@@ -700,7 +700,7 @@ public class Demonstration {
          String stepName, int maxOccurs) {
 
       getNewTaskModel();
-      
+
       TaskClass task = this.taskModel.getTaskClass(taskName);
       DecompositionClass subtask = task.getDecomposition(subtaskId);
       DecompositionClass.Step step = subtask.getStep(stepName);
@@ -716,7 +716,7 @@ public class Demonstration {
          String applicable) throws NoSuchMethodException, ScriptException {
 
       getNewTaskModel();
-      
+
       List<Task> steps = findDemonstration(disco);
       TaskClass task = this.taskModel.getTaskClass(taskName);
       TaskClass newTask = demonstratedTask(disco, taskName, steps);
@@ -724,19 +724,19 @@ public class Demonstration {
 
       return taskModel;
    }
-   
-   public TaskModel answerQuestion(String taskName, String input){
+
+   public TaskModel answerQuestion (String taskName, String input) {
 
       getNewTaskModel();
-      
+
       TaskClass task = taskModel.getTaskClass(taskName);
       Input in = task.getInput(defaultInputName);
       in.setName(input);
-      for(DecompositionClass dec:task.getDecompositions()){
+      for (DecompositionClass dec : task.getDecompositions()) {
          dec.setApplicable(dec.getApplicable().replace(defaultInputName, input));
       }
       defaultInputName = input;
-      
+
       return taskModel;
    }
 
@@ -747,7 +747,7 @@ public class Demonstration {
          String stepNameDep, String stepNameRef) {
 
       getNewTaskModel();
-      
+
       TaskClass task = this.taskModel.getTaskClass(taskName);
       DecompositionClass subtask = task.getDecomposition(subtaskId);
       subtask.setOrdered(false);
@@ -763,7 +763,7 @@ public class Demonstration {
    public TaskModel setOrdered (String taskName, String subtaskId) {
 
       getNewTaskModel();
-      
+
       TaskClass task = this.taskModel.getTaskClass(taskName);
       DecompositionClass subtask = task.getDecomposition(subtaskId);
       subtask.setOrdered(true);
@@ -782,7 +782,7 @@ public class Demonstration {
          String condition) {
 
       getNewTaskModel();
-      
+
       TaskClass task = this.taskModel.getTaskClass(taskName);
       DecompositionClass subtask = task.getDecomposition(subtaskId);
       subtask.setApplicable(condition);
@@ -796,7 +796,7 @@ public class Demonstration {
    public TaskModel addPrecondition (String taskName, String precondition) {
 
       getNewTaskModel();
-      
+
       TaskClass task = this.taskModel.getTaskClass(taskName);
       task.setPrecondition(precondition);
 
@@ -810,7 +810,7 @@ public class Demonstration {
          boolean sufficient) {
 
       getNewTaskModel();
-      
+
       TaskClass task = this.taskModel.getTaskClass(taskName);
       task.setPostcondition(postcondition);
       task.setSufficient(sufficient);
@@ -825,7 +825,7 @@ public class Demonstration {
          String outputType) {
 
       getNewTaskModel();
-      
+
       TaskClass task = this.taskModel.getTaskClass(taskName);
       TaskClass.Output outputC = null;
       outputC = task.new Output(outputName, outputType);
@@ -841,7 +841,7 @@ public class Demonstration {
          String modified) {
 
       getNewTaskModel();
-      
+
       TaskClass task = this.taskModel.getTaskClass(taskName);
       TaskClass.Output outputC = null;
       if ( modified != null && modified != "" )
@@ -995,7 +995,7 @@ public class Demonstration {
             boolean contain = false;
             for (int j = 0; j < temp2.size(); j++) {
                Step step2 = supertask.getStep(temp2.get(j));
-               if ( step1.isEquivalent(step2, taskModel ) ) {
+               if ( step1.isEquivalent(step2, taskModel) ) {
 
                   if ( subtask.checkInputs(temp1.get(i), step1.getType(),
                         temp2.get(j), step2.getType(), subtask, supertask,
@@ -1134,17 +1134,15 @@ public class Demonstration {
       }
 
    }
-   
+
    /**
     * Gets the new taskmodel.
     */
-   void getNewTaskModel(){
+   void getNewTaskModel () {
       taskModel = new TaskModel();
       if ( this.externalTaskModel != null ) {
          learnedTaskmodel();
       }
    }
-   
-   
 
 }

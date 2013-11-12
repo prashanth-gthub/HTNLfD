@@ -707,7 +707,7 @@ public class TaskClass extends TaskModel.Member {
       this.setQname(newTask.getQname());
 
    }
-   
+
    /**
     * Finds a new task name.
     */
@@ -726,24 +726,26 @@ public class TaskClass extends TaskModel.Member {
     * Adds an internal task.
     */
    public TaskClass addInternalTask (TaskModel taskModel,
-         DecompositionClass decccc1, List<Step> steps) {
-      String taskName = findTaskName("_Temp",taskModel); // internal
-      
+         DecompositionClass taskDecomposition, List<Step> steps) {
+      String taskName = findTaskName("_Temp", taskModel); // internal
+
       TaskClass taskI = new TaskClass(taskModel, taskName, new QName(
             taskModel.namespace, taskName));
 
       // /////
       List<Entry<String, Binding>> removeBindings = new ArrayList<Entry<String, Binding>>();
       Map<String, Binding> addBindings = new HashMap<String, Binding>();
-      // adding new step to task
-      DecompositionClass.Step taskStp = decccc1.new Step(taskI, 1, 1, null);
-      String stepNameTask = taskStp.findStepName (taskName);
-      
-      for (int i = 0; i < decccc1.getStepNames().size(); i++) {
-         if ( decccc1.getStep(decccc1.getStepNames().get(i)).equals(
-               steps.get(0)) ) {
-            decccc1.addStep(stepNameTask, taskStp,
-                  decccc1.getStepNames().get(i - 1));
+      // adding new steps to task
+      DecompositionClass.Step taskStp = taskDecomposition.new Step(taskI, 1, 1,
+            null);
+      String stepNameTask = taskStp.findStepName(taskName);
+
+      for (int i = 0; i < taskDecomposition.getStepNames().size(); i++) {
+         if ( taskDecomposition
+               .getStep(taskDecomposition.getStepNames().get(i)).equals(
+                     steps.get(0)) ) {
+            taskDecomposition.addStep(stepNameTask, taskStp, taskDecomposition
+                  .getStepNames().get(i - 1));
             break;
          }
       }
@@ -810,8 +812,10 @@ public class TaskClass extends TaskModel.Member {
                            .getValue().getSlot(), stepNameNew, "$this."
                         + inputT.getName(), bind.getValue().getType()));
 
-                     addBindings.put("$"+ stepNameTask + "." + inputT.getName(), dec.new Binding(inputT.getName(), stepNameTask,
-                           bind.getValue().getValue(), bind.getValue()
+                     addBindings.put(
+                           "$" + stepNameTask + "." + inputT.getName(),
+                           dec.new Binding(inputT.getName(), stepNameTask, bind
+                                 .getValue().getValue(), bind.getValue()
                                  .getType()));
 
                      break;
@@ -879,38 +883,39 @@ public class TaskClass extends TaskModel.Member {
       // subtask.addOrdering(taskModel);
 
       // removing internal tasks data from task + add ordering
-      
+
       List<String> removeSteps = new ArrayList<String>();
-      
-      for (int i = 0; i < decccc1.getStepNames().size(); i++) {
+
+      for (int i = 0; i < taskDecomposition.getStepNames().size(); i++) {
          for (int j = 0; j < steps.size(); j++) {
-            if ( decccc1.getStep(decccc1.getStepNames().get(i)).equals(
-                  steps.get(j)) ) {
-               removeSteps.add(decccc1.getStepNames().get(i));
+            if ( taskDecomposition.getStep(
+                  taskDecomposition.getStepNames().get(i)).equals(steps.get(j)) ) {
+               removeSteps.add(taskDecomposition.getStepNames().get(i));
                break;
             }
          }
       }
-      for(String rm:removeSteps){
-         if(decccc1.getStep(rm)!=null){
+      for (String rm : removeSteps) {
+         if ( taskDecomposition.getStep(rm) != null ) {
             for (Entry<String, Binding> rmB : removeBindings) {
-               if(rmB.getValue().getStep().equals(rm) || rmB.getValue().getValue().contains("$"+rm+".")){
-                  decccc1.removeBinding(rmB.getKey());
+               if ( rmB.getValue().getStep().equals(rm)
+                  || rmB.getValue().getValue().contains("$" + rm + ".") ) {
+                  taskDecomposition.removeBinding(rmB.getKey());
                   for (Entry<String, Binding> add : addBindings.entrySet()) {
-                     if(add.getKey().equals(rmB.getKey()) || add.getValue().getValue().equals(rmB.getValue().getValue()))
-                        decccc1.addBinding(add.getKey(), add.getValue());
+                     if ( add.getKey().equals(rmB.getKey())
+                        || add.getValue().getValue()
+                              .equals(rmB.getValue().getValue()) )
+                        taskDecomposition.addBinding(add.getKey(),
+                              add.getValue());
                   }
                }
-               
+
             }
- 
-            decccc1.removeStep(rm);
+
+            taskDecomposition.removeStep(rm);
          }
-         
+
       }
-      
-      
-      
 
       return taskI;
    }

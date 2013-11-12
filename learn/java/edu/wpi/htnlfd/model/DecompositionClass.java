@@ -491,8 +491,6 @@ public class DecompositionClass extends TaskModel.Member {
          }
       }
 
-  
-
    }
 
    /**
