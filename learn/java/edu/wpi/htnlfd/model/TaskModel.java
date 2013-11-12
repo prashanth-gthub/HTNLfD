@@ -16,7 +16,7 @@ public class TaskModel {
    public static String namespacePrefix;
 
    static {
-      
+
    }
 
    /**
@@ -25,24 +25,23 @@ public class TaskModel {
    public TaskModel () {
 
       namespace = "urn:disco.wpi.edu:htnlfd:setTable";
-      
+
       int count = 1;
-      if ( taskmodels.size() == 0 ){         
+      if ( taskmodels.size() == 0 ) {
          count = 1;
-      }
-      else {
+      } else {
          String nameS = taskmodels.get(taskmodels.size() - 1).namespacePrefix;
          nameS = nameS.replaceAll("[^0-9]*", "");
          count = Integer.parseInt(nameS) + 1;
-         
+
       }
 
-      //count = 1;
-      
+      // count = 1;
+
       namespace = namespace + count;
       String[] dNSNameArray = namespace.split(":");
       namespacePrefix = dNSNameArray[dNSNameArray.length - 1];
-      
+
       taskmodels.add(this);
    }
 

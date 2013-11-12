@@ -817,10 +817,26 @@ public class TaskClass extends TaskModel.Member {
                            dec.new Binding(inputT.getName(), stepNameTask, bind
                                  .getValue().getValue(), bind.getValue()
                                  .getType()));
-
+                     //add Constant
+                     Entry<String, Binding> bindR = dec.getBinding (bind,dec);
+                     if(bindR!=null){
+                        boolean contain = false;
+                        for(Entry<String, Binding> bindT:taskDecomposition.getBindings().entrySet()){
+                           if((bindT.getKey().equals(bindR.getKey()) && bindT.getValue().equals(bindR.getValue()))){
+                              contain = true;
+                              break;                     
+                           }
+                        }
+                        if(!contain){
+                           subtask.addBinding("$this."+inputT.getName(),subtask.new Binding(inputT.getName(), "this", bindR.getValue().getValue()
+                                 , DecompositionClass.Type.Constant));
+                        }
+                     }
                      break;
 
                   }
+                  
+                  
                }
 
                removeBindings.add(bind);
@@ -876,7 +892,10 @@ public class TaskClass extends TaskModel.Member {
 
                removeBindings.add(bind);
             }
+            
+            
          }
+
 
       }
 

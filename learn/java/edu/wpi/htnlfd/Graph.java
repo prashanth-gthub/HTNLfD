@@ -1,7 +1,6 @@
 package edu.wpi.htnlfd;
 
 import java.util.*;
-import edu.wpi.htnlfd.Graph.Node;
 import edu.wpi.htnlfd.model.DecompositionClass.Step;
 import edu.wpi.htnlfd.model.*;
 
@@ -598,7 +597,7 @@ public class Graph {
                      }
                      TaskClass intTask = task.addInternalTask(taskModel, task
                            .getDecompositions().get(0), steps); // //////
-                     taskModel.add(intTask);
+                    taskModel.add(intTask);
 
                      for (int i = interval[1][0] + 2; i < interval[1][1] + 1; i++) {
                         stepsAlt.add(nodes2.get(i).step);
@@ -606,9 +605,9 @@ public class Graph {
 
                      TaskClass recipeTask = task.addInternalTask(taskModel,
                            task.getDecompositions().get(0), stepsAlt);
-                     // adding binding to constant
-                     demonstration.addAlternativeRecipe(intTask, null,
-                           recipeTask);
+                     //taskModel.add(recipeTask);
+                     demonstration.addAlternativeRecipe(recipeTask, null,
+                           intTask);
                   }
                }
 

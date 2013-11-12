@@ -99,7 +99,7 @@ public class Demonstration {
 
          // String applicable = KB.getApplicable(task, newTask);
 
-         String input = defaultInputName;
+         /*String input = defaultInputName;
          String applicable = "!this." + input;
          if ( task.getDecompositions().get(0).getApplicable() == null ) {
             task.getDecompositions().get(0).setApplicable("this." + input);
@@ -111,8 +111,8 @@ public class Demonstration {
          addAlternativeRecipe(newTask, applicable, task);
          // askQuestion(disco);
 
-         task.changeNameSpace(newTask);
-         // graph.addGraph(this,task,taskModel, newTask);
+         task.changeNameSpace(newTask);*/
+         graph.addGraph(this,task,taskModel, newTask);
 
       } else {
          this.taskModel.add(newTask);
@@ -200,6 +200,8 @@ public class Demonstration {
                            .findValueInParents(taskModel, null, task,
                                  task.getDecompositions().get(0), in1.getName());
                   if ( newTask.getDecompositions().get(0).getBindings()
+                        .get("$this." + in2.getName())!=null &&
+                        newTask.getDecompositions().get(0).getBindings()
                         .get("$this." + in2.getName()).getValue().equals(value) ) {
                      contain = true;
                      if ( bindValue == null ) {
