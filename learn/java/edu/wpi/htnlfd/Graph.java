@@ -112,15 +112,19 @@ public class Graph {
          }
       }
 
-      
+      if(max == 0){
+         return false;
+      }
       merge(chosenNodes.subList(1, chosenNodes.size()),
             chosenDemNodes.subList(1, chosenDemNodes.size()), taskModel,
             maxSolution);
 
       bfs(chosenNodes);
 
-      optional(taskModel);
-      return alternativeRecipe(demonstration, taskModel, task, newTask);
+      boolean opt = optional(taskModel);
+      boolean alt =  alternativeRecipe(demonstration, taskModel, task, newTask);
+      
+      return alt || opt;
    }
 
    /**
@@ -559,9 +563,10 @@ public class Graph {
 
    /**
     * Searches for optional steps, and changes their optional attribute.
+    * @return 
     */
-   void optional (TaskModel taskModel) {
-
+   boolean optional (TaskModel taskModel) {
+      boolean opt = false;
       List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
 
       findPathes(nodesLists);
@@ -574,16 +579,19 @@ public class Graph {
                if ( interval[0][0] == interval[0][1] - 1 ) {
                   for (int i = interval[1][0] + 2; i < interval[1][1] + 1; i++) {
                      nodes2.get(i).step.setMinOccurs(0);
+                     opt = true;
                   }
                } else if ( interval[1][0] == interval[1][1] - 1 ) {
                   for (int i = interval[0][0] + 2; i < interval[0][1] + 1; i++) {
                      nodes1.get(i).step.setMinOccurs(0);
+                     opt = true;
                   }
                }
             }
 
          }
       }
+      return opt;
 
    }
 

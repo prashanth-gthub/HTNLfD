@@ -2,7 +2,7 @@ cd models
 load SetTableDemonstration.xml
 
 task Demonstration
-task Place / PhysObj.DinnerPlate / location(0,0,0) / PhysObj.SquareTable
+task Place / PhysObj.Knife / location(0,0,0) / PhysObj.SquareTable
 task Place / PhysObj.SaladPlate / location(0,0,1) / PhysObj.DinnerPlate
 task Place / PhysObj.Spoon / location(0,0,1) / PhysObj.DinnerPlate
 task Place / PhysObj.SoupBowl / location(0,0,2) / PhysObj.DinnerPlate

@@ -5,7 +5,7 @@ task Demonstration
 task Place / PhysObj.SaladPlate / location(0,0,1) / PhysObj.DinnerPlate
 task Place / PhysObj.DinnerPlate / location(0,0,0) / PhysObj.SquareTable
 task Place / PhysObj.Spoon / location(0,0,1) / PhysObj.DinnerPlate
-task Place / PhysObj.SoupBowl / location(0,0,2) / PhysObj.DinnerPlate
+task Place / PhysObj.SoupBowl / location(0,0,2) / PhysObj.SquareTable
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
 print PlaceDishes urn:disco.wpi.edu:htnlfd:setTable1
@@ -13,7 +13,7 @@ print PlaceDishes urn:disco.wpi.edu:htnlfd:setTable1
 task Demonstration
 task Place / PhysObj.SaladPlate / location(0,0,1) / PhysObj.DinnerPlate
 task Place / PhysObj.Knife / location(0,0,2) / PhysObj.DinnerPlate
-task Place / PhysObj.SoupBowl / location(0,0,2) / PhysObj.DinnerPlate
+task Place / PhysObj.SoupBowl / location(0,0,2) / PhysObj.SquareTable
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
 print PlaceDishes urn:disco.wpi.edu:htnlfd:setTable2

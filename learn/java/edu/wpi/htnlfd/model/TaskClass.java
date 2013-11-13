@@ -725,7 +725,7 @@ public class TaskClass extends TaskModel.Member {
    /**
     * Adds an internal task.
     */
-   @SuppressWarnings("null")
+
    public TaskClass addInternalTask (TaskModel taskModel,
          DecompositionClass taskDecomposition, List<Step> steps) {
       String taskName = findTaskName("_Temp", taskModel); // internal
@@ -745,9 +745,9 @@ public class TaskClass extends TaskModel.Member {
          if ( taskDecomposition
                .getStep(taskDecomposition.getStepNames().get(i)).equals(
                      steps.get(0)) ) {
-            if(i-1>=0)
-               taskDecomposition.addStep(stepNameTask, taskStp, taskDecomposition
-                  .getStepNames().get(i - 1));
+            if ( i - 1 >= 0 )
+               taskDecomposition.addStep(stepNameTask, taskStp,
+                     taskDecomposition.getStepNames().get(i - 1));
             else
                taskDecomposition.addStep(stepNameTask, taskStp, null);
             break;
@@ -766,9 +766,12 @@ public class TaskClass extends TaskModel.Member {
       subtask.setGoal(taskI);
       subtask.setQname(new QName(taskModel.namespace, subtask.getId()));
       taskI.addDecompositionClass(subtask);
+
       List<String> prevStepNames = new ArrayList<String>();
+
       for (int j = 0; j < steps.size(); j++) {
          Step step = steps.get(j);
+
          if ( step.getRequired() != null && step.getRequired().size() != 0 ) {
             // adding requires
             for (int f = 0; f < j; f++) {
@@ -805,17 +808,16 @@ public class TaskClass extends TaskModel.Member {
                                     .substring(6,
                                           bind.getValue().getValue().length())) ) {
                      TaskClass.Input inputT = null;
-                     if((inputT = taskI.getInput(in.getChangedName(in.getName(), // in is not correct
-                           stepName, stepNameNew)))==null){
-                        inputT = taskI.new Input(null,
-                              in.getType(), in.getModified());
+                     if ( (inputT = taskI.getInput(in.getChangedName(
+                           in.getName(), // in is not correct
+                           stepName, stepNameNew))) == null ) {
+                        inputT = taskI.new Input(null, in.getType(),
+                              in.getModified());
                         inputT.setName(inputT.getChangedName(in.getName(),
                               stepName, stepNameNew));
 
                         taskI.addInput(inputT);
                      }
-                     
-                     
 
                      subtask.addBinding("$" + stepNameNew + "."
                         + bind.getValue().getSlot(), subtask.new Binding(bind
@@ -827,26 +829,29 @@ public class TaskClass extends TaskModel.Member {
                            dec.new Binding(inputT.getName(), stepNameTask, bind
                                  .getValue().getValue(), bind.getValue()
                                  .getType()));
-                     //add Constant
-                     Entry<String, Binding> bindR = dec.getBinding (bind,dec);
-                     if(bindR!=null){
+                     // add Constant
+                     Entry<String, Binding> bindR = dec.getBinding(bind, dec);
+                     if ( bindR != null ) {
                         boolean contain = false;
-                        for(Entry<String, Binding> bindT:taskDecomposition.getBindings().entrySet()){
-                           if((bindT.getKey().equals(bindR.getKey()) && bindT.getValue().equals(bindR.getValue()))){
+                        for (Entry<String, Binding> bindT : taskDecomposition
+                              .getBindings().entrySet()) {
+                           if ( (bindT.getKey().equals(bindR.getKey()) && bindT
+                                 .getValue().equals(bindR.getValue())) ) {
                               contain = true;
-                              break;                     
+                              break;
                            }
                         }
-                        if(!contain){
-                           subtask.addBinding("$this."+inputT.getName(),subtask.new Binding(inputT.getName(), "this", bindR.getValue().getValue()
-                                 , DecompositionClass.Type.Constant));
+                        if ( !contain ) {
+                           subtask.addBinding("$this." + inputT.getName(),
+                                 subtask.new Binding(inputT.getName(), "this",
+                                       bindR.getValue().getValue(),
+                                       DecompositionClass.Type.Constant));
                         }
                      }
                      break;
 
                   }
-                  
-                  
+
                }
 
                removeBindings.add(bind);
@@ -902,13 +907,10 @@ public class TaskClass extends TaskModel.Member {
 
                removeBindings.add(bind);
             }
-            
-            
+
          }
 
-
       }
-
 
       // removing internal tasks data from task + add ordering
 
@@ -939,14 +941,32 @@ public class TaskClass extends TaskModel.Member {
                }
 
             }
-
+            Step stp = taskDecomposition.getStep(rm);
+            if(stp.getRequired()!=null && stp.getRequired().size()!=0){
+               for(String req:stp.getRequired())
+                  taskStp.addRequired(req);
+            }
+            
+            for(Entry<String, Step> step:taskDecomposition.getSteps().entrySet()){
+               if(step.getValue().getRequired().contains(rm) && !removeSteps.contains(step.getKey())){
+                  step.getValue().removeRequired(rm);
+                  step.getValue().addRequired(stepNameTask);
+               }
+               else if(step.getValue().getRequired().contains(rm)){
+                  step.getValue().removeRequired(rm);
+               }
+            }
+            
             taskDecomposition.removeStep(rm);
+            
+            
          }
 
       }
 
-      subtask.addOrdering(taskModel);
       
+      subtask.addOrdering(taskModel);
+
       return taskI;
    }
 
