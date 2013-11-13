@@ -107,7 +107,7 @@ public class Graph {
                maxSolution = opt;
                max = LCS;
             }
-            //System.out.println("LCS = " + LCS);
+            // System.out.println("LCS = " + LCS);
          }
       }
 
@@ -115,7 +115,7 @@ public class Graph {
             chosenDemNodes.subList(1, chosenDemNodes.size()), taskModel,
             maxSolution);
 
-      //bfs(chosenNodes.subList(1, chosenNodes.size()));
+      bfs(chosenNodes);
 
       optional(taskModel);
       alternativeRecipe(demonstration, taskModel, task, newTask);
@@ -176,7 +176,7 @@ public class Graph {
     */
    public void bfs (List<Node> nodes) {
 
-      //System.out.println("...........................");
+      // System.out.println("...........................");
       Queue<Node> queue = new LinkedList<Node>();
       Node root = nodes.get(0);
       printNode(root);
@@ -210,8 +210,16 @@ public class Graph {
       if ( root.stepNames == null )
          return;
       for (int i = 0; i < root.stepNames.size(); i++) {
-         System.out.println(root.stepNames.get(i) + " "
-            + root.tasks.get(i).getId() + " " + root.level);
+         System.out.print(root.stepNames.get(i) + " "
+            + root.tasks.get(i).getId() + " " + root.level+"      ");
+         for(int j=0;j<root.childs.size();j++)
+            if(root.childs.get(j).tasks.size()>0)
+               System.out.print(root.childs.get(j).tasks.get(0).getId()+" "+root.childs.get(j).tasks.size()+" ");
+         System.out.print("Par:  ");
+         for(int j=0;j<root.parents.size();j++)
+            if(root.parents.get(j).tasks.size()>0)
+               System.out.print(root.parents.get(j).tasks.get(0).getId()+" "+root.parents.get(j).tasks.size()+" ");
+         System.out.println();
       }
       System.out.println("-----------------");
    }
@@ -221,6 +229,7 @@ public class Graph {
     */
    public void getNodes (TaskClass task, TaskModel taskModel, List<Node> nodes) {
 
+      // adding optional steps and alternative recipes
       for (DecompositionClass dec : task.getDecompositions()) {
 
          for (String stepName : dec.getStepNames()) {
@@ -261,6 +270,8 @@ public class Graph {
     */
    void merge (List<Node> x, List<Node> y, TaskModel taskModel, int[][] opt) {
 
+      
+      System.out.println("?????????????????");
       int M = x.size();
       int N = y.size();
 
@@ -290,6 +301,8 @@ public class Graph {
       }
 
       for (int k = 0; k < newNodes.size(); k++) {
+         
+         bfs(x);
          if ( newNodes.get(k) != null ) {
 
             if ( k == 0 ) {
@@ -317,6 +330,7 @@ public class Graph {
             if ( !contain ) {
                if ( !x.get(k).parents.contains(newNodes.get(k).parents.get(0)) ) {
                   x.get(k).parents.add(newNodes.get(k).parents.get(0));
+                  newNodes.get(k).parents.get(0).childs.remove(newNodes.get(k));
                }
                if ( !newNodes.get(k).parents.get(0).childs.contains(x.get(k)) ) {
                   newNodes.get(k).parents.get(0).childs.add(x.get(k));
@@ -333,8 +347,10 @@ public class Graph {
                      && newNodes.get(v).step.equals(newNodes.get(k).childs
                            .get(0).step) ) {
                      x.get(k).childs.add(x.get(v));
-                     if ( !x.get(v).parents.contains(x.get(k)) )
+                     if ( !x.get(v).parents.contains(x.get(k)) ){
                         x.get(v).parents.add(x.get(k));
+                        newNodes.get(k).childs.remove(x.get(v));
+                     }
                      contain1 = true;
                      break;
                   }
@@ -597,7 +613,7 @@ public class Graph {
                      }
                      TaskClass intTask = task.addInternalTask(taskModel, task
                            .getDecompositions().get(0), steps); // //////
-                    taskModel.add(intTask);
+                     taskModel.add(intTask);
 
                      for (int i = interval[1][0] + 2; i < interval[1][1] + 1; i++) {
                         stepsAlt.add(nodes2.get(i).step);
@@ -605,7 +621,7 @@ public class Graph {
 
                      TaskClass recipeTask = task.addInternalTask(taskModel,
                            task.getDecompositions().get(0), stepsAlt);
-                     //taskModel.add(recipeTask);
+                     // taskModel.add(recipeTask);
                      demonstration.addAlternativeRecipe(recipeTask, null,
                            intTask);
                   }

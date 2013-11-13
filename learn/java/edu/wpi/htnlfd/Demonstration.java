@@ -112,6 +112,7 @@ public class Demonstration {
          // askQuestion(disco);
 
          task.changeNameSpace(newTask);*/
+         newTask.setId(newTask.getId()+"1");
          graph.addGraph(this,task,taskModel, newTask);
 
       } else {

@@ -12,7 +12,7 @@
 
 		<binding slot="$this.external" value="false"/>
 
-		<postcondition>
+		<postcondition sufficient="true">
 
 			($this.newObject == undefined || $this.object == undefined || $this.referenceFrame == undefined) ? null :
 
