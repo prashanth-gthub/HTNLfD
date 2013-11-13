@@ -211,14 +211,16 @@ public class Graph {
          return;
       for (int i = 0; i < root.stepNames.size(); i++) {
          System.out.print(root.stepNames.get(i) + " "
-            + root.tasks.get(i).getId() + " " + root.level+"      ");
-         for(int j=0;j<root.childs.size();j++)
-            if(root.childs.get(j).tasks.size()>0)
-               System.out.print(root.childs.get(j).tasks.get(0).getId()+" "+root.childs.get(j).tasks.size()+" ");
+            + root.tasks.get(i).getId() + " " + root.level + "      ");
+         for (int j = 0; j < root.childs.size(); j++)
+            if ( root.childs.get(j).tasks.size() > 0 )
+               System.out.print(root.childs.get(j).tasks.get(0).getId() + " "
+                  + root.childs.get(j).tasks.size() + " ");
          System.out.print("Par:  ");
-         for(int j=0;j<root.parents.size();j++)
-            if(root.parents.get(j).tasks.size()>0)
-               System.out.print(root.parents.get(j).tasks.get(0).getId()+" "+root.parents.get(j).tasks.size()+" ");
+         for (int j = 0; j < root.parents.size(); j++)
+            if ( root.parents.get(j).tasks.size() > 0 )
+               System.out.print(root.parents.get(j).tasks.get(0).getId() + " "
+                  + root.parents.get(j).tasks.size() + " ");
          System.out.println();
       }
       System.out.println("-----------------");
@@ -270,7 +272,6 @@ public class Graph {
     */
    void merge (List<Node> x, List<Node> y, TaskModel taskModel, int[][] opt) {
 
-      
       System.out.println("?????????????????");
       int M = x.size();
       int N = y.size();
@@ -301,8 +302,7 @@ public class Graph {
       }
 
       for (int k = 0; k < newNodes.size(); k++) {
-         
-         bfs(x);
+
          if ( newNodes.get(k) != null ) {
 
             if ( k == 0 ) {
@@ -327,14 +327,19 @@ public class Graph {
                   }
                }
             }
+
             if ( !contain ) {
                if ( !x.get(k).parents.contains(newNodes.get(k).parents.get(0)) ) {
                   x.get(k).parents.add(newNodes.get(k).parents.get(0));
-                  newNodes.get(k).parents.get(0).childs.remove(newNodes.get(k));
+                 
                }
                if ( !newNodes.get(k).parents.get(0).childs.contains(x.get(k)) ) {
                   newNodes.get(k).parents.get(0).childs.add(x.get(k));
-                  newNodes.get(k).parents.get(0).childs.remove(newNodes.get(k));
+               }
+               for(Node rm:newNodes.get(k).parents.get(0).childs){
+                  if(rm.step.equals(newNodes.get(k).step)){
+                     newNodes.get(k).parents.get(0).childs.remove(rm);
+                  }
                }
             }
 
@@ -346,17 +351,21 @@ public class Graph {
                      && newNodes.get(v).step != null
                      && newNodes.get(v).step.equals(newNodes.get(k).childs
                            .get(0).step) ) {
-                     x.get(k).childs.add(x.get(v));
-                     if ( !x.get(v).parents.contains(x.get(k)) ){
-                        x.get(v).parents.add(x.get(k));
-                        newNodes.get(k).childs.remove(x.get(v));
+
+                    //  x.get(k).childs.add(x.get(v));
+                     if ( !x.get(v).parents.contains(x.get(k)) ) {
+                         x.get(v).parents.add(x.get(k));                         
                      }
+                     newNodes.get(k).childs.remove(newNodes.get(v));
+                     
                      contain1 = true;
                      break;
                   }
                }
-               if ( !contain1 )
+               if ( !contain1 ) {
                   x.get(k).childs.add(newNodes.get(k).childs.get(0));
+
+               }
             }
 
          }

@@ -133,12 +133,17 @@ public class DecompositionClass extends TaskModel.Member {
          stepNames = new ArrayList<String>();
       }
       steps.put(name, step);
+      if(afterStep == null){
+         stepNames.add(0, name);
+         return;
+      }
       for (int i = 0; i < stepNames.size(); i++) {
          if ( stepNames.get(i).equals(afterStep) ) {
             stepNames.add(i + 1, name);
             break;
          }
       }
+      
    }
 
    public void removeStep (String name) {

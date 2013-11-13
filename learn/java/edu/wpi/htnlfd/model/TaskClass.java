@@ -744,8 +744,11 @@ public class TaskClass extends TaskModel.Member {
          if ( taskDecomposition
                .getStep(taskDecomposition.getStepNames().get(i)).equals(
                      steps.get(0)) ) {
-            taskDecomposition.addStep(stepNameTask, taskStp, taskDecomposition
+            if(i-1>=0)
+               taskDecomposition.addStep(stepNameTask, taskStp, taskDecomposition
                   .getStepNames().get(i - 1));
+            else
+               taskDecomposition.addStep(stepNameTask, taskStp, null);
             break;
          }
       }
