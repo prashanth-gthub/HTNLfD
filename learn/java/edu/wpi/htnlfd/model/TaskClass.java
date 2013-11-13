@@ -725,6 +725,7 @@ public class TaskClass extends TaskModel.Member {
    /**
     * Adds an internal task.
     */
+   @SuppressWarnings("null")
    public TaskClass addInternalTask (TaskModel taskModel,
          DecompositionClass taskDecomposition, List<Step> steps) {
       String taskName = findTaskName("_Temp", taskModel); // internal
@@ -803,12 +804,18 @@ public class TaskClass extends TaskModel.Member {
                                     .getValue()
                                     .substring(6,
                                           bind.getValue().getValue().length())) ) {
-                     TaskClass.Input inputT = taskI.new Input(null,
-                           in.getType(), in.getModified());
-                     inputT.setName(inputT.getChangedName(in.getName(),
-                           stepName, stepNameNew));
+                     TaskClass.Input inputT = null;
+                     if((inputT = taskI.getInput(in.getChangedName(in.getName(), // in is not correct
+                           stepName, stepNameNew)))==null){
+                        inputT = taskI.new Input(null,
+                              in.getType(), in.getModified());
+                        inputT.setName(inputT.getChangedName(in.getName(),
+                              stepName, stepNameNew));
 
-                     taskI.addInput(inputT);
+                        taskI.addInput(inputT);
+                     }
+                     
+                     
 
                      subtask.addBinding("$" + stepNameNew + "."
                         + bind.getValue().getSlot(), subtask.new Binding(bind
@@ -902,7 +909,6 @@ public class TaskClass extends TaskModel.Member {
 
       }
 
-      // subtask.addOrdering(taskModel);
 
       // removing internal tasks data from task + add ordering
 
@@ -939,6 +945,8 @@ public class TaskClass extends TaskModel.Member {
 
       }
 
+      subtask.addOrdering(taskModel);
+      
       return taskI;
    }
 

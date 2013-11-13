@@ -67,8 +67,9 @@ public class Graph {
 
    /**
     * Main function to merge two taskclasses.
+    * @return 
     */
-   public void addGraph (Demonstration demonstration, TaskClass task,
+   public boolean addGraph (Demonstration demonstration, TaskClass task,
          TaskModel taskModel, TaskClass newTask) {
 
       List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
@@ -111,6 +112,7 @@ public class Graph {
          }
       }
 
+      
       merge(chosenNodes.subList(1, chosenNodes.size()),
             chosenDemNodes.subList(1, chosenDemNodes.size()), taskModel,
             maxSolution);
@@ -118,7 +120,7 @@ public class Graph {
       bfs(chosenNodes);
 
       optional(taskModel);
-      alternativeRecipe(demonstration, taskModel, task, newTask);
+      return alternativeRecipe(demonstration, taskModel, task, newTask);
    }
 
    /**
@@ -588,8 +590,9 @@ public class Graph {
    /**
     * Searches for alternative recipes and adds them.
     */
-   void alternativeRecipe (Demonstration demonstration, TaskModel taskModel,
+   boolean alternativeRecipe (Demonstration demonstration, TaskModel taskModel,
          TaskClass task, TaskClass newTask) {
+      boolean changed = false;
       List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
 
       findPathes(nodesLists);
@@ -620,19 +623,25 @@ public class Graph {
                      for (int i = interval[0][0] + 2; i < interval[0][1] + 1; i++) {
                         steps.add(nodes1.get(i).step);
                      }
+                     
+                     for (int i = interval[1][0] + 2; i < interval[1][1] + 1; i++) {
+                        stepsAlt.add(nodes2.get(i).step);
+                     }
+                     
+                     if(steps.size()==0 || stepsAlt.size()==0)
+                        continue;
                      TaskClass intTask = task.addInternalTask(taskModel, task
                            .getDecompositions().get(0), steps); // //////
                      taskModel.add(intTask);
 
-                     for (int i = interval[1][0] + 2; i < interval[1][1] + 1; i++) {
-                        stepsAlt.add(nodes2.get(i).step);
-                     }
+                     
 
                      TaskClass recipeTask = task.addInternalTask(taskModel,
                            task.getDecompositions().get(0), stepsAlt);
                      // taskModel.add(recipeTask);
                      demonstration.addAlternativeRecipe(recipeTask, null,
                            intTask);
+                     changed = true;
                   }
                }
 
@@ -640,6 +649,8 @@ public class Graph {
 
          }
       }
+      
+      return changed;
    }
 
 }
