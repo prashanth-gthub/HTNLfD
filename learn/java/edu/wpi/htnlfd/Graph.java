@@ -357,8 +357,16 @@ public class Graph {
                      && newNodes.get(v).step != null
                      && newNodes.get(v).step.equals(newNodes.get(k).childs
                            .get(0).step) ) {
-
-                    //  x.get(k).childs.add(x.get(v));
+                     boolean cont = false;
+                     for (Node child:x.get(k).childs) {
+                        if(child.step.equals(x.get(v).step)){
+                           cont = true;
+                           break;
+                        }
+                     }
+                     if(!cont)
+                        x.get(k).childs.add(x.get(v));
+                     
                      if ( !x.get(v).parents.contains(x.get(k)) ) {
                          x.get(v).parents.add(x.get(k));                         
                      }
@@ -429,9 +437,9 @@ public class Graph {
 
       int i = 0, j = 0;
       int startF = -1;
-      int endF = -1;
+      int endF = x.size(); //??
       int startS = -1;
-      int endS = -1;
+      int endS = y.size(); //??
       while (i < M && j < N) {
          if ( x.get(i).isEquivalent(y.get(j), taskModel) ) {
             startF = i;
