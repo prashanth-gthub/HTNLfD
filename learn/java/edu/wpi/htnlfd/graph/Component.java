@@ -83,8 +83,6 @@ public class Component {
    public void join (List<Node> nodes, Graph graph, TaskModel taskModel) {
       boolean satisfy = false;
 
-      List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
-      graph.findPathes(nodesLists, start);
 
       if ( start.childs.size() == 0 ) {
          start.childs.add(nodes.get(0));
@@ -108,20 +106,18 @@ public class Component {
 
       graph.giveCombinations(nodesListDem, nodes);
       ArrayList<Node> demSave = null;
-
+      List<Node> path = findSharedNodes (graph, taskModel);
+      List<Node> validPath = new ArrayList<Node>();
+      for (Node pa : path) {
+         if ( pa.step != null ) {
+            validPath.add(pa);
+         }
+      }
+      
       for (ArrayList<Node> dem : nodesListDem) {
-
-         for (int i = 0; i < nodesLists.size(); i++) {
-            List<Node> path = nodesLists.get(i);
+            
             List<Node> newNodes1 = new ArrayList<Node>();
-            List<Node> newNodes2 = new ArrayList<Node>();
-
-            List<Node> validPath = new ArrayList<Node>();
-            for (Node pa : path) {
-               if ( pa.step != null ) {
-                  validPath.add(pa);
-               }
-            }
+            List<Node> newNodes2 = new ArrayList<Node>();            
 
             graph.getLCS(validPath, dem, taskModel, newNodes1, newNodes2);
             List<Node> LCS = newNodes1;
@@ -136,7 +132,7 @@ public class Component {
                }
                demSave = dem;
             }
-         }
+         
       }
 
       // should be here
