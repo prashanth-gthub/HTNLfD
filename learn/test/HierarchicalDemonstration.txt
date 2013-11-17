@@ -39,7 +39,7 @@ task Place / PhysObj.SoupBowl / location(0,0,2) / PhysObj.DinnerPlate
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
 eval Packages.edu.wpi.htnlfd.Init.answerQuestion($disco,"PlaceDishes","Fancy")
-print PlaceDishes urn:disco.wpi.edu:htnlfd:setTable6
+print PlaceDishes urn:disco.wpi.edu:htnlfd:setTable5
 
 
 task Demonstration
@@ -48,7 +48,7 @@ task Place / PhysObj.Fork / location(1,0,0) / PhysObj.DinnerPlate
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
 eval Packages.edu.wpi.htnlfd.Init.answerQuestion($disco,"PlaceSilverware","Fancy")
-print PlaceSilverware urn:disco.wpi.edu:htnlfd:setTable8
+print PlaceSilverware urn:disco.wpi.edu:htnlfd:setTable6
 
 task Demonstration
 task Place / PhysObj.WaterGlass / location(0,1,0) / PhysObj.DinnerPlate

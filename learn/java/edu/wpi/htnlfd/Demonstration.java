@@ -3,6 +3,7 @@ package edu.wpi.htnlfd;
 import edu.wpi.cetask.Task;
 import edu.wpi.disco.*;
 import edu.wpi.disco.lang.*;
+import edu.wpi.htnlfd.graph.Graph;
 import edu.wpi.htnlfd.model.*;
 import edu.wpi.htnlfd.model.DecompositionClass.Step;
 import edu.wpi.htnlfd.model.TaskClass.Input;
@@ -30,7 +31,7 @@ public class Demonstration {
 
    private String defaultInputName = "input1";
 
-   Graph graph = new Graph();
+   
 
    static {
 
@@ -95,12 +96,16 @@ public class Demonstration {
       findLoop(newTask); // /
 
       TaskClass task = isAlternativeRecipe(newTask);
+      
+      Graph graph = Graph.getGraph(taskName);
+      
+      graph.addGraph(this,task,taskModel, newTask);
+      graph.printGraph();
       if ( task != null ) {
 
          // String applicable = KB.getApplicable(task, newTask);
 
-         newTask.setId(newTask.getId()+"1");
-         if(!graph.addGraph(this,task,taskModel, newTask)){
+         if(false){ // ???????????????????????
             
             String input = defaultInputName;
             String applicable = "!this." + input;
@@ -458,6 +463,7 @@ public class Demonstration {
                task.getQName().getNamespaceURI(), task.getQName()
                      .getLocalPart()));
          domTask.setPrimitive(task.isPrimitive());
+         domTask.setInternal(task.isInternal());
          this.taskModel.add(domTask);
          for (String outputName : task.getDeclaredOutputNames()) {
 

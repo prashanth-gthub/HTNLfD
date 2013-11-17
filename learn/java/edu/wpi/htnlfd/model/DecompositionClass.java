@@ -613,9 +613,14 @@ public class DecompositionClass extends TaskModel.Member {
 
       List<Object[]> temp = findParents(parentTask, parentStep, parentSubtask,
             taskModel);
-      parentTask = (TaskClass) temp.get(temp.size() - 1)[0];
-      parentSubtask = (DecompositionClass) temp.get(temp.size() - 1)[1];
-      parentStep = (Entry<String, Step>) temp.get(temp.size() - 1)[2];
+      if(temp.size()>0){
+         parentTask = (TaskClass) temp.get(temp.size() - 1)[0];
+         parentSubtask = (DecompositionClass) temp.get(temp.size() - 1)[1];
+         parentStep = (Entry<String, Step>) temp.get(temp.size() - 1)[2];
+      }
+      else{
+         return null;
+      }
 
       if ( parentSubtask != null ) {
          for (Entry<String, Binding> bind1 : parentSubtask.getBindings()

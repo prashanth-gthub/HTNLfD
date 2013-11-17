@@ -1,0 +1,324 @@
+#
+# Merging two demonstrations
+#
+    # 14-Nov-2013 1:26:54 PM - TaskEngine 1.5.1 / Disco 1.7.1
+    Welcome to Disco! (Type 'help' for command list)
+  > cd models
+    D:\GitHub\HTNLfD\learn\models
+  > load SetTableDemonstration.xml
+  > 
+#
+# First demonstration
+#
+  > task Demonstration
+    User says "Let's achieve Demonstration."
+    Agent says "Ok."
+  > task Place / PhysObj.Spoon / location(0,0,2) / PhysObj.DinnerPlate
+    User says "Please place Spoon at [0,0,2] wrt DinnerPlate."
+    Agent place Spoon at [0,0,2] wrt DinnerPlate.
+    Agent says "Ok."
+  > task Place / PhysObj.Fork / location(0,0,2) / PhysObj.DinnerPlate
+    User says "Please place Fork at [0,0,2] wrt DinnerPlate."
+    Agent place Fork at [0,0,2] wrt DinnerPlate.
+    Agent says "Ok."
+  > task Place / PhysObj.SaladPlate / location(0,0,2) / PhysObj.Fork
+    User says "Please place SaladPlate at [0,0,2] wrt Fork."
+    Agent place SaladPlate at [0,0,2] wrt Fork.
+    Agent says "Ok."
+  > task Place / PhysObj.SoupBowl / location(0,0,2) / PhysObj.DinnerPlate
+    User says "Please place SoupBowl at [0,0,2] wrt DinnerPlate."
+    Agent place SoupBowl at [0,0,2] wrt DinnerPlate.
+    Agent says "Ok."
+  > task Place / PhysObj.Spoon / location(0,0,2) / PhysObj.DinnerPlate
+    User says "Please place Spoon at [0,0,2] wrt DinnerPlate."
+    Agent place Spoon at [0,0,2] wrt DinnerPlate.
+    Agent says "Ok."
+  > done Demonstration
+    User says "Achieve Demonstration is done."
+    Agent says "Ok."
+  > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
+    # Returned 'null'
+  > print PlaceDishes urn:disco.wpi.edu:htnlfd:setTable1
+
+<task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+    <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
+    <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
+    <input name="place1_referenceFrame" type="PhysObj"/>
+    <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
+    <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
+    <input name="place3_referenceFrame" type="PhysObj"/>
+    <input modified="place4_newObject" name="place4_object" type="PhysObj"/>
+    <output name="place1_newObject" type="PhysObj"/>
+    <output name="place2_newObject" type="PhysObj"/>
+    <output name="place3_newObject" type="PhysObj"/>
+    <output name="place4_newObject" type="PhysObj"/>
+    <output name="place5_newObject" type="PhysObj"/>
+    <subtasks id="placeDishes1" ordered="false">
+      <step name="place1" task="std:Place"/>
+      <step name="place2" task="std:Place"/>
+      <step name="place3" requires="place2" task="std:Place"/>
+      <step name="place4" task="std:Place"/>
+      <step name="place5" requires="place1" task="std:Place"/>
+      <binding slot="$place3.referenceFrame" value="$this.place3_referenceFrame"/>
+      <binding slot="$place5.object" value="$this.place1_object"/>
+      <binding slot="$place4.object" value="$this.place4_object"/>
+      <binding slot="$place3.location" value="$this.place1_location"/>
+      <binding slot="$place4.location" value="$this.place1_location"/>
+      <binding slot="$place2.object" value="$this.place2_object"/>
+      <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this.place2_object" value="PhysObj.Fork"/>
+      <binding slot="$this.place3_newObject" value="$place3.newObject"/>
+      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
+      <binding slot="$this.place4_newObject" value="$place4.newObject"/>
+      <binding slot="$this.place2_newObject" value="$place2.newObject"/>
+      <binding slot="$place5.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$place4.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this.place1_location" value="location(0,0,2)"/>
+      <binding slot="$this.place4_object" value="PhysObj.SoupBowl"/>
+      <binding slot="$place1.location" value="$this.place1_location"/>
+      <binding slot="$this.place1_referenceFrame" value="PhysObj.DinnerPlate"/>
+      <binding slot="$place2.location" value="$this.place1_location"/>
+      <binding slot="$this.place3_object" value="PhysObj.SaladPlate"/>
+      <binding slot="$place5.location" value="$this.place1_location"/>
+      <binding slot="$this.place1_object" value="PhysObj.Spoon"/>
+      <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$this.place3_referenceFrame" value="PhysObj.Fork"/>
+      <binding slot="$place2.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$place3.object" value="$this.place3_object"/>
+      <binding slot="$this.place5_newObject" value="$place5.newObject"/>
+    </subtasks>
+  </task>
+
+  > 
+#
+# Second demonstration
+#
+  > task Demonstration
+    User says "Let's achieve Demonstration."
+    Agent says "Ok."
+  > task Place / PhysObj.Spoon / location(0,0,2) / PhysObj.DinnerPlate
+    User says "Please place Spoon at [0,0,2] wrt DinnerPlate."
+    Agent place Spoon at [0,0,2] wrt DinnerPlate.
+    Agent says "Ok."
+  > task Place / PhysObj.SaladPlate / location(0,0,2) / PhysObj.DinnerPlate
+    User says "Please place SaladPlate at [0,0,2] wrt DinnerPlate."
+    Agent place SaladPlate at [0,0,2] wrt DinnerPlate.
+    Agent says "Ok."
+  > task Place / PhysObj.SoupBowl / location(0,0,2) / PhysObj.DinnerPlate
+    User says "Please place SoupBowl at [0,0,2] wrt DinnerPlate."
+    Agent place SoupBowl at [0,0,2] wrt DinnerPlate.
+    Agent says "Ok."
+  > task Place / PhysObj.Fork / location(0,0,2) / PhysObj.SoupBowl
+    User says "Please place Fork at [0,0,2] wrt SoupBowl."
+    Agent place Fork at [0,0,2] wrt SoupBowl.
+    Agent says "Ok."
+  > done Demonstration
+    User says "Achieve Demonstration is done."
+    Agent says "Ok."
+  > eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
+    # Returned 'null'
+  > print PlaceDishes urn:disco.wpi.edu:htnlfd:setTable2
+
+<task id="PlaceDishes" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+    <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
+    <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
+    <input name="place1_referenceFrame" type="PhysObj"/>
+    <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
+    <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
+    <input name="place3_referenceFrame" type="PhysObj"/>
+    <input modified="place4_newObject" name="place4_object" type="PhysObj"/>
+    <input name="_Temp11__Temp12_place1_referenceFrame" type="PhysObj"/>
+    <input modified="_Temp11__Temp12_place1_newObject" name="_Temp11__Temp12_place1_object" type="PhysObj"/>
+    <output name="place1_newObject" type="PhysObj"/>
+    <output name="place2_newObject" type="PhysObj"/>
+    <output name="place3_newObject" type="PhysObj"/>
+    <output name="place4_newObject" type="PhysObj"/>
+    <output name="place5_newObject" type="PhysObj"/>
+    <output name="_Temp11__Temp12_place1_newObject" type="PhysObj"/>
+    <subtasks id="placeDishes1" ordered="false">
+      <step name="place1" task="std:Place"/>
+#
+# Merged step
+#
+      <step name="_Temp21" task="_Temp2"/>
+      <step name="place4" task="std:Place"/>
+#
+# Merged step
+#
+      <step name="_Temp11" requires="place1" task="_Temp1"/>
+      <binding slot="$_Temp11._Temp12_place1_referenceFrame" value="$this._Temp11__Temp12_place1_referenceFrame"/>
+      <binding slot="$_Temp11.place1_object" value="$this.place1_object"/>
+      <binding slot="$_Temp21.place1_object" value="$this.place2_object"/>
+      <binding slot="$place4.object" value="$this.place4_object"/>
+      <binding slot="$this._Temp11__Temp12_place1_object" value="PhysObj.Fork"/>
+      <binding slot="$_Temp11._Temp12_place1_object" value="$this._Temp11__Temp12_place1_object"/>
+      <binding slot="$place4.location" value="$this.place1_location"/>
+      <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this.place3_newObject" value="$_Temp21.place2_newObject"/>
+      <binding slot="$_Temp11.place1_location" value="$this.place1_location"/>
+      <binding slot="$this.place2_object" value="PhysObj.Fork"/>
+      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
+      <binding slot="$this.place4_newObject" value="$place4.newObject"/>
+      <binding slot="$_Temp21.place2_object" value="$this.place3_object"/>
+      <binding slot="$this.place2_newObject" value="$_Temp21.place1_newObject"/>
+      <binding slot="$_Temp21.place2_referenceFrame" value="$this.place3_referenceFrame"/>
+      <binding slot="$_Temp21.place1_location" value="$this.place1_location"/>
+      <binding slot="$this._Temp11__Temp12_place1_referenceFrame" value="PhysObj.SoupBowl"/>
+      <binding slot="$place4.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this.place1_location" value="location(0,0,2)"/>
+      <binding slot="$this.place4_object" value="PhysObj.SoupBowl"/>
+      <binding slot="$place1.location" value="$this.place1_location"/>
+      <binding slot="$this.place1_referenceFrame" value="PhysObj.DinnerPlate"/>
+      <binding slot="$this.place3_object" value="PhysObj.SaladPlate"/>
+      <binding slot="$this.place1_object" value="PhysObj.Spoon"/>
+      <binding slot="$_Temp11.place1_referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this._Temp11__Temp12_place1_newObject" value="$_Temp11._Temp12_place1_newObject"/>
+      <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$this.place3_referenceFrame" value="PhysObj.Fork"/>
+      <binding slot="$_Temp21.place1_referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this.place5_newObject" value="$_Temp11.place1_newObject"/>
+    </subtasks>
+  </task>
+
+  > 
+  > 
+  > print _Temp1
+#
+# Internal task
+#
+<task id="_Temp1" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+    <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
+    <input name="place1_referenceFrame" type="PhysObj"/>
+    <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
+    <input name="_Temp12_place1_referenceFrame" type="PhysObj"/>
+    <input modified="_Temp12_place1_newObject" name="_Temp12_place1_object" type="PhysObj"/>
+    <output name="place1_newObject" type="PhysObj"/>
+    <output name="_Temp12_place1_newObject" type="PhysObj"/>
+    <subtasks id="_Temp11">
+      <step name="place1" task="std:Place"/>
+      <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
+      <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$place1.location" value="$this.place1_location"/>
+    </subtasks>
+    <subtasks id="_Temp12">
+      <step name="place1" task="std:Place"/>
+      <binding slot="$this._Temp12_place1_newObject" value="$place1.newObject"/>
+      <binding slot="$place1.referenceFrame" value="$this._Temp12_place1_referenceFrame"/>
+      <binding slot="$place1.object" value="$this._Temp12_place1_object"/>
+      <binding slot="$place1.location" value="$this.place1_location"/>
+    </subtasks>
+  </task>
+
+  > print _Temp2
+#
+# Internal task
+#
+<task id="_Temp2" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+    <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
+    <input name="place1_location" type="Packages.edu.wpi.htnlfd.table.Location"/>
+    <input name="place1_referenceFrame" type="PhysObj"/>
+    <input name="place2_referenceFrame" type="PhysObj"/>
+    <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
+    <output name="place1_newObject" type="PhysObj"/>
+    <output name="place2_newObject" type="PhysObj"/>
+    <subtasks id="_Temp21" ordered="false">
+      <step name="place1" task="std:Place"/>
+      <step name="place2" requires="place1" task="std:Place"/>
+      <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
+      <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$place1.location" value="$this.place1_location"/>
+      <binding slot="$place2.referenceFrame" value="$this.place2_referenceFrame"/>
+      <binding slot="$place2.location" value="$this.place1_location"/>
+      <binding slot="$this.place2_newObject" value="$place2.newObject"/>
+      <binding slot="$place2.object" value="$this.place2_object"/>
+    </subtasks>
+    <subtasks id="_Temp22">
+      <step name="place1" task="std:Place"/>
+      <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$place1.object" value="$this.place2_object"/>
+      <binding slot="$place1.location" value="$this.place1_location"/>
+      <binding slot="$this.place2_newObject" value="$place1.newObject"/>
+    </subtasks>
+  </task>
+
+  > 
+#
+# Executing PlaceDishes
+#
+  > task PlaceDishes
+edu.wpi.cetask.TaskEngine$AmbiguousIdException: PlaceDishes found in urn:disco.wpi.edu:htnlfd:setTable2 and urn:disco.wpi.edu:htnlfd:setTable1
+at edu.wpi.cetask.TaskEngine.getMember(TaskEngine.java:623)
+  > 
+  > 
+  > task PlaceDishes urn:disco.wpi.edu:htnlfd:setTable2
+    User says "Let's achieve {urn:disco.wpi.edu:htnlfd:setTable2}PlaceDishes on Spoon and [0,0,2] and DinnerPlate and Fork and SaladPlate and Fork and SoupBowl and SoupBowl and Fork."
+    Agent place Spoon at [0,0,2] wrt DinnerPlate.
+    Agent place SoupBowl at [0,0,2] wrt DinnerPlate.
+    Agent says "Ok."
+  > next
+    Agent says "Ok."
+  > history
+
+[Achieve Demonstration] -accepted
+   User says "Let's achieve Demonstration."
+   Agent says "Ok."
+   [Agent place Spoon at [0,0,2] wrt DinnerPlate] -accepted -succeeded -interruption
+      User says "Please place Spoon at [0,0,2] wrt DinnerPlate."
+      Agent place Spoon at [0,0,2] wrt DinnerPlate. -succeeded
+   Agent says "Ok."
+   [Agent place Fork at [0,0,2] wrt DinnerPlate] -accepted -succeeded -interruption
+      User says "Please place Fork at [0,0,2] wrt DinnerPlate."
+      Agent place Fork at [0,0,2] wrt DinnerPlate. -succeeded
+   Agent says "Ok."
+   [Agent place SaladPlate at [0,0,2] wrt Fork] -accepted -succeeded -interruption
+      User says "Please place SaladPlate at [0,0,2] wrt Fork."
+      Agent place SaladPlate at [0,0,2] wrt Fork. -succeeded
+   Agent says "Ok."
+   [Agent place SoupBowl at [0,0,2] wrt DinnerPlate] -accepted -succeeded -interruption
+      User says "Please place SoupBowl at [0,0,2] wrt DinnerPlate."
+      Agent place SoupBowl at [0,0,2] wrt DinnerPlate. -succeeded
+   Agent says "Ok."
+   [Agent place Spoon at [0,0,2] wrt DinnerPlate] -accepted -succeeded -interruption
+      User says "Please place Spoon at [0,0,2] wrt DinnerPlate."
+      Agent place Spoon at [0,0,2] wrt DinnerPlate. -succeeded
+   Agent says "Ok."
+   User says "Achieve Demonstration is done."
+   Agent says "Ok."
+[Achieve Demonstration] -accepted
+   User says "Let's achieve Demonstration."
+   Agent says "Ok."
+   [Agent place Spoon at [0,0,2] wrt DinnerPlate] -accepted -succeeded -interruption
+      User says "Please place Spoon at [0,0,2] wrt DinnerPlate."
+      Agent place Spoon at [0,0,2] wrt DinnerPlate. -succeeded
+   Agent says "Ok."
+   [Agent place SaladPlate at [0,0,2] wrt DinnerPlate] -accepted -succeeded -interruption
+      User says "Please place SaladPlate at [0,0,2] wrt DinnerPlate."
+      Agent place SaladPlate at [0,0,2] wrt DinnerPlate. -succeeded
+   Agent says "Ok."
+   [Agent place SoupBowl at [0,0,2] wrt DinnerPlate] -accepted -succeeded -interruption
+      User says "Please place SoupBowl at [0,0,2] wrt DinnerPlate."
+      Agent place SoupBowl at [0,0,2] wrt DinnerPlate. -succeeded
+   Agent says "Ok."
+   [Agent place Fork at [0,0,2] wrt SoupBowl] -accepted -succeeded -interruption
+      User says "Please place Fork at [0,0,2] wrt SoupBowl."
+      Agent place Fork at [0,0,2] wrt SoupBowl. -succeeded
+   Agent says "Ok."
+   User says "Achieve Demonstration is done."
+   Agent says "Ok."
+[Achieve {urn:disco.wpi.edu:htnlfd:setTable2}PlaceDishes on Spoon and [0,0,2] and DinnerPlate and Fork and SaladPlate and Fork and SoupBowl and SoupBowl and Fork producing Spoon and a physObj and a physObj and SoupBowl] -accepted -live <-focus
+   User says "Let's achieve {urn:disco.wpi.edu:htnlfd:setTable2}PlaceDishes on Spoon and [0,0,2] and DinnerPlate and Fork and SaladPlate and Fork and SoupBowl and SoupBowl and Fork."
+   Agent place Spoon at [0,0,2] wrt DinnerPlate. -succeeded
+   Agent place SoupBowl at [0,0,2] wrt DinnerPlate. -succeeded
+   Agent says "Ok."
+   Agent says "Ok."
+#
+# No applicable conditions, so disco cannot choose between these two tasks
+#
+   [ ] -live
+   [ ] -live
+
+  > 
+  > quit
+    
