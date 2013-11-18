@@ -2,13 +2,13 @@
 
 	<task id="Place">
 
-		<input name="object" type="PhysObj" modified="newObject"/>
+		<input name="object" type="Packages.edu.wpi.htnlfd.table.PhysObj" modified="newObject"/>
 
 		<input name="location" type="Packages.edu.wpi.htnlfd.table.Location"/>
 
-		<input name="referenceFrame" type="PhysObj"/>
+		<input name="referenceFrame" type="Packages.edu.wpi.htnlfd.table.PhysObj"/>
 
-		<output name="newObject" type="PhysObj"/>
+		<output name="newObject" type="Packages.edu.wpi.htnlfd.table.PhysObj"/>
 
 		<binding slot="$this.external" value="false"/>
 
@@ -35,32 +35,21 @@
 		function location (x,y,z) { 
 			return new Packages.edu.wpi.htnlfd.table.Location(x,y,z); 
 		}
+
 		
-		// define PhysObj class
-
-		function PhysObj (name, location) {
-			this.name = name;
-			this.location = location;
-		}
-
-		PhysObj.prototype.toString = function () { return this.name; }
-		function find (obj) { 
-			if(obj instanceof PhysObj)
-				return "PhysObj."+obj.name;
-		}
 		function Reset(){
-			PhysObj.DinnerPlate = new PhysObj("DinnerPlate", location(-10,-10,-10));
-			PhysObj.SaladPlate = new PhysObj("SaladPlate", location(-10,-10,-10));
-			PhysObj.SoupBowl = new PhysObj("SoupBowl", location(-10,-10,-10));
+			DinnerPlate = new Packages.edu.wpi.htnlfd.table.Dishes("DinnerPlate", location(-10,-10,-10));
+			SaladPlate = new Packages.edu.wpi.htnlfd.table.Dishes("SaladPlate", location(-10,-10,-10));
+			SoupBowl = new Packages.edu.wpi.htnlfd.table.Dishes("SoupBowl", location(-10,-10,-10));
 				
-			PhysObj.Fork = new PhysObj("Fork", location(-10,-10,-10));
-			PhysObj.Spoon = new PhysObj("Spoon", location(-10,-10,-10));
-			PhysObj.Knife = new PhysObj("Knife", location(-10,-10,-10));
+			Fork = new Packages.edu.wpi.htnlfd.table.Silverware("Fork", location(-10,-10,-10));
+			Spoon = new Packages.edu.wpi.htnlfd.table.Silverware("Spoon", location(-10,-10,-10));
+			Knife = new Packages.edu.wpi.htnlfd.table.Silverware("Knife", location(-10,-10,-10));
 				
-			PhysObj.WaterGlass = new PhysObj("WaterGlass", location(-10,-10,-10));
-			PhysObj.WineGlass = new PhysObj("WineGlass", location(-10,-10,-10));
+			WaterGlass = new Packages.edu.wpi.htnlfd.table.Glasses("WaterGlass", location(-10,-10,-10));
+			WineGlass = new Packages.edu.wpi.htnlfd.table.Glasses("WineGlass", location(-10,-10,-10));
 					
-			PhysObj.SquareTable = new PhysObj("SquareTable", location(10,10,10)); 
+			SquareTable = new Packages.edu.wpi.htnlfd.table.PhysObj("SquareTable", location(10,10,10)); 
 		}
 		Reset()
 		

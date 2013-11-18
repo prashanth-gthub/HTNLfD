@@ -646,19 +646,31 @@ public class Graph {
    /**
     * Searches for alternative recipes and adds them.
     */
-  /* boolean alternativeRecipe (Demonstration demonstration, TaskModel taskModel,
-         TaskClass task, TaskClass newTask) {
+   boolean alternativeRecipe (Demonstration demonstration, TaskModel taskModel,
+         TaskClass task, TaskClass newTask, Node root) {
       
-         /*
-                     if ( steps.size() == 0 || stepsAlt.size() == 0 )
-                        continue;
-                     TaskClass intTask = task.addInternalTask(taskModel, task
-                           .getDecompositions().get(0), steps); // //////
-                     taskModel.add(intTask);
+      boolean alt = false;
 
+      while(root.childs.size()!=0){
+        if(root.childs.size() == 1){
+           root = root.childs.get(0);
+        }
+        else if(root.childs.size()>1){
+           
+           
+           for(Node child:root.childs){
+              alternativeRecipe(demonstration, taskModel,
+                    task, newTask, child);
+           }
+           
+           break;
+        }
+      }
+      return alt;
+                     
                 
 
-   }*/
+   }
 
    public void printGraph(){
       
