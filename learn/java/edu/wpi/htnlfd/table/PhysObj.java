@@ -2,31 +2,38 @@ package edu.wpi.htnlfd.table;
 
 import edu.wpi.htnlfd.ApplicationSpecificClass;
 
-public class PhysObj extends ApplicationSpecificClass implements Cloneable{
+public class PhysObj extends ApplicationSpecificClass implements Cloneable {
    private String name;
+
    private Location location;
+
    public PhysObj (String name, Location location) {
       super();
       this.name = name;
       this.location = location;
    }
+
    public String getName () {
       return name;
    }
+
    public void setName (String name) {
       this.name = name;
    }
+
    public Location getLocation () {
       return location;
    }
+
    public void setLocation (Location location) {
       this.location = location;
    }
-   
+
    @Override
    public String toString () {
       return this.name;
    }
+
    @Override
    public int hashCode () {
       final int prime = 31;
@@ -35,6 +42,7 @@ public class PhysObj extends ApplicationSpecificClass implements Cloneable{
       result = prime * result + ((name == null) ? 0 : name.hashCode());
       return result;
    }
+
    @Override
    public boolean equals (Object obj) {
       if ( this == obj )
@@ -56,12 +64,13 @@ public class PhysObj extends ApplicationSpecificClass implements Cloneable{
          return false;
       return true;
    }
-   
+
    public String find () {
       return this.name;
    }
 
-   public PhysObj clone(){
-      return new PhysObj(this.getName(),new Location(this.getLocation().x,this.getLocation().y,this.getLocation().z));      
+   public PhysObj clone () {
+      return new PhysObj(this.getName(), new Location(this.getLocation().x,
+            this.getLocation().y, this.getLocation().z));
    }
 }

@@ -644,8 +644,11 @@ public class TaskClass extends TaskModel.Member {
          Object inputBinding = null;
          String inputBindingValue = null;
 
-       /*  inputBinding = (((Invocable) disco.getScriptEngine()).invokeFunction(
-               "find", step.getSlotValue(inputName)));*/
+         /*
+          * inputBinding = (((Invocable)
+          * disco.getScriptEngine()).invokeFunction( "find",
+          * step.getSlotValue(inputName)));
+          */
 
          if ( inputBinding == null ) {
             inputBinding = step.getSlotValue(inputName);
@@ -942,29 +945,28 @@ public class TaskClass extends TaskModel.Member {
 
             }
             Step stp = taskDecomposition.getStep(rm);
-            if(stp.getRequired()!=null && stp.getRequired().size()!=0){
-               for(String req:stp.getRequired())
+            if ( stp.getRequired() != null && stp.getRequired().size() != 0 ) {
+               for (String req : stp.getRequired())
                   taskStp.addRequired(req);
             }
-            
-            for(Entry<String, Step> step:taskDecomposition.getSteps().entrySet()){
-               if(step.getValue().getRequired().contains(rm) && !removeSteps.contains(step.getKey())){
+
+            for (Entry<String, Step> step : taskDecomposition.getSteps()
+                  .entrySet()) {
+               if ( step.getValue().getRequired().contains(rm)
+                  && !removeSteps.contains(step.getKey()) ) {
                   step.getValue().removeRequired(rm);
                   step.getValue().addRequired(stepNameTask);
-               }
-               else if(step.getValue().getRequired().contains(rm)){
+               } else if ( step.getValue().getRequired().contains(rm) ) {
                   step.getValue().removeRequired(rm);
                }
             }
-            
+
             taskDecomposition.removeStep(rm);
-            
-            
+
          }
 
       }
 
-      
       subtask.addOrdering(taskModel);
 
       return taskI;

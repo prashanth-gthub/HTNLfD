@@ -31,14 +31,27 @@ public class Demonstration {
 
    private String defaultInputName = "input1";
 
-   
+   List<Pair> demonstrations = new ArrayList<Pair>();
 
    static {
 
    }
+   
+  
 
    public Demonstration () {
 
+   }
+   
+   public class Pair{
+      public Object left;
+      public Object Right;
+      public Pair (Object left, Object right) {
+         super();
+         this.left = left;
+         Right = right;
+      }      
+      
    }
 
    /**
@@ -95,6 +108,8 @@ public class Demonstration {
       TaskClass newTask = demonstratedTask(disco, taskName, steps);
       findLoop(newTask); // /
 
+      demonstrations.add(new Pair(taskName,newTask)); // saving demonstrations
+      
       TaskClass task = isAlternativeRecipe(newTask);
       
       Graph graph = Graph.getGraph(taskName);

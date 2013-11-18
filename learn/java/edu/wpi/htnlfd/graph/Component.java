@@ -83,7 +83,6 @@ public class Component {
    public void join (List<Node> nodes, Graph graph, TaskModel taskModel) {
       boolean satisfy = false;
 
-
       if ( start.childs.size() == 0 ) {
          start.childs.add(nodes.get(0));
          nodes.get(0).parents.add(start);
@@ -106,33 +105,33 @@ public class Component {
 
       graph.giveCombinations(nodesListDem, nodes);
       ArrayList<Node> demSave = null;
-      List<Node> path = findSharedNodes (graph, taskModel);
+      List<Node> path = findSharedNodes(graph, taskModel);
       List<Node> validPath = new ArrayList<Node>();
       for (Node pa : path) {
          if ( pa.step != null ) {
             validPath.add(pa);
          }
       }
-      
+
       for (ArrayList<Node> dem : nodesListDem) {
-            
-            List<Node> newNodes1 = new ArrayList<Node>();
-            List<Node> newNodes2 = new ArrayList<Node>();            
 
-            graph.getLCS(validPath, dem, taskModel, newNodes1, newNodes2);
-            List<Node> LCS = newNodes1;
+         List<Node> newNodes1 = new ArrayList<Node>();
+         List<Node> newNodes2 = new ArrayList<Node>();
 
-            if ( max < LCS.size() ) {
-               chosenNodes = newNodes1;
-               chosenDemNodes = newNodes2;
-               max = LCS.size();
-               if(max == dem.size()){
-                  //return; // satisfy
-                  satisfy = true;
-               }
-               demSave = dem;
+         graph.getLCS(validPath, dem, taskModel, newNodes1, newNodes2);
+         List<Node> LCS = newNodes1;
+
+         if ( max < LCS.size() ) {
+            chosenNodes = newNodes1;
+            chosenDemNodes = newNodes2;
+            max = LCS.size();
+            if ( max == dem.size() ) {
+               // return; // satisfy
+               satisfy = true;
             }
-         
+            demSave = dem;
+         }
+
       }
 
       // should be here
@@ -208,7 +207,5 @@ public class Component {
          nod.visited = false;
       }
    }
-
-  
 
 }

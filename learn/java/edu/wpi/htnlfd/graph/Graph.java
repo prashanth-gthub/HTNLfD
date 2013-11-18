@@ -139,16 +139,16 @@ public class Graph {
             // component.bfs();
          }
       }
-      
 
-      boolean opt = optional(taskModel,startNode );
-      /*boolean alt = alternativeRecipe(demonstration, taskModel, task, newTask);
-
-      return alt || opt;*/
+      boolean opt = optional(taskModel, startNode);
+      /*
+       * boolean alt = alternativeRecipe(demonstration, taskModel, task,
+       * newTask); return alt || opt;
+       */
       return false;
    }
 
-   /** 
+   /**
     * Finds pathes.
     */
    void findPathes (List<ArrayList<Node>> nodesLists, Node start) {
@@ -176,16 +176,14 @@ public class Graph {
 
             List<Node> newNodes = new ArrayList<Node>();
             for (int k = 0; k < size; k++) {
-               /*Node node = nodes.get(k);
-               Node temp = null;
-               if ( node.step != null ) {
-                  temp = new Node(node.step, node.tasks.get(0),
-                        node.decompositions.get(0), node.stepNames.get(0));
-               } else {
-                  temp = new Node(node.step, null, null, null);
-               }
-               temp.parents.addAll(node.parents);
-               temp.childs.addAll(node.childs);*/
+               /*
+                * Node node = nodes.get(k); Node temp = null; if ( node.step !=
+                * null ) { temp = new Node(node.step, node.tasks.get(0),
+                * node.decompositions.get(0), node.stepNames.get(0)); } else {
+                * temp = new Node(node.step, null, null, null); }
+                * temp.parents.addAll(node.parents);
+                * temp.childs.addAll(node.childs);
+                */
                newNodes.add(nodes.get(k));
 
             }
@@ -301,9 +299,9 @@ public class Graph {
                      }
                      if ( !contain1 ) {
                         x.get(k).parents.add(x.get(l));
-                        
+
                      }
-                     
+
                      boolean contain2 = false;
                      for (Node xpar : x.get(l).childs) {
                         if ( xpar.equals(x.get(k))
@@ -315,7 +313,7 @@ public class Graph {
                      if ( !contain2 ) {
                         x.get(l).childs.add(x.get(k));
                      }
-                     
+
                      contC = true;
                      break;
                   }
@@ -361,7 +359,7 @@ public class Graph {
                      }
                      if ( !contain1 ) {
                         x.get(k).childs.add(x.get(l));
-                        
+
                      }
                      boolean contain2 = false;
                      for (Node xch : x.get(l).parents) {
@@ -591,53 +589,51 @@ public class Graph {
    boolean optional (TaskModel taskModel, Node root) {
       boolean opt = false;
 
-      while(root.childs.size()!=0){
-        if(root.childs.size() == 1){
-           root = root.childs.get(0);
-        }
-        else if(root.childs.size()>1){
-           boolean find = false;
-           for(Node ch1:root.childs){
-              for(Node ch2:root.childs){
-                 if(!ch1.equals(ch2)){
-                    // not nested
-                    Node node = ch2;
-                    while(!node.childs.get(0).equals(ch1)){
-                       
-                       if(node.childs.size()>1){
-                          
-                          break;
-                       }
-                       
-                       node = node.childs.get(0);
-                       
-                       if(node == null || node.childs.size() == 0)
-                          break;
-                    }
-                    
-                    if(node == null || node.childs.size() == 0){
-                       continue;
-                    }
-                    if(node.childs.get(0).equals(ch1)){
-                       node = ch2;
-                       find = true;
-                       while(!node.equals(ch1)){
-                          node.step.setMinOccurs(0);
-                          node = node.childs.get(0);
-                       }
-                    }
-                   
-                    
-                 }
-              }
-           }
-           
-           for(Node child:root.childs){
-              optional(taskModel,child);
-           }
-           
-           break;
-        }
+      while (root.childs.size() != 0) {
+         if ( root.childs.size() == 1 ) {
+            root = root.childs.get(0);
+         } else if ( root.childs.size() > 1 ) {
+            boolean find = false;
+            for (Node ch1 : root.childs) {
+               for (Node ch2 : root.childs) {
+                  if ( !ch1.equals(ch2) ) {
+                     // not nested
+                     Node node = ch2;
+                     while (!node.childs.get(0).equals(ch1)) {
+
+                        if ( node.childs.size() > 1 ) {
+
+                           break;
+                        }
+
+                        node = node.childs.get(0);
+
+                        if ( node == null || node.childs.size() == 0 )
+                           break;
+                     }
+
+                     if ( node == null || node.childs.size() == 0 ) {
+                        continue;
+                     }
+                     if ( node.childs.get(0).equals(ch1) ) {
+                        node = ch2;
+                        find = true;
+                        while (!node.equals(ch1)) {
+                           node.step.setMinOccurs(0);
+                           node = node.childs.get(0);
+                        }
+                     }
+
+                  }
+               }
+            }
+
+            for (Node child : root.childs) {
+               optional(taskModel, child);
+            }
+
+            break;
+         }
       }
       return opt;
 
@@ -648,33 +644,28 @@ public class Graph {
     */
    boolean alternativeRecipe (Demonstration demonstration, TaskModel taskModel,
          TaskClass task, TaskClass newTask, Node root) {
-      
+
       boolean alt = false;
 
-      while(root.childs.size()!=0){
-        if(root.childs.size() == 1){
-           root = root.childs.get(0);
-        }
-        else if(root.childs.size()>1){
-           
-           
-           for(Node child:root.childs){
-              alternativeRecipe(demonstration, taskModel,
-                    task, newTask, child);
-           }
-           
-           break;
-        }
+      while (root.childs.size() != 0) {
+         if ( root.childs.size() == 1 ) {
+            root = root.childs.get(0);
+         } else if ( root.childs.size() > 1 ) {
+
+            for (Node child : root.childs) {
+               alternativeRecipe(demonstration, taskModel, task, newTask, child);
+            }
+
+            break;
+         }
       }
       return alt;
-                     
-                
 
    }
 
-   public void printGraph(){
-      
-      for(Component comp:this.components){
+   public void printGraph () {
+
+      for (Component comp : this.components) {
          comp.bfs();
       }
    }
