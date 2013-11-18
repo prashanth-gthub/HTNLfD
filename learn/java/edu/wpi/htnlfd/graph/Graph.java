@@ -139,15 +139,16 @@ public class Graph {
             // component.bfs();
          }
       }
-      return false;
+      
 
-      /*boolean opt = optional(taskModel);
-      boolean alt = alternativeRecipe(demonstration, taskModel, task, newTask);
+      boolean opt = optional(taskModel,startNode );
+      /*boolean alt = alternativeRecipe(demonstration, taskModel, task, newTask);
 
       return alt || opt;*/
+      return false;
    }
 
-   /**
+   /** 
     * Finds pathes.
     */
    void findPathes (List<ArrayList<Node>> nodesLists, Node start) {
@@ -288,7 +289,7 @@ public class Graph {
             }
             if ( !contain ) {
                boolean contC = false;
-               for (int l = 0; l < k - 1; l++) {
+               for (int l = 0; l <= k - 1; l++) {
                   if ( y.get(l).equals(ypar) || y.get(l).step.equals(ypar.step) ) {
                      boolean contain1 = false;
                      for (Node xpar : x.get(k).parents) {
@@ -300,8 +301,21 @@ public class Graph {
                      }
                      if ( !contain1 ) {
                         x.get(k).parents.add(x.get(l));
+                        
+                     }
+                     
+                     boolean contain2 = false;
+                     for (Node xpar : x.get(l).childs) {
+                        if ( xpar.equals(x.get(k))
+                           || xpar.step.equals(x.get(k).step) ) {
+                           contain2 = true;
+                           break;
+                        }
+                     }
+                     if ( !contain2 ) {
                         x.get(l).childs.add(x.get(k));
                      }
+                     
                      contC = true;
                      break;
                   }
@@ -347,6 +361,17 @@ public class Graph {
                      }
                      if ( !contain1 ) {
                         x.get(k).childs.add(x.get(l));
+                        
+                     }
+                     boolean contain2 = false;
+                     for (Node xch : x.get(l).parents) {
+                        if ( xch.equals(x.get(k))
+                           || xch.step.equals(x.get(k).step) ) {
+                           contain2 = true;
+                           break;
+                        }
+                     }
+                     if ( !contain2 ) {
                         x.get(l).parents.add(x.get(k));
                      }
                      contC = true;
@@ -549,7 +574,9 @@ public class Graph {
                   newNodes.add(temp);
                }
             }
-            newNodes.add(dem.get(i));
+            Node temp = new Node(dem.get(i).step, dem.get(i).tasks.get(0),
+                  dem.get(i).decompositions.get(0), dem.get(i).stepNames.get(0));
+            newNodes.add(temp);
             combination(nodesLists, dem, newNodes);
          }
       }
@@ -561,31 +588,56 @@ public class Graph {
     * 
     * @return
     */
-   boolean optional (TaskModel taskModel) {
+   boolean optional (TaskModel taskModel, Node root) {
       boolean opt = false;
-      List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
 
-      findPathes(nodesLists, startNode);
-      for (ArrayList<Node> nodes1 : nodesLists) {
-         for (ArrayList<Node> nodes2 : nodesLists) {
-            if ( !nodes1.equals(nodes2) ) {
-               int[][] interval = findAlternativeRecipe(
-                     nodes1.subList(1, nodes1.size()),
-                     nodes2.subList(1, nodes2.size()), taskModel);
-               if ( interval[0][0] == interval[0][1] - 1 ) {
-                  for (int i = interval[1][0] + 2; i < interval[1][1] + 1; i++) {
-                     nodes2.get(i).step.setMinOccurs(0);
-                     opt = true;
-                  }
-               } else if ( interval[1][0] == interval[1][1] - 1 ) {
-                  for (int i = interval[0][0] + 2; i < interval[0][1] + 1; i++) {
-                     nodes1.get(i).step.setMinOccurs(0);
-                     opt = true;
-                  }
-               }
-            }
-
-         }
+      while(root.childs.size()!=0){
+        if(root.childs.size() == 1){
+           root = root.childs.get(0);
+        }
+        else if(root.childs.size()>1){
+           boolean find = false;
+           for(Node ch1:root.childs){
+              for(Node ch2:root.childs){
+                 if(!ch1.equals(ch2)){
+                    // not nested
+                    Node node = ch2;
+                    while(!node.childs.get(0).equals(ch1)){
+                       
+                       if(node.childs.size()>1){
+                          
+                          break;
+                       }
+                       
+                       node = node.childs.get(0);
+                       
+                       if(node == null || node.childs.size() == 0)
+                          break;
+                    }
+                    
+                    if(node == null || node.childs.size() == 0){
+                       continue;
+                    }
+                    if(node.childs.get(0).equals(ch1)){
+                       node = ch2;
+                       find = true;
+                       while(!node.equals(ch1)){
+                          node.step.setMinOccurs(0);
+                          node = node.childs.get(0);
+                       }
+                    }
+                   
+                    
+                 }
+              }
+           }
+           
+           for(Node child:root.childs){
+              optional(taskModel,child);
+           }
+           
+           break;
+        }
       }
       return opt;
 
@@ -594,83 +646,19 @@ public class Graph {
    /**
     * Searches for alternative recipes and adds them.
     */
-   boolean alternativeRecipe (Demonstration demonstration, TaskModel taskModel,
+  /* boolean alternativeRecipe (Demonstration demonstration, TaskModel taskModel,
          TaskClass task, TaskClass newTask) {
-      boolean changed = false;
-      List<Step> marked = new ArrayList<Step>();
-      List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
-
-      findPathes(nodesLists, startNode);
-      List<ArrayList<Node>> pairs = new ArrayList<ArrayList<Node>>();
-      for (ArrayList<Node> nodes1 : nodesLists) {
-         for (ArrayList<Node> nodes2 : nodesLists) {
-            if ( !nodes1.equals(nodes2) ) {
-               boolean contain = false;
-               for (int i = 0; i < pairs.size(); i = i + 1) {
-                  if ( pairs.get(i).equals(nodes2)
-                     && pairs.get(i + 1).equals(nodes1) ) {
-                     contain = true;
-                     break;
-                  }
-               }
-
-               if ( !contain ) {
-                  pairs.add(nodes1);
-                  pairs.add(nodes2);
-
-                  int[][] interval = findAlternativeRecipe(
-                        nodes1.subList(1, nodes1.size()),
-                        nodes2.subList(1, nodes2.size()), taskModel);
-                  List<Step> steps = new ArrayList<Step>();
-                  List<Step> stepsAlt = new ArrayList<Step>();
-                  if ( (interval[0][0] != interval[0][1] - 1)
-                     && (interval[1][0] != interval[1][1] - 1) ) {
-                     boolean continueMark = false;
-                     for (int i = interval[0][0] + 2; i < interval[0][1] + 1; i++) {
-                        if ( !marked.contains(nodes1.get(i).step) ) {
-                           steps.add(nodes1.get(i).step);
-                           marked.add(nodes1.get(i).step);
-                        } else {
-                           continueMark = true;
-                           break;
-                        }
-
-                     }
-
-                     for (int i = interval[1][0] + 2; i < interval[1][1] + 1; i++) {
-                        if ( !marked.contains(nodes2.get(i).step) ) {
-                           stepsAlt.add(nodes2.get(i).step);
-                           marked.add(nodes2.get(i).step);
-                        } else {
-                           continueMark = true;
-                           break;
-                        }
-                     }
-                     if ( continueMark ) {
-                        continue;
-                     }
+      
+         /*
                      if ( steps.size() == 0 || stepsAlt.size() == 0 )
                         continue;
                      TaskClass intTask = task.addInternalTask(taskModel, task
                            .getDecompositions().get(0), steps); // //////
                      taskModel.add(intTask);
 
-                     TaskClass recipeTask = task.addInternalTask(taskModel,
-                           task.getDecompositions().get(0), stepsAlt);
-                     // taskModel.add(recipeTask);
-                     demonstration.addAlternativeRecipe(recipeTask, null,
-                           intTask);
-                     changed = true;
-                  }
-               }
+                
 
-            }
-
-         }
-      }
-
-      return changed;
-   }
+   }*/
 
    public void printGraph(){
       
