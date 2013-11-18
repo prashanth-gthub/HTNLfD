@@ -644,8 +644,8 @@ public class TaskClass extends TaskModel.Member {
          Object inputBinding = null;
          String inputBindingValue = null;
 
-         inputBinding = (((Invocable) disco.getScriptEngine()).invokeFunction(
-               "find", step.getSlotValue(inputName)));
+       /*  inputBinding = (((Invocable) disco.getScriptEngine()).invokeFunction(
+               "find", step.getSlotValue(inputName)));*/
 
          if ( inputBinding == null ) {
             inputBinding = step.getSlotValue(inputName);

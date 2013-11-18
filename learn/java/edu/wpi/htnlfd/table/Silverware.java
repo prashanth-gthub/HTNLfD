@@ -10,4 +10,5 @@ public class Silverware extends PhysObj{
       return new Silverware(this.getName(),new Location(this.getLocation().x,this.getLocation().y,this.getLocation().z));    
    }
 
+   
 }

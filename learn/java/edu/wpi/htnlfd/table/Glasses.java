@@ -9,4 +9,6 @@ public class Glasses extends PhysObj{
    public Glasses clone(){
       return new Glasses(this.getName(),new Location(this.getLocation().x,this.getLocation().y,this.getLocation().z));      
    }
+   
+   
 }
