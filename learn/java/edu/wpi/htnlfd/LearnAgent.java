@@ -1,9 +1,7 @@
 package edu.wpi.htnlfd;
 
 import edu.wpi.disco.Agenda.Plugin;
-import edu.wpi.disco.Agent;
-import edu.wpi.disco.Interaction;
-import edu.wpi.disco.User;
+import edu.wpi.disco.*;
 import edu.wpi.disco.lang.Say;
 
 public class LearnAgent extends Agent {
@@ -13,11 +11,15 @@ public class LearnAgent extends Agent {
    private boolean once = true;
    
    public static void main (String[] args) {
-      new Interaction(
+      Interaction interaction = new Interaction(
             new LearnAgent("agent"), 
             new User("user"),
-            args.length > 0 && args[0].length() > 0 ? args[0] : null)
-      .start(true); 
+            args.length > 0 && args[0].length() > 0 ? args[0] : null);
+      Disco disco = interaction.getDisco();
+      disco.importPackage("Packages.edu.wpi.htnlfd");
+      disco.importPackage("Packages.edu.wpi.htnlfd.table");
+      disco.eval("function find (value) { return value.find(); }", "LearnAgent.main()");
+      interaction.start(true); 
    }
    
    @Override

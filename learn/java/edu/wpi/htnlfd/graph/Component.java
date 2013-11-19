@@ -4,6 +4,7 @@ import edu.wpi.htnlfd.model.*;
 import java.util.*;
 
 public class Component {
+   // each component has a start node and end node
    private Node start = null;
 
    private Node end = null;
@@ -53,6 +54,9 @@ public class Component {
       this.end = end;
    }
 
+   /**
+    * Find shared nodes of this component.
+    */
    public List<Node> findSharedNodes (Graph graph, TaskModel taskModel) {
 
       List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
@@ -68,6 +72,9 @@ public class Component {
       return LCS;
    }
 
+   /**
+    * Checks whether a new demonstration can join this component or not
+    */
    public boolean canJoin (List<Node> nodes, Graph graph, TaskModel taskModel) {
       if ( start.childs.size() == 0 )
          return true;
@@ -80,6 +87,9 @@ public class Component {
       return true;
    }
 
+   /**
+    * Join a new demonstration with a previous graph.
+    */
    public void join (List<Node> nodes, Graph graph, TaskModel taskModel) {
       boolean satisfy = false;
 
@@ -151,6 +161,9 @@ public class Component {
       bfs();
    }
 
+   /**
+    * Breath First Search.
+    */
    public void bfs () {
 
       // System.out.println("...........................");
@@ -181,6 +194,9 @@ public class Component {
 
    }
 
+   /**
+    * Depth First Search.
+    */
    public void dfs (Node root) {
 
       Stack<Node> stack = new Stack<Node>();

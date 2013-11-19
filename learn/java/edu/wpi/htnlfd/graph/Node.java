@@ -74,6 +74,9 @@ public class Node {
       return false;
    }
 
+   /**
+    * Prints the node.
+    */
    public void printNode () {
       System.out.println("-----------------");
       Node root = this;

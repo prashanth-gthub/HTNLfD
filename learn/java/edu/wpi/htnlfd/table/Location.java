@@ -2,25 +2,28 @@ package edu.wpi.htnlfd.table;
 
 import edu.wpi.htnlfd.ApplicationSpecificClass;
 
-public class Location extends ApplicationSpecificClass{
+public class Location extends ApplicationSpecificClass {
 
-   public final int x;
-   public final int y;
-   public final int z;
+   public final int x, y, z;
+   
    public Location (int x, int y, int z) {
-      super();
       this.x = x;
       this.y = y;
       this.z = z;
    }
+   
+   public static Location plus (Location loc1, Location loc2) {
+      return new Location(loc1.x+loc2.x, loc1.y+loc2.y, loc1.z+loc2.z);
+   }
+    
+   public String find () {
+      // assumes importPackage("Packages.edu.wpi.htnlfd.table")
+      return "new Location("+x+","+y+","+z+")";
+   }
+       
    @Override
-   public int hashCode () {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + x;
-      result = prime * result + y;
-      result = prime * result + z;
-      return result;
+   public String toString () {
+      return "[" + x + "," + y + "," + z + "]";
    }
    @Override
    public boolean equals (Object obj) {
@@ -39,13 +42,15 @@ public class Location extends ApplicationSpecificClass{
          return false;
       return true;
    }
+   
    @Override
-   public String toString () {
-      return "[" + x + "," + y + "," + z + "]";
-   }
-   public String find () {
-      return "location("+x+","+y+","+z+")";
-   }
-   
-   
+   public int hashCode () {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + x;
+      result = prime * result + y;
+      result = prime * result + z;
+      return result;
+   } 
+  
 }

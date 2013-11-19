@@ -2,47 +2,42 @@ package edu.wpi.htnlfd.table;
 
 import edu.wpi.htnlfd.ApplicationSpecificClass;
 
+// NB: PhysObj must cloneable because it is used in modified inputs
+
 public class PhysObj extends ApplicationSpecificClass implements Cloneable {
-   private String name;
 
-   private Location location;
-
+   public static PhysObj TABLE = new PhysObj("TABLE", null);
+   
+   // fields public for convenience in JavaScript
+   public final String name;
+   public Location location;
+ 
+   @Override
+   public Object clone () { 
+      // default clone method will copy the two fields above
+      try { return super.clone(); }
+      catch (CloneNotSupportedException e) { return null; } // cannot happen 
+   }
+   
    public PhysObj (String name, Location location) {
-      super();
+      if ( name == null )
+         throw new IllegalArgumentException("PhysObj must have name");
       this.name = name;
-      this.location = location;
-   }
-
-   public String getName () {
-      return name;
-   }
-
-   public void setName (String name) {
-      this.name = name;
-   }
-
-   public Location getLocation () {
-      return location;
-   }
-
-   public void setLocation (Location location) {
-      this.location = location;
+      this.location = location == null ? new Location(0,0,0) : location;
    }
 
    @Override
-   public String toString () {
-      return this.name;
+   public String find () {
+      // assumes importPackage("Packages.edu.wpi.htnlfd.table")
+      return getClass().getSimpleName()+'.'+name;
    }
 
    @Override
-   public int hashCode () {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((location == null) ? 0 : location.hashCode());
-      result = prime * result + ((name == null) ? 0 : name.hashCode());
-      return result;
-   }
+   public String toString () { return find(); }
 
+   /** 
+    * Two physical objects are equal iff they have the same names
+    */
    @Override
    public boolean equals (Object obj) {
       if ( this == obj )
@@ -52,11 +47,6 @@ public class PhysObj extends ApplicationSpecificClass implements Cloneable {
       if ( getClass() != obj.getClass() )
          return false;
       PhysObj other = (PhysObj) obj;
-      if ( location == null ) {
-         if ( other.location != null )
-            return false;
-      } else if ( !location.equals(other.location) )
-         return false;
       if ( name == null ) {
          if ( other.name != null )
             return false;
@@ -64,13 +54,13 @@ public class PhysObj extends ApplicationSpecificClass implements Cloneable {
          return false;
       return true;
    }
-
-   public String find () {
-      return this.name;
+   
+   @Override
+   public int hashCode () {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((name == null) ? 0 : name.hashCode());
+      return result;
    }
 
-   public PhysObj clone () {
-      return new PhysObj(this.getName(), new Location(this.getLocation().x,
-            this.getLocation().y, this.getLocation().z));
-   }
 }

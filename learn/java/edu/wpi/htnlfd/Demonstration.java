@@ -45,11 +45,11 @@ public class Demonstration {
    
    public class Pair{
       public Object left;
-      public Object Right;
+      public Object right;
       public Pair (Object left, Object right) {
          super();
          this.left = left;
-         Right = right;
+         this.right = right;
       }      
       
    }

@@ -1,7 +1,9 @@
 package edu.wpi.htnlfd.graph;
 
 import java.util.*;
+import java.util.Map.Entry;
 import edu.wpi.htnlfd.Demonstration;
+import edu.wpi.htnlfd.graph.Graph.Pair;
 import edu.wpi.htnlfd.model.DecompositionClass.Step;
 import edu.wpi.htnlfd.model.*;
 
@@ -14,6 +16,35 @@ public class Graph {
    List<Component> components;
 
    static Map<String, Graph> taskGraphs = new HashMap<String, Graph>();
+
+   public class Triple {
+      public Object fisrt;
+
+      public Object second;
+
+      public Object third;
+
+      public Triple (Object first, Object second, Object third) {
+         super();
+         this.fisrt = first;
+         this.second = second;
+         this.third = third;
+      }
+
+   }
+
+   public class Pair {
+      public Object left;
+
+      public Object right;
+
+      public Pair (Object left, Object right) {
+         super();
+         this.left = left;
+         this.right = right;
+      }
+
+   }
 
    public Graph (String taskName) {
       if ( !taskGraphs.containsKey(taskName) ) {
@@ -37,6 +68,10 @@ public class Graph {
       }
    }
 
+   /**
+    * Finds the longest common subsequence of two list of nodes, and fills the
+    * newNodes1 and newNodes2 list by their common subsequence.
+    */
    void getLCS (List<Node> nodes1, List<Node> nodes2, TaskModel taskModel,
          List<Node> newNodes1, List<Node> newNodes2) {
       int M = nodes1.size();
@@ -141,10 +176,9 @@ public class Graph {
       }
 
       boolean opt = optional(taskModel, startNode);
-      /*
-       * boolean alt = alternativeRecipe(demonstration, taskModel, task,
-       * newTask); return alt || opt;
-       */
+
+      boolean alt = alternativeRecipe(demonstration, taskModel, task, newTask);
+
       return false;
    }
 
@@ -265,6 +299,9 @@ public class Graph {
        */
    }
 
+   /**
+    * Merges graphs.
+    */
    void mergeGraphs (List<Node> x, List<Node> y, TaskModel taskModel,
          Component component) {
 
@@ -443,69 +480,6 @@ public class Graph {
    }
 
    /**
-    * Find alternative recipe.
-    */
-   public int[][] findAlternativeRecipe (List<Node> x, List<Node> y,
-         TaskModel taskModel) {
-
-      int M = x.size();
-      int N = y.size();
-      int[][] interval = new int[2][2];
-
-      int i = 0, j = 0;
-      int startF = -1;
-      int endF = x.size(); // ??
-      int startS = -1;
-      int endS = y.size(); // ??
-      while (i < M && j < N) {
-         if ( x.get(i).isEquivalent(y.get(j), taskModel) ) {
-            startF = i;
-            startS = j;
-            i++;
-            j++;
-         } else
-            break;
-      }
-      i = M - 1;
-      j = N - 1;
-      while (i >= 0 && j >= 0) {
-         if ( x.get(i).isEquivalent(y.get(j), taskModel) ) {
-            endF = i;
-            endS = j;
-            i--;
-            j--;
-         } else
-            break;
-      }
-      i = startF + 1;
-      j = startS + 1;
-
-      int M1 = x.size();
-      int N1 = y.size();
-      int[][] opt = new int[M1 + 1][N1 + 1];
-
-      int LCS = findLCS(x, y, taskModel, opt);
-      if ( LCS != startF + x.size() - endF + 1 ) {
-         interval[0][0] = -1;
-         interval[0][1] = -1;
-         interval[1][0] = -1;
-         interval[1][1] = -1;
-         return interval;
-      }
-
-      interval[0][0] = startF;
-      interval[0][1] = endF;
-      interval[1][0] = startS;
-      interval[1][1] = endS;
-
-      return interval;
-   }
-
-   /**
-    * Depth first search
-    */
-
-   /**
     * Gives combinations of the nodes by considering their ordering constraints.
     */
    void giveCombinations (List<ArrayList<Node>> nodesLists, List<Node> dem) {
@@ -620,7 +594,10 @@ public class Graph {
                         find = true;
                         while (!node.equals(ch1)) {
                            node.step.setMinOccurs(0);
+                           System.out.println("optional "
+                              + node.stepNames.get(0));
                            node = node.childs.get(0);
+
                         }
                      }
 
@@ -640,33 +617,180 @@ public class Graph {
    }
 
    /**
-    * Searches for alternative recipes and adds them.
+    * Find alternative recipe.
     */
-   boolean alternativeRecipe (Demonstration demonstration, TaskModel taskModel,
-         TaskClass task, TaskClass newTask, Node root) {
-
-      boolean alt = false;
+   public void findAlternativeRecipe (Node root, Stack<Pair> stack,
+         List<Triple> triples) {
 
       while (root.childs.size() != 0) {
+
+         if ( root.parents.size() > 1 ) {
+            if ( stack.size() != 0 ) {
+               Pair top = stack.pop();
+               Triple tr = new Triple(top.left, top.right, root);
+               triples.add(tr);
+               if ( ((Node) tr.third).step != null
+                  && ((Node) tr.fisrt).step != null
+                  && ((Node) tr.second).step != null )
+                  System.out.println(((Node) tr.fisrt).stepNames.get(0) + " "
+                     + ((Node) tr.second).stepNames.get(0) + "-"
+                     + ((Node) tr.second).tasks.get(0).getId() + " "
+                     + ((Node) tr.third).stepNames.get(0) + " ");
+               else
+                  System.out.println("inja");
+            }
+         }
          if ( root.childs.size() == 1 ) {
             root = root.childs.get(0);
          } else if ( root.childs.size() > 1 ) {
 
             for (Node child : root.childs) {
-               alternativeRecipe(demonstration, taskModel, task, newTask, child);
+               stack = new Stack<Pair>();
+               stack.push(new Pair(root, child));
+               findAlternativeRecipe(child, stack, triples);
             }
 
             break;
          }
+
+      }
+
+   }
+
+   /**
+    * Searches for alternative recipes and adds them.
+    */
+   boolean alternativeRecipe (Demonstration demonstration, TaskModel taskModel,
+         TaskClass task, TaskClass newTask) {
+      TaskClass builtTask = null;
+      boolean alt = false;
+      boolean first = false;
+      for (Component comp : this.components) {
+         Map<Pair, ArrayList<Node>> altr = new HashMap<Pair, ArrayList<Node>>();
+
+         List<Triple> triples = new ArrayList<Triple>();
+         findAlternativeRecipe(comp.getStart(), null, triples);
+         for (Triple tr : triples) {
+            if ( !tr.second.equals(tr.third) ) {
+               boolean contain = false;
+               for (Entry<Pair, ArrayList<Node>> al : altr.entrySet()) {
+                  if ( ((Node) al.getKey().left).step
+                        .equals(((Node) tr.fisrt).step)
+                     && ((Node) al.getKey().right).step
+                           .equals(((Node) tr.third).step) ) {
+                     al.getValue().add((Node) tr.second);
+                     contain = true;
+                     break;
+                  }
+               }
+               if ( !contain ) {
+                  ArrayList<Node> children = new ArrayList<Node>();
+                  children.add((Node) tr.second);
+                  altr.put(new Pair((Node) tr.fisrt, (Node) tr.third), children);
+               }
+            }
+         }
+
+         if ( triples.size() != 0 ) {
+            Map<Pair, TaskClass> taskPair = addAlternativeRecipes(
+                  demonstration, taskModel, task.getDecompositions().get(0),
+                  altr);
+            TaskClass compTask = replaceAltTask(taskModel,taskPair, comp.getStart(),task.getDecompositions().get(0));
+            if ( !first ) {
+               builtTask = compTask;
+               first = true;
+            } else {
+               demonstration.addAlternativeRecipe(compTask, null, builtTask);
+            }
+         }
+
+      }
+
+      if(builtTask!=null){
+         taskModel.remove(task);
+         taskModel.add(builtTask);
       }
       return alt;
 
    }
 
+   public TaskClass replaceAltTask (TaskModel taskModel, Map<Pair, TaskClass> taskPair,
+          Node root, DecompositionClass dec) {
+      List<Step> steps = new ArrayList<Step>();
+      
+      while (root.childs.size() != 0) {
+
+         
+         if ( root.childs.size() == 1 ) {
+            steps.add(root.step);
+            root = root.childs.get(0);
+         } else if ( root.childs.size() > 1 ) {
+            steps.add(root.step);
+            for (Entry<Pair, TaskClass> pair : taskPair.entrySet()) {
+               if ( ((Node) pair.getKey().left).step.equals(root.step) ) {
+                  DecompositionClass.Step stp = dec.new Step(pair.getValue(),
+                        1, 1, null);
+                  steps.add(stp);
+                  root = (Node) pair.getKey().right;
+                  break;
+               }
+            }
+
+         }
+
+      }
+      
+      List<Step> validSteps = new ArrayList<Step>();
+      for(Step st:steps){
+         if(st!=null){
+            validSteps.add(st);
+         }
+      }
+      TaskClass task = dec.getGoal().addInternalTask(taskModel, dec,
+            validSteps);
+      return task;
+   }
+
+   private Map<Pair, TaskClass> addAlternativeRecipes (
+         Demonstration demonstration, TaskModel taskModel,
+         DecompositionClass dec, Map<Pair, ArrayList<Node>> altr) {
+      Map<Pair, TaskClass> taskPair = new HashMap<Pair, TaskClass>();
+      List<TaskClass> tasks = new ArrayList<TaskClass>();
+      for (Entry<Pair, ArrayList<Node>> al : altr.entrySet()) {
+         boolean first = false;
+         for (Node child : al.getValue()) {
+            List<Step> steps = new ArrayList<Step>();
+            while (!child.step.equals(((Node) al.getKey().right).step)) {
+               steps.add(child.step);
+               child = child.childs.get(0);
+            }
+
+            TaskClass task = dec.getGoal().addInternalTask(taskModel, dec,
+                  steps);
+            if ( !first ) {
+               tasks.add(task);
+               first = true;
+            } else {
+               demonstration.addAlternativeRecipe(task, null,
+                     tasks.get(tasks.size() - 1));
+            }
+
+         }
+         taskPair.put(al.getKey(), tasks.get(tasks.size() - 1));
+         taskModel.add(tasks.get(tasks.size() - 1));
+      }
+
+      return taskPair;
+   }
+
+   /**
+    * Prints the graph.
+    */
    public void printGraph () {
 
       for (Component comp : this.components) {
          comp.bfs();
       }
    }
+
 }
