@@ -1,8 +1,0 @@
-package edu.wpi.htnlfd.table;
-
-public class Dishes extends PhysObj {
-
-   public Dishes (String name, Location location) {
-      super(name, location);
-   }
-}

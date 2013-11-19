@@ -6,5 +6,5 @@ public class Knife extends Silverware {
       super(name, location);
    }
  
-   public static Knife K1 = new Knife("K1", null);
+   public static final Knife K1 = new Knife("K1", null);
 }

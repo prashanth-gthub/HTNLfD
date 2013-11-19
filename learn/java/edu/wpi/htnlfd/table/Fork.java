@@ -6,5 +6,5 @@ public class Fork extends Silverware {
       super(name, location);
    }
  
-   public static Fork F1 = new Fork("F1", null);
+   public static final Fork F1 = new Fork("F1", null);
 }

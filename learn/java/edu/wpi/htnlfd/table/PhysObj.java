@@ -6,7 +6,7 @@ import edu.wpi.htnlfd.ApplicationSpecificClass;
 
 public class PhysObj extends ApplicationSpecificClass implements Cloneable {
 
-   public static PhysObj TABLE = new PhysObj("TABLE", null);
+   public static final PhysObj TABLE = new PhysObj("TABLE", null);
    
    // fields public for convenience in JavaScript
    public final String name;

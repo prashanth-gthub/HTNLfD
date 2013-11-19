@@ -1,11 +1,11 @@
 package edu.wpi.htnlfd.table;
 
-public class SaladPlate extends Dishes {
+public class SaladPlate extends Dish {
 
    public SaladPlate (String name, Location location) {
       super(name, location);
    }
    
-   public static SaladPlate SP1 = new SaladPlate("SP1", null);
+   public static final SaladPlate SP1 = new SaladPlate("SP1", null);
  
 }
