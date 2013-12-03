@@ -142,7 +142,7 @@
 			<step name="closeCap" task="CloseCap"/>
 			
 			<binding slot="$pour.fluid" value="$this.fluid"/>
-			<binding slot="$pour.level" value="$this.toLevel"/>
+			<binding slot="$pour.level" value="Level.minus($this.toLevel,$this.fromLevel)"/>
 		</subtasks>		
 	</task>
 	<task id="BringObject">
@@ -286,9 +286,7 @@
 		<input name="fluid" type="Fluid"/>
 		<input name="level" type="Level"/>
 
-		<script>
-			
-		</script>
+		<script> $this.fluid.level = Level.minus(fluid.level,$this.level) </script>
 	</task>
 	<task id="CloseCap">		
 
@@ -317,6 +315,8 @@
 		function reset () {
          Fluid.Oil.location = new Location(10,10,0);
 		 Fluid.RadiatorFluid.location = new Location(11,11,0);
+		 Fluid.Oil.level = new Level(20);
+		 Fluid.RadiatorFluid.level = new Level(25);
        }
 	   
        reset();
