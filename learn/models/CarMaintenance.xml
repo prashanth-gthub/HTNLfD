@@ -320,8 +320,7 @@
 			Fluid.RadiatorFluid.level = new Level(25);
 			RobotLocation = new Location(-10,-10,-10);
 		}
-	   
-       reset();
+		reset();
 	</script>
   
 </taskModel>
