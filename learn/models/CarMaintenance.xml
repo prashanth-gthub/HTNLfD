@@ -18,10 +18,10 @@
 			<step name="checkTire3" task="CheckTire"/>	
 			<step name="checkTire4" task="CheckTire"/>	
 			
-			<binding slot="$checkTire1.tire" value="new Tire(new Location(0,0,0))"/>
-			<binding slot="$checkTire2.tire" value="new Tire(new Location(10,0,0))"/>
-			<binding slot="$checkTire3.tire" value="new Tire(new Location(0,10,0))"/>
-			<binding slot="$checkTire4.tire" value="new Tire(new Location(10,10,0))"/>
+			<binding slot="$checkTire1.tire" value="Car.T1"/>
+			<binding slot="$checkTire2.tire" value="Car.T2"/>
+			<binding slot="$checkTire3.tire" value="Car.T3"/>
+			<binding slot="$checkTire4.tire" value="Car.T4"/>
 		</subtasks>		
 	</task>
 	
@@ -59,11 +59,11 @@
 			<step name="wipe" task="Wipe"/>
 			<step name="reinsert" task="Reinsert"/>
 			<step name="pull" task="Pull"/>
-			<step name="readLevel" task="ReadLevel"/>
+			<step name="readLevel" task="ReadLevel"/> <!-- -->
 			<step name="reinsert" task="Reinsert"/>
-			<step name="fill" task="Fill"/>
+			<step name="fill" task="Fill"/> <!-- -->
 			
-			<binding slot="$goto.location" value="OilContainer.location"/>
+			<binding slot="$goto.location" value="Car.OC.location"/>
 			<binding slot="$fill.fluid" value="Oil"/>
 			<binding slot="$fill.fromLevel" value="$readLevel.level"/>
 			<binding slot="$fill.toLevel" value="new Level(9)"/>
@@ -76,7 +76,7 @@
 			<step name="goto" task="Goto"/>	
 			<step name="checkFluid" task="CheckFluid"/> 
 			
-			<binding slot="$goto.location" value="Radiator.location"/>
+			<binding slot="$goto.location" value="Car.R.location"/>
 			<binding slot="$checkFluid.fluid" value="RadiatorFluid"/>
 			<binding slot="$checkFluid.toLevel" value="new Level(8)"/>
 		</subtasks>		
@@ -88,7 +88,7 @@
 			<step name="goto" task="Goto"/>	
 			<step name="checkFluid" task="CheckFluid"/> 
 			
-			<binding slot="$goto.location" value="WindshieldWiperContainer.location"/>
+			<binding slot="$goto.location" value="Car.WWC.location"/>
 			<binding slot="$checkFluid.fluid" value="WiperFluid"/>
 			<binding slot="$checkFluid.toLevel" value="new Level(10)"/>
 		</subtasks>		
@@ -117,14 +117,64 @@
 			($this.fromLevel >= $this.toLevel)
 		</postcondition>
 		<subtasks id="fill">
+			
+			<step name="bringFluid" task="BringObject"/>
+			<step name="addFluid" task="AddFluid"/>
+			<step name="returnFluid" task="ReturnObject"/>
+			
+			<binding slot="$bringFluid.fluid" value="$this.fluid"/>
+			<binding slot="$bringFluid.destinationLocation" value="RobotLocation"/>
+			<binding slot="$addFluid.fluid" value="$bringFluid.newFluid"/>
+			<binding slot="$returnFluid.fluid" value="$addFluid.newFluid"/>
+			<binding slot="$returnFluid.destinationLocation" value="$this.fluid.location"/>
+			<binding slot="$addFluid.level" value="$this.toLevel"/>
+		</subtasks>		
+	</task>
+	<task id="AddFluid">
+		<input name="fluid" type="Fluid"/>
+		<input name="fromLevel" type="Level"/>
+		<input name="toLevel" type="Level"/>
+
+		<subtasks id="addFluid">
+			
 			<step name="openCap" task="OpenCap"/>
 			<step name="pour" task="Pour"/>
 			<step name="closeCap" task="CloseCap"/>
 			
-			<binding slot="$pour.fluid" value="$this.toLevel - $this.fromLevel"/>
+			<binding slot="$pour.fluid" value="$this.fluid"/>
 			<binding slot="$pour.level" value="$this.toLevel"/>
 		</subtasks>		
 	</task>
+	<task id="BringObject">
+		<input name="object" type="PhysObj"/>
+		<input name="destinationLocation" type="Location"/>
+
+		<subtasks id="bringObject">
+			
+			<step name="goto1" task="Goto"/>
+			<step name="pickUp" task="PickUp"/>
+			<step name="goto2" task="Goto"/>
+			
+			<binding slot="$goto1.location" value="$this.object.location"/>
+			<binding slot="$pickUp.object" value="$this.object"/>
+			<binding slot="$goto2.location" value="$this.destinationLocation"/>
+		</subtasks>		
+	</task>
+	<task id="ReturnObject">
+		<input name="object" type="PhysObj"/>
+		<input name="destinationLocation" type="Location"/>
+
+		<subtasks id="returnObject">
+			
+			<step name="goto1" task="Goto"/>
+			<step name="place" task="Place"/>
+			
+			<binding slot="$goto1.location" value="$this.destinationLocation"/>
+			<binding slot="$place.object" value="$this.object"/>
+			
+		</subtasks>		
+	</task>
+	
 	
 	<!-- Primitive tasks-->	
 	<!-- If we are doing these actions with the help of other robots or other individuals,
@@ -246,11 +296,30 @@
 			
 		</script>
 	</task>
+	<task id="Place">		
+		<input name="object" type="Object"/>
+		
+		<script>
+			
+		</script>
+	</task>
+	<task id="PickUp">		
+		<input name="object" type="Object"/>
+		
+		<script>
+			
+		</script>
+	</task>
 	
 	<!-- Scripts-->
 	<script init="true">
 
-		
+		function reset () {
+         Fluid.Oil.location = new Location(10,10,0);
+		 Fluid.RadiatorFluid.location = new Location(11,11,0);
+       }
+	   
+       reset();
 	</script>
   
 </taskModel>
