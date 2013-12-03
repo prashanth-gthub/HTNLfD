@@ -1,5 +1,4 @@
 <taskModel about="urn:disco.wpi.edu:htnlfd:CarMaintenance" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-
 	<task id="CarMaintenance">
 		
 		<subtasks id="carMaintenance">
@@ -286,7 +285,9 @@
 		<input name="fluid" type="Fluid"/>
 		<input name="level" type="Level"/>
 
-		<script> $this.fluid.level = Level.minus(fluid.level,$this.level) </script>
+		<script> 
+			$this.fluid.level = Level.minus(fluid.level,$this.level) 
+		</script>
 	</task>
 	<task id="CloseCap">		
 
