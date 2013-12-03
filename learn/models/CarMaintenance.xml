@@ -314,12 +314,12 @@
 	<script init="true">
 
 		function reset () {
-         Fluid.Oil.location = new Location(10,10,0);
-		 Fluid.RadiatorFluid.location = new Location(11,11,0);
-		 Fluid.Oil.level = new Level(20);
-		 Fluid.RadiatorFluid.level = new Level(25);
-		 RobotLocation = new Location(-10,-10,-10);
-       }
+			Fluid.Oil.location = new Location(10,10,0);
+			Fluid.RadiatorFluid.location = new Location(11,11,0);
+			Fluid.Oil.level = new Level(20);
+			Fluid.RadiatorFluid.level = new Level(25);
+			RobotLocation = new Location(-10,-10,-10);
+		}
 	   
        reset();
 	</script>
