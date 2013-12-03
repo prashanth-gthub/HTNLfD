@@ -1,0 +1,256 @@
+<taskModel about="urn:disco.wpi.edu:htnlfd:CarMaintenance" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+
+	<task id="CarMaintenance">
+		
+		<subtasks id="carMaintenance">
+			<step name="checkTires" task="CheckTires"/>	
+			<step name="checkOil" task="CheckOil"/>
+			<step name="checkRadiatorFluid" task="CheckRadiatorFluid"/>
+			<step name="checkWindshieldWiperFluid" task="CheckWindshieldWiperFluid"/>
+		</subtasks>		
+	</task>
+	
+	<task id="CheckTires">
+		
+		<subtasks id="checkTires">
+			<step name="checkTire1" task="CheckTire"/>	
+			<step name="checkTire2" task="CheckTire"/>	
+			<step name="checkTire3" task="CheckTire"/>	
+			<step name="checkTire4" task="CheckTire"/>	
+			
+			<binding slot="$checkTire1.tire" value="new Tire(new Location(0,0,0))"/>
+			<binding slot="$checkTire2.tire" value="new Tire(new Location(10,0,0))"/>
+			<binding slot="$checkTire3.tire" value="new Tire(new Location(0,10,0))"/>
+			<binding slot="$checkTire4.tire" value="new Tire(new Location(10,10,0))"/>
+		</subtasks>		
+	</task>
+	
+	<task id="CheckTire">
+		<input name="tire" type="Tire" modified="newTire"/>
+		<output name="newTire" type="Tire"/>
+		
+		<subtasks id="checkTire" ordered="true">
+			<step name="goto" task="Goto"/>	
+			<step name="unscrewCap" task="UnscrewCap"/>	
+			<step name="applyGauge" task="ApplyGauge"/>
+			<step name="readGauge" task="ReadGauge"/>
+			<step name="removeGauge" task="RemoveGauge"/>
+			<step name="fillTire" task="FillTire"/>			
+			<step name="screwCap" task="ScrewCap"/>
+			
+			<binding slot="$goto.location" value="$this.tire.location"/>
+			<binding slot="$unscrewCap.tire" value="$this.tire"/>
+			<binding slot="$applyGauge.tire" value="$this.tire"/>
+			<binding slot="$fillTire.tire" value="$this.tire"/>
+			<binding slot="$removeGauge.tire" value="$this.tire"/>
+			<binding slot="$this.newTire" value="$fillTire.newTire"/>
+			<binding slot="$fillTire.fromLevel" value="$readGauge.level"/>
+			<binding slot="$fillTire.toLevel" value="new Level(10)"/>
+			<binding slot="$this.newTire" value="$fillTire.newTire"/>
+			<binding slot="$screwCap.tire" value="$this.newTire"/>
+		</subtasks>		
+	</task>
+	
+	<task id="CheckOil">
+	
+		<subtasks id="checkOil" ordered="true">
+			<step name="goto" task="Goto"/>	
+			<step name="pullOutDipstick" task="PullOutDipstick"/>	
+			<step name="wipe" task="Wipe"/>
+			<step name="reinsert" task="Reinsert"/>
+			<step name="pull" task="Pull"/>
+			<step name="readLevel" task="ReadLevel"/>
+			<step name="reinsert" task="Reinsert"/>
+			<step name="fill" task="Fill"/>
+			
+			<binding slot="$goto.location" value="OilContainer.location"/>
+			<binding slot="$fill.fluid" value="Oil"/>
+			<binding slot="$fill.fromLevel" value="$readLevel.level"/>
+			<binding slot="$fill.toLevel" value="new Level(9)"/>
+		</subtasks>		
+	</task>
+	
+	<task id="CheckRadiatorFluid">
+	
+		<subtasks id="checkRadiatorFluid" ordered="true">
+			<step name="goto" task="Goto"/>	
+			<step name="checkFluid" task="CheckFluid"/> 
+			
+			<binding slot="$goto.location" value="Radiator.location"/>
+			<binding slot="$checkFluid.fluid" value="RadiatorFluid"/>
+			<binding slot="$checkFluid.toLevel" value="new Level(8)"/>
+		</subtasks>		
+	</task>
+	
+	<task id="CheckWindshieldWiperFluid">
+	
+		<subtasks id="checkWindshieldWiperFluid" ordered="true">
+			<step name="goto" task="Goto"/>	
+			<step name="checkFluid" task="CheckFluid"/> 
+			
+			<binding slot="$goto.location" value="WindshieldWiperContainer.location"/>
+			<binding slot="$checkFluid.fluid" value="WiperFluid"/>
+			<binding slot="$checkFluid.toLevel" value="new Level(10)"/>
+		</subtasks>		
+	</task>
+	
+	<task id="CheckFluid">
+		<input name="fluid" type="Fluid"/>
+		<input name="toLevel" type="Level"/>
+		
+		<subtasks id="checkFluid" ordered="true">
+			<step name="readLevel" task="ReadLevel"/>
+			<step name="fill" task="Fill"/>
+			
+			<binding slot="$fill.fluid" value="$this.fluid"/>
+			<binding slot="$fill.fromLevel" value="$readLevel.level"/>
+			<binding slot="$fill.toLevel" value="$this.toLevel"/>
+		</subtasks>		
+	</task>
+
+	<task id="Fill">
+		<input name="fluid" type="Fluid"/>
+		<input name="fromLevel" type="Level"/>
+		<input name="toLevel" type="Level"/>
+		
+		<postcondition sufficient="true">
+			($this.fromLevel >= $this.toLevel)
+		</postcondition>
+		<subtasks id="fill">
+			<step name="openCap" task="OpenCap"/>
+			<step name="pour" task="Pour"/>
+			<step name="closeCap" task="CloseCap"/>
+			
+			<binding slot="$pour.fluid" value="$this.toLevel - $this.fromLevel"/>
+			<binding slot="$pour.level" value="$this.toLevel"/>
+		</subtasks>		
+	</task>
+	
+	<!-- Primitive tasks-->	
+	<!-- If we are doing these actions with the help of other robots or other individuals,
+		 we should have sufficient postconditions for all of the primitive tasks. 
+		 (In these situations instead of reporting "failure" the robot should wait.)
+	-->
+	<task id="UnscrewCap">
+		<input name="tire" type="Tire"/>
+		
+		<postcondition sufficient="true">
+			CapIsUnscrewed()
+		</postcondition>
+		<script>
+			
+		</script>
+	</task>
+	<task id="ApplyGauge">
+		<input name="tire" type="Tire"/>
+
+		<script>
+			
+		</script>
+	</task>
+	<task id="ReadGauge">
+		<output name="level" type="Level"/>
+		
+		<script>
+			
+		</script>
+	</task>
+	<task id="FillTire">
+		<input name="tire" type="Tire" modified="newTire"/>
+		<output name="newTire" type="Tire"/>
+		<input name="fromLevel" type="Level"/>
+		<input name="toLevel" type="Level"/>
+
+		<postcondition sufficient="true">
+			($this.fromLevel >= $this.toLevel)
+		</postcondition>
+		<script>
+			
+		</script>
+	</task>
+	<task id="goto">
+		<input name="location" type="Location"/>
+		
+		<postcondition sufficient="true">
+			($this.location == RobotLocation)
+		</postcondition>
+		<script>
+			
+		</script>
+	</task>
+	<task id="screwCap">
+		<input name="tire" type="Tire"/>
+
+		<script>
+			
+		</script>
+	</task>
+	<task id="removeGauge">
+		<input name="tire" type="Tire"/>
+
+		<script>
+			
+		</script>
+	</task>	
+	<task id="PullOutDipstick">
+
+		<script>
+			
+		</script>
+	</task>
+	<task id="Wipe">
+
+		<script>
+			
+		</script>
+	</task>
+	<task id="Reinsert">
+
+		<script>
+			
+		</script>
+	</task>
+	<task id="Pull">	
+
+		<script>
+			
+		</script>
+	</task>
+	<task id="ReadLevel">
+		<output name="level" type="Level"/>
+
+		<script>
+			
+		</script>
+	</task>
+	<task id="OpenCap">
+	
+		<postcondition sufficient="true">
+			CapIsOpen()
+		</postcondition>
+		<script>
+			
+		</script>
+	</task>
+	<task id="Pour">
+		<input name="fluid" type="Fluid"/>
+		<input name="level" type="Level"/>
+
+		<script>
+			
+		</script>
+	</task>
+	<task id="CloseCap">		
+
+		<script>
+			
+		</script>
+	</task>
+	
+	<!-- Scripts-->
+	<script init="true">
+
+		
+	</script>
+  
+</taskModel>
