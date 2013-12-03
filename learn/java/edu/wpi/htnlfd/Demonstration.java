@@ -36,22 +36,22 @@ public class Demonstration {
    static {
 
    }
-   
-  
 
    public Demonstration () {
 
    }
-   
-   public class Pair{
+
+   public class Pair {
       public Object left;
+
       public Object right;
+
       public Pair (Object left, Object right) {
          super();
          this.left = left;
          this.right = right;
-      }      
-      
+      }
+
    }
 
    /**
@@ -108,38 +108,35 @@ public class Demonstration {
       TaskClass newTask = demonstratedTask(disco, taskName, steps);
       findLoop(newTask); // /
 
-      demonstrations.add(new Pair(taskName,newTask)); // saving demonstrations
-      
+      demonstrations.add(new Pair(taskName, newTask)); // saving demonstrations
+
       TaskClass task = isAlternativeRecipe(newTask);
-      
-      Graph graph = Graph.getGraph(taskName);
-      
-      graph.addGraph(this,task,taskModel, newTask);
-      graph.printGraph();
+
+      // Graph graph = Graph.getGraph(taskName);
+
+      // graph.addGraph(this,task,taskModel, newTask);
+      // graph.printGraph();
       if ( task != null ) {
 
          // String applicable = KB.getApplicable(task, newTask);
 
-         if(false){ // ???????????????????????
-            
-            String input = defaultInputName;
-            String applicable = "!this." + input;
-            if ( task.getDecompositions().get(0).getApplicable() == null ) {
-               task.getDecompositions().get(0).setApplicable("this." + input);
-            }
-
-            TaskClass.Input inputC = task.new Input(input, "boolean", null);
-            task.addInput(inputC);
-
-            addAlternativeRecipe(newTask, applicable, task);
-            // askQuestion(disco);
-
-            task.changeNameSpace(newTask);
+         String input = defaultInputName;
+         String applicable = "!this." + input;
+         if ( task.getDecompositions().get(0).getApplicable() == null ) {
+            task.getDecompositions().get(0).setApplicable("this." + input);
          }
+
+         TaskClass.Input inputC = task.new Input(input, "boolean", null);
+         task.addInput(inputC);
+
+         addAlternativeRecipe(newTask, applicable, task);
+         // askQuestion(disco);
+
+         task.changeNameSpace(newTask);
 
       } else {
          this.taskModel.add(newTask);
-         optionals(this.taskModel);
+         //optionals(this.taskModel);
       }
 
       // inputTransformation.generalizeInput(this.taskModel);
@@ -223,9 +220,10 @@ public class Demonstration {
                            .findValueInParents(taskModel, null, task,
                                  task.getDecompositions().get(0), in1.getName());
                   if ( newTask.getDecompositions().get(0).getBindings()
-                        .get("$this." + in2.getName())!=null &&
-                        newTask.getDecompositions().get(0).getBindings()
-                        .get("$this." + in2.getName()).getValue().equals(value) ) {
+                        .get("$this." + in2.getName()) != null
+                     && newTask.getDecompositions().get(0).getBindings()
+                           .get("$this." + in2.getName()).getValue()
+                           .equals(value) ) {
                      contain = true;
                      if ( bindValue == null ) {
                         removed1.put("$this." + in2.getName(),
@@ -290,7 +288,8 @@ public class Demonstration {
          }
 
          Map<String, Binding> bindChange = new HashMap<String, Binding>();
-         Map<String, String> changed = new HashMap<String, String>();
+         Map<String, String> changed =
+               new HashMap<String, String>();
 
          for (TaskClass.Output out : newTask.getDeclaredOutputs()) {
             String outputName = task.getDecompositions().get(1).getId() + "_"
