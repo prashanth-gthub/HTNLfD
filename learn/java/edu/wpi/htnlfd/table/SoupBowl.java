@@ -1,5 +1,7 @@
 package edu.wpi.htnlfd.table;
 
+import edu.wpi.htnlfd.Location;
+
 public class SoupBowl extends Dish {
 
    public SoupBowl (String name, Location location) {

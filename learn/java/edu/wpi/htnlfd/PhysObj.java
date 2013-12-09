@@ -1,12 +1,10 @@
-package edu.wpi.htnlfd.table;
+package edu.wpi.htnlfd;
 
-import edu.wpi.htnlfd.ApplicationSpecificClass;
 
 // NB: PhysObj must cloneable because it is used in modified inputs
 
 public class PhysObj extends ApplicationSpecificClass implements Cloneable {
 
-   public static final PhysObj TABLE = new PhysObj("TABLE", null);
    
    // fields public for convenience in JavaScript
    public final String name;

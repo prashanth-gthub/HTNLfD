@@ -23,7 +23,7 @@
 	<script init="true">
 
        function reset () {
-         PhysObj.TABLE.location = new Location(10,10,10);
+	     Table.T1.location = new Location(10,10,10);
          Fork.F1.location = new Location(-10,-10,10);
 		 Spoon.S1.location = new Location(-10,-10,10);
 		 Knife.K1.location = new Location(-10,-10,10);

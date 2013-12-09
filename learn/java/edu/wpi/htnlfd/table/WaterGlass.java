@@ -1,5 +1,7 @@
 package edu.wpi.htnlfd.table;
 
+import edu.wpi.htnlfd.Location;
+
 public class WaterGlass extends Glass {
 
    public WaterGlass (String name, Location location) {

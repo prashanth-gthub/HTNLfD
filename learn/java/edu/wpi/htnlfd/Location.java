@@ -1,6 +1,5 @@
-package edu.wpi.htnlfd.table;
+package edu.wpi.htnlfd;
 
-import edu.wpi.htnlfd.ApplicationSpecificClass;
 
 public class Location extends ApplicationSpecificClass {
 

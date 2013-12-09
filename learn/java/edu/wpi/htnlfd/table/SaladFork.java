@@ -1,5 +1,7 @@
 package edu.wpi.htnlfd.table;
 
+import edu.wpi.htnlfd.Location;
+
 public class SaladFork extends Fork {
 
    public SaladFork (String name, Location location) {

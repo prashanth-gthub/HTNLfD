@@ -1,5 +1,7 @@
 package edu.wpi.htnlfd.table;
 
+import edu.wpi.htnlfd.Location;
+
 public class SaladPlate extends Dish {
 
    public SaladPlate (String name, Location location) {

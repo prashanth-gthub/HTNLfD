@@ -1,8 +1,10 @@
 package edu.wpi.htnlfd.table;
 
-public class Silverware extends PhysObj {
+import edu.wpi.htnlfd.*;
 
-   public Silverware (String name, Location location) {
+public abstract class Silverware extends PhysObj {
+
+   protected Silverware (String name, Location location) {
       super(name, location);
    }
 }

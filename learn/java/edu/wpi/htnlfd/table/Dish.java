@@ -1,8 +1,10 @@
 package edu.wpi.htnlfd.table;
 
-public class Dish extends PhysObj {
+import edu.wpi.htnlfd.*;
 
-   public Dish (String name, Location location) {
+public abstract class Dish extends PhysObj {
+
+   protected Dish (String name, Location location) {
       super(name, location);
    }
 }

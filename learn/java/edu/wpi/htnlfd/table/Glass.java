@@ -1,8 +1,10 @@
 package edu.wpi.htnlfd.table;
 
-public class Glass extends PhysObj {
+import edu.wpi.htnlfd.*;
 
-   public Glass (String name, Location location) {
+public abstract class Glass extends PhysObj {
+
+   protected Glass (String name, Location location) {
       super(name, location);
    }
 }

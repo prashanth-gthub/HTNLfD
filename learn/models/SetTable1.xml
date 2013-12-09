@@ -107,7 +107,7 @@
       <binding slot="$this.placeSilverware1_place1_location" value="new Location(-1,0,0)"/>
       <binding slot="$placeGlasses1.place1_location" value="$this.placeGlasses1_place1_location"/>
       <binding slot="$placeDishes1.place1_location" value="$this.placeDishes1_place1_location"/>
-      <binding slot="$this.placeDishes1_place1_referenceFrame" value="PhysObj.TABLE"/>
+      <binding slot="$this.placeDishes1_place1_referenceFrame" value="Table.T1"/>
       <binding slot="$this.placeGlasses1_place1_location" value="new Location(0,1,0)"/>
       <binding slot="$placeDishes1.place1_referenceFrame" value="$this.placeDishes1_place1_referenceFrame"/>
       <binding slot="$placeDishes1.place3_object" value="$this.placeDishes1_place3_object"/>
