@@ -25,6 +25,8 @@
        function reset () {
 	     Table.T1.location = new Location(10,10,10);
          Fork.F1.location = new Location(-10,-10,10);
+		 Fork.F2.location = new Location(-10,-10,10);
+		 Fork.F3.location = new Location(-10,-10,10);
 		 Spoon.S1.location = new Location(-10,-10,10);
 		 Knife.K1.location = new Location(-10,-10,10);
 		 DinnerPlate.DP1.location = new Location(-10,-10,10);

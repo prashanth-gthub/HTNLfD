@@ -134,8 +134,9 @@ public class Demonstration {
 
          addAlternativeRecipe(newTask, applicable, task);
          // askQuestion(disco);
-
-         task.changeNameSpace(newTask);*/
+         */
+         task.changeNameSpace(newTask);
+         
 
       } else {
          this.taskModel.add(newTask);

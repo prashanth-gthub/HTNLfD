@@ -3,7 +3,7 @@ package edu.wpi.htnlfd.graph;
 import edu.wpi.htnlfd.model.DecompositionClass.Binding;
 import edu.wpi.htnlfd.model.DecompositionClass.Step;
 import edu.wpi.htnlfd.model.*;
-import edu.wpi.htnlfd.model.TaskClass.Input;
+import edu.wpi.htnlfd.model.TaskClass.*;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -198,6 +198,20 @@ public class Node {
                   + bind.getValue().getSlot(), currentDec.new Binding(bind
                      .getValue().getSlot(), newName, "$this." + inName,
                      DecompositionClass.Type.InputInput));
+               
+               if ( modified != null ) {
+                  String outName = null;
+                  outName = currentTask.getInput(inputT.getName()).getModified().getName();
+
+                  String outputTaskName = prevDec.getBindings()
+                        .get("$this" + modified).getValue()
+                        .substring(2 + this.stepName.length());
+                  
+                  currentDec.addBinding("$this." + outName,
+                        currentDec.new Binding(outName, "this", "$" + newName
+                           + "." + outputTaskName,
+                              DecompositionClass.Type.OutputOutput));
+               }
 
             } else {
                currentDec.addBinding("$" + newName + "."
@@ -206,31 +220,34 @@ public class Node {
                      DecompositionClass.Type.InputInput));
                currentDec.addBinding("$this." + inName, currentDec.new Binding(
                      inName, "this", value, DecompositionClass.Type.Constant));
-
-            }
-
-            if ( modified != null ) {
-               String outName = null;
-               outName = currentTask.getInput(inName).getModified().getName();
-
-               String outputTaskName = prevDec.getBindings()
-                     .get("$this" + modified).getValue()
-                     .substring(2 + this.stepName.length());
                
-               currentDec.addBinding("$this." + outName,
-                     currentDec.new Binding(outName, "this", "$" + newName
-                        + "." + outputTaskName,
-                           DecompositionClass.Type.OutputOutput));
+               if ( modified != null ) {
+                  String outName = null;
+                  outName = modified;                  
+                  
+                  String outputTaskName = prevDec.getBindings()
+                        .get("$this." + modified).getValue()
+                        .substring(2 + this.stepName.length());
+                  TaskClass.Output output = currentTask.new Output(currentTask.findOutputName(newName, outputTaskName
+                        ), prevTask.getOutput(outName).getType()
+                        );
+                  currentTask.addOutput(output);
+                  currentTask.getInput(inName).setModified(output);
+                  
+                  currentDec.addBinding("$this." + output.getName(),
+                        currentDec.new Binding(output.getName(), "this", "$" + newName
+                           + "." + outputTaskName,
+                              DecompositionClass.Type.OutputOutput));
+               }
+
             }
 
          }
       }
 
       // Add Ordering
-
       currentDec.addOrdering(taskModel);
-      //
-
+            
       this.step = stp;
       this.stepName = newName;
       return this;

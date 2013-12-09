@@ -312,16 +312,15 @@ public class Graph {
             addInternalTask (taskModel,nodes.get(firstM).step.getDecompositionClass() , steps) ;
             taskModel.add(newTask2);
             
-            
+            steps = new ArrayList<Step>();
             for(int m=firstD+1;m<secondD;m++){
                   steps.add(demonstration.get(m).step);
             }
             TaskClass newTask = nodes.get(firstM).step.getDecompositionClass().getGoal().
             addInternalTask (taskModel,nodes.get(firstM).step.getDecompositionClass() , steps) ;
-            taskModel.add(newTask);
-            
-            
-           // this.demonstration.addAlternativeRecipe(newTask2, null, newTask);
+            //taskModel.add(newTask);
+
+            this.demonstration.addAlternativeRecipe(newTask, null, newTask2);
             
             
             System.out.print("1111\n");

@@ -9,4 +9,6 @@ public class Fork extends Silverware {
    }
  
    public static final Fork F1 = new Fork("F1", null);
+   public static final Fork F2 = new Fork("F2", null);
+   public static final Fork F3 = new Fork("F3", null);
 }

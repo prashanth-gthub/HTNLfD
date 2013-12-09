@@ -709,6 +709,10 @@ public class TaskClass extends TaskModel.Member {
       this.setQname(newTask.getQname());
 
    }
+   
+   public String findOutputName(String stepName, String name){
+      return stepName+"_"+name;
+   }
 
    /**
     * Finds a new task name.
