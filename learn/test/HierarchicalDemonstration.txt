@@ -34,7 +34,7 @@ print SetTable urn:disco.wpi.edu:htnlfd:setTable4
 eval reset()
 
 task Demonstration
-task  Place / DinnerPlate.DP1 / new Location(0,0,0) / PhysObj.TABLE
+task  Place / DinnerPlate.DP1 / new Location(0,0,0) / Table.T1
 task Place / SoupBowl.SB1 / new Location(0,0,2) / DinnerPlate.DP1
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
@@ -56,7 +56,7 @@ task Place /  WineGlass.WG1 / new Location(0,-1,0) /  DinnerPlate.DP1
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")
 eval Packages.edu.wpi.htnlfd.Init.answerQuestion($disco,"PlaceGlasses","Fancy")
-print PlaceGlasses urn:disco.wpi.edu:htnlfd:setTable9
-print SetTable urn:disco.wpi.edu:htnlfd:setTable9
+print PlaceGlasses urn:disco.wpi.edu:htnlfd:setTable7
+print SetTable urn:disco.wpi.edu:htnlfd:setTable7
 
-task SetTable urn:disco.wpi.edu:htnlfd:setTable9
+task SetTable urn:disco.wpi.edu:htnlfd:setTable7

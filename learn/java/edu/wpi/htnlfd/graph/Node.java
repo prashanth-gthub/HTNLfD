@@ -1,6 +1,5 @@
 package edu.wpi.htnlfd.graph;
 
-import edu.wpi.htnlfd.graph.Node.CType;
 import edu.wpi.htnlfd.model.DecompositionClass.Binding;
 import edu.wpi.htnlfd.model.DecompositionClass.Step;
 import edu.wpi.htnlfd.model.*;
@@ -51,7 +50,7 @@ public class Node {
    }
 
    public Node () {
-      // TODO Auto-generated constructor stub
+
    }
 
    public List<ArrayList<Node>> evaluate () {
@@ -166,7 +165,7 @@ public class Node {
       DecompositionClass prevDec = this.step.getDecompositionClass();
       TaskClass prevTask = prevDec.getGoal();
       TaskClass currentTask = currentDec.getGoal();
-      
+
       currentDec.addStep(newName, stp, nameWhich);
 
       for (Entry<String, Binding> bind : prevDec.getBindings().entrySet()) {
@@ -174,52 +173,72 @@ public class Node {
             Entry<String, Binding> bind2 = prevDec.getBinding(bind, prevDec);
             String value = bind2.getValue().getValue();
 
-            Entry<String, Binding> valBind = currentDec.getBinding(value);
-            
             TaskClass.Input inputT = null;
-            
-            for(Input in:prevTask.getDeclaredInputs()){
-               if(in.getName().equals(bind.getValue().getValue().substring(6))){
+
+            for (Input in : prevTask.getDeclaredInputs()) {
+               if ( in.getName()
+                     .equals(bind.getValue().getValue().substring(6)) ) {
                   inputT = in;
                   break;
-               }                     
+               }
             }
-            
+
             int adding = currentTask.getDeclaredInputs().size();
-            
-            String modified = (inputT.getModified() == null)?null:inputT.getModified().getName();
-            
-            String inName = currentTask.addInput (taskModel, currentTask,
-                  inputT.getName(), inputT.getType(), modified,
-                  value, currentDec, newName);
-                  
+
+            String modified = (inputT.getModified() == null) ? null : inputT
+                  .getModified().getName();
+
+            String inName = currentTask.addInput(taskModel, currentTask,
+                  inputT.getName(), inputT.getType(), modified, value,
+                  currentDec, newName);
+
             boolean add = (currentTask.getDeclaredInputs().size() != adding);
             if ( !add ) {
-               currentDec.addBinding("$"+newName+"."+bind.getValue().getSlot(), 
-                     currentDec.new Binding(bind.getValue().getSlot(), newName, "$this."+inName,
-                           DecompositionClass.Type.InputInput));
+               currentDec.addBinding("$" + newName + "."
+                  + bind.getValue().getSlot(), currentDec.new Binding(bind
+                     .getValue().getSlot(), newName, "$this." + inName,
+                     DecompositionClass.Type.InputInput));
+
             } else {
-               currentDec.addBinding("$"+newName+"."+bind.getValue().getSlot(), 
-                     currentDec.new Binding(bind.getValue().getSlot(), newName, "$this."+inName,
-                           DecompositionClass.Type.InputInput));
-               currentDec.addBinding("$this."+inName, 
-                     currentDec.new Binding(inName, "this", value,
-                           DecompositionClass.Type.Constant));
-               
+               currentDec.addBinding("$" + newName + "."
+                  + bind.getValue().getSlot(), currentDec.new Binding(bind
+                     .getValue().getSlot(), newName, "$this." + inName,
+                     DecompositionClass.Type.InputInput));
+               currentDec.addBinding("$this." + inName, currentDec.new Binding(
+                     inName, "this", value, DecompositionClass.Type.Constant));
+
             }
+
+            if ( modified != null ) {
+               String outName = null;
+               outName = currentTask.getInput(inName).getModified().getName();
+
+               String outputTaskName = prevDec.getBindings()
+                     .get("$this" + modified).getValue()
+                     .substring(2 + this.stepName.length());
+               
+               currentDec.addBinding("$this." + outName,
+                     currentDec.new Binding(outName, "this", "$" + newName
+                        + "." + outputTaskName,
+                           DecompositionClass.Type.OutputOutput));
+            }
+
          }
       }
-      
-      // 
-      
+
+      // Add Ordering
+
+      currentDec.addOrdering(taskModel);
+      //
+
       this.step = stp;
       this.stepName = newName;
       return this;
    }
 
-   public Node addOptionalStep (Node node, CType required,TaskModel taskModel) {
+   public Node addOptionalStep (Node node, CType required, TaskModel taskModel) {
       this.step.setMinOccurs(0);
-      return addNode(node, required,taskModel);
+      return addNode(node, required, taskModel);
    }
 
    public void printNode () {

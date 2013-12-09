@@ -27,8 +27,6 @@ public class Demonstration {
 
    // private KnowledgeBase KB = new TableKnowledgeBase();
 
-   private LearnAgent LAgent = new LearnAgent("Anahita");
-
    private String defaultInputName = "input1";
 
    List<Pair> demonstrations = new ArrayList<Pair>();

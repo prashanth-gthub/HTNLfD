@@ -1,6 +1,6 @@
 package edu.wpi.htnlfd.table;
 
-import edu.wpi.htnlfd.Location;
+import edu.wpi.htnlfd.domain.Location;
 
 public class SoupBowl extends Dish {
 

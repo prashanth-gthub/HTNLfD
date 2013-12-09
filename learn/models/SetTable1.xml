@@ -1,4 +1,4 @@
-<taskModel xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext" xmlns:setTable3="urn:disco.wpi.edu:htnlfd:setTable3" xmlns:std="urn:disco.wpi.edu:htnlfd:std" about="urn:disco.wpi.edu:htnlfd:setTable4">
+<taskModel xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext" xmlns:setTable4="urn:disco.wpi.edu:htnlfd:setTable4" xmlns:std="urn:disco.wpi.edu:htnlfd:std" about="urn:disco.wpi.edu:htnlfd:setTable5">
   <task id="PlaceSilverware">
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Location"/>
@@ -15,60 +15,17 @@
       <step name="place2" task="std:Place"/>
       <step name="place3" task="std:Place"/>
       <binding slot="$place3.referenceFrame" value="$this.place1_referenceFrame"/>
-      <binding slot="$place1.location" value="$this.place1_location"/>
-      <binding slot="$place2.location" value="$this.place2_location"/>
-      <binding slot="$place3.location" value="$this.place3_location"/>
-      <binding slot="$place2.object" value="$this.place2_object"/>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$this.place3_newObject" value="$place3.newObject"/>
       <binding slot="$this.place1_newObject" value="$place1.newObject"/>
       <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$place1.location" value="$this.place1_location"/>
       <binding slot="$place2.referenceFrame" value="$this.place1_referenceFrame"/>
-      <binding slot="$place3.object" value="$this.place3_object"/>
-      <binding slot="$this.place2_newObject" value="$place2.newObject"/>
-    </subtasks>
-  </task>
-  <task id="PlaceGlasses">
-    <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
-    <input name="place1_location" type="Location"/>
-    <input name="place1_referenceFrame" type="PhysObj"/>
-    <output name="place1_newObject" type="PhysObj"/>
-    <subtasks id="placeGlasses1">
-      <step name="place1" task="std:Place"/>
-      <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
-      <binding slot="$place1.object" value="$this.place1_object"/>
-      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
-      <binding slot="$place1.location" value="$this.place1_location"/>
-    </subtasks>
-  </task>
-  <task id="PlaceDishes">
-    <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
-    <input name="place1_location" type="Location"/>
-    <input name="place1_referenceFrame" type="PhysObj"/>
-    <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
-    <input name="place2_location" type="Location"/>
-    <input name="place2_referenceFrame" type="PhysObj"/>
-    <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
-    <input name="place3_location" type="Location"/>
-    <output name="place1_newObject" type="PhysObj"/>
-    <output name="place2_newObject" type="PhysObj"/>
-    <output name="place3_newObject" type="PhysObj"/>
-    <subtasks id="placeDishes1" ordered="false">
-      <step name="place1" task="std:Place"/>
-      <step name="place2" requires="place1" task="std:Place"/>
-      <step name="place3" requires="place1" task="std:Place"/>
-      <binding slot="$place3.referenceFrame" value="$this.place2_referenceFrame"/>
-      <binding slot="$place1.location" value="$this.place1_location"/>
       <binding slot="$place2.location" value="$this.place2_location"/>
       <binding slot="$place3.location" value="$this.place3_location"/>
-      <binding slot="$place2.object" value="$this.place2_object"/>
-      <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
-      <binding slot="$this.place3_newObject" value="$place3.newObject"/>
-      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
-      <binding slot="$place1.object" value="$this.place1_object"/>
-      <binding slot="$place2.referenceFrame" value="$this.place2_referenceFrame"/>
       <binding slot="$place3.object" value="$this.place3_object"/>
       <binding slot="$this.place2_newObject" value="$place2.newObject"/>
+      <binding slot="$place2.object" value="$this.place2_object"/>
     </subtasks>
   </task>
   <task id="SetTable">
@@ -96,9 +53,9 @@
     <output name="placeSilverware1_place3_newObject" type="PhysObj"/>
     <output name="placeGlasses1_place1_newObject" type="PhysObj"/>
     <subtasks id="setTable1" ordered="false">
-      <step name="placeDishes1" task="setTable3:PlaceDishes"/>
-      <step name="placeSilverware1" requires="placeDishes1" task="setTable3:PlaceSilverware"/>
-      <step name="placeGlasses1" requires="placeDishes1" task="setTable3:PlaceGlasses"/>
+      <step name="placeDishes1" task="setTable4:PlaceDishes"/>
+      <step name="placeSilverware1" requires="placeDishes1" task="setTable4:PlaceSilverware"/>
+      <step name="placeGlasses1" requires="placeDishes1" task="setTable4:PlaceGlasses"/>
       <binding slot="$this.placeDishes1_place3_object" value="SoupBowl.SB1"/>
       <binding slot="$placeSilverware1.place1_referenceFrame" value="$this.placeDishes1_place2_referenceFrame"/>
       <binding slot="$placeDishes1.place2_object" value="$this.placeDishes1_place2_object"/>
@@ -140,6 +97,49 @@
       <binding slot="$this.placeDishes1_place2_location" value="new Location(0,0,1)"/>
       <binding slot="$placeDishes1.place2_referenceFrame" value="$this.placeDishes1_place2_referenceFrame"/>
       <binding slot="$this.placeDishes1_place1_location" value="new Location(0,0,0)"/>
+    </subtasks>
+  </task>
+  <task id="PlaceGlasses">
+    <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
+    <input name="place1_location" type="Location"/>
+    <input name="place1_referenceFrame" type="PhysObj"/>
+    <output name="place1_newObject" type="PhysObj"/>
+    <subtasks id="placeGlasses1">
+      <step name="place1" task="std:Place"/>
+      <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
+      <binding slot="$place1.location" value="$this.place1_location"/>
+    </subtasks>
+  </task>
+  <task id="PlaceDishes">
+    <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
+    <input name="place1_location" type="Location"/>
+    <input name="place1_referenceFrame" type="PhysObj"/>
+    <input modified="place2_newObject" name="place2_object" type="PhysObj"/>
+    <input name="place2_location" type="Location"/>
+    <input name="place2_referenceFrame" type="PhysObj"/>
+    <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
+    <input name="place3_location" type="Location"/>
+    <output name="place1_newObject" type="PhysObj"/>
+    <output name="place2_newObject" type="PhysObj"/>
+    <output name="place3_newObject" type="PhysObj"/>
+    <subtasks id="placeDishes1" ordered="false">
+      <step name="place1" task="std:Place"/>
+      <step minOccurs="0" name="place2" requires="place1" task="std:Place"/>
+      <step name="place3" requires="place1" task="std:Place"/>
+      <binding slot="$place3.referenceFrame" value="$this.place2_referenceFrame"/>
+      <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this.place3_newObject" value="$place3.newObject"/>
+      <binding slot="$this.place1_newObject" value="$place1.newObject"/>
+      <binding slot="$place1.object" value="$this.place1_object"/>
+      <binding slot="$place1.location" value="$this.place1_location"/>
+      <binding slot="$place2.referenceFrame" value="$this.place2_referenceFrame"/>
+      <binding slot="$place2.location" value="$this.place2_location"/>
+      <binding slot="$place3.location" value="$this.place3_location"/>
+      <binding slot="$place3.object" value="$this.place3_object"/>
+      <binding slot="$this.place2_newObject" value="$place2.newObject"/>
+      <binding slot="$place2.object" value="$this.place2_object"/>
     </subtasks>
   </task>
 </taskModel>

@@ -650,12 +650,11 @@ public class TaskClass extends TaskModel.Member {
           * step.getSlotValue(inputName)));
           */
 
-         if ( inputBinding == null ) {
             inputBinding = step.getSlotValue(inputName);
             inputBindingValue = ((ApplicationSpecificClass) inputBinding)
                   .find();
-         } else
-            inputBindingValue = (String) inputBinding;
+
+            //inputBindingValue = (String) inputBinding;
 
          int inputNum1 = this.getDeclaredInputs().size();
          String changedName = this.addInput(taskModel, this, inputName, step

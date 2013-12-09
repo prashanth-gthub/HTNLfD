@@ -1,4 +1,6 @@
-package edu.wpi.htnlfd;
+package edu.wpi.htnlfd.domain;
+
+import edu.wpi.htnlfd.ApplicationSpecificClass;
 
 
 public class Location extends ApplicationSpecificClass {

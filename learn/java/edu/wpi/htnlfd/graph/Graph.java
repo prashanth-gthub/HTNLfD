@@ -142,7 +142,7 @@ public class Graph {
             for (Node child : root.children) {
                List<Node> newNodes1 = new ArrayList<Node>();
                List<Node> newNodes2 = new ArrayList<Node>();
-               int LCS = getLCS(pa.nodes, demonstration, taskModel, newNodes1,
+               getLCS(pa.nodes, demonstration, taskModel, newNodes1,
                      newNodes2);
                if ( !merge(child, demonstration, newNodes1, newNodes2,
                      pa.nodes, taskModel) ) {
@@ -160,7 +160,7 @@ public class Graph {
 
             List<Node> newNodes1 = new ArrayList<Node>();
             List<Node> newNodes2 = new ArrayList<Node>();
-            int LCS = getLCS(pa.nodes, demonstration, taskModel, newNodes1,
+            getLCS(pa.nodes, demonstration, taskModel, newNodes1,
                   newNodes2);
 
             if ( !merge(root, demonstration, newNodes1, newNodes2, pa.nodes,

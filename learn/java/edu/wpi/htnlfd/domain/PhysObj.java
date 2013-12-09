@@ -1,4 +1,6 @@
-package edu.wpi.htnlfd;
+package edu.wpi.htnlfd.domain;
+
+import edu.wpi.htnlfd.ApplicationSpecificClass;
 
 
 // NB: PhysObj must cloneable because it is used in modified inputs

@@ -1,6 +1,7 @@
 package edu.wpi.htnlfd.table;
 
 import edu.wpi.htnlfd.*;
+import edu.wpi.htnlfd.domain.*;
 
 
 public class Table extends PhysObj {
