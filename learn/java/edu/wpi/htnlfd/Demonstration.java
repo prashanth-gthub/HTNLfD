@@ -114,13 +114,18 @@ public class Demonstration {
 
       // Graph graph = Graph.getGraph(taskName);
 
+       
       // graph.addGraph(this,task,taskModel, newTask);
       // graph.printGraph();
       if ( task != null ) {
 
+         Graph graph = new Graph();
+         newTask.setId("Temp");
+         graph.buildTree (task, newTask, taskModel,this);
+         
          // String applicable = KB.getApplicable(task, newTask);
 
-         String input = defaultInputName;
+        /* String input = defaultInputName;
          String applicable = "!this." + input;
          if ( task.getDecompositions().get(0).getApplicable() == null ) {
             task.getDecompositions().get(0).setApplicable("this." + input);
@@ -132,7 +137,7 @@ public class Demonstration {
          addAlternativeRecipe(newTask, applicable, task);
          // askQuestion(disco);
 
-         task.changeNameSpace(newTask);
+         task.changeNameSpace(newTask);*/
 
       } else {
          this.taskModel.add(newTask);
