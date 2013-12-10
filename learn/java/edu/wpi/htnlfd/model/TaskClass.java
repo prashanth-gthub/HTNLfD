@@ -737,7 +737,7 @@ public class TaskClass extends TaskModel.Member {
 
       TaskClass taskI = new TaskClass(taskModel, taskName, new QName(
             taskModel.namespace, taskName));
-
+      taskI.setInternal(true);
       // /////
       List<Entry<String, Binding>> removeBindings = new ArrayList<Entry<String, Binding>>();
       Map<String, Binding> addBindings = new HashMap<String, Binding>();
@@ -974,4 +974,24 @@ public class TaskClass extends TaskModel.Member {
       return taskI;
    }
 
+   /**
+    * Adds the question of an internal task to the Properties Obj.
+    */
+   public String getQuestion (TaskModel taskModel) {
+      String valOut = "";
+      if ( this.isInternal() ) {
+         String key = "Ask.How(" + this.getId() + ")@format";
+         String value = "what do you want to do next?";
+         TaskModel.properties.setProperty(key, value);
+
+         for (DecompositionClass dec : this.getDecompositions()) {
+            String keyDec = "Propose.How(" + dec.getId() + ")@format";
+            String valDec = dec.getQuestion(taskModel);
+            TaskModel.properties.setProperty(keyDec, valDec);
+            if ( valDec != null )
+               valOut += valDec;
+         }
+      }
+      return valOut;
+   }
 }

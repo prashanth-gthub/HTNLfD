@@ -121,6 +121,105 @@ public class DecompositionClass extends TaskModel.Member {
    }
 
    /**
+    * Creates and adds the step after another step in the demopositionClass.
+    */
+   public String addStep (Step which, String stepName, Step step,
+         String nameWhich, TaskModel taskModel) {
+      DecompositionClass.Step stp = which.getDecompositionClass().new Step(
+            step.getType(), step.getMinOccurs(), step.getMaxOccurs(), null);
+      String newName = which.findStepName(stepName);
+      DecompositionClass currentDec = which.getDecompositionClass();
+      DecompositionClass prevDec = step.getDecompositionClass();
+      TaskClass prevTask = prevDec.getGoal();
+      TaskClass currentTask = currentDec.getGoal();
+
+      currentDec.addStep(newName, stp, nameWhich);
+
+      for (Entry<String, Binding> bind : prevDec.getBindings().entrySet()) {
+         if ( bind.getValue().getStep().equals(stepName) ) {
+            Entry<String, Binding> bind2 = prevDec.getBinding(bind, prevDec);
+            String value = bind2.getValue().getValue();
+
+            TaskClass.Input inputT = null;
+
+            for (Input in : prevTask.getDeclaredInputs()) {
+               if ( in.getName()
+                     .equals(bind.getValue().getValue().substring(6)) ) {
+                  inputT = in;
+                  break;
+               }
+            }
+
+            int adding = currentTask.getDeclaredInputs().size();
+
+            String modified = (inputT.getModified() == null) ? null : inputT
+                  .getModified().getName();
+
+            String inName = currentTask.addInput(taskModel, currentTask,
+                  inputT.getName(), inputT.getType(), modified, value,
+                  currentDec, newName);
+
+            boolean add = (currentTask.getDeclaredInputs().size() != adding);
+            if ( !add ) {
+               currentDec.addBinding("$" + newName + "."
+                  + bind.getValue().getSlot(), currentDec.new Binding(bind
+                     .getValue().getSlot(), newName, "$this." + inName,
+                     DecompositionClass.Type.InputInput));
+
+               if ( modified != null ) {
+                  String outName = null;
+                  outName = currentTask.getInput(inputT.getName())
+                        .getModified().getName();
+
+                  String outputTaskName = prevDec.getBindings()
+                        .get("$this" + modified).getValue()
+                        .substring(2 + stepName.length());
+
+                  currentDec.addBinding("$this." + outName,
+                        currentDec.new Binding(outName, "this", "$" + newName
+                           + "." + outputTaskName,
+                              DecompositionClass.Type.OutputOutput));
+               }
+
+            } else {
+               currentDec.addBinding("$" + newName + "."
+                  + bind.getValue().getSlot(), currentDec.new Binding(bind
+                     .getValue().getSlot(), newName, "$this." + inName,
+                     DecompositionClass.Type.InputInput));
+               currentDec.addBinding("$this." + inName, currentDec.new Binding(
+                     inName, "this", value, DecompositionClass.Type.Constant));
+
+               if ( modified != null ) {
+                  String outName = null;
+                  outName = modified;
+
+                  String outputTaskName = prevDec.getBindings()
+                        .get("$this." + modified).getValue()
+                        .substring(2 + stepName.length());
+                  TaskClass.Output output = currentTask.new Output(
+                        currentTask.findOutputName(newName, outputTaskName),
+                        prevTask.getOutput(outName).getType());
+                  currentTask.addOutput(output);
+                  currentTask.getInput(inName).setModified(output);
+
+                  currentDec.addBinding("$this." + output.getName(),
+                        currentDec.new Binding(output.getName(), "this", "$"
+                           + newName + "." + outputTaskName,
+                              DecompositionClass.Type.OutputOutput));
+               }
+
+            }
+
+         }
+      }
+
+      // Add Ordering
+      currentDec.addOrdering(taskModel);
+
+      return newName;
+   }
+
+   /**
     * Adds the step. Also adds step's name to stepNames by considering that the
     * new step should be after the other step.
     */
@@ -1111,6 +1210,36 @@ public class DecompositionClass extends TaskModel.Member {
          }
       }
       return null;
+   }
+
+   /**
+    * Gets the question of this decompositionClass.
+    */
+   public String getQuestion (TaskModel taskModel) {
+      String valueOut = "";
+
+      for (Entry<String, Step> step : this.getSteps().entrySet()) {
+         String val = valueOut;
+         if ( !step.getValue().getType().isInternal() ) {
+            valueOut += step.getValue().getType().getId();
+            for (Input in : step.getValue().getType().getDeclaredInputs()) {
+               String var = findValueInParents(taskModel, step.getKey(), step
+                     .getValue().getDecompositionClass().getGoal(), step
+                     .getValue().getDecompositionClass(), in.getName());
+               if ( var != null )
+                  val += var + " and";
+            }
+
+            if ( val != null && val != "" )
+               valueOut = val.substring(0, val.length() - 4);
+         } else {
+            String valTask = "";
+            valTask = step.getValue().getType().getQuestion(taskModel);
+            if ( valTask != null )
+               valueOut += valTask;
+         }
+      }
+      return valueOut;
    }
 
 }

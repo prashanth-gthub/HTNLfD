@@ -11,6 +11,10 @@ public class Graph {
 
    public Demonstration demonstration;
 
+   /**
+    * Builds the tree and tries to merge the new demonstration with the current
+    * model.
+    */
    public void buildTree (TaskClass task, TaskClass newTask,
          TaskModel taskModel, Demonstration demonstration) {
       this.demonstration = demonstration;
@@ -23,6 +27,9 @@ public class Graph {
 
    }
 
+   /**
+    * Gets the tree of given taskClass.
+    */
    public Node getTree (TaskClass task, Node root) {
 
       if ( task.getDecompositions().size() > 1 ) {
@@ -43,6 +50,9 @@ public class Graph {
       return root;
    }
 
+   /**
+    * One node.
+    */
    public Node oneNode (DecompositionClass dec, Node root) {
       for (String stepName : dec.getStepNames()) {
          Step step = dec.getStep(stepName);
@@ -71,6 +81,9 @@ public class Graph {
       return null;
    }
 
+   /**
+    * Checks whether the current demonstration is satisfied by the model or not.
+    */
    boolean statisfiable (List<ArrayList<Node>> nodesList,
          List<Node> demonstration, TaskModel taskModel) {
       boolean equal = false;
@@ -94,6 +107,10 @@ public class Graph {
       return equal;
    }
 
+   /**
+    * Checks whether the current demonstration is satisfied by the model or not
+    * if not, it tries to merge them.
+    */
    boolean mergable (Node root, List<Node> demonstration, TaskModel taskModel,
          Node demonstrationRoot) {
 
@@ -172,6 +189,9 @@ public class Graph {
       return retMerged;
    }
 
+   /**
+    * Merges the new demonstration with the model.
+    */
    private boolean merge (Node root, List<Node> demonstration,
          List<Node> newNodes1, List<Node> newNodes2, ArrayList<Node> nodes,
          TaskModel taskModel) {
@@ -323,7 +343,6 @@ public class Graph {
 
             this.demonstration.addAlternativeRecipe(newTask, null, newTask2);
 
-            System.out.print("1111\n");
          } else if ( firstM + 1 == secondM && firstD + 1 != secondD ) {
             // optional
             int where = firstM;
@@ -331,23 +350,19 @@ public class Graph {
             for (int i = firstD + 1; i < secondD; i++) {
                demonstration.get(i).typeOfNode = NType.Optional;
                demonstration.get(i).step.setMinOccurs(0);
-               bfs();
+
                retnode = demonstration.get(i).addOptionalStep(retnode,
                      CType.Required, taskModel);
-               bfs();
-            }
 
-            System.out.print("2222\n");
+            }
          } else if ( firstD + 1 == secondD && firstM + 1 != secondM ) {
             // optional
             for (int i = firstM + 1; i < secondM; i++) {
                nodes.get(i).typeOfNode = NType.Optional;
                nodes.get(i).step.setMinOccurs(0);
             }
-            System.out.print("3333\n");
          } else if ( firstD + 1 == secondD && firstM + 1 == secondM ) {
             ;
-            System.out.print("4444\n");
          }
          firstD = secondD;
          firstM = secondM;
@@ -356,6 +371,9 @@ public class Graph {
       return merged;
    }
 
+   /**
+    * Finds the longest common subsequent.
+    */
    int getLCS (List<Node> nodes1, List<Node> nodes2, TaskModel taskModel,
          List<Node> newNodes1, List<Node> newNodes2) {
       int M = nodes1.size();
@@ -388,6 +406,9 @@ public class Graph {
 
    }
 
+   /**
+    * Find the value of longest common subsequent.
+    */
    public static int findLCS (List<Node> x, List<Node> y, TaskModel taskModel,
          int[][] opt) {
 
@@ -422,6 +443,9 @@ public class Graph {
       return LCS;
    }
 
+   /**
+    * Breath first search.
+    */
    public void bfs () {
 
       // System.out.println("...........................");

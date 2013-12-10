@@ -15,9 +15,7 @@ public class TaskModel {
 
    public static String namespacePrefix;
 
-   static {
-
-   }
+   public static Properties properties = new Properties();
 
    /**
     * Instantiates a new task model.
@@ -154,7 +152,7 @@ public class TaskModel {
     * 
     * @param properties
     */
-   public Node toNode (Document document, Properties properties) {
+   public Node toNode (Document document) {
       Element taskModelElement = null;
 
       taskModelElement = document.createElementNS(TaskModel.xmlnsValue,

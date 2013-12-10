@@ -141,6 +141,8 @@ public class Demonstration {
 
       this.taskModel.isEquivalent();
 
+      internalTaskQ();
+
       return this.taskModel;
    }
 
@@ -1164,6 +1166,16 @@ public class Demonstration {
       taskModel = new TaskModel();
       if ( this.externalTaskModel != null ) {
          learnedTaskmodel();
+      }
+   }
+
+   /**
+    * Creates questions for all internal tasks.
+    */
+   void internalTaskQ () {
+      for (TaskClass task : taskModel.getTaskClasses()) {
+         if ( task.getDecompositions().size() > 1 )
+            task.getQuestion(taskModel);
       }
    }
 

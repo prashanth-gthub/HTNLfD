@@ -17,7 +17,6 @@ public class DomManipulation {
    private DocumentBuilder builder;
 
    private Document document;
-   Properties properties = new Properties();
 
    /**
     * Instantiates a new dom manipulation.
@@ -39,7 +38,7 @@ public class DomManipulation {
     * Builds the dom.
     */
    public Node buildDOM (TaskModel taskmodel) {
-      return taskmodel.toNode(document,properties);
+      return taskmodel.toNode(document);
    }
 
    /**
@@ -95,7 +94,7 @@ public class DomManipulation {
 
          Document doc = builder.newDocument();
          DOMSource domSource = new DOMSource(doc);
-         taskmodel.toNode(doc,properties);
+         taskmodel.toNode(doc);
 
          transformer.transform(domSource, new StreamResult(stream));
       } catch (TransformerConfigurationException e) {
@@ -116,7 +115,7 @@ public class DomManipulation {
 
       try (FileOutputStream fileOutputStream = new FileOutputStream(
             demonstrationFile, false)) {
-         for(Entry<Object, Object> property:properties.entrySet()){
+         for(Entry<Object, Object> property:TaskModel.properties.entrySet()){
             byte[] contentInBytes = ((String)property.getKey()+" = " + (String)property.getValue()+"\n").getBytes();            
             fileOutputStream.write(contentInBytes);
          }
