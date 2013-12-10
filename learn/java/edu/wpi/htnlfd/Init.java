@@ -168,11 +168,11 @@ public class Init {
       load(disco);
 
    }
-   
-   
-   public static void answerQuestion (Disco disco, String taskName, String input) throws Exception{
 
-      learnedTaskmodel = demonstration.answerQuestion(taskName,input);
+   public static void answerQuestion (Disco disco, String taskName, String input)
+         throws Exception {
+
+      learnedTaskmodel = demonstration.answerQuestion(taskName, input);
       load(disco);
    }
 
@@ -200,8 +200,10 @@ public class Init {
       DOM.writeDOM(fileName, learnedTaskmodel);
       demonstration.readDOM(disco, fileName);
    }
-   public static void printTasks(){
-      for(edu.wpi.htnlfd.model.TaskClass task:learnedTaskmodel.getTaskClasses()){
+
+   public static void printTasks () {
+      for (edu.wpi.htnlfd.model.TaskClass task : learnedTaskmodel
+            .getTaskClasses()) {
          System.out.println(task.getId());
       }
    }

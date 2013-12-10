@@ -133,7 +133,7 @@ public class DecompositionClass extends TaskModel.Member {
          stepNames = new ArrayList<String>();
       }
       steps.put(name, step);
-      if(afterStep == null){
+      if ( afterStep == null ) {
          stepNames.add(0, name);
          return;
       }
@@ -143,7 +143,7 @@ public class DecompositionClass extends TaskModel.Member {
             break;
          }
       }
-      
+
    }
 
    public void removeStep (String name) {
@@ -613,12 +613,11 @@ public class DecompositionClass extends TaskModel.Member {
 
       List<Object[]> temp = findParents(parentTask, parentStep, parentSubtask,
             taskModel);
-      if(temp.size()>0){
+      if ( temp.size() > 0 ) {
          parentTask = (TaskClass) temp.get(temp.size() - 1)[0];
          parentSubtask = (DecompositionClass) temp.get(temp.size() - 1)[1];
          parentStep = (Entry<String, Step>) temp.get(temp.size() - 1)[2];
-      }
-      else{
+      } else {
          return null;
       }
 
@@ -865,7 +864,7 @@ public class DecompositionClass extends TaskModel.Member {
       }
       return null;
    }
-   
+
    public Entry<String, Binding> getBinding (String value) {
       for (Entry<String, Binding> binding : this.getBindings().entrySet()) {
          if ( binding.getValue().getValue().equals(value) ) {
@@ -874,7 +873,7 @@ public class DecompositionClass extends TaskModel.Member {
       }
       return null;
    }
-   
+
    /**
     * Checks whether one step is before another or not.
     */

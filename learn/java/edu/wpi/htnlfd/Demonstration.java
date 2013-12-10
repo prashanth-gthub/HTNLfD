@@ -112,35 +112,29 @@ public class Demonstration {
 
       // Graph graph = Graph.getGraph(taskName);
 
-       
       // graph.addGraph(this,task,taskModel, newTask);
       // graph.printGraph();
       if ( task != null ) {
 
          Graph graph = new Graph();
          newTask.setId("Temp");
-         graph.buildTree (task, newTask, taskModel,this);
-         
+         graph.buildTree(task, newTask, taskModel, this);
+
          // String applicable = KB.getApplicable(task, newTask);
 
-        /* String input = defaultInputName;
-         String applicable = "!this." + input;
-         if ( task.getDecompositions().get(0).getApplicable() == null ) {
-            task.getDecompositions().get(0).setApplicable("this." + input);
-         }
-
-         TaskClass.Input inputC = task.new Input(input, "boolean", null);
-         task.addInput(inputC);
-
-         addAlternativeRecipe(newTask, applicable, task);
-         // askQuestion(disco);
-         */
+         /*
+          * String input = defaultInputName; String applicable = "!this." +
+          * input; if ( task.getDecompositions().get(0).getApplicable() == null
+          * ) { task.getDecompositions().get(0).setApplicable("this." + input);
+          * } TaskClass.Input inputC = task.new Input(input, "boolean", null);
+          * task.addInput(inputC); addAlternativeRecipe(newTask, applicable,
+          * task); // askQuestion(disco);
+          */
          task.changeNameSpace(newTask);
-         
 
       } else {
          this.taskModel.add(newTask);
-         //optionals(this.taskModel);
+         // optionals(this.taskModel);
       }
 
       // inputTransformation.generalizeInput(this.taskModel);
@@ -292,8 +286,7 @@ public class Demonstration {
          }
 
          Map<String, Binding> bindChange = new HashMap<String, Binding>();
-         Map<String, String> changed =
-               new HashMap<String, String>();
+         Map<String, String> changed = new HashMap<String, String>();
 
          for (TaskClass.Output out : newTask.getDeclaredOutputs()) {
             String outputName = task.getDecompositions().get(1).getId() + "_"
@@ -316,7 +309,7 @@ public class Demonstration {
          }
          for (TaskClass.Input in : newTask.getDeclaredInputs()) {
             String inputName = task.getDecompositions().get(1).getId() + "_"
-               + in.getName();
+               + in.getName();//
 
             for (Entry<String, Binding> binding : task.getDecompositions()
                   .get(1).getBindings().entrySet()) {
@@ -381,8 +374,8 @@ public class Demonstration {
       List<Object[]> parents = parentSubtask.findParents(parentTask, null,
             parentSubtask, taskModel);
 
-      this.inputTransformation.transferBottomUp(parents, slotName, slotType,
-            modified, type);
+      String lastInputName = this.inputTransformation.transferBottomUp(parents,
+            slotName, slotType, modified, type);
 
       if ( type && parents != null && parents.size() != 0 ) {
 
@@ -393,9 +386,9 @@ public class Demonstration {
          Entry<String, Step> step = (Entry<String, Step>) parents.get(parents
                .size() - 1)[2];
 
-         subtask.addBinding("$this." + step.getKey() + "_" + slotName,
-               subtask.new Binding(step.getKey() + "_" + slotName, "this",
-                     binding, DecompositionClass.Type.Constant));
+         subtask.addBinding("$this." + lastInputName,
+               subtask.new Binding(lastInputName, "this", binding,
+                     DecompositionClass.Type.Constant));
 
          return true;
 

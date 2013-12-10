@@ -14,8 +14,9 @@ public class InputTransformation {
     * 
     * @param parents the parents (TaskClass, DecompositionClass, Step)
     * @param type the type: Input or Output
+    * @return
     */
-   void transferBottomUp (List<Object[]> parents, String slotName,
+   String transferBottomUp (List<Object[]> parents, String slotName,
          String slotType, String modified, boolean type) {
       for (Object[] parent : parents) {
          TaskClass task = (TaskClass) (parent[0]);
@@ -32,6 +33,9 @@ public class InputTransformation {
             subtask.addBinding("$" + step.getKey() + "." + slotName,
                   subtask.new Binding(inputPar, step.getKey(), "$this."
                      + inputPar, DecompositionClass.Type.InputInput));
+
+            slotName = inputPar;
+            modified = step.getKey() + "_" + modified;
          } else {
             String OutputPar = step.getKey() + "_" + slotName;
             TaskClass.Output outputCC = task.new Output(OutputPar, slotType);
@@ -40,8 +44,10 @@ public class InputTransformation {
             subtask.addBinding("$this." + OutputPar, subtask.new Binding(
                   OutputPar, "this", "$" + step.getKey() + "." + slotName,
                   DecompositionClass.Type.OutputOutput));
+            slotName = OutputPar;
          }
       }
+      return slotName;
 
    }
 

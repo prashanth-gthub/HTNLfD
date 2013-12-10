@@ -8,9 +8,11 @@ import edu.wpi.htnlfd.model.DecompositionClass.Step;
 
 public class Graph {
    public Node root;
+
    public Demonstration demonstration;
 
-   public void buildTree (TaskClass task, TaskClass newTask, TaskModel taskModel, Demonstration demonstration) {
+   public void buildTree (TaskClass task, TaskClass newTask,
+         TaskModel taskModel, Demonstration demonstration) {
       this.demonstration = demonstration;
       this.root = new Node(null, NType.Root);
       getTree(task, root);
@@ -18,7 +20,7 @@ public class Graph {
       getTree(newTask, demonstrationRoot);
       List<Node> demonstrationNodes = demonstrationRoot.evaluate().get(0);
       mergable(root, demonstrationNodes, taskModel, demonstrationRoot);
-      
+
    }
 
    public Node getTree (TaskClass task, Node root) {
@@ -44,34 +46,27 @@ public class Graph {
    public Node oneNode (DecompositionClass dec, Node root) {
       for (String stepName : dec.getStepNames()) {
          Step step = dec.getStep(stepName);
-         if ( step.getType().isInternal() ) {
-            Node newRoot = null;
-            if ( step.getMinOccurs() != 0 ) {
-               newRoot = new Node(null, NType.Required);
-               newRoot.step = step;
-               newRoot.stepName = stepName;
-            } else {
-               newRoot = new Node(null, NType.Optional);
-               newRoot.step = step;
-               newRoot.stepName = stepName;
-            }
-
-            getTree(step.getType(), newRoot);
-            root.children.add(newRoot);
+         /*
+          * if ( step.getType().isInternal() ) { Node newRoot = null; if (
+          * step.getMinOccurs() != 0 ) { newRoot = new Node(null,
+          * NType.Required); newRoot.step = step; newRoot.stepName = stepName; }
+          * else { newRoot = new Node(null, NType.Optional); newRoot.step =
+          * step; newRoot.stepName = stepName; } getTree(step.getType(),
+          * newRoot); root.children.add(newRoot); } else {
+          */
+         Node newRoot = null;
+         if ( step.getMinOccurs() != 0 ) {
+            newRoot = new Node(null, NType.Required);
+            newRoot.step = step;
+            newRoot.stepName = stepName;
          } else {
-            Node newRoot = null;
-            if ( step.getMinOccurs() != 0 ) {
-               newRoot = new Node(null, NType.Required);
-               newRoot.step = step;
-               newRoot.stepName = stepName;
-            } else {
-               newRoot = new Node(null, NType.Optional);
-               newRoot.step = step;
-               newRoot.stepName = stepName;
-            }
-            newRoot.parent = root;
-            root.children.add(newRoot);
+            newRoot = new Node(null, NType.Optional);
+            newRoot.step = step;
+            newRoot.stepName = stepName;
          }
+         newRoot.parent = root;
+         root.children.add(newRoot);
+         // }
       }
       return null;
    }
@@ -101,6 +96,8 @@ public class Graph {
 
    boolean mergable (Node root, List<Node> demonstration, TaskModel taskModel,
          Node demonstrationRoot) {
+
+      boolean retMerged = true;
       List<ArrayList<Node>> nodesList = root.evaluate();
 
       boolean equal = statisfiable(nodesList, demonstration, taskModel);
@@ -136,53 +133,49 @@ public class Graph {
       Collections.sort(nodesLCS);
 
       for (Pair pa : nodesLCS) {
-         // We will have just one level alternative recipe
+
          if ( root.typeOfChildren == Node.CType.Alter ) {
-            boolean merged = false;
-            for (Node child : root.children) {
-               List<Node> newNodes1 = new ArrayList<Node>();
-               List<Node> newNodes2 = new ArrayList<Node>();
-               getLCS(pa.nodes, demonstration, taskModel, newNodes1,
-                     newNodes2);
-               if ( !merge(child, demonstration, newNodes1, newNodes2,
-                     pa.nodes, taskModel) ) {
-                  merged = false;
-               } else {
-                  merged = true;
-                  break;
-               }
+
+            List<Node> newNodes1 = new ArrayList<Node>();
+            List<Node> newNodes2 = new ArrayList<Node>();
+            getLCS(pa.nodes, demonstration, taskModel, newNodes1, newNodes2);
+            if ( !merge(root, demonstration, newNodes1, newNodes2, pa.nodes,
+                  taskModel) ) {
+               retMerged = false;
+            } else {
+               retMerged = true;
+               break;
             }
-            if ( !merged ) {
-               root.children.add(demonstrationRoot);
-               demonstrationRoot.parent = root;
-            }
+
          } else if ( root.typeOfChildren == Node.CType.Required ) {
 
             List<Node> newNodes1 = new ArrayList<Node>();
             List<Node> newNodes2 = new ArrayList<Node>();
-            getLCS(pa.nodes, demonstration, taskModel, newNodes1,
-                  newNodes2);
+            getLCS(pa.nodes, demonstration, taskModel, newNodes1, newNodes2);
 
             if ( !merge(root, demonstration, newNodes1, newNodes2, pa.nodes,
                   taskModel) ) {
-               Node newRoot = new Node(null, NType.Root);
-               this.root = newRoot;
-               newRoot.children.add(root);
-               root.typeOfNode = null;
-               root.parent = newRoot;
-               newRoot.children.add(demonstrationRoot);
-               return false;
+               /*
+                * Node newRoot = new Node(null, NType.Root); this.root =
+                * newRoot; newRoot.children.add(root); root.typeOfNode = null;
+                * root.parent = newRoot;
+                * newRoot.children.add(demonstrationRoot);
+                */
+               retMerged = false;
+            } else {
+               retMerged = true;
+               break;
             }
          }
       }
 
-      return false;
+      return retMerged;
    }
 
    private boolean merge (Node root, List<Node> demonstration,
          List<Node> newNodes1, List<Node> newNodes2, ArrayList<Node> nodes,
          TaskModel taskModel) {
-      boolean merged = false;
+      boolean merged = true;
 
       List<ArrayList<Node>> eval = root.giveSeparateNodes();
 
@@ -273,7 +266,7 @@ public class Graph {
       while (secondD <= indicesDem.length - 1
          && secondM <= indicesMod.length - 1) {
          boolean set = false;
-         for (int i = secondD+1; i < indicesDem.length; i++) {
+         for (int i = secondD + 1; i < indicesDem.length; i++) {
 
             int inD = indicesDem[i];
 
@@ -283,11 +276,11 @@ public class Graph {
                break;
             }
          }
-         if(!set){
+         if ( !set ) {
             secondD = indicesDem.length;
          }
          set = false;
-         for (int j = secondM+1; j < indicesMod.length; j++) {
+         for (int j = secondM + 1; j < indicesMod.length; j++) {
             int inM = indicesMod[j];
             if ( inM == 1 ) {
                secondM = j;
@@ -295,59 +288,64 @@ public class Graph {
                break;
             }
          }
-         if(!set){
+         if ( !set ) {
             secondM = indicesMod.length;
          }
-        
-         if(firstM +1 != secondM && firstD + 1 != secondD){
-            
-            //alternative
+
+         if ( firstM + 1 != secondM && firstD + 1 != secondD ) {
+
+            // alternative
             List<Step> steps = new ArrayList<Step>();
-            
+
             steps = new ArrayList<Step>();
-            for(int m=firstM+1;m<secondM;m++){
-                  steps.add(nodes.get(m).step);
+            for (int m = firstM + 1; m < secondM; m++) {
+               steps.add(nodes.get(m).step);
             }
-            TaskClass newTask2 = nodes.get(firstM).step.getDecompositionClass().getGoal().
-            addInternalTask (taskModel,nodes.get(firstM).step.getDecompositionClass() , steps) ;
+            TaskClass newTask2 = nodes.get(firstM + 1).step
+                  .getDecompositionClass()
+                  .getGoal()
+                  .addInternalTask(taskModel,
+                        nodes.get(firstM + 1).step.getDecompositionClass(),
+                        steps);
             taskModel.add(newTask2);
-            
+
             steps = new ArrayList<Step>();
-            for(int m=firstD+1;m<secondD;m++){
-                  steps.add(demonstration.get(m).step);
+            for (int m = firstD + 1; m < secondD; m++) {
+               steps.add(demonstration.get(m).step);
             }
-            TaskClass newTask = nodes.get(firstM).step.getDecompositionClass().getGoal().
-            addInternalTask (taskModel,nodes.get(firstM).step.getDecompositionClass() , steps) ;
-            //taskModel.add(newTask);
+            TaskClass newTask = nodes.get(firstM + 1).step
+                  .getDecompositionClass()
+                  .getGoal()
+                  .addInternalTask(taskModel,
+                        nodes.get(firstM + 1).step.getDecompositionClass(),
+                        steps);
+            // taskModel.add(newTask);
 
             this.demonstration.addAlternativeRecipe(newTask, null, newTask2);
-            
-            
+
             System.out.print("1111\n");
-         }
-         else if(firstM +1 == secondM && firstD + 1 != secondD){
-            //optional
+         } else if ( firstM + 1 == secondM && firstD + 1 != secondD ) {
+            // optional
             int where = firstM;
             Node retnode = nodes.get(where);
-            for(int i=firstD + 1;i<secondD;i++){
+            for (int i = firstD + 1; i < secondD; i++) {
                demonstration.get(i).typeOfNode = NType.Optional;
                demonstration.get(i).step.setMinOccurs(0);
-               bfs ();
-               retnode = demonstration.get(i).addOptionalStep(retnode,CType.Required,taskModel);
-               bfs ();               
+               bfs();
+               retnode = demonstration.get(i).addOptionalStep(retnode,
+                     CType.Required, taskModel);
+               bfs();
             }
-            
+
             System.out.print("2222\n");
-         }
-         else if(firstD +1 == secondD && firstM + 1 != secondM){
-            //optional
-            for(int i=firstM + 1;i<secondM;i++){
+         } else if ( firstD + 1 == secondD && firstM + 1 != secondM ) {
+            // optional
+            for (int i = firstM + 1; i < secondM; i++) {
                nodes.get(i).typeOfNode = NType.Optional;
                nodes.get(i).step.setMinOccurs(0);
             }
             System.out.print("3333\n");
-         }
-         else if(firstD +1 == secondD && firstM + 1 == secondM){
+         } else if ( firstD + 1 == secondD && firstM + 1 == secondM ) {
             ;
             System.out.print("4444\n");
          }
@@ -423,7 +421,7 @@ public class Graph {
       }
       return LCS;
    }
-   
+
    public void bfs () {
 
       // System.out.println("...........................");
