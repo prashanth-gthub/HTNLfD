@@ -178,13 +178,14 @@ public class Init {
 
    /**
     * Prints the learned taskmodel.
+    * @throws IOException 
     */
-   public static void print (PrintStream stream) throws TransformerException {
+   public static void print (PrintStream stream) throws TransformerException, IOException {
       DOM.writeDOM(stream, learnedTaskmodel);
    }
 
    public static void print () throws TransformerException,
-         FileNotFoundException {
+         IOException {
       // C:\Users\User\AppData\Local\Temp\Console.test
       PrintStream stream = new PrintStream(System.out);
       print(stream);
@@ -199,6 +200,8 @@ public class Init {
       // engine.load(learnedTaskmodel.toNode(), null);
       DOM.writeDOM(fileName, learnedTaskmodel);
       demonstration.readDOM(disco, fileName);
+      
+
    }
 
    public static void printTasks () {

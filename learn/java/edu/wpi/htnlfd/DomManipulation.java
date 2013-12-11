@@ -1,6 +1,7 @@
 package edu.wpi.htnlfd;
 
 import edu.wpi.htnlfd.model.*;
+import edu.wpi.htnlfd.question.AskQuestion;
 import org.w3c.dom.*;
 import java.io.*;
 import java.util.Map.Entry;
@@ -61,7 +62,8 @@ public class DomManipulation {
          Transformer transformer = tf.newTransformer();
 
          buildDOM(taskmodel);
-         writeProperties(fileName);
+         writeProperties(fileName,TaskModel.properties);
+         writeProperties("models\\Tell",AskQuestion.properties);
          // Adding indentation and omitting xml declaration
          transformer.setOutputProperty(OutputKeys.INDENT, "yes");
          transformer.setOutputProperty(
@@ -78,9 +80,10 @@ public class DomManipulation {
 
    /**
     * Writes dom to specified stream.
+    * @throws IOException 
     */
    public void writeDOM (PrintStream stream, TaskModel taskmodel)
-         throws TransformerException {
+         throws TransformerException, IOException {
       try {
          TransformerFactory tf = TransformerFactory.newInstance();
          Transformer transformer;
@@ -95,7 +98,9 @@ public class DomManipulation {
          Document doc = builder.newDocument();
          DOMSource domSource = new DOMSource(doc);
          taskmodel.toNode(doc);
-
+                  
+         writeProperties("models\\Tell",AskQuestion.properties);
+         
          transformer.transform(domSource, new StreamResult(stream));
       } catch (TransformerConfigurationException e) {
          throw e;
@@ -108,14 +113,14 @@ public class DomManipulation {
    /**
     * Write properties file.
     */
-   public void writeProperties(String fileName) throws IOException{
+   public void writeProperties(String fileName, Properties properties) throws IOException{
       File demonstrationFile = new File(fileName+".properties");
       if ( !demonstrationFile.exists() )
          demonstrationFile.createNewFile();
 
       try (FileOutputStream fileOutputStream = new FileOutputStream(
             demonstrationFile, false)) {
-         for(Entry<Object, Object> property:TaskModel.properties.entrySet()){
+         for(Entry<Object, Object> property:properties.entrySet()){
             byte[] contentInBytes = ((String)property.getKey()+" = " + (String)property.getValue()+"\n").getBytes();            
             fileOutputStream.write(contentInBytes);
          }

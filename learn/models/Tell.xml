@@ -1,0 +1,16 @@
+<taskModel about="urn:disco.wpi.edu:htnlfd:tell" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+	
+  <!-- domain-independent utterances to tell learning system useful advice -->
+
+  <!-- example of a question whose answer is a physical object -->
+  <task id="TellAppCondition">
+    <input name="input" type="string"/>
+    <binding slot="$this.external" value="true"/>
+    <script>
+      // here is where you put code to set state in learning system
+      println("User told me: "+$this.input);
+	  Packages.edu.wpi.htnlfd.Init.addApplicable ($disco, "PlaceDishes", "placeDishes1", "this.input1");	  
+    </script>
+  </task>
+	
+</taskModel>

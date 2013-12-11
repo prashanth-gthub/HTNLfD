@@ -1,5 +1,6 @@
 cd models
 load SetTableDemonstration.xml
+load Tell.xml
 
 task Demonstration
 task Place / DinnerPlate.DP1 / new Location(0,0,0) / Table.T1
@@ -58,7 +59,7 @@ done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
 print PlaceSilverware urn:disco.wpi.edu:htnlfd:setTable7
 print urn:disco.wpi.edu:htnlfd:setTable7 _Temp1
-print urn:disco.wpi.edu:htnlfd:setTable7 _Temp2
+print _Temp2
 
 task Demonstration
 task Place /  WaterGlass.WaG1 / new Location(0,1,0) /  DinnerPlate.DP1

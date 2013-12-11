@@ -9,6 +9,7 @@ import edu.wpi.htnlfd.model.DecompositionClass.Step;
 import edu.wpi.htnlfd.model.TaskClass.Input;
 import edu.wpi.htnlfd.model.TaskClass.Output;
 import edu.wpi.htnlfd.model.DecompositionClass.*;
+import edu.wpi.htnlfd.question.AskQuestion;
 //import edu.wpi.htnlfd.table.TableKnowledgeBase;
 import java.io.IOException;
 import java.util.*;
@@ -28,6 +29,8 @@ public class Demonstration {
    // private KnowledgeBase KB = new TableKnowledgeBase();
 
    private String defaultInputName = "input1";
+
+   AskQuestion askQuestion = new AskQuestion();
 
    List<Pair> demonstrations = new ArrayList<Pair>();
 
@@ -142,6 +145,8 @@ public class Demonstration {
       this.taskModel.isEquivalent();
 
       internalTaskQ();
+
+      LearnAgent.question = askQuestion.Ask(taskModel);
 
       return this.taskModel;
    }
@@ -649,6 +654,7 @@ public class Demonstration {
     */
    public void readDOM (Disco disco, String fileName) {
       this.externalTaskModel = disco.getInteraction().load(fileName + ".xml");
+      disco.getInteraction().load("Tell.xml"); ///????????
    }
 
    /**
@@ -1178,5 +1184,6 @@ public class Demonstration {
             task.getQuestion(taskModel);
       }
    }
+
 
 }
