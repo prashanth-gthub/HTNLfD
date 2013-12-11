@@ -17,7 +17,7 @@ public class AskAppCondition extends Question {
                if ( dec.getApplicable() == null || dec.getApplicable() == "" ) {
                   this.question = "What is" + task.getId() + " " + dec.getId()
                      + " applicability condition?";
-                  AskQuestion.properties.put("Ask.How(TellAppCondition)@format", "What is "
+                  AskQuestion.properties.put("TellAppCondition@format", "What is "
                         + task.getQname().getNamespaceURI() + ":" + task.getId() + "'s "
                         + "applicability condition?");
                   return this;
