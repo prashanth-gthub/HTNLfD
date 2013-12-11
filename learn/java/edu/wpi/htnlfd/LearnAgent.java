@@ -37,7 +37,7 @@ public class LearnAgent extends Agent {
          // model and Disco
          once = false;
          Disco disco = interaction.getDisco();
-         if (question!=null && (question instanceof AskAppCondition) ){
+         if ( question != null && (question instanceof AskAppCondition) ) {
             return Agenda.newItem(
                   Propose.Should.newInstance(disco, true,
                         disco.getTaskClass("TellAppCondition").newInstance()),
@@ -64,5 +64,6 @@ public class LearnAgent extends Agent {
       }
       return super.respondIf(interaction, guess);
    }
+   
 
 }

@@ -654,7 +654,7 @@ public class Demonstration {
     */
    public void readDOM (Disco disco, String fileName) {
       this.externalTaskModel = disco.getInteraction().load(fileName + ".xml");
-      disco.getInteraction().load("Tell.xml"); ///????????
+      disco.getInteraction().load("Tell.xml"); ///???
    }
 
    /**

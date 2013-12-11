@@ -63,7 +63,7 @@ public class DomManipulation {
 
          buildDOM(taskmodel);
          writeProperties(fileName,TaskModel.properties);
-         writeProperties("models\\Tell",AskQuestion.properties);
+         writeProperties("models\\Tell",AskQuestion.properties); ///???
          // Adding indentation and omitting xml declaration
          transformer.setOutputProperty(OutputKeys.INDENT, "yes");
          transformer.setOutputProperty(
@@ -99,7 +99,7 @@ public class DomManipulation {
          DOMSource domSource = new DOMSource(doc);
          taskmodel.toNode(doc);
                   
-         writeProperties("models\\Tell",AskQuestion.properties);
+         writeProperties("models\\Tell",AskQuestion.properties); ///???
          
          transformer.transform(domSource, new StreamResult(stream));
       } catch (TransformerConfigurationException e) {

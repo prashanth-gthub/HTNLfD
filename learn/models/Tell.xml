@@ -4,12 +4,15 @@
 
   <!-- example of a question whose answer is a physical object -->
   <task id="TellAppCondition">
+	<input name="taskName" type="string"/>
+	<input name="decompositionName" type="string"/>
+	<input name="condition" type="string"/>
     <input name="input" type="string"/>
     <binding slot="$this.external" value="true"/>
     <script>
       // here is where you put code to set state in learning system
       println("User told me: "+$this.input);
-	  Packages.edu.wpi.htnlfd.Init.addApplicable ($disco, "PlaceDishes", "placeDishes1", "this.input1");	  
+	  Packages.edu.wpi.htnlfd.Init.addApplicable ($disco, taskName, decompositionName, condition);	  
     </script>
   </task>
 	
