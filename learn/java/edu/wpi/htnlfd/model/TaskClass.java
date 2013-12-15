@@ -969,6 +969,8 @@ public class TaskClass extends TaskModel.Member {
 
       }
 
+      taskDecomposition.getGoal().changeNameSpace(taskI);
+      
       subtask.addOrdering(taskModel);
 
       return taskI;

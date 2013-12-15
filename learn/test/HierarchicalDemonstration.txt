@@ -45,27 +45,32 @@ print PlaceDishes urn:disco.wpi.edu:htnlfd:setTable5
 task Demonstration
 task Place / Spoon.S1 / new Location(-1,0,0) /  DinnerPlate.DP1
 task Place /  Fork.F2 / new Location(1,0,0) /  DinnerPlate.DP1
+task Place / WaterGlass.WaG1 / new Location(0,1,0) / DinnerPlate.DP1
 task Place /  Knife.K1 / new Location(-2,0,0) /  DinnerPlate.DP1
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
-print PlaceSilverware urn:disco.wpi.edu:htnlfd:setTable6
-print _Temp1
+
 
 task Demonstration
-task Place / Spoon.S1 / new Location(-1,0,0) /  DinnerPlate.DP1
+task Place /  WaterGlass.WaG1 / new Location(0,1,0) /  DinnerPlate.DP1
 task Place /  Fork.F3 / new Location(1,0,0) /  DinnerPlate.DP1
 task Place /  Knife.K1 / new Location(-2,0,0) /  DinnerPlate.DP1
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
-print PlaceSilverware urn:disco.wpi.edu:htnlfd:setTable7
-print urn:disco.wpi.edu:htnlfd:setTable7 _Temp1
-print _Temp2
+
+
+execute TellAppCondition / "_Temp1" / "_Temp11" / "$this.input1"
+execute TellAppCondition / "_Temp1" / "_Temp12" / "!$this.input1"
+
+print PlaceGlasses urn:disco.wpi.edu:htnlfd:setTable7
+print SetTable urn:disco.wpi.edu:htnlfd:setTable7
+
 
 task Demonstration
 task Place /  WaterGlass.WaG1 / new Location(0,1,0) /  DinnerPlate.DP1
 task Place /  WineGlass.WG1 / new Location(0,-1,0) /  DinnerPlate.DP1
 done Demonstration
-eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceGlasses")
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
 print PlaceGlasses urn:disco.wpi.edu:htnlfd:setTable8
 print SetTable urn:disco.wpi.edu:htnlfd:setTable8
 

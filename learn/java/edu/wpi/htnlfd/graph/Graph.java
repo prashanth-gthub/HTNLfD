@@ -23,7 +23,10 @@ public class Graph {
       Node demonstrationRoot = new Node(null, NType.Root);
       getTree(newTask, demonstrationRoot);
       List<Node> demonstrationNodes = demonstrationRoot.evaluate().get(0);
-      mergable(root, demonstrationNodes, taskModel, demonstrationRoot);
+      boolean merged = mergable(root, demonstrationNodes, taskModel, demonstrationRoot);
+      if(!merged){
+         demonstration.addAlternativeRecipe(newTask, null, task);
+      }
 
    }
 
@@ -35,12 +38,12 @@ public class Graph {
       if ( task.getDecompositions().size() > 1 ) {
          for (DecompositionClass dec : task.getDecompositions()) {
 
-            Node newRoot = null;
-            newRoot = new Node(null, NType.Required);
-
-            oneNode(dec, root);
-            root.children.add(newRoot);
+            Node newRoot = new Node(null, NType.Required);
+            oneNode(dec, newRoot);
+            newRoot.typeOfChildren = CType.Required;
             root.typeOfChildren = CType.Alter;
+            root.children.add(newRoot);
+
          }
       } else {
          DecompositionClass dec = task.getDecompositions().get(0);
@@ -56,27 +59,36 @@ public class Graph {
    public Node oneNode (DecompositionClass dec, Node root) {
       for (String stepName : dec.getStepNames()) {
          Step step = dec.getStep(stepName);
-         /*
-          * if ( step.getType().isInternal() ) { Node newRoot = null; if (
-          * step.getMinOccurs() != 0 ) { newRoot = new Node(null,
-          * NType.Required); newRoot.step = step; newRoot.stepName = stepName; }
-          * else { newRoot = new Node(null, NType.Optional); newRoot.step =
-          * step; newRoot.stepName = stepName; } getTree(step.getType(),
-          * newRoot); root.children.add(newRoot); } else {
-          */
-         Node newRoot = null;
-         if ( step.getMinOccurs() != 0 ) {
-            newRoot = new Node(null, NType.Required);
-            newRoot.step = step;
-            newRoot.stepName = stepName;
+
+         if ( step.getType().isInternal() ) {
+            Node newRoot = null;
+            if ( step.getMinOccurs() != 0 ) {
+               newRoot = new Node(null, NType.Required);
+               newRoot.step = step;
+               newRoot.stepName = stepName;
+            } else {
+               newRoot = new Node(null, NType.Optional);
+               newRoot.step = step;
+               newRoot.stepName = stepName;
+            }
+            getTree(step.getType(), newRoot);
+            newRoot.parent = root;
+            root.children.add(newRoot);
          } else {
-            newRoot = new Node(null, NType.Optional);
-            newRoot.step = step;
-            newRoot.stepName = stepName;
+
+            Node newRoot = null;
+            if ( step.getMinOccurs() != 0 ) {
+               newRoot = new Node(null, NType.Required);
+               newRoot.step = step;
+               newRoot.stepName = stepName;
+            } else {
+               newRoot = new Node(null, NType.Optional);
+               newRoot.step = step;
+               newRoot.stepName = stepName;
+            }
+            newRoot.parent = root;
+            root.children.add(newRoot);
          }
-         newRoot.parent = root;
-         root.children.add(newRoot);
-         // }
       }
       return null;
    }
@@ -147,43 +159,24 @@ public class Graph {
          int LCS = getLCS(nodes, demonstration, taskModel, newNodes1, newNodes2);
          nodesLCS.add(new Pair((ArrayList<Node>) nodes, LCS));
       }
-      Collections.sort(nodesLCS);
+      Collections.sort(nodesLCS,Collections.reverseOrder());
 
+      if(nodesLCS.size() == 0 || nodesLCS.get(0).LCS == 0){
+         return false;
+      }
       for (Pair pa : nodesLCS) {
 
-         if ( root.typeOfChildren == Node.CType.Alter ) {
-
-            List<Node> newNodes1 = new ArrayList<Node>();
-            List<Node> newNodes2 = new ArrayList<Node>();
-            getLCS(pa.nodes, demonstration, taskModel, newNodes1, newNodes2);
-            if ( !merge(root, demonstration, newNodes1, newNodes2, pa.nodes,
-                  taskModel) ) {
-               retMerged = false;
-            } else {
-               retMerged = true;
-               break;
-            }
-
-         } else if ( root.typeOfChildren == Node.CType.Required ) {
-
-            List<Node> newNodes1 = new ArrayList<Node>();
-            List<Node> newNodes2 = new ArrayList<Node>();
-            getLCS(pa.nodes, demonstration, taskModel, newNodes1, newNodes2);
-
-            if ( !merge(root, demonstration, newNodes1, newNodes2, pa.nodes,
-                  taskModel) ) {
-               /*
-                * Node newRoot = new Node(null, NType.Root); this.root =
-                * newRoot; newRoot.children.add(root); root.typeOfNode = null;
-                * root.parent = newRoot;
-                * newRoot.children.add(demonstrationRoot);
-                */
-               retMerged = false;
-            } else {
-               retMerged = true;
-               break;
-            }
+         List<Node> newNodes1 = new ArrayList<Node>();
+         List<Node> newNodes2 = new ArrayList<Node>();
+         getLCS(pa.nodes, demonstration, taskModel, newNodes1, newNodes2);
+         if ( !merge(root, demonstration, newNodes1, newNodes2, pa.nodes,
+               taskModel) ) {
+            retMerged = false;
+         } else {
+            retMerged = true;
+            break;
          }
+
       }
 
       return retMerged;
@@ -197,10 +190,10 @@ public class Graph {
          TaskModel taskModel) {
       boolean merged = true;
 
-      List<ArrayList<Node>> eval = root.giveSeparateNodes();
+      //List<ArrayList<Node>> eval = root.giveSeparateNodes();
 
-      ArrayList<Node> evl = null;
-      for (ArrayList<Node> ev : eval) {
+      ArrayList<Node> evl = nodes;
+      /*for (ArrayList<Node> ev : eval) {
          ArrayList<Node> copyEv = new ArrayList<Node>(ev);
          Iterator<Node> next = copyEv.iterator();
          while (next.hasNext()) {
@@ -214,7 +207,10 @@ public class Graph {
                break;
             }
          }
-      }
+         if(evl!=null){
+            break;
+         }
+      }*/
 
       int[] indices = new int[newNodes2.size()];
 
@@ -311,8 +307,13 @@ public class Graph {
          if ( !set ) {
             secondM = indicesMod.length;
          }
+         
+         if((firstM == -1 && secondM == indicesMod.length) ||
+               (firstD == -1 && secondD == indicesDem.length)){
+            return false;
+         }
 
-         if ( firstM + 1 != secondM && firstD + 1 != secondD ) {
+         else if ( firstM + 1 != secondM && firstD + 1 != secondD ) {
 
             // alternative
             List<Step> steps = new ArrayList<Step>();

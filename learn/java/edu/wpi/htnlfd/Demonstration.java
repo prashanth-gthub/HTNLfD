@@ -144,9 +144,9 @@ public class Demonstration {
 
       this.taskModel.isEquivalent();
 
-      internalTaskQ();
+      //internalTaskQ();
 
-      LearnAgent.question = askQuestion.Ask(taskModel);
+      //LearnAgent.question = askQuestion.Ask(taskModel);
 
       return this.taskModel;
    }
@@ -212,18 +212,23 @@ public class Demonstration {
                   && ((in1.getModified() == null && in2.getModified() == null) || (in1
                         .getModified() != null && in2.getModified() != null)) ) {
                   Entry<String, Binding> bindValue = task.getDecompositions()
-                        .get(0).getBindingValue("this", in1.getName());
+                        .get(0).getBindingValue("this", in1.getName()); ////????
 
                   String value = null;
                   if ( bindValue != null ) {
                      value = bindValue.getValue().getValue();
                   }
-                  if ( value == null )
-                     value = newTask
-                           .getDecompositions()
-                           .get(0)
-                           .findValueInParents(taskModel, null, task,
-                                 task.getDecompositions().get(0), in1.getName());
+                  if ( value == null ){
+                     for(int tg=0;tg<task.getDecompositions().size()-1;tg++){
+                        value = newTask
+                              .getDecompositions()
+                              .get(0)
+                              .findValueInParents(taskModel, null, task,
+                                    task.getDecompositions().get(tg), in1.getName());
+                        if(value!=null)
+                           break;
+                     }
+                  }
                   if ( newTask.getDecompositions().get(0).getBindings()
                         .get("$this." + in2.getName()) != null
                      && newTask.getDecompositions().get(0).getBindings()
@@ -296,11 +301,10 @@ public class Demonstration {
          Map<String, String> changed = new HashMap<String, String>();
 
          for (TaskClass.Output out : newTask.getDeclaredOutputs()) {
-            String outputName = task.getDecompositions().get(1).getId() + "_"
+            String outputName = newTask.getDecompositions().get(0).getId() + "_"
                + out.getName();
 
-            for (Entry<String, Binding> binding : task.getDecompositions()
-                  .get(1).getBindings().entrySet()) {
+            for (Entry<String, Binding> binding : newTask.getDecompositions().get(0).getBindings().entrySet()) {
                if ( binding.getKey().equals("$this." + out.getName()) ) {
                   bindChange.put(binding.getKey(), binding.getValue());
                   changed.put(binding.getKey(), "$this." + outputName);
@@ -310,16 +314,15 @@ public class Demonstration {
             task.addOutput(outCC);
 
             // output
-            addSlotToParents(task, task.getDecompositions().get(1), taskModel,
+            addSlotToParents(task, newTask.getDecompositions().get(0), taskModel,
                   false, outputName, out.getType(), null, null);
 
          }
          for (TaskClass.Input in : newTask.getDeclaredInputs()) {
-            String inputName = task.getDecompositions().get(1).getId() + "_"
+            String inputName = newTask.getDecompositions().get(0).getId() + "_"
                + in.getName();//
 
-            for (Entry<String, Binding> binding : task.getDecompositions()
-                  .get(1).getBindings().entrySet()) {
+            for (Entry<String, Binding> binding : newTask.getDecompositions().get(0).getBindings().entrySet()) {
                if ( binding.getKey().equals("$this." + in.getName()) ) {
                   bindChange.put(binding.getKey(), binding.getValue());
                   changed.put(binding.getKey(), "$this." + inputName);
@@ -332,7 +335,7 @@ public class Demonstration {
             String modified = null;
             TaskClass.Output outputModified = null;
             if ( in.getModified() != null ) {
-               modified = task.getDecompositions().get(1).getId() + "_"
+               modified = newTask.getDecompositions().get(0).getId() + "_"
                   + in.getModified().getName();
                outputModified = task.getOutput(modified);
             }
@@ -340,16 +343,15 @@ public class Demonstration {
                   outputModified);
             inputCC.setOptional(true);
             task.addInput(inputCC);
-            String binding = task.getDecompositions().get(1).getBindings()
+            String binding = newTask.getDecompositions().get(0).getBindings()
                   .get("$this." + in.getName()).getValue();
 
             // input
-            boolean binded = addSlotToParents(task, task.getDecompositions()
-                  .get(1), taskModel, true, inputName, in.getType(), binding,
+            boolean binded = addSlotToParents(task, newTask.getDecompositions().get(0), taskModel, true, inputName, in.getType(), binding,
                   modified);
 
             if ( binded ) {
-               task.getDecompositions().get(1)
+               newTask.getDecompositions().get(0)
                      .removeBinding("$this." + in.getName());
             }
          }
@@ -365,6 +367,7 @@ public class Demonstration {
                            binding.getValue());
          }
 
+         task.changeNameSpace(newTask);
          return true;
       }
       return false;
@@ -788,7 +791,7 @@ public class Demonstration {
    }
 
    /**
-    * Makes the steps of a subtask completely ordered
+    * Makes the steps of a subtask totally ordered
     */
    public TaskModel setOrdered (String taskName, String subtaskId) {
 
@@ -801,6 +804,8 @@ public class Demonstration {
       for (Entry<String, Step> step : subtask.getSteps().entrySet()) {
          step.getValue().removeRequireds();
       }
+      
+      
 
       return taskModel;
    }
@@ -817,6 +822,8 @@ public class Demonstration {
       DecompositionClass subtask = task.getDecomposition(subtaskId);
       subtask.setApplicable(condition);
 
+      LearnAgent.question = askQuestion.Ask(taskModel);
+      
       return taskModel;
    }
 
@@ -830,6 +837,8 @@ public class Demonstration {
       TaskClass task = this.taskModel.getTaskClass(taskName);
       task.setPrecondition(precondition);
 
+      LearnAgent.question = askQuestion.Ask(taskModel);
+      
       return taskModel;
    }
 
@@ -845,6 +854,8 @@ public class Demonstration {
       task.setPostcondition(postcondition);
       task.setSufficient(sufficient);
 
+      LearnAgent.question = askQuestion.Ask(taskModel);
+      
       return taskModel;
    }
 
@@ -1179,10 +1190,10 @@ public class Demonstration {
     * Creates questions for all internal tasks.
     */
    void internalTaskQ () {
-      for (TaskClass task : taskModel.getTaskClasses()) {
+     /* for (TaskClass task : taskModel.getTaskClasses()) {
          if ( task.getDecompositions().size() > 1 )
             task.getQuestion(taskModel);
-      }
+      }*/
    }
 
 

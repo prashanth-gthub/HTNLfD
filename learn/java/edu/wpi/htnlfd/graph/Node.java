@@ -54,10 +54,21 @@ public class Node {
     * Evaluate nodes value.
     */
    public List<ArrayList<Node>> evaluate () {
-      ArrayList<Node> newNodes = new ArrayList<Node>();
+      
       List<ArrayList<Node>> nodeList = new ArrayList<ArrayList<Node>>();
-      nodeList.add(newNodes);
-      eval(this, newNodes, nodeList);
+      
+      if(this.typeOfChildren == CType.Alter){
+         for(Node child:this.children){
+            ArrayList<Node> newNodes = new ArrayList<Node>();
+            nodeList.add(newNodes);
+            eval(child, newNodes, nodeList);
+         }
+      }
+      else{
+         ArrayList<Node> newNodes = new ArrayList<Node>();
+         nodeList.add(newNodes);
+         eval(this, newNodes, nodeList);
+      }
       return nodeList;
    }
 
@@ -69,31 +80,63 @@ public class Node {
       if ( root.children.isEmpty() ) {
          return root;
       } else {
-         if ( typeOfChildren == CType.Required ) {
+         if ( root.typeOfChildren == CType.Required ) {
             for (Node child : root.children) {
-               Node ret = eval(child, nodes, nodeList);
-               if ( ret != null )
-                  nodes.add(ret);
+               //Node ret = eval(child, nodes, nodeList);
+               //if ( ret != null ){
+                  nodes.add(child);
+               //}
+                  /*for(ArrayList<Node> li:nodeList){
+                     li.add(ret);
+                  }*/
+               
             }
-         } else if ( typeOfChildren == CType.Alter ) {
+         } 
+         /*else if ( root.typeOfChildren == CType.Alter ) {
 
-            for (Node child : root.children) {
-               ArrayList<Node> newNodes = new ArrayList<Node>();
-               nodeList.add(newNodes);
-               Node ret = eval(child, newNodes, nodeList);
-               if ( ret != null )
-                  newNodes.add(ret);
+            int size = nodes.size();
+            
+            for (int ch=0;ch<root.children.size();ch++) {
+               Node child = root.children.get(ch);
+               
+               if(ch == 0){
+                  Node ret = eval(child, nodes, nodeList);
+                  if ( ret != null )
+                     nodes.add(ret);
+               }
+               else {
+                  ArrayList<Node> newNodes = new ArrayList<Node>();
+                  for(int s=0;s<size;s++){
+                     newNodes.add(nodes.get(s).getCopy());
+                  }
+                  
+                  nodeList.add(newNodes);
+                  Node ret = eval(child, newNodes, nodeList);
+                  if ( ret != null )
+                     newNodes.add(ret);
+               }
             }
-         }
+         }*/
       }
-      return null;
+            return null;
+   }
+   
+   public Node getCopy(){
+      Node n = new Node();
+      n.step = this.step;
+      n.stepName = this.stepName;
+      n.parent = this.parent;
+      n.typeOfChildren = this.typeOfChildren;
+      n.typeOfNode = this.typeOfNode;
+      return n;
    }
 
+   
    /**
     * Give nodes without any empty node between two consecutive steps and with
     * empty node between two non-consecutive steps.
     */
-   public List<ArrayList<Node>> giveSeparateNodes () {
+   /*public List<ArrayList<Node>> giveSeparateNodes () {
       ArrayList<Node> newNodes = new ArrayList<Node>();
       List<ArrayList<Node>> nodeList = new ArrayList<ArrayList<Node>>();
       nodeList.add(newNodes);
@@ -103,42 +146,67 @@ public class Node {
       }
       return nodeList;
    }
-
+*/
+   
    /**
     * Give nodes without any empty node between two consecutive steps and with
     * empty node between two non-consecutive steps.
     */
-   public Node giveSeparateNode (Node root, ArrayList<Node> nodes,
+   /*public Node giveSeparateNode (Node root, ArrayList<Node> nodes,
          List<ArrayList<Node>> nodeList) {
       if ( root.children.isEmpty() ) {
          return root;
       } else {
-         if ( typeOfChildren == CType.Required ) {
+         if ( root.typeOfChildren == CType.Required ) {
             for (Node child : root.children) {
-               Node ret = eval(child, nodes, nodeList);
-               if ( ret != null ) {
-                  nodes.add(ret);
-                  Node dumyNode = new Node();
-                  dumyNode.typeOfNode = NType.Empty;
-                  nodes.add(dumyNode);
+               Node ret = giveSeparateNode(child, nodes, nodeList);
+               if ( ret != null ){
+                  for(ArrayList<Node> li:nodeList){
+                     
+                     li.add(ret);
+                     Node dumyNode = new Node();
+                     dumyNode.typeOfNode = NType.Empty;
+                     li.add(dumyNode);
+                  }
                }
             }
+         } else if ( root.typeOfChildren == CType.Alter ) {
 
-         } else if ( typeOfChildren == CType.Alter ) {
-
-            for (Node child : root.children) {
-               ArrayList<Node> newNodes = new ArrayList<Node>();
-               nodeList.add(newNodes);
-               Node ret = eval(child, newNodes, nodeList);
-               if ( ret != null )
-                  newNodes.add(ret);
+            int size = nodes.size();
+            
+            for (int ch=0;ch<root.children.size();ch++) {
+               Node child = root.children.get(ch);
+               
+               if(ch == 0){
+                  Node ret = eval(child, nodes, nodeList);
+                  if ( ret != null ){
+                     nodes.add(ret);
+                     Node dumyNode = new Node();
+                     dumyNode.typeOfNode = NType.Empty;
+                     nodes.add(dumyNode);
+                  }
+               }
+               else {
+                  ArrayList<Node> newNodes = new ArrayList<Node>();
+                  for(int s=0;s<size;s++){
+                     newNodes.add(nodes.get(s).getCopy());
+                  }
+                  
+                  nodeList.add(newNodes);
+                  Node ret = giveSeparateNode(child, newNodes, nodeList);
+                  if ( ret != null ){
+                     newNodes.add(ret);
+                     Node dumyNode = new Node();
+                     dumyNode.typeOfNode = NType.Empty;
+                     newNodes.add(dumyNode);
+                  }
+               }
             }
-
          }
       }
       return null;
    }
-
+*/
    /**
     * Checks if two nodes are equivalent. Checks one node's step with another.
     */
