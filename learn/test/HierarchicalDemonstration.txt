@@ -41,6 +41,13 @@ done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
 print PlaceDishes urn:disco.wpi.edu:htnlfd:setTable5
 
+task Demonstration
+task Place / Spoon.S1 / new Location(-1,0,0) /  DinnerPlate.DP1
+task Place /  Fork.F2 / new Location(1,0,0) /  DinnerPlate.DP1
+task Place /  Knife.K1 / new Location(-2,0,0) /  DinnerPlate.DP1
+task Place /  WaterGlass.WaG1 / new Location(0,1,0) /  DinnerPlate.DP1
+done Demonstration
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
 
 task Demonstration
 task Place / Spoon.S1 / new Location(-1,0,0) /  DinnerPlate.DP1

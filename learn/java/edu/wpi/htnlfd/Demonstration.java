@@ -905,6 +905,8 @@ public class Demonstration {
    public void findLoop (TaskClass task) {
 
       for (DecompositionClass dec : task.getDecompositions()) {
+         if(dec.getStepNames().size() <=1)
+            continue;
          Map<Step, List<Step>> steps = new HashMap<Step, List<Step>>();
          Map<Step, List<String>> names = new HashMap<Step, List<String>>();
 

@@ -794,7 +794,7 @@ public class TaskClass extends TaskModel.Member {
          }
 
          DecompositionClass.Step stp = subtask.new Step(null,
-               step.getMinOccurs(), step.getMinOccurs(), null);
+               step.getMinOccurs(), step.getMaxOccurs(), null);
          String stepNameNew = stp.findStepName(step.getType().getId());
 
          prevStepNames.add(stepNameNew);
