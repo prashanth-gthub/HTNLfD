@@ -127,7 +127,7 @@ public class DecompositionClass extends TaskModel.Member {
          String nameWhich, TaskModel taskModel) {
       DecompositionClass.Step stp = which.getDecompositionClass().new Step(
             step.getType(), step.getMinOccurs(), step.getMaxOccurs(), null);
-      String newName = which.findStepName(stepName);
+      String newName = which.findStepName(step.getType().getId());
       DecompositionClass currentDec = which.getDecompositionClass();
       DecompositionClass prevDec = step.getDecompositionClass();
       TaskClass prevTask = prevDec.getGoal();
@@ -313,6 +313,9 @@ public class DecompositionClass extends TaskModel.Member {
          this.minOccurs = minOccurs;
          this.maxOccurs = maxOccurs;
          this.required = required;
+         if(required == null){
+            this.required = new ArrayList<String>();
+         }
       }
 
       /**
@@ -585,8 +588,24 @@ public class DecompositionClass extends TaskModel.Member {
          int count = 1;
 
          String stepNameFind = Character.toLowerCase(stepName.charAt(0))
-            + (stepName.length() > 1 ? stepName.substring(1) : "");
+               + (stepName.length() > 1 ? stepName.substring(1) : "");
 
+         
+         if(this.getDecompositionClass().stepNames!=null){
+            for(String name:this.getDecompositionClass().stepNames){
+               if(name.length()> stepNameFind.length() && stepNameFind.equals(name.substring(0,stepNameFind.length()))){
+                  try{
+                     int num = Integer.parseInt(name.substring(stepNameFind.length()));
+                     if(num>count)
+                        count = num;
+                  }catch (NumberFormatException e) {
+                     ;
+                  }
+               }
+            }
+         }
+         
+         
          while (true) {
             if ( getStep(stepNameFind + count) != null )
                count++;

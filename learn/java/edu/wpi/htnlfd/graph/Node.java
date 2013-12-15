@@ -235,6 +235,8 @@ public class Node {
     */
    public Node addNode (Node node, CType required, TaskModel taskModel) {
 
+      if(node.step == null)
+         return null;
       node.parent.children.add(node.parent.children.indexOf(node) + 1, this);
       this.parent = node.parent;
       // Adding to taskClass
@@ -246,7 +248,7 @@ public class Node {
       String newName = this.step.getDecompositionClass().addStep(which,
             this.stepName, this.step, nameWhich, taskModel);
 
-      this.step = this.step.getDecompositionClass().getStep(newName);
+      this.step = which.getDecompositionClass().getStep(newName);
       this.stepName = newName;
       return this;
    }

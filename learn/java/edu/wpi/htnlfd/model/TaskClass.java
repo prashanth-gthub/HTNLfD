@@ -172,7 +172,7 @@ public class TaskClass extends TaskModel.Member {
 
             String value = subtask.findValueInParents(taskModel, null, task,
                   subtask, input.getName());
-            if ( value.equals(inputBindingValue) ) {
+            if (value!=null && value.equals(inputBindingValue) ) {
                return input.getName();
             }
 

@@ -344,7 +344,7 @@ public class Graph {
 
             this.demonstration.addAlternativeRecipe(newTask, null, newTask2);
 
-         } else if ( firstM + 1 == secondM && firstD + 1 != secondD ) {
+         } else if ( firstM + 1 == secondM &&  firstD + 1 != secondD ) {
             // optional
             int where = firstM;
             Node retnode = nodes.get(where);
