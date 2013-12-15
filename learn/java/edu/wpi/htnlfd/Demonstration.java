@@ -211,9 +211,13 @@ public class Demonstration {
                if ( in1.getType().equals(in2.getType())
                   && ((in1.getModified() == null && in2.getModified() == null) || (in1
                         .getModified() != null && in2.getModified() != null)) ) {
-                  Entry<String, Binding> bindValue = task.getDecompositions()
-                        .get(0).getBindingValue("this", in1.getName()); ////????
-
+                  Entry<String, Binding> bindValue = null;
+                  for(int tg=0;tg<task.getDecompositions().size()-1;tg++){
+                     bindValue = task.getDecompositions()
+                           .get(tg).getBindingValue("this", in1.getName()); ////
+                     if(bindValue!=null)
+                        break;
+                  }
                   String value = null;
                   if ( bindValue != null ) {
                      value = bindValue.getValue().getValue();
@@ -224,7 +228,7 @@ public class Demonstration {
                               .getDecompositions()
                               .get(0)
                               .findValueInParents(taskModel, null, task,
-                                    task.getDecompositions().get(tg), in1.getName());
+                                    task.getDecompositions().get(tg), in1.getName()); ////
                         if(value!=null)
                            break;
                      }
