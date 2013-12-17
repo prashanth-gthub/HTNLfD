@@ -249,6 +249,22 @@ public class DecompositionClass extends TaskModel.Member {
       steps.remove(name);
       stepNames.remove(name);
    }
+   
+   public void removeStepB(String name){
+      String stepName = name;
+      Step removeStep = this.getStep(stepName);
+      for (Input in : removeStep.getType().getDeclaredInputs()) {
+         this.removeBinding("$" + stepName + "." + in.getName());
+      }
+      for (Output out : removeStep.getType().getDeclaredOutputs()) {
+         Entry<String, Binding> binding = this.removeBindingValue("$"
+            + stepName + "." + out.getName());
+         this.goal.removeOutput(binding.getValue().getSlot());
+      }
+
+      this.removeStep(stepName);
+
+   }
 
    public Step getStep (String name) {
       if ( steps != null )

@@ -1,4 +1,4 @@
-<taskModel xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext" xmlns:std="urn:disco.wpi.edu:htnlfd:std" about="urn:disco.wpi.edu:htnlfd:setTable1">
+<taskModel xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext" xmlns:std="urn:disco.wpi.edu:htnlfd:std" about="urn:disco.wpi.edu:htnlfd:setTable2">
   <task id="PlaceDishes">
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
     <input name="place1_location" type="Location"/>
@@ -10,15 +10,12 @@
     <input name="place4_location" type="Location"/>
     <output name="place1_newObject" type="PhysObj"/>
     <output name="place2_newObject" type="PhysObj"/>
-    <output name="place3_newObject" type="PhysObj"/>
     <output name="place4_newObject" type="PhysObj"/>
     <subtasks id="placeDishes1" ordered="false">
       <step name="place1" task="std:Place"/>
-      <step name="place2" requires="place1" task="std:Place"/>
-      <step name="place3" requires="place2 place1 " task="std:Place"/>
+      <step maxOccurs="3" name="place2" requires="place1" task="std:Place"/>
       <step name="place4" requires="place1" task="std:Place"/>
       <binding slot="$place4.referenceFrame" value="$this.place2_referenceFrame"/>
-      <binding slot="$place3.referenceFrame" value="$this.place2_referenceFrame"/>
       <binding slot="$this.place1_location" value="new Location(0,0,0)"/>
       <binding slot="$this.place4_object" value="SoupBowl.SB1"/>
       <binding slot="$place4.object" value="$this.place4_object"/>
@@ -26,19 +23,16 @@
       <binding slot="$this.place1_referenceFrame" value="Table.T1"/>
       <binding slot="$place2.location" value="$this.place2_location"/>
       <binding slot="$place4.location" value="$this.place4_location"/>
-      <binding slot="$place3.location" value="$this.place2_location"/>
       <binding slot="$place2.object" value="$this.place2_object"/>
       <binding slot="$this.place2_location" value="new Location(0,0,1)"/>
       <binding slot="$this.place1_object" value="DinnerPlate.DP1"/>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
-      <binding slot="$this.place3_newObject" value="$place3.newObject"/>
       <binding slot="$this.place2_object" value="SaladPlate.SP1"/>
       <binding slot="$this.place4_newObject" value="$place4.newObject"/>
       <binding slot="$this.place1_newObject" value="$place1.newObject"/>
       <binding slot="$place1.object" value="$this.place1_object"/>
       <binding slot="$this.place2_referenceFrame" value="DinnerPlate.DP1"/>
       <binding slot="$place2.referenceFrame" value="$this.place2_referenceFrame"/>
-      <binding slot="$place3.object" value="$this.place2_object"/>
       <binding slot="$this.place2_newObject" value="$place2.newObject"/>
       <binding slot="$this.place4_location" value="new Location(0,0,2)"/>
     </subtasks>

@@ -5,6 +5,7 @@ load Tell.xml
 task Demonstration
 task Place / DinnerPlate.DP1 / new Location(0,0,0) / Table.T1
 task Place / SaladPlate.SP1 / new Location(0,0,1) / DinnerPlate.DP1
+task Place / SaladPlate.SP1 / new Location(0,0,1) / DinnerPlate.DP1
 task Place / SoupBowl.SB1 / new Location(0,0,2) / DinnerPlate.DP1
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceDishes")
@@ -77,3 +78,5 @@ print SetTable urn:disco.wpi.edu:htnlfd:setTable8
 clear
 
 task SetTable urn:disco.wpi.edu:htnlfd:setTable8
+
+execute TellMaxOccurs / "PlaceDishes" / "placeDishes1" / "place2" / 3

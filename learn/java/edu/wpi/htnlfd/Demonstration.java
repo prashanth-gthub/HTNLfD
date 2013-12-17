@@ -102,6 +102,7 @@ public class Demonstration {
          List<edu.wpi.cetask.Task> steps) throws NoSuchMethodException,
          ScriptException, IOException {
       taskModel = new TaskModel();
+
       if ( this.externalTaskModel != null ) {
          learnedTaskmodel();
       }
@@ -742,7 +743,30 @@ public class Demonstration {
       DecompositionClass subtask = task.getDecomposition(subtaskId);
       DecompositionClass.Step step = subtask.getStep(stepName);
       step.setMaxOccurs(maxOccurs);
-
+      int i=0;
+      for(i=0;i<subtask.getStepNames().size();i++){
+         if(subtask.getStepNames().get(i).equals(stepName))
+         break;
+      }
+      List<String> rem = new ArrayList<String>();
+      for(int j = i+1;j<subtask.getStepNames().size() && j<i+maxOccurs;j++){
+         
+         DecompositionClass.Step stepF = subtask.getStep(subtask.getStepNames().get(j));
+         DecompositionClass.Step copyStepF = subtask.new Step(stepF);
+         copyStepF.removeRequired(stepName);
+         if(step.isEquivalent(copyStepF, taskModel)){
+            if ( subtask.checkInputs(stepName,
+                  step.getType(), subtask.getStepNames().get(j),
+                  copyStepF.getType(), subtask, subtask, taskModel) ) {
+               rem.add(subtask.getStepNames().get(j));
+            }
+         }
+      }
+      for(String re:rem){
+         subtask.removeStepB(re);
+      }
+      
+      LearnAgent.question = null; ///???
       return taskModel;
    }
 

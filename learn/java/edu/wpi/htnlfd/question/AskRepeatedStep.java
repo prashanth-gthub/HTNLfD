@@ -119,13 +119,17 @@ public class AskRepeatedStep extends Question {
          for (Entry<Step, List<Step>> step : steps.entrySet()) {
             List<String> list = names.get(step.getKey());
             int maxOccurs = list.size();
-            this.question = "Is " + list.get(maxOccurs - 1) + " repeated "
-               + maxOccurs + " times?";
+            
             this.stepName = list.get(maxOccurs - 1);
             this.times = maxOccurs;
             this.taskName = task.getId();
             this.decName = dec.getId();
             this.uri = task.getQname().getNamespaceURI();
+            
+            this.question = "Is "+this.uri+ ":" + this.taskName+":"+this.decName
+                  +":"+this.stepName + " repeated "
+                  + this.times + " times?";
+            AskQuestion.properties.put("TellMaxOccurs@format",this.question);
             return this;
          }
       }

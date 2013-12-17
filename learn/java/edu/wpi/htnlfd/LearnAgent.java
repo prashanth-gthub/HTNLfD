@@ -43,6 +43,12 @@ public class LearnAgent extends Agent {
                         disco.getTaskClass("TellAppCondition").newInstance()),
                   null);
          }
+         else if ( question != null && (question instanceof AskRepeatedStep) ) {
+            return Agenda.newItem(
+                  Propose.Should.newInstance(disco, true,
+                        disco.getTaskClass("TellMaxOccurs").newInstance()),
+                  null);
+         }
          /*
           * case "TellInput": return Agenda.newItem(
           * Propose.Should.newInstance(disco, true,
