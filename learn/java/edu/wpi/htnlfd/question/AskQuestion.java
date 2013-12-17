@@ -14,8 +14,10 @@ public class AskQuestion {
    }
 
    public AskQuestion () {
-      Question q1 = new AskAppCondition(1);
+      Question q1 = new AskAppCondition(2);
       addQuestion(q1);
+      Question q2 = new AskRepeatedStep(1);
+      addQuestion(q2);
    }
 
    public void addQuestion (Question q) {

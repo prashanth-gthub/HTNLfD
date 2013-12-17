@@ -58,7 +58,6 @@ task Place / Fork.F4 / new Location(0,1,0) / DinnerPlate.DP1
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
 
-
 execute TellAppCondition / "_Temp1" / "_Temp11" / "$this.input1"
 execute TellAppCondition / "_Temp1" / "_Temp12" / "!$this.input1"
 

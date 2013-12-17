@@ -107,7 +107,7 @@ public class Demonstration {
       }
 
       TaskClass newTask = demonstratedTask(disco, taskName, steps);
-      findLoop(newTask); // /
+      //findLoop(newTask); 
 
       demonstrations.add(new Pair(taskName, newTask)); // saving demonstrations
 
@@ -146,7 +146,7 @@ public class Demonstration {
 
       //internalTaskQ();
 
-      //LearnAgent.question = askQuestion.Ask(taskModel);
+      LearnAgent.question = askQuestion.Ask(taskModel);
 
       return this.taskModel;
    }

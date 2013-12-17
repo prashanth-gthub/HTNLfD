@@ -9,10 +9,108 @@
 	<input name="condition" type="string"/>
     <binding slot="$this.external" value="true"/>
     <script>
-      // here is where you put code to set state in learning system
       println("User told me: "+$this.condition);
 	  Packages.edu.wpi.htnlfd.Init.addApplicable ($disco, $this.taskName, $this.decompositionName, $this.condition);	  
     </script>
   </task>
-	
+  
+  <task id="TellPrecondition">
+	<input name="taskName" type="string"/>
+	<input name="precondition" type="string"/>
+    <script>
+      println("User told me: "+$this.precondition);
+	  Packages.edu.wpi.htnlfd.Init.addPrecondition ($disco, $this.taskName, $this.precondition);	  
+    </script>
+  </task>
+  
+  <task id="TellPostcondition">
+	<input name="taskName" type="string"/>
+	<input name="postcondition" type="string"/>
+    <script>
+      println("User told me: "+$this.postcondition);
+	  Packages.edu.wpi.htnlfd.Init.addPostcondition ($disco, $this.taskName, $this.postcondition);	  
+    </script>
+  </task>
+  
+  
+  <task id="TellNewOutput">
+	<input name="taskName" type="string"/>
+	<input name="outputName" type="string"/>
+	<input name="outputType" type="string"/>
+    <script>
+      println("User told me: "+$this.outputName);
+	  Packages.edu.wpi.htnlfd.Init.addOutput ($disco, $this.taskName, $this.outputName, $this.outputType);	  
+    </script>
+  </task>
+  
+  <task id="TellNewInput">
+	<input name="taskName" type="string"/>
+	<input name="inputName" type="string"/>
+	<input name="inputType" type="string"/>
+	<input name="modified" type="string"/>
+    <script>
+      println("User told me: "+$this.inputName);
+	  Packages.edu.wpi.htnlfd.Init.addInput ($disco, $this.taskName, $this.inputName, $this.inputType, $this.modified);	  
+    </script>
+  </task>
+  
+  <task id="TellOrdered">
+	<input name="taskName" type="string"/>
+	<input name="subtaskId" type="string"/>
+    <script>
+      println("User told me: "+$this.subtaskId);
+	  Packages.edu.wpi.htnlfd.Init.setOrdered ($disco, $this.taskName, $this.subtaskId);
+    </script>
+  </task>
+	<task id="TellOrderedStep">
+	<input name="taskName" type="string"/>
+	<input name="subtaskId" type="string"/>
+	<input name="stepNameDep" type="string"/>
+	<input name="stepNameRef" type="string"/>
+    <script>
+      println("User told me: "+$this.subtaskId);
+	  Packages.edu.wpi.htnlfd.Init.addOrderStep ($disco, $this.taskName, $this.subtaskId, $this.stepNameDep, $this.stepNameRef);
+    </script>
+  </task>
+  
+  <task id="TellAlternativeRecipe">
+	<input name="taskName" type="string"/>
+	<input name="applicable" type="string"/>
+    <script>
+      println("User told me: "+$this.subtaskId);
+	  Packages.edu.wpi.htnlfd.Init.addAlternativeRecipe ($disco, $this.taskName, $this.applicable);
+    </script>
+  </task>
+  
+  <task id="TellMaxOccurs">
+	<input name="taskName" type="string"/>
+	<input name="subtaskId" type="string"/>
+	<input name="stepName" type="string"/>
+	<input name="maxOccurs" type="number"/>
+    <script>
+      println("User told me: "+$this.subtaskId);
+	  Packages.edu.wpi.htnlfd.Init.addMaxOccurs ($disco, $this.taskName, $this.subtaskId, $this.stepName, $this.maxOccurs);
+    </script>
+  </task>
+  
+  <task id="TellOptionalStep">
+	<input name="taskName" type="string"/>
+	<input name="subtaskId" type="string"/>
+	<input name="stepName" type="string"/>
+    <script>
+      println("User told me: "+$this.subtaskId);
+	  Packages.edu.wpi.htnlfd.Init.addOptionalStep ($disco, $this.taskName, $this.subtaskId, $this.stepName);
+    </script>
+  </task>
+  
+  <task id="TellSteps">
+	<input name="taskName" type="string"/>
+	<input name="subtaskId" type="string"/>
+	<input name="afterStep" type="string"/>
+    <script>
+      println("User told me: "+$this.subtaskId);
+	  Packages.edu.wpi.htnlfd.Init.addSteps ($disco, $this.taskName, $this.subtaskId, $this.afterStep);
+    </script>
+  </task>
+
 </taskModel>
