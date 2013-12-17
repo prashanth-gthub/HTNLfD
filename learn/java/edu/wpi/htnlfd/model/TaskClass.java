@@ -653,7 +653,7 @@ public class TaskClass extends TaskModel.Member {
          inputBinding = step.getSlotValue(inputName);
          if(inputBinding instanceof String)
             inputBindingValue = (String) inputBinding;
-         else
+         else if (inputBinding!=null)
             inputBindingValue = ((ApplicationSpecificClass) inputBinding).find();
 
          // inputBindingValue = (String) inputBinding;
