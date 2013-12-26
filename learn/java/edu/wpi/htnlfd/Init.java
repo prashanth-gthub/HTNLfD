@@ -55,21 +55,21 @@ public class Init {
     * Adds the steps to the specified task and subtask. If it should be added at
     * the end after should be null or "".
     */
-   public static void addSteps (Disco disco, String taskName, String subtask,
+   public static void addSteps (Disco disco,String subtask,
          String after) throws Exception {
 
       learnedTaskmodel = demonstration
-            .addSteps(disco, taskName, subtask, after);
+            .addSteps(disco, subtask, after);
       load(disco);
    }
 
    /**
     * Makes one step to be optional.
     */
-   public static void addOptionalStep (Disco disco, String taskName,
+   public static void addOptionalStep (Disco disco, 
          String subtask, String stepName) throws Exception {
 
-      learnedTaskmodel = demonstration.addOptionalStep(taskName, subtask,
+      learnedTaskmodel = demonstration.addOptionalStep( subtask,
             stepName);
       load(disco);
    }
@@ -77,10 +77,10 @@ public class Init {
    /**
     * Makes the step to be repeated
     */
-   public static void addMaxOccurs (Disco disco, String taskName,
+   public static void addMaxOccurs (Disco disco, 
          String subtask, String stepName, int maxOccurs) throws Exception {
 
-      learnedTaskmodel = demonstration.addMaxOccurs(taskName, subtask,
+      learnedTaskmodel = demonstration.addMaxOccurs( subtask,
             stepName, maxOccurs);
       load(disco);
    }
@@ -96,11 +96,11 @@ public class Init {
       load(disco);
    }
 
-   public static void addOrderStep (Disco disco, String taskName,
+   public static void addOrderStep (Disco disco, 
          String subtaskId, String stepNameDep, String stepNameRef)
          throws Exception {
 
-      learnedTaskmodel = demonstration.addOrderStep(taskName, subtaskId,
+      learnedTaskmodel = demonstration.addOrderStep(subtaskId,
             stepNameDep, stepNameRef);
       load(disco);
    }
@@ -108,9 +108,9 @@ public class Init {
    /**
     * Makes the steps of a subtask completely ordered
     */
-   public static void setOrdered (Disco disco, String taskName, String subtaskId)
+   public static void setOrdered (Disco disco, String subtaskId)
          throws Exception {
-      learnedTaskmodel = demonstration.setOrdered(taskName, subtaskId);
+      learnedTaskmodel = demonstration.setOrdered(subtaskId);
       load(disco);
 
    }
@@ -118,10 +118,10 @@ public class Init {
    /**
     * Adds the applicable condition to a subtask.
     */
-   public static void addApplicable (Disco disco, String taskName,
+   public static void addApplicable (Disco disco,
          String subtaskId, String condition) throws Exception {
 
-      learnedTaskmodel = demonstration.addApplicable(taskName, subtaskId,
+      learnedTaskmodel = demonstration.addApplicable( subtaskId,
             condition);
       load(disco);
    }

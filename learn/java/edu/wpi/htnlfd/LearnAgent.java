@@ -13,7 +13,7 @@ public class LearnAgent extends Agent {
 
    private boolean once = false;
 
-   public static Question question = null;
+   public Question question = null;
 
    public static void main (String[] args) {
       Interaction interaction = new Interaction(new LearnAgent("agent"),
@@ -37,13 +37,13 @@ public class LearnAgent extends Agent {
          // model and Disco
          once = false;
          Disco disco = interaction.getDisco();
-         if ( question != null && (question instanceof AskAppCondition) ) {
+         if ( question instanceof AskAppCondition ) {
             return Agenda.newItem(
                   Propose.Should.newInstance(disco, true,
                         disco.getTaskClass("TellAppCondition").newInstance()),
                   null);
          }
-         else if ( question != null && (question instanceof AskRepeatedStep) ) {
+         else if ( question instanceof AskRepeatedStep ) {
             return Agenda.newItem(
                   Propose.Should.newInstance(disco, true,
                         disco.getTaskClass("TellMaxOccurs").newInstance()),

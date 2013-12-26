@@ -53,9 +53,9 @@ print PlaceSilverware urn:disco.wpi.edu:htnlfd:setTable6
 
 execute TellNewInput / "_Temp1" / "input1" / "boolean" / ""
 print _Temp1 urn:disco.wpi.edu:htnlfd:setTable7
-execute TellAppCondition / "_Temp1" / "_Temp11" / "$this.input1"
+execute TellAppCondition / "_Temp11" / "$this.input1"
 print _Temp1 urn:disco.wpi.edu:htnlfd:setTable8
-execute TellAppCondition / "_Temp1" / "_Temp12" / "!$this.input1"
+execute TellAppCondition / "_Temp12" / "!$this.input1"
 print _Temp1 urn:disco.wpi.edu:htnlfd:setTable9
 
 
@@ -71,9 +71,9 @@ print PlaceSilverware urn:disco.wpi.edu:htnlfd:setTable10
 
 execute TellNewInput / "_Temp2" / "input1" / "boolean" / ""
 print _Temp2 urn:disco.wpi.edu:htnlfd:setTable11
-execute TellAppCondition / "_Temp2" / "_Temp21" / "$this.input1"
+execute TellAppCondition / "_Temp21" / "$this.input1"
 print _Temp2 urn:disco.wpi.edu:htnlfd:setTable12
-execute TellAppCondition / "_Temp2" / "_Temp22" / "!$this.input1"
+execute TellAppCondition / "_Temp22" / "!$this.input1"
 print _Temp2 urn:disco.wpi.edu:htnlfd:setTable13
 
 
@@ -90,4 +90,4 @@ clear
 
 task SetTable urn:disco.wpi.edu:htnlfd:setTable14
 
-execute TellMaxOccurs / "PlaceDishes" / "placeDishes1" / "place2" / 3
+execute TellMaxOccurs / "placeDishes1" / "place2" / 3

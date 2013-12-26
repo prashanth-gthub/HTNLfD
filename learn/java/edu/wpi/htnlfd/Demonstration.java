@@ -33,6 +33,8 @@ public class Demonstration {
    AskQuestion askQuestion = new AskQuestion();
 
    List<Pair> demonstrations = new ArrayList<Pair>();
+   
+   LearnAgent LA = new LearnAgent("Anahita");
 
    static {
 
@@ -147,7 +149,7 @@ public class Demonstration {
 
       //internalTaskQ();
 
-      LearnAgent.question = askQuestion.Ask(taskModel);
+      LA.question = askQuestion.Ask(taskModel);
 
       return this.taskModel;
    }
@@ -397,9 +399,9 @@ public class Demonstration {
          DecompositionClass subtask = (DecompositionClass) parents.get(parents
                .size() - 1)[1];
 
-         @SuppressWarnings("unchecked")
-         Entry<String, Step> step = (Entry<String, Step>) parents.get(parents
-               .size() - 1)[2];
+//         @SuppressWarnings("unchecked")
+//         Entry<String, Step> step = (Entry<String, Step>) parents.get(parents
+//               .size() - 1)[2];
 
          subtask.addBinding("$this." + lastInputName,
                subtask.new Binding(lastInputName, "this", binding,
@@ -669,14 +671,15 @@ public class Demonstration {
     * Adds the step. This function adds the specified steps the end of a subtask
     * of a task.
     */
-   public TaskModel addSteps (Disco disco, String taskName, String subtaskId,
+   public TaskModel addSteps (Disco disco, String subtaskId,
          String afterStep) throws NoSuchMethodException, ScriptException {
 
       getNewTaskModel();
 
       List<Task> steps = findDemonstration(disco);
-      TaskClass task = this.taskModel.getTaskClass(taskName);
-      DecompositionClass subtask = task.getDecomposition(subtaskId);
+      DecompositionClass subtask = this.taskModel.getDecompositionClass(subtaskId);
+      TaskClass task = subtask.getGoal();
+      
 
       for (edu.wpi.cetask.Task step : steps) {
 
@@ -718,13 +721,13 @@ public class Demonstration {
    /**
     * Adds the optional step.
     */
-   public TaskModel addOptionalStep (String taskName, String subtaskId,
+   public TaskModel addOptionalStep (String subtaskId,
          String stepName) {
 
       getNewTaskModel();
 
-      TaskClass task = this.taskModel.getTaskClass(taskName);
-      DecompositionClass subtask = task.getDecomposition(subtaskId);
+      DecompositionClass subtask = this.taskModel.getDecompositionClass(subtaskId);
+
       DecompositionClass.Step step = subtask.getStep(stepName);
       step.setMinOccurs(0);
 
@@ -734,13 +737,13 @@ public class Demonstration {
    /**
     * Makes the step to be repeated
     */
-   public TaskModel addMaxOccurs (String taskName, String subtaskId,
+   public TaskModel addMaxOccurs (String subtaskId,
          String stepName, int maxOccurs) {
 
       getNewTaskModel();
 
-      TaskClass task = this.taskModel.getTaskClass(taskName);
-      DecompositionClass subtask = task.getDecomposition(subtaskId);
+      DecompositionClass subtask = this.taskModel.getDecompositionClass(subtaskId);
+
       DecompositionClass.Step step = subtask.getStep(stepName);
       step.setMaxOccurs(maxOccurs);
       int i=0;
@@ -766,7 +769,7 @@ public class Demonstration {
          subtask.removeStepB(re);
       }
       
-      LearnAgent.question = null; ///???
+      LA.question = null; ///???
       return taskModel;
    }
 
@@ -804,13 +807,13 @@ public class Demonstration {
    /**
     * Adds an ordering constraint to a step.
     */
-   public TaskModel addOrderStep (String taskName, String subtaskId,
+   public TaskModel addOrderStep (String subtaskId,
          String stepNameDep, String stepNameRef) {
 
       getNewTaskModel();
 
-      TaskClass task = this.taskModel.getTaskClass(taskName);
-      DecompositionClass subtask = task.getDecomposition(subtaskId);
+      DecompositionClass subtask = this.taskModel.getDecompositionClass(subtaskId);
+
       subtask.setOrdered(false);
       DecompositionClass.Step step = subtask.getStep(stepNameDep);
       step.addRequired(stepNameRef);
@@ -821,12 +824,12 @@ public class Demonstration {
    /**
     * Makes the steps of a subtask totally ordered
     */
-   public TaskModel setOrdered (String taskName, String subtaskId) {
+   public TaskModel setOrdered (String subtaskId) {
 
       getNewTaskModel();
 
-      TaskClass task = this.taskModel.getTaskClass(taskName);
-      DecompositionClass subtask = task.getDecomposition(subtaskId);
+      DecompositionClass subtask = this.taskModel.getDecompositionClass(subtaskId);
+  
       subtask.setOrdered(true);
 
       for (Entry<String, Step> step : subtask.getSteps().entrySet()) {
@@ -841,16 +844,16 @@ public class Demonstration {
    /**
     * Adds the applicable condition to a subtask.
     */
-   public TaskModel addApplicable (String taskName, String subtaskId,
+   public TaskModel addApplicable (String subtaskId,
          String condition) {
 
       getNewTaskModel();
 
-      TaskClass task = this.taskModel.getTaskClass(taskName);
-      DecompositionClass subtask = task.getDecomposition(subtaskId);
+      DecompositionClass subtask = this.taskModel.getDecompositionClass(subtaskId);
+
       subtask.setApplicable(condition);
 
-      LearnAgent.question = askQuestion.Ask(taskModel);
+      LA.question = askQuestion.Ask(taskModel);
       
       return taskModel;
    }
@@ -865,7 +868,7 @@ public class Demonstration {
       TaskClass task = this.taskModel.getTaskClass(taskName);
       task.setPrecondition(precondition);
 
-      LearnAgent.question = askQuestion.Ask(taskModel);
+      LA.question = askQuestion.Ask(taskModel);
       
       return taskModel;
    }
@@ -882,7 +885,7 @@ public class Demonstration {
       task.setPostcondition(postcondition);
       task.setSufficient(sufficient);
 
-      LearnAgent.question = askQuestion.Ask(taskModel);
+      LA.question = askQuestion.Ask(taskModel);
       
       return taskModel;
    }
