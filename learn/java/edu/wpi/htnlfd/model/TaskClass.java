@@ -702,6 +702,26 @@ public class TaskClass extends TaskModel.Member {
       }
       return null;
    }
+   
+   /**
+    * Checks if is input.
+    */
+   boolean isInput(String name){
+      if (this.getInput(name) == null)
+         return false;
+      else
+         return true;
+   }
+   
+   /**
+    * Checks if is output.
+    */
+   boolean isOutput(String name){
+      if (this.getOutput(name) == null)
+         return false;
+      else
+         return true;
+   }
 
    /**
     * Changes namespace of the specified task.

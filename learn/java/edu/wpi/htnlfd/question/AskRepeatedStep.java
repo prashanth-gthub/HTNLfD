@@ -1,5 +1,6 @@
 package edu.wpi.htnlfd.question;
 
+import org.w3c.dom.*;
 import java.util.*;
 import java.util.Map.Entry;
 import edu.wpi.htnlfd.model.*;
@@ -8,11 +9,11 @@ import edu.wpi.htnlfd.model.TaskClass.*;
 
 public class AskRepeatedStep extends Question {
 
-   String taskName = null;
+//   String taskName = null;
 
    String decName = null;
 
-   String uri = null;
+//   String uri = null;
 
    String stepName = null;
 
@@ -122,11 +123,11 @@ public class AskRepeatedStep extends Question {
             
             this.stepName = list.get(maxOccurs - 1);
             this.times = maxOccurs;
-            this.taskName = task.getId();
+           // this.taskName = task.getId();
             this.decName = dec.getId();
-            this.uri = task.getQname().getNamespaceURI();
+           // this.uri = task.getQname().getNamespaceURI();
             
-            this.question = "Is "+this.uri+ ":" + this.taskName+":"+this.decName
+            this.question = "Is "+this.decName
                   +":"+this.stepName + " repeated "
                   + this.times + " times?";
             AskQuestion.properties.put("TellMaxOccurs@format",this.question);
@@ -135,6 +136,118 @@ public class AskRepeatedStep extends Question {
       }
       return null;
 
+   }
+
+   public Node toNode (Document document) {
+
+      Element taskElement = document.createElementNS(TaskModel.xmlnsValue,
+            "task");
+      Attr idTask = document.createAttribute("id");
+      idTask.setValue("TellMaxOccurs");
+      taskElement.setAttributeNode(idTask);
+      
+      // Inputs
+      Element decInput = document.createElementNS(TaskModel.xmlnsValue,
+            "input");  
+      Attr typeDec = document.createAttribute("type");
+      typeDec.setValue("string");
+      decInput.setAttributeNode(typeDec);
+      
+      Attr nameDec = document.createAttribute("name");
+      nameDec.setValue("subtask");
+      decInput.setAttributeNode(nameDec);
+      
+      taskElement.appendChild(decInput);
+           
+      
+      Element stepInput = document.createElementNS(TaskModel.xmlnsValue,
+            "input");  
+      Attr typeCondition = document.createAttribute("type");
+      typeCondition.setValue("string");
+      stepInput.setAttributeNode(typeCondition);
+      
+      Attr nameStep = document.createAttribute("name");
+      nameStep.setValue("stepName");
+      stepInput.setAttributeNode(nameStep);
+      
+      taskElement.appendChild(stepInput);
+      
+      Element maxInput = document.createElementNS(TaskModel.xmlnsValue,
+            "input");  
+      Attr typeMax = document.createAttribute("type");
+      typeCondition.setValue("number");
+      maxInput.setAttributeNode(typeMax);
+      
+      Attr nameMax = document.createAttribute("name");
+      nameMax.setValue("maxOccurs");
+      maxInput.setAttributeNode(nameMax);
+      
+      taskElement.appendChild(maxInput);
+      
+      
+      
+      // Bindings
+      Element subtaskBinding = document.createElementNS(
+            TaskModel.xmlnsValue, "binding");
+
+      Attr bindingSlot = document.createAttribute("slot");
+
+      bindingSlot.setValue("$this.subtask");
+
+      subtaskBinding.setAttributeNode(bindingSlot);
+
+      Attr bindingValue = document.createAttribute("value");
+
+      bindingValue.setValue(this.decName);
+
+      subtaskBinding.setAttributeNode(bindingValue);
+      
+      taskElement.appendChild(subtaskBinding);
+      
+      // Bindings
+      Element stepBinding = document.createElementNS(
+            TaskModel.xmlnsValue, "binding");
+
+      Attr bindingStepSlot = document.createAttribute("slot");
+
+      bindingStepSlot.setValue("$this.subtask");
+
+      stepBinding.setAttributeNode(bindingStepSlot);
+
+      Attr bindingStepValue = document.createAttribute("value");
+
+      bindingStepValue.setValue(this.decName);
+
+      stepBinding.setAttributeNode(bindingStepValue);
+      
+      taskElement.appendChild(stepBinding);
+      
+      // External Binding
+      Element extSubtaskBinding = document.createElementNS(
+            TaskModel.xmlnsValue, "binding");
+
+      Attr extBindingSlot = document.createAttribute("slot");
+
+      extBindingSlot.setValue("$this.external");
+
+      extSubtaskBinding.setAttributeNode(extBindingSlot);
+
+      Attr extBindingValue = document.createAttribute("value");
+
+      extBindingValue.setValue("true");
+
+      extSubtaskBinding.setAttributeNode(extBindingValue);
+      
+      taskElement.appendChild(extSubtaskBinding);
+      // Script      
+      Element script = document.createElementNS(
+            TaskModel.xmlnsValue, "script");
+      
+      script.setTextContent("Packages.edu.wpi.htnlfd.Init.addApplicable ($disco, $this.subtask, $this.condition);");
+      
+      taskElement.appendChild(script);
+      
+      return taskElement;
    }
 
 }

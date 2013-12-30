@@ -467,8 +467,12 @@ public class Demonstration {
       }
 
       // ordering
+      
+      
       subtask.addOrdering(taskModel);
 
+      subtask.addOrderingByDataflow ();
+      
       return task;
 
    }
@@ -1228,6 +1232,8 @@ public class Demonstration {
             task.getQuestion(taskModel);
       }*/
    }
+   
+   
 
 
 }

@@ -1,5 +1,6 @@
 package edu.wpi.htnlfd.model;
 
+import edu.wpi.htnlfd.model.TaskClass.Input;
 import edu.wpi.htnlfd.model.TaskClass.*;
 import org.w3c.dom.*;
 import java.util.*;
@@ -249,8 +250,8 @@ public class DecompositionClass extends TaskModel.Member {
       steps.remove(name);
       stepNames.remove(name);
    }
-   
-   public void removeStepB(String name){
+
+   public void removeStepB (String name) {
       String stepName = name;
       Step removeStep = this.getStep(stepName);
       for (Input in : removeStep.getType().getDeclaredInputs()) {
@@ -329,7 +330,7 @@ public class DecompositionClass extends TaskModel.Member {
          this.minOccurs = minOccurs;
          this.maxOccurs = maxOccurs;
          this.required = required;
-         if(required == null){
+         if ( required == null ) {
             this.required = new ArrayList<String>();
          }
       }
@@ -604,24 +605,25 @@ public class DecompositionClass extends TaskModel.Member {
          int count = 1;
 
          String stepNameFind = Character.toLowerCase(stepName.charAt(0))
-               + (stepName.length() > 1 ? stepName.substring(1) : "");
+            + (stepName.length() > 1 ? stepName.substring(1) : "");
 
-         
-         if(this.getDecompositionClass().stepNames!=null){
-            for(String name:this.getDecompositionClass().stepNames){
-               if(name.length()> stepNameFind.length() && stepNameFind.equals(name.substring(0,stepNameFind.length()))){
-                  try{
-                     int num = Integer.parseInt(name.substring(stepNameFind.length()));
-                     if(num>count)
+         if ( this.getDecompositionClass().stepNames != null ) {
+            for (String name : this.getDecompositionClass().stepNames) {
+               if ( name.length() > stepNameFind.length()
+                  && stepNameFind.equals(name.substring(0,
+                        stepNameFind.length())) ) {
+                  try {
+                     int num = Integer.parseInt(name.substring(stepNameFind
+                           .length()));
+                     if ( num > count )
                         count = num;
-                  }catch (NumberFormatException e) {
+                  } catch (NumberFormatException e) {
                      ;
                   }
                }
             }
          }
-         
-         
+
          while (true) {
             if ( getStep(stepNameFind + count) != null )
                count++;
@@ -964,6 +966,7 @@ public class DecompositionClass extends TaskModel.Member {
          subtaskBinding.setAttributeNode(bindingValue);
          return subtaskBinding;
       }
+      
 
    }
 
@@ -1055,7 +1058,8 @@ public class DecompositionClass extends TaskModel.Member {
                   String valueDep = findValueInParents(taskModel, null, task,
                         this, bindingDep.getValue().getValue().substring(6));
                   // getBindingValue(bindingDep, this);
-
+                     
+                  // Better implementation
                   if ( valueDep != null && valueRef != null
                      && valueDep.equals(valueRef) ) {
                      inputRef = bindingRef.getValue().getValue().substring(6);
@@ -1070,6 +1074,11 @@ public class DecompositionClass extends TaskModel.Member {
                                  step.getValue().addRequired(
                                        bindingRef.getValue().getStep());
                                  this.setOrdered(false);
+                                 String stepOutputName = bindingRef.getKey().substring(1,bindingRef.getKey().indexOf('.'));
+                                 Input stO = this.getStep(stepOutputName).type.getInput(
+                                       bindingRef.getKey().substring(bindingRef.getKey().indexOf('.')+1));
+                                 bindingDep.getValue().setValue("$"+stepOutputName+"."+stO.getModified().getName());
+                                 
                                  break;
                               }
                            }
@@ -1275,6 +1284,32 @@ public class DecompositionClass extends TaskModel.Member {
          }
       }
       return valueOut;
+   }
+
+   /**
+    * Adds the ordering by dataflow.
+    */
+   public void addOrderingByDataflow () {
+      for(Entry<String, Binding> bind:this.bindings.entrySet()){
+         String stepIn = bind.getValue().step;
+         
+         if(!stepIn.equals("this") && 
+               bind.getValue().type != Type.Constant && 
+               this.getStep(stepIn).getType().isInput(bind.getValue().slot)){
+            int st = bind.getValue().getValue().indexOf('.');
+            if(st == -1)
+               continue;
+            String outputName = bind.getValue().getValue().substring(st+1);
+            String stepOut = bind.getValue().getValue().substring(1, st);
+            if(!stepOut.equals("this") && this.getStep(stepOut).getType().isOutput(outputName)){
+               
+               
+               if(!stepIn.equals(stepOut)){
+                  this.getStep(stepIn).addRequired(stepOut);
+               }
+            }
+         }
+      }
    }
 
 }

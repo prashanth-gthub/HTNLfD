@@ -19,6 +19,7 @@ public class DomManipulation {
 
    private Document document;
 
+   private Document documentTell;
    /**
     * Instantiates a new dom manipulation.
     */
@@ -44,15 +45,22 @@ public class DomManipulation {
 
    /**
     * Writes dom to file.
+    * @param askQuestion 
     */
-   public void writeDOM (String fileName, TaskModel taskmodel) throws Exception {
+   public void writeDOM (String fileName, TaskModel taskmodel, AskQuestion askQuestion) throws Exception {
 
       // Writing document into xml file
       document = builder.newDocument();
+      documentTell = builder.newDocument();
       DOMSource domSource = new DOMSource(document);
+      DOMSource domSourceTell = new DOMSource(documentTell);
       File demonstrationFile = new File(fileName+".xml");
+      File tellFile = new File(askQuestion.filename+".xml");
       if ( !demonstrationFile.exists() )
          demonstrationFile.createNewFile();
+      
+      if ( !tellFile.exists() )
+         tellFile.createNewFile();
 
       try (FileOutputStream fileOutputStream = new FileOutputStream(
             demonstrationFile, false)) {
@@ -63,13 +71,34 @@ public class DomManipulation {
 
          buildDOM(taskmodel);
          writeProperties(fileName,TaskModel.properties);
-         writeProperties("models\\Tell",AskQuestion.properties); ///???
+         
          // Adding indentation and omitting xml declaration
          transformer.setOutputProperty(OutputKeys.INDENT, "yes");
          transformer.setOutputProperty(
                "{http://xml.apache.org/xslt}indent-amount", "2");
          transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
          transformer.transform(domSource, streamResult);
+
+      } catch (Exception e) {
+
+         throw e;
+      }
+      
+      try (FileOutputStream fileOutputStream = new FileOutputStream(
+            tellFile, false)) {
+
+         StreamResult streamResult = new StreamResult(fileOutputStream);
+         TransformerFactory tf = TransformerFactory.newInstance();
+         Transformer transformer = tf.newTransformer();
+
+         askQuestion.toNode(taskmodel, documentTell);
+         writeProperties(AskQuestion.filename,AskQuestion.properties); ///???
+         // Adding indentation and omitting xml declaration
+         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+         transformer.setOutputProperty(
+               "{http://xml.apache.org/xslt}indent-amount", "2");
+         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+         transformer.transform(domSourceTell, streamResult);
 
       } catch (Exception e) {
 

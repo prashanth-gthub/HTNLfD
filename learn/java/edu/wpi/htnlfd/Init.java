@@ -198,7 +198,7 @@ public class Init {
     */
    public static void load (Disco disco) throws Exception {
       // engine.load(learnedTaskmodel.toNode(), null);
-      DOM.writeDOM(fileName, learnedTaskmodel);
+      DOM.writeDOM(fileName, learnedTaskmodel,demonstration.askQuestion);
       demonstration.readDOM(disco, fileName);
       
 
