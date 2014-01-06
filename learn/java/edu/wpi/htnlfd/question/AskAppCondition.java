@@ -6,8 +6,9 @@ import edu.wpi.htnlfd.model.*;
 public class AskAppCondition extends Question {
 
    String decName = null;
-//   String uri = null;
-   
+
+   // String uri = null;
+
    public AskAppCondition (int priority) {
       super(priority);
       this.question = "";
@@ -20,10 +21,11 @@ public class AskAppCondition extends Question {
             for (DecompositionClass dec : task.getDecompositions()) {
                if ( dec.getApplicable() == null || dec.getApplicable() == "" ) {
                   this.question = "tell the applicability condition of %s is %s";
-                  
+
                   this.decName = dec.getId();
-         //         this.uri = task.getQname().getNamespaceURI() ;
-                  AskQuestion.properties.put("TellAppCondition@format",this.question);
+                  // this.uri = task.getQname().getNamespaceURI() ;
+                  AskQuestion.properties.put("TellAppCondition@format",
+                        this.question);
                   return this;
                }
             }
@@ -31,7 +33,7 @@ public class AskAppCondition extends Question {
       }
       return null;
    }
-   
+
    public Node toNode (Document document) {
 
       Element taskElement = document.createElementNS(TaskModel.xmlnsValue,
@@ -39,38 +41,35 @@ public class AskAppCondition extends Question {
       Attr idTask = document.createAttribute("id");
       idTask.setValue("TellAppCondition");
       taskElement.setAttributeNode(idTask);
-      
+
       // Inputs
-      Element decInput = document.createElementNS(TaskModel.xmlnsValue,
-            "input");  
+      Element decInput = document
+            .createElementNS(TaskModel.xmlnsValue, "input");
       Attr typeDec = document.createAttribute("type");
       typeDec.setValue("string");
       decInput.setAttributeNode(typeDec);
-      
+
       Attr nameDec = document.createAttribute("name");
       nameDec.setValue("subtask");
       decInput.setAttributeNode(nameDec);
-      
+
       taskElement.appendChild(decInput);
-           
-      
+
       Element conditionInput = document.createElementNS(TaskModel.xmlnsValue,
-            "input");  
+            "input");
       Attr typeCondition = document.createAttribute("type");
       typeCondition.setValue("string");
       conditionInput.setAttributeNode(typeCondition);
-      
+
       Attr nameCond = document.createAttribute("name");
       nameCond.setValue("condition");
       conditionInput.setAttributeNode(nameCond);
-      
+
       taskElement.appendChild(conditionInput);
-      
-      
-      
+
       // Bindings
-      Element subtaskBinding = document.createElementNS(
-            TaskModel.xmlnsValue, "binding");
+      Element subtaskBinding = document.createElementNS(TaskModel.xmlnsValue,
+            "binding");
 
       Attr bindingSlot = document.createAttribute("slot");
 
@@ -83,9 +82,9 @@ public class AskAppCondition extends Question {
       bindingValue.setValue(this.decName);
 
       subtaskBinding.setAttributeNode(bindingValue);
-      
+
       taskElement.appendChild(subtaskBinding);
-      
+
       // External Binding
       Element extSubtaskBinding = document.createElementNS(
             TaskModel.xmlnsValue, "binding");
@@ -101,16 +100,15 @@ public class AskAppCondition extends Question {
       extBindingValue.setValue("true");
 
       extSubtaskBinding.setAttributeNode(extBindingValue);
-      
+
       taskElement.appendChild(extSubtaskBinding);
-      // Script      
-      Element script = document.createElementNS(
-            TaskModel.xmlnsValue, "script");
-      
+      // Script
+      Element script = document.createElementNS(TaskModel.xmlnsValue, "script");
+
       script.setTextContent("Packages.edu.wpi.htnlfd.Init.addApplicable ($disco, $this.subtask, $this.condition);");
-      
+
       taskElement.appendChild(script);
-      
+
       return taskElement;
    }
 

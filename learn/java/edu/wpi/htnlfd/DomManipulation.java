@@ -20,6 +20,7 @@ public class DomManipulation {
    private Document document;
 
    private Document documentTell;
+
    /**
     * Instantiates a new dom manipulation.
     */
@@ -45,20 +46,22 @@ public class DomManipulation {
 
    /**
     * Writes dom to file.
-    * @param askQuestion 
+    * 
+    * @param askQuestion
     */
-   public void writeDOM (String fileName, TaskModel taskmodel, AskQuestion askQuestion) throws Exception {
+   public void writeDOM (String fileName, TaskModel taskmodel,
+         AskQuestion askQuestion) throws Exception {
 
       // Writing document into xml file
       document = builder.newDocument();
       documentTell = builder.newDocument();
       DOMSource domSource = new DOMSource(document);
       DOMSource domSourceTell = new DOMSource(documentTell);
-      File demonstrationFile = new File(fileName+".xml");
-      File tellFile = new File(askQuestion.filename+".xml");
+      File demonstrationFile = new File(fileName + ".xml");
+      File tellFile = new File(askQuestion.filename + ".xml");
       if ( !demonstrationFile.exists() )
          demonstrationFile.createNewFile();
-      
+
       if ( !tellFile.exists() )
          tellFile.createNewFile();
 
@@ -70,8 +73,8 @@ public class DomManipulation {
          Transformer transformer = tf.newTransformer();
 
          buildDOM(taskmodel);
-         writeProperties(fileName,TaskModel.properties);
-         
+         writeProperties(fileName, TaskModel.properties);
+
          // Adding indentation and omitting xml declaration
          transformer.setOutputProperty(OutputKeys.INDENT, "yes");
          transformer.setOutputProperty(
@@ -83,16 +86,16 @@ public class DomManipulation {
 
          throw e;
       }
-      
-      try (FileOutputStream fileOutputStream = new FileOutputStream(
-            tellFile, false)) {
+
+      try (FileOutputStream fileOutputStream = new FileOutputStream(tellFile,
+            false)) {
 
          StreamResult streamResult = new StreamResult(fileOutputStream);
          TransformerFactory tf = TransformerFactory.newInstance();
          Transformer transformer = tf.newTransformer();
 
          askQuestion.toNode(taskmodel, documentTell);
-         writeProperties(AskQuestion.filename,AskQuestion.properties); ///???
+         writeProperties(AskQuestion.filename, AskQuestion.properties); // /???
          // Adding indentation and omitting xml declaration
          transformer.setOutputProperty(OutputKeys.INDENT, "yes");
          transformer.setOutputProperty(
@@ -109,7 +112,8 @@ public class DomManipulation {
 
    /**
     * Writes dom to specified stream.
-    * @throws IOException 
+    * 
+    * @throws IOException
     */
    public void writeDOM (PrintStream stream, TaskModel taskmodel)
          throws TransformerException, IOException {
@@ -127,9 +131,9 @@ public class DomManipulation {
          Document doc = builder.newDocument();
          DOMSource domSource = new DOMSource(doc);
          taskmodel.toNode(doc);
-                  
-         writeProperties("models\\Tell",AskQuestion.properties); ///???
-         
+
+         writeProperties("models\\Tell", AskQuestion.properties); // /???
+
          transformer.transform(domSource, new StreamResult(stream));
       } catch (TransformerConfigurationException e) {
          throw e;
@@ -138,19 +142,21 @@ public class DomManipulation {
       }
 
    }
-   
+
    /**
     * Write properties file.
     */
-   public void writeProperties(String fileName, Properties properties) throws IOException{
-      File demonstrationFile = new File(fileName+".properties");
+   public void writeProperties (String fileName, Properties properties)
+         throws IOException {
+      File demonstrationFile = new File(fileName + ".properties");
       if ( !demonstrationFile.exists() )
          demonstrationFile.createNewFile();
 
       try (FileOutputStream fileOutputStream = new FileOutputStream(
             demonstrationFile, false)) {
-         for(Entry<Object, Object> property:properties.entrySet()){
-            byte[] contentInBytes = ((String)property.getKey()+" = " + (String)property.getValue()+"\n").getBytes();            
+         for (Entry<Object, Object> property : properties.entrySet()) {
+            byte[] contentInBytes = ((String) property.getKey() + " = "
+               + (String) property.getValue() + "\n").getBytes();
             fileOutputStream.write(contentInBytes);
          }
       } catch (FileNotFoundException e) {

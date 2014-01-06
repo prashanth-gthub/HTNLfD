@@ -59,6 +59,10 @@ public class DecompositionClass extends TaskModel.Member {
 
    }
 
+   /**
+    * Returns a name that is not used for any decomposition. Check every
+    * decomposition in all of the tasks???
+    */
    public String findDecompositionName (String DecName) {
       int count = 1;
 
@@ -246,11 +250,18 @@ public class DecompositionClass extends TaskModel.Member {
 
    }
 
+   /**
+    * Removes the step.
+    */
    public void removeStep (String name) {
       steps.remove(name);
       stepNames.remove(name);
    }
 
+   /**
+    * Removes the step and their bindings and their inputs/outputs. remove
+    * inputs????
+    */
    public void removeStepB (String name) {
       String stepName = name;
       Step removeStep = this.getStep(stepName);
@@ -267,6 +278,9 @@ public class DecompositionClass extends TaskModel.Member {
 
    }
 
+   /**
+    * Gets the step.
+    */
    public Step getStep (String name) {
       if ( steps != null )
          return steps.get(name);
@@ -394,11 +408,17 @@ public class DecompositionClass extends TaskModel.Member {
             this.required.add(require);
       }
 
+      /**
+       * Removes all required steps.
+       */
       public void removeRequireds () {
          if ( required != null && !this.required.isEmpty() )
             this.required.clear();
       }
 
+      /**
+       * Removes the specified required step.
+       */
       public void removeRequired (String require) {
          this.required.remove(require);
       }
@@ -503,6 +523,9 @@ public class DecompositionClass extends TaskModel.Member {
          return sameOrder;
       }
 
+      /**
+       * Checks two steps are equivalent.
+       */
       public boolean isEquivalentSteps (TaskModel taskModel,
             List<String> steps1, DecompositionClass dec1, List<String> steps2,
             DecompositionClass dec2) {
@@ -667,6 +690,9 @@ public class DecompositionClass extends TaskModel.Member {
       return true;
    }
 
+   /**
+    * Checks if two steps have the same inputs.
+    */
    public boolean checkStepInputs (Entry<String, Step> stp1, TaskClass type1,
          Entry<String, Step> stp2, TaskClass type2, DecompositionClass dec1,
          DecompositionClass dec2, TaskModel taskModel) {
@@ -682,45 +708,47 @@ public class DecompositionClass extends TaskModel.Member {
                String value2 = null;
                for (Entry<String, Binding> binding : dec1.getBindings()
                      .entrySet()) {
-                  
+
                   if ( binding.getValue().getStep().equals(stp1.getKey())
                      && binding.getValue().getSlot().equals(in1.getName()) ) {
-                        value1 = getConstantValue (binding,
-                           stp1.getValue().getDecompositionClass());
-                     if(value1==null){
-                        binding = getConstantBinding (binding,
-                              stp1.getValue().getDecompositionClass());
-                        
+                     value1 = getConstantValue(binding, stp1.getValue()
+                           .getDecompositionClass());
+                     if ( value1 == null ) {
+                        binding = getConstantBinding(binding, stp1.getValue()
+                              .getDecompositionClass());
+
                         int index = binding.getValue().getValue().indexOf('.');
-                        in1Name = binding.getValue().getValue().substring(index+1);
+                        in1Name = binding.getValue().getValue()
+                              .substring(index + 1);
                      }
                      break;
                   }
                }
                for (Entry<String, Binding> binding : dec2.getBindings()
                      .entrySet()) {
-                  
+
                   if ( binding.getValue().getStep().equals(stp2.getKey())
                      && binding.getValue().getSlot().equals(in2.getName()) ) {
-                        value2 = getConstantValue (binding,
-                           stp2.getValue().getDecompositionClass());
-                     if(value2==null){
-                        binding = getConstantBinding (binding,
-                              stp2.getValue().getDecompositionClass());
+                     value2 = getConstantValue(binding, stp2.getValue()
+                           .getDecompositionClass());
+                     if ( value2 == null ) {
+                        binding = getConstantBinding(binding, stp2.getValue()
+                              .getDecompositionClass());
                         int index = binding.getValue().getValue().indexOf('.');
-                        in2Name = binding.getValue().getValue().substring(index+1);
+                        in2Name = binding.getValue().getValue()
+                              .substring(index + 1);
                      }
                      break;
                   }
                }
 
-               if(value1 == null){
-                  value1 = findValueInParents(taskModel, stp1.getKey(),
-                     type1, dec1, in1Name);
+               if ( value1 == null ) {
+                  value1 = findValueInParents(taskModel, stp1.getKey(), type1,
+                        dec1, in1Name);
                }
-               if(value2 == null){
-                  value2 = findValueInParents(taskModel, stp2.getKey(),
-                     type2, dec2, in2Name);
+               if ( value2 == null ) {
+                  value2 = findValueInParents(taskModel, stp2.getKey(), type2,
+                        dec2, in2Name);
                }
                if ( value1 != null && value2 != null && value1.equals(value2) ) {
                   // ???? removing the input
@@ -748,7 +776,7 @@ public class DecompositionClass extends TaskModel.Member {
       if ( dec != null && stp != null ) {
          for (Entry<String, Binding> bind1 : dec.getBindings().entrySet()) {
             if ( bind1.getValue().getStep().equals(stp)
-               && inputName.contains(bind1.getValue().getSlot()) ) { ///????
+               && inputName.contains(bind1.getValue().getSlot()) ) { // /????
                String tem = getConstantValue(bind1, dec);
                if ( tem != null )
                   return tem;
@@ -900,78 +928,74 @@ public class DecompositionClass extends TaskModel.Member {
          return false;
       return true;
    }
-   
-   public void setType(Entry<String,Binding> bind){
+
+   /**
+    * Sets the type of specified binding.
+    */
+   public void setType (Entry<String, Binding> bind) {
       Object first = null;
       Object second = null;
-      if(bind == null)
+      if ( bind == null )
          return;
       // Finds left part of binding's type
       String bindVal = bind.getKey();
-      if(bindVal.contains("$this.")){
-         
+      if ( bindVal.contains("$this.") ) {
+
          String name = bindVal.substring(6);
-         first = getType(bind.getValue().value,name,this.goal);
-         
+         first = getType(name, this.goal);
+
+      } else {
+         String stepName = bindVal.substring(1, bindVal.indexOf('.'));
+         Step step = bind.getValue().getDecompositionClass().getStep(stepName);
+
+         String name = bindVal.substring(bindVal.indexOf('.') + 1);
+         first = getType(name, step.getType());
       }
-      else{
-         String stepName = bindVal.substring(1,bindVal.indexOf('.'));
-         Step step = bind.getValue().getDecompositionClass().getStep(stepName); 
-         
-         String name = bindVal.substring(bindVal.indexOf('.')+1);
-         first = getType(bind.getValue().value,
-               name,
-               step.getType());
-      }
-      
-   // Finds right part of binding's type
+
+      // Finds right part of binding's type
       bindVal = bind.getValue().value;
-      if(bindVal.contains("$this.")){
-         
+      if ( bindVal.contains("$this.") ) {
+
          String name = bindVal.substring(6);
-         second = getType(bind.getValue().value,name,this.goal);
-         
-      }
-      else{
-         if(bindVal.indexOf('.')>1){
-            String stepName = bindVal.substring(1,bindVal.indexOf('.'));
-         
-            Step step = bind.getValue().getDecompositionClass().getStep(stepName);
-         
-            if(step != null){
-               String name = bindVal.substring(bindVal.indexOf('.')+1);
-               second = getType(bind.getValue().value,name,step.getType());
-            }
-            else{
+         second = getType(name, this.goal);
+
+      } else {
+         if ( bindVal.indexOf('.') > 1 ) {
+            String stepName = bindVal.substring(1, bindVal.indexOf('.'));
+
+            Step step = bind.getValue().getDecompositionClass()
+                  .getStep(stepName);
+
+            if ( step != null ) {
+               String name = bindVal.substring(bindVal.indexOf('.') + 1);
+               second = getType(name, step.getType());
+            } else {
                bind.getValue().setType(Type.Constant);
             }
-         }
-         else{
+         } else {
             bind.getValue().setType(Type.Constant);
          }
       }
-      
-      if((first instanceof Input)  && (second instanceof Input)){
+
+      if ( (first instanceof Input) && (second instanceof Input) ) {
          bind.getValue().setType(Type.InputInput);
-      }
-      else if((first instanceof Input)  && (second instanceof Output)){
+      } else if ( (first instanceof Input) && (second instanceof Output) ) {
          bind.getValue().setType(Type.InputOutput);
-      }
-      else if((first instanceof Output)  && (second instanceof Output)){
+      } else if ( (first instanceof Output) && (second instanceof Output) ) {
          bind.getValue().setType(Type.OutputOutput);
       }
    }
-   
-   
-   
-   public Slot getType(String bindVal, String name, TaskClass task){
-      
+
+   /**
+    * Gets the type.
+    */
+   public Slot getType (String name, TaskClass task) {
+
       Input in = task.getInput(name);
       Output out = task.getOutput(name);
-      if(in!=null){
+      if ( in != null ) {
          return in;
-      }
-      else if(out!=null){
+      } else if ( out != null ) {
          return out;
       }
       return null;
@@ -1044,12 +1068,11 @@ public class DecompositionClass extends TaskModel.Member {
       public void setSlot (String slot) {
          this.slot = slot;
       }
-      
-      
+
       public DecompositionClass getDecompositionClass () {
          return getDecomposition();
       }
-      
+
       /**
        * Makes the binding's DOM element.
        */
@@ -1070,7 +1093,6 @@ public class DecompositionClass extends TaskModel.Member {
          subtaskBinding.setAttributeNode(bindingValue);
          return subtaskBinding;
       }
-      
 
    }
 
@@ -1094,93 +1116,62 @@ public class DecompositionClass extends TaskModel.Member {
       }
       return null;
    }
-   
+
+   /**
+    * Gets the constant value of a binding.
+    */
    public String getConstantValue (Entry<String, Binding> bindingRef,
          DecompositionClass dec) {
-      
-      while(true){
-         boolean contain = false;
-         if(bindingRef == null){
-            return null;
-         }
-         for (Entry<String, Binding> binding : dec.getBindings().entrySet()) {
-            if ( binding.getKey().equals(bindingRef.getKey()) ) {
-               this.setType(binding);
-               if(binding.getValue().getType() == Type.Constant){
-                  contain = true;
-                  return binding.getValue().getValue();
-               }
-               else if(binding.getValue().getType() == Type.InputInput){
-                  contain = true;
-                  bindingRef = getBinding(binding,dec);
-                  break;
-               }
-               else if(binding.getValue().getType() == Type.InputOutput){
-                  contain = true;
-                  String stepName = binding.getValue().value.substring(1,binding.getValue().value.indexOf('.'));
-                  Step step = binding.getValue().getDecompositionClass().getStep(stepName);
-                  String outputName = binding.getValue().value.substring(binding.getValue().value.indexOf('.')+1);
-                  String inputName = null;
-                  for(Input in:step.getType().getDeclaredInputs()){                     
-                     if(in.getModified().getName().equals(outputName)){
-                        inputName = "$"+stepName+"."+in.getName();
-                        break;
-                     }
-                  }
-                  for (Entry<String, Binding> binding2 : dec.getBindings().entrySet()) {
-                     if(binding2.getKey().equals(inputName)){
-                        bindingRef = binding2;
-                        break;
-                     }
-                  }
-                  break;
-               }
 
-            }
-         }
-         if(!contain){
-            break;
-         }
-      }
-      return null;
+      Entry<String, Binding> binding = getConstantBinding(bindingRef, dec);
+      if ( binding != null )
+         return binding.getValue().value;
+      else
+         return null;
+
    }
 
-   public Entry<String, Binding> getConstantBinding (Entry<String, Binding> bindingRef,
-         DecompositionClass dec) {
-      
-      while(true){
+   /**
+    * Gets the constant binding of a binding.
+    */
+   public Entry<String, Binding> getConstantBinding (
+         Entry<String, Binding> bindingRef, DecompositionClass dec) {
+
+      while (true) {
          boolean contain = false;
-         
+
          for (Entry<String, Binding> binding : dec.getBindings().entrySet()) {
             if ( binding.getKey().equals(bindingRef.getKey()) ) {
                this.setType(binding);
-               if(binding.getValue().getType() == Type.Constant){
+               if ( binding.getValue().getType() == Type.Constant ) {
                   contain = true;
                   return binding;
-               }
-               else if(binding.getValue().getType() == Type.InputInput){
+               } else if ( binding.getValue().getType() == Type.InputInput ) {
                   contain = true;
-                  Entry<String, Binding> bindingR = getBinding(binding,dec);
-                  if(bindingR!=null)
+                  Entry<String, Binding> bindingR = getBinding(binding, dec);
+                  if ( bindingR != null )
                      bindingRef = bindingR;
                   else
                      return bindingRef;
                   break;
-               }
-               else if(binding.getValue().getType() == Type.InputOutput){
+               } else if ( binding.getValue().getType() == Type.InputOutput ) {
                   contain = true;
-                  String stepName = binding.getValue().value.substring(1,binding.getValue().value.indexOf('.'));
-                  Step step = this.getStep(stepName);
-                  String outputName = binding.getValue().value.substring(binding.getValue().value.indexOf('.')+1);
+                  String stepName = binding.getValue().value.substring(1,
+                        binding.getValue().value.indexOf('.'));
+                  Step step = binding.getValue().getDecompositionClass()
+                        .getStep(stepName);
+                  String outputName = binding.getValue().value
+                        .substring(binding.getValue().value.indexOf('.') + 1);
                   String inputName = null;
-                  for(Input in:step.getType().getDeclaredInputs()){                     
-                     if(in.getModified().getName().equals(outputName)){
-                        inputName = "$"+stepName+"."+in.getName();
+                  for (Input in : step.getType().getDeclaredInputs()) {
+                     if ( in.getModified().getName().equals(outputName) ) {
+                        inputName = "$" + stepName + "." + in.getName();
                         break;
                      }
                   }
-                  for (Entry<String, Binding> binding2 : dec.getBindings().entrySet()) {
-                     if(binding2.getKey().equals(inputName)){
+                  for (Entry<String, Binding> binding2 : dec.getBindings()
+                        .entrySet()) {
+                     if ( binding2.getKey().equals(inputName) ) {
                         bindingRef = binding2;
                      }
                   }
@@ -1189,13 +1180,16 @@ public class DecompositionClass extends TaskModel.Member {
 
             }
          }
-         if(!contain){
+         if ( !contain ) {
             break;
          }
       }
       return bindingRef;
    }
-   
+
+   /**
+    * Gets the binding entry.
+    */
    public Entry<String, Binding> getBinding (Entry<String, Binding> bindingRef,
          DecompositionClass dec) {
       for (Entry<String, Binding> binding : dec.getBindings().entrySet()) {
@@ -1207,6 +1201,9 @@ public class DecompositionClass extends TaskModel.Member {
       return null;
    }
 
+   /**
+    * Gets the binding entry.
+    */
    public Entry<String, Binding> getBinding (String value) {
       for (Entry<String, Binding> binding : this.getBindings().entrySet()) {
          if ( binding.getValue().getValue().equals(value) ) {
@@ -1263,7 +1260,7 @@ public class DecompositionClass extends TaskModel.Member {
                   String valueDep = findValueInParents(taskModel, null, task,
                         this, bindingDep.getValue().getValue().substring(6));
                   // getBindingValue(bindingDep, this);
-                     
+
                   // Better implementation
                   if ( valueDep != null && valueRef != null
                      && valueDep.equals(valueRef) ) {
@@ -1279,11 +1276,18 @@ public class DecompositionClass extends TaskModel.Member {
                                  step.getValue().addRequired(
                                        bindingRef.getValue().getStep());
                                  this.setOrdered(false);
-                                 String stepOutputName = bindingRef.getKey().substring(1,bindingRef.getKey().indexOf('.'));
-                                 Input stO = this.getStep(stepOutputName).type.getInput(
-                                       bindingRef.getKey().substring(bindingRef.getKey().indexOf('.')+1));
-                                 bindingDep.getValue().setValue("$"+stepOutputName+"."+stO.getModified().getName());
-                                 
+                                 String stepOutputName = bindingRef.getKey()
+                                       .substring(1,
+                                             bindingRef.getKey().indexOf('.'));
+                                 Input stO = this.getStep(stepOutputName).type
+                                       .getInput(bindingRef.getKey()
+                                             .substring(
+                                                   bindingRef.getKey().indexOf(
+                                                         '.') + 1));
+                                 bindingDep.getValue().setValue(
+                                       "$" + stepOutputName + "."
+                                          + stO.getModified().getName());
+
                                  break;
                               }
                            }
@@ -1495,21 +1499,20 @@ public class DecompositionClass extends TaskModel.Member {
     * Adds the ordering by dataflow.
     */
    public void addOrderingByDataflow () {
-      for(Entry<String, Binding> bind:this.bindings.entrySet()){
+      for (Entry<String, Binding> bind : this.bindings.entrySet()) {
          String stepIn = bind.getValue().step;
          this.setType(bind);
-         if(!stepIn.equals("this") && 
-               bind.getValue().type != Type.Constant && 
-               this.getStep(stepIn).getType().isInput(bind.getValue().slot)){
+         if ( !stepIn.equals("this") && bind.getValue().type != Type.Constant
+            && this.getStep(stepIn).getType().isInput(bind.getValue().slot) ) {
             int st = bind.getValue().getValue().indexOf('.');
-            if(st == -1)
+            if ( st == -1 )
                continue;
-            String outputName = bind.getValue().getValue().substring(st+1);
+            String outputName = bind.getValue().getValue().substring(st + 1);
             String stepOut = bind.getValue().getValue().substring(1, st);
-            if(!stepOut.equals("this") && this.getStep(stepOut).getType().isOutput(outputName)){
-               
-               
-               if(!stepIn.equals(stepOut)){
+            if ( !stepOut.equals("this")
+               && this.getStep(stepOut).getType().isOutput(outputName) ) {
+
+               if ( !stepIn.equals(stepOut) ) {
                   this.getStep(stepIn).addRequired(stepOut);
                }
             }

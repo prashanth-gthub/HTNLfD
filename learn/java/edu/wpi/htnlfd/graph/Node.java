@@ -54,17 +54,16 @@ public class Node {
     * Evaluate nodes value.
     */
    public List<ArrayList<Node>> evaluate () {
-      
+
       List<ArrayList<Node>> nodeList = new ArrayList<ArrayList<Node>>();
-      
-      if(this.typeOfChildren == CType.Alter){
-         for(Node child:this.children){
+
+      if ( this.typeOfChildren == CType.Alter ) {
+         for (Node child : this.children) {
             ArrayList<Node> newNodes = new ArrayList<Node>();
             nodeList.add(newNodes);
             eval(child, newNodes, nodeList);
          }
-      }
-      else{
+      } else {
          ArrayList<Node> newNodes = new ArrayList<Node>();
          nodeList.add(newNodes);
          eval(this, newNodes, nodeList);
@@ -82,46 +81,31 @@ public class Node {
       } else {
          if ( root.typeOfChildren == CType.Required ) {
             for (Node child : root.children) {
-               //Node ret = eval(child, nodes, nodeList);
-               //if ( ret != null ){
-                  nodes.add(child);
-               //}
-                  /*for(ArrayList<Node> li:nodeList){
-                     li.add(ret);
-                  }*/
-               
-            }
-         } 
-         /*else if ( root.typeOfChildren == CType.Alter ) {
+               // Node ret = eval(child, nodes, nodeList);
+               // if ( ret != null ){
+               nodes.add(child);
+               // }
+               /*
+                * for(ArrayList<Node> li:nodeList){ li.add(ret); }
+                */
 
-            int size = nodes.size();
-            
-            for (int ch=0;ch<root.children.size();ch++) {
-               Node child = root.children.get(ch);
-               
-               if(ch == 0){
-                  Node ret = eval(child, nodes, nodeList);
-                  if ( ret != null )
-                     nodes.add(ret);
-               }
-               else {
-                  ArrayList<Node> newNodes = new ArrayList<Node>();
-                  for(int s=0;s<size;s++){
-                     newNodes.add(nodes.get(s).getCopy());
-                  }
-                  
-                  nodeList.add(newNodes);
-                  Node ret = eval(child, newNodes, nodeList);
-                  if ( ret != null )
-                     newNodes.add(ret);
-               }
             }
-         }*/
+         }
+         /*
+          * else if ( root.typeOfChildren == CType.Alter ) { int size =
+          * nodes.size(); for (int ch=0;ch<root.children.size();ch++) { Node
+          * child = root.children.get(ch); if(ch == 0){ Node ret = eval(child,
+          * nodes, nodeList); if ( ret != null ) nodes.add(ret); } else {
+          * ArrayList<Node> newNodes = new ArrayList<Node>(); for(int
+          * s=0;s<size;s++){ newNodes.add(nodes.get(s).getCopy()); }
+          * nodeList.add(newNodes); Node ret = eval(child, newNodes, nodeList);
+          * if ( ret != null ) newNodes.add(ret); } } }
+          */
       }
-            return null;
+      return null;
    }
-   
-   public Node getCopy(){
+
+   public Node getCopy () {
       Node n = new Node();
       n.step = this.step;
       n.stepName = this.stepName;
@@ -131,82 +115,41 @@ public class Node {
       return n;
    }
 
-   
    /**
     * Give nodes without any empty node between two consecutive steps and with
     * empty node between two non-consecutive steps.
     */
-   /*public List<ArrayList<Node>> giveSeparateNodes () {
-      ArrayList<Node> newNodes = new ArrayList<Node>();
-      List<ArrayList<Node>> nodeList = new ArrayList<ArrayList<Node>>();
-      nodeList.add(newNodes);
-      Node ret = giveSeparateNode(this, newNodes, nodeList);
-      if ( ret != null ) {
-         newNodes.add(ret);
-      }
-      return nodeList;
-   }
-*/
-   
-   /**
-    * Give nodes without any empty node between two consecutive steps and with
-    * empty node between two non-consecutive steps.
+   /*
+    * public List<ArrayList<Node>> giveSeparateNodes () { ArrayList<Node>
+    * newNodes = new ArrayList<Node>(); List<ArrayList<Node>> nodeList = new
+    * ArrayList<ArrayList<Node>>(); nodeList.add(newNodes); Node ret =
+    * giveSeparateNode(this, newNodes, nodeList); if ( ret != null ) {
+    * newNodes.add(ret); } return nodeList; }
     */
-   /*public Node giveSeparateNode (Node root, ArrayList<Node> nodes,
-         List<ArrayList<Node>> nodeList) {
-      if ( root.children.isEmpty() ) {
-         return root;
-      } else {
-         if ( root.typeOfChildren == CType.Required ) {
-            for (Node child : root.children) {
-               Node ret = giveSeparateNode(child, nodes, nodeList);
-               if ( ret != null ){
-                  for(ArrayList<Node> li:nodeList){
-                     
-                     li.add(ret);
-                     Node dumyNode = new Node();
-                     dumyNode.typeOfNode = NType.Empty;
-                     li.add(dumyNode);
-                  }
-               }
-            }
-         } else if ( root.typeOfChildren == CType.Alter ) {
 
-            int size = nodes.size();
-            
-            for (int ch=0;ch<root.children.size();ch++) {
-               Node child = root.children.get(ch);
-               
-               if(ch == 0){
-                  Node ret = eval(child, nodes, nodeList);
-                  if ( ret != null ){
-                     nodes.add(ret);
-                     Node dumyNode = new Node();
-                     dumyNode.typeOfNode = NType.Empty;
-                     nodes.add(dumyNode);
-                  }
-               }
-               else {
-                  ArrayList<Node> newNodes = new ArrayList<Node>();
-                  for(int s=0;s<size;s++){
-                     newNodes.add(nodes.get(s).getCopy());
-                  }
-                  
-                  nodeList.add(newNodes);
-                  Node ret = giveSeparateNode(child, newNodes, nodeList);
-                  if ( ret != null ){
-                     newNodes.add(ret);
-                     Node dumyNode = new Node();
-                     dumyNode.typeOfNode = NType.Empty;
-                     newNodes.add(dumyNode);
-                  }
-               }
-            }
-         }
-      }
-      return null;
-   }
-*/
+   /**
+    * Give nodes without any empty node between two consecutive steps and with
+    * empty node between two non-consecutive steps.
+    */
+   /*
+    * public Node giveSeparateNode (Node root, ArrayList<Node> nodes,
+    * List<ArrayList<Node>> nodeList) { if ( root.children.isEmpty() ) { return
+    * root; } else { if ( root.typeOfChildren == CType.Required ) { for (Node
+    * child : root.children) { Node ret = giveSeparateNode(child, nodes,
+    * nodeList); if ( ret != null ){ for(ArrayList<Node> li:nodeList){
+    * li.add(ret); Node dumyNode = new Node(); dumyNode.typeOfNode =
+    * NType.Empty; li.add(dumyNode); } } } } else if ( root.typeOfChildren ==
+    * CType.Alter ) { int size = nodes.size(); for (int
+    * ch=0;ch<root.children.size();ch++) { Node child = root.children.get(ch);
+    * if(ch == 0){ Node ret = eval(child, nodes, nodeList); if ( ret != null ){
+    * nodes.add(ret); Node dumyNode = new Node(); dumyNode.typeOfNode =
+    * NType.Empty; nodes.add(dumyNode); } } else { ArrayList<Node> newNodes =
+    * new ArrayList<Node>(); for(int s=0;s<size;s++){
+    * newNodes.add(nodes.get(s).getCopy()); } nodeList.add(newNodes); Node ret =
+    * giveSeparateNode(child, newNodes, nodeList); if ( ret != null ){
+    * newNodes.add(ret); Node dumyNode = new Node(); dumyNode.typeOfNode =
+    * NType.Empty; newNodes.add(dumyNode); } } } } } return null; }
+    */
    /**
     * Checks if two nodes are equivalent. Checks one node's step with another.
     */
@@ -235,7 +178,7 @@ public class Node {
     */
    public Node addNode (Node node, CType required, TaskModel taskModel) {
 
-      if(node.step == null)
+      if ( node.step == null )
          return null;
       node.parent.children.add(node.parent.children.indexOf(node) + 1, this);
       this.parent = node.parent;

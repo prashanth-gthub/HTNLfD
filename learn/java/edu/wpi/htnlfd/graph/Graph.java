@@ -23,8 +23,9 @@ public class Graph {
       Node demonstrationRoot = new Node(null, NType.Root);
       getTree(newTask, demonstrationRoot);
       List<Node> demonstrationNodes = demonstrationRoot.evaluate().get(0);
-      boolean merged = mergable(root, demonstrationNodes, taskModel, demonstrationRoot);
-      if(!merged){
+      boolean merged = mergable(root, demonstrationNodes, taskModel,
+            demonstrationRoot);
+      if ( !merged ) {
          demonstration.addAlternativeRecipe(newTask, null, task);
       }
 
@@ -54,7 +55,7 @@ public class Graph {
    }
 
    /**
-    * One node.
+    * Makes one Node recursively.
     */
    public Node oneNode (DecompositionClass dec, Node root) {
       for (String stepName : dec.getStepNames()) {
@@ -159,9 +160,9 @@ public class Graph {
          int LCS = getLCS(nodes, demonstration, taskModel, newNodes1, newNodes2);
          nodesLCS.add(new Pair((ArrayList<Node>) nodes, LCS));
       }
-      Collections.sort(nodesLCS,Collections.reverseOrder());
+      Collections.sort(nodesLCS, Collections.reverseOrder());
 
-      if(nodesLCS.size() == 0 || nodesLCS.get(0).LCS == 0){
+      if ( nodesLCS.size() == 0 || nodesLCS.get(0).LCS == 0 ) {
          return false;
       }
       for (Pair pa : nodesLCS) {
@@ -190,27 +191,17 @@ public class Graph {
          TaskModel taskModel) {
       boolean merged = true;
 
-      //List<ArrayList<Node>> eval = root.giveSeparateNodes();
+      // List<ArrayList<Node>> eval = root.giveSeparateNodes();
 
       ArrayList<Node> evl = nodes;
-      /*for (ArrayList<Node> ev : eval) {
-         ArrayList<Node> copyEv = new ArrayList<Node>(ev);
-         Iterator<Node> next = copyEv.iterator();
-         while (next.hasNext()) {
-            if ( next.next().typeOfNode == NType.Empty )
-               next.remove();
-         }
-         evl = ev;
-         for (int i = 0; i < nodes.size(); i++) {
-            if ( !nodes.get(i).equals(copyEv.get(i)) ) {
-               evl = null;
-               break;
-            }
-         }
-         if(evl!=null){
-            break;
-         }
-      }*/
+      /*
+       * for (ArrayList<Node> ev : eval) { ArrayList<Node> copyEv = new
+       * ArrayList<Node>(ev); Iterator<Node> next = copyEv.iterator(); while
+       * (next.hasNext()) { if ( next.next().typeOfNode == NType.Empty )
+       * next.remove(); } evl = ev; for (int i = 0; i < nodes.size(); i++) { if
+       * ( !nodes.get(i).equals(copyEv.get(i)) ) { evl = null; break; } }
+       * if(evl!=null){ break; } }
+       */
 
       int[] indices = new int[newNodes2.size()];
 
@@ -307,9 +298,9 @@ public class Graph {
          if ( !set ) {
             secondM = indicesMod.length;
          }
-         
-         if((firstM == -1 && secondM == indicesMod.length) ||
-               (firstD == -1 && secondD == indicesDem.length)){
+
+         if ( (firstM == -1 && secondM == indicesMod.length)
+            || (firstD == -1 && secondD == indicesDem.length) ) {
             return false;
          }
 
@@ -322,6 +313,7 @@ public class Graph {
             for (int m = firstM + 1; m < secondM; m++) {
                steps.add(nodes.get(m).step);
             }
+
             TaskClass newTask2 = nodes.get(firstM + 1).step
                   .getDecompositionClass()
                   .getGoal()
@@ -344,7 +336,7 @@ public class Graph {
 
             this.demonstration.addAlternativeRecipe(newTask, null, newTask2);
 
-         } else if ( firstM + 1 == secondM &&  firstD + 1 != secondD ) {
+         } else if ( firstM + 1 == secondM && firstD + 1 != secondD ) {
             // optional
             int where = firstM;
             Node retnode = nodes.get(where);
@@ -471,6 +463,78 @@ public class Graph {
 
       for (Node nod : nodes) {
          nod.visited = false;
+      }
+
+   }
+
+   /**
+    * Gets different permutations of the list of nodes.
+    */
+   void getPermutations (List<ArrayList<Node>> nodesLists, List<Node> dem) {
+      permutation(nodesLists, dem, new ArrayList<Node>());
+
+      for (List<Node> nodeLists : nodesLists) {
+         for (int m = 1; m < nodeLists.size(); m++) {
+            nodeLists.get(m).parent = null;
+            nodeLists.get(m).parent = nodeLists.get(m - 1);
+            nodeLists.get(m - 1).children.clear();
+            nodeLists.get(m - 1).children.add(nodeLists.get(m));
+         }
+      }
+   }
+
+   void permutation (List<ArrayList<Node>> nodesLists, List<Node> dem,
+         List<Node> nodes) {
+
+      if ( nodes.size() == dem.size() ) {
+         nodesLists.add((ArrayList<Node>) nodes);
+
+         return;
+      }
+
+      // checking ordering constraints
+      if ( nodes.size() != 0 && nodes.get(nodes.size() - 1).step != null
+         && nodes.get(nodes.size() - 1).step.getRequired() != null
+         && nodes.get(nodes.size() - 1).step.getRequired().size() != 0 ) {
+         for (String reqStep : nodes.get(nodes.size() - 1).step.getRequired()) {
+            boolean contain = false;
+            for (Node req : nodes) {
+               if ( req.stepName.equals(reqStep) ) {
+                  contain = true;
+               }
+            }
+            if ( !contain ) {
+               return;
+            }
+         }
+      }
+
+      for (int i = 0; i < dem.size(); i++) {
+         boolean contain = false;
+         for (int j = 0; j < nodes.size(); j++) {
+            if ( dem.get(i).step.equals(nodes.get(j).step) ) {
+               contain = true;
+               break;
+            }
+         }
+         if ( !contain ) {
+            List<Node> newNodes = new ArrayList<Node>();
+            for (Node node : nodes) {
+               if ( node.step != null ) {
+                  Node temp = new Node(node.value, node.parent, node.children,
+                        node.typeOfChildren, node.typeOfNode);
+                  newNodes.add(temp);
+               } else {
+                  Node temp = new Node();
+                  newNodes.add(temp);
+               }
+            }
+            Node temp = new Node(dem.get(i).value, dem.get(i).parent,
+                  dem.get(i).children, dem.get(i).typeOfChildren,
+                  dem.get(i).typeOfNode);
+            newNodes.add(temp);
+            permutation(nodesLists, dem, newNodes);
+         }
       }
 
    }

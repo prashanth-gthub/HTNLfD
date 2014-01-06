@@ -1,1 +1,9 @@
-<taskModel xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext" about="urn:disco.wpi.edu:htnlfd:tell"/>
+<taskModel xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext" about="urn:disco.wpi.edu:htnlfd:tell">
+  <task id="TellAppCondition">
+    <input name="subtask" type="string"/>
+    <input name="condition" type="string"/>
+    <binding slot="$this.subtask" value="placeSilverware1"/>
+    <binding slot="$this.external" value="true"/>
+    <script>Packages.edu.wpi.htnlfd.Init.addApplicable ($disco, $this.subtask, $this.condition);</script>
+  </task>
+</taskModel>

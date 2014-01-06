@@ -8,6 +8,7 @@ public class AskQuestion {
    public static final String filename = "models\\Tell";
 
    public String namespace = "urn:disco.wpi.edu:htnlfd:tell";
+
    public static Properties properties = new Properties();
 
    private List<Question> questions = new ArrayList<Question>(); // final
@@ -24,6 +25,9 @@ public class AskQuestion {
       addQuestion(q2);
    }
 
+   /**
+    * Adds the question to the list of questions according to it's priority.
+    */
    public void addQuestion (Question q) {
       if ( this.questions.size() == 0 ) {
          this.questions.add(q);
@@ -38,6 +42,9 @@ public class AskQuestion {
       }
    }
 
+   /**
+    * Finds the most important question.
+    */
    public Question Ask (TaskModel taskModel) {
       for (Question question : this.questions) {
          Question q = question.ask(taskModel);
@@ -46,9 +53,12 @@ public class AskQuestion {
       }
       return null;
    }
-   
-   public Node toNode(TaskModel taskModel, Document document){
-      
+
+   /**
+    * Converts all of the questions to DOM Node and adds them to the document.
+    */
+   public Node toNode (TaskModel taskModel, Document document) {
+
       Element taskModelElement = null;
 
       taskModelElement = document.createElementNS(TaskModel.xmlnsValue,
@@ -61,11 +71,10 @@ public class AskQuestion {
       Attr xmlns = document.createAttribute("xmlns");
       xmlns.setValue(TaskModel.xmlnsValue);
       taskModelElement.setAttributeNode(xmlns);
-      
 
       for (Question question : this.questions) {
          Question q = question.ask(taskModel);
-         if ( q != null ){
+         if ( q != null ) {
             taskModelElement.appendChild(q.toNode(document));
          }
       }

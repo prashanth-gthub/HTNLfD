@@ -42,8 +42,7 @@ public class LearnAgent extends Agent {
                   Propose.Should.newInstance(disco, true,
                         disco.getTaskClass("TellAppCondition").newInstance()),
                   null);
-         }
-         else if ( question instanceof AskRepeatedStep ) {
+         } else if ( question instanceof AskRepeatedStep ) {
             return Agenda.newItem(
                   Propose.Should.newInstance(disco, true,
                         disco.getTaskClass("TellMaxOccurs").newInstance()),
@@ -70,6 +69,5 @@ public class LearnAgent extends Agent {
       }
       return super.respondIf(interaction, guess);
    }
-   
 
 }

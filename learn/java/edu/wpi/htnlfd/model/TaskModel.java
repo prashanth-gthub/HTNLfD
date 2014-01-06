@@ -65,14 +65,14 @@ public class TaskModel {
       }
       return null;
    }
-   
+
    /**
     * Gets the decomposition class.
     */
    public DecompositionClass getDecompositionClass (String id) {
       for (TaskClass task : tasks) {
          DecompositionClass dec = task.getDecomposition(id);
-         if ( dec !=null )
+         if ( dec != null )
             return dec;
       }
       return null;
