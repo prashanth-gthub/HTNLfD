@@ -46,6 +46,18 @@ public class Node {
       this.typeOfNode = typeOfNode;
    }
 
+   public Node (Node value, Node parent, List<Node> children,
+         CType typeOfChildren, NType typeOfNode, Step step, String stepNam) {
+      super();
+      this.value = value;
+      this.parent = parent;
+      this.children = children;
+      this.typeOfChildren = typeOfChildren;
+      this.typeOfNode = typeOfNode;
+      this.step = step;
+      this.stepName = stepNam;
+   }
+
    public Node () {
 
    }
@@ -69,6 +81,69 @@ public class Node {
          eval(this, newNodes, nodeList);
       }
       return nodeList;
+   }
+
+   public List<ArrayList<Node>> constantEvaluation () {
+
+      List<ArrayList<Node>> nodeLists = constantEval(this);
+      return nodeLists;
+
+   }
+
+   public List<ArrayList<Node>> constantEval (Node root) {
+      
+      if ( root.children == null || root.children.size() == 0 ) {
+         List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
+         ArrayList<Node> nodes = new ArrayList<Node>();
+         nodes.add(root);
+         nodesLists.add(nodes);
+         
+         return nodesLists;
+      } else if ( root.typeOfChildren == CType.Required ) {
+         
+         List<ArrayList<Node>> nodesListsTemp = new ArrayList<ArrayList<Node>>();
+         for (Node child : root.children) {
+            List<ArrayList<Node>> list = constantEval(child);
+            List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
+            
+            if(nodesListsTemp.size() != 0){
+               for(ArrayList<Node> l:list){
+                  for(ArrayList<Node> li:nodesListsTemp){
+                     ArrayList<Node> temp = new ArrayList<Node>();                     
+                     for(Node lii:li){
+                        temp.add(lii);
+                     }
+                     for(Node ll:l){
+                        temp.add(ll);
+                     }
+                     nodesLists.add(temp);
+                  }
+               }
+               
+               nodesListsTemp = nodesLists;
+            }
+            else{
+               for(ArrayList<Node> l:list){                  
+                  nodesListsTemp.add(l);                  
+               }
+            }
+            
+         }
+         
+         return nodesListsTemp;
+      } else if ( root.typeOfChildren == CType.Alter ) {
+
+         List<ArrayList<Node>> nodesListsTemp = new ArrayList<ArrayList<Node>>();
+         for (Node child : root.children) {
+            List<ArrayList<Node>> list = constantEval(child);
+            for(ArrayList<Node> l:list){
+               nodesListsTemp.add(l);
+            }
+         }
+         
+         return nodesListsTemp;
+      }
+      return null;
    }
 
    /**

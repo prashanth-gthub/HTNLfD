@@ -142,14 +142,14 @@ public class DecompositionClass extends TaskModel.Member {
 
       for (Entry<String, Binding> bind : prevDec.getBindings().entrySet()) {
          if ( bind.getValue().getStep().equals(stepName) ) {
-            Entry<String, Binding> bind2 = prevDec.getBinding(bind, prevDec);
+            Entry<String, Binding> bind2 = prevDec.getConstantBinding(bind, prevDec);
             String value = bind2.getValue().getValue();
 
             TaskClass.Input inputT = null;
 
             for (Input in : prevTask.getDeclaredInputs()) {
                if ( in.getName()
-                     .equals(bind.getValue().getValue().substring(6)) ) {
+                     .equals(bind2.getKey().substring(6)) ) {
                   inputT = in;
                   break;
                }
@@ -171,19 +171,30 @@ public class DecompositionClass extends TaskModel.Member {
                      .getValue().getSlot(), newName, "$this." + inName,
                      DecompositionClass.Type.InputInput));
 
+               
                if ( modified != null ) {
                   String outName = null;
                   outName = currentTask.getInput(inputT.getName())
                         .getModified().getName();
 
                   String outputTaskName = prevDec.getBindings()
-                        .get("$this" + modified).getValue()
+                        .get("$this." + modified).getValue()
                         .substring(2 + stepName.length());
 
-                  currentDec.addBinding("$this." + outName,
+                  /*currentDec.addBinding("$this." + outName,
                         currentDec.new Binding(outName, "this", "$" + newName
                            + "." + outputTaskName,
-                              DecompositionClass.Type.OutputOutput));
+                              DecompositionClass.Type.OutputOutput));*/
+                  
+                  /*TaskClass.Output output = currentTask.new Output(
+                        currentTask.findOutputName(newName, outputTaskName),
+                        prevTask.getOutput(outName).getType());
+                  currentTask.addOutput(output);
+
+                  currentDec.addBinding("$this." + output.getName(),
+                        currentDec.new Binding(output.getName(), "this", "$"
+                           + newName + "." + outputTaskName,
+                              DecompositionClass.Type.OutputOutput));*/
                }
 
             } else {
@@ -1125,14 +1136,17 @@ public class DecompositionClass extends TaskModel.Member {
 
       Entry<String, Binding> binding = getConstantBinding(bindingRef, dec);
       if ( binding != null )
-         return binding.getValue().value;
+         if(binding.getValue().getType() == Type.Constant)
+            return binding.getValue().value;
+         else
+            return null;
       else
          return null;
 
    }
 
    /**
-    * Gets the constant binding of a binding.
+    * Gets the constant binding of a binding by considering inputOutput bindings.
     */
    public Entry<String, Binding> getConstantBinding (
          Entry<String, Binding> bindingRef, DecompositionClass dec) {
