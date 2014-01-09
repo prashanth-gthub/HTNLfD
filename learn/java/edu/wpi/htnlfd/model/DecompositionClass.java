@@ -766,6 +766,7 @@ public class DecompositionClass extends TaskModel.Member {
                   contain = true;
                   break;
                }
+               
 
             }
          }
@@ -809,12 +810,16 @@ public class DecompositionClass extends TaskModel.Member {
          }
       }
 
-      List<Object[]> temp = findParents(parentTask, parentStep, parentSubtask,
+      List<Object[]> temp = findParents(parentTask, parentStep, parentSubtask, inputName,
             taskModel);
       if ( temp.size() > 0 ) {
          parentTask = (TaskClass) temp.get(temp.size() - 1)[0];
          parentSubtask = (DecompositionClass) temp.get(temp.size() - 1)[1];
          parentStep = (Entry<String, Step>) temp.get(temp.size() - 1)[2];
+         if(temp.size() - 2 >=0){
+            inputName = (String) temp.get(temp.size() - 2)[3];
+         }
+         
       } else {
          return null;
       }
@@ -841,7 +846,7 @@ public class DecompositionClass extends TaskModel.Member {
     * it.)
     */
    public List<Object[]> findParents (TaskClass parentTask,
-         Entry<String, Step> parentStep, DecompositionClass parentSubtask,
+         Entry<String, Step> parentStep, DecompositionClass parentSubtask, String inputName,
          TaskModel taskModel) {
 
       List<Object[]> parents = new ArrayList<Object[]>();
@@ -859,13 +864,32 @@ public class DecompositionClass extends TaskModel.Member {
                      parentTask = temptask;
                      parentSubtask = subtask;
                      parentStep = step;
+                     
 
-                     Object[] parent = new Object[3];
+                     Object[] parent = new Object[4];
 
                      parent[0] = temptask;
                      parent[1] = subtask;
                      parent[2] = step;
 
+                     if(inputName != null){
+                        for( Entry<String, Binding> bind:subtask.getBindings().entrySet()){
+                           if(bind.getValue().getSlot().equals(inputName)){
+                              Entry<String, Binding> bindF = this.getConstantBinding(bind, subtask);
+                              if(bindF.getValue().getType() == Type.Constant){
+                                 parent[3] = bindF.getValue().getSlot();
+                              }
+                              else if(bindF.getValue().getType() == Type.InputInput && bindF.getValue().value.
+                                    substring(1, 5).equals("this")){
+                                 parent[3] = bindF.getValue().value.
+                                       substring(6);
+                                 
+                              }
+                              inputName = (String) parent[3];
+                           }
+                        }
+                     }
+                     
                      parents.add(parent);
                      contain = true;
 

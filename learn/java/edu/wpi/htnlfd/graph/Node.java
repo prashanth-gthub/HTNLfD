@@ -232,17 +232,23 @@ public class Node {
       if ( this.equals(comp) ) {
          return true;
       }
-      if ( this.step != null && comp.step != null
-         && this.step.isEquivalent(comp.step, taskModel) ) {
+      Step stepFake = this.step;
+      Step stepReal = stepFake.getDecompositionClass().getStep(this.stepName);
+      
+      Step stepFakeD = comp.step;
+      Step stepRealD = stepFakeD.getDecompositionClass().getStep(comp.stepName);
+            
+      if ( stepReal != null && stepRealD != null
+         && stepReal.isEquivalent(stepRealD, taskModel) ) {
          Map.Entry<String, Step> entry1 = new AbstractMap.SimpleEntry<String, Step>(
                this.stepName, this.step);
          Map.Entry<String, Step> entry2 = new AbstractMap.SimpleEntry<String, Step>(
-               comp.stepName, comp.step);
-         if ( this.step.getDecompositionClass().checkStepInputs(entry1,
-               this.step.getDecompositionClass().getGoal(), entry2,
-               comp.step.getDecompositionClass().getGoal(),
-               this.step.getDecompositionClass(),
-               comp.step.getDecompositionClass(), taskModel) )
+               comp.stepName, stepRealD);
+         if ( stepReal.getDecompositionClass().checkStepInputs(entry1,
+               stepReal.getDecompositionClass().getGoal(), entry2,
+               stepRealD.getDecompositionClass().getGoal(),
+               stepReal.getDecompositionClass(),
+               stepRealD.getDecompositionClass(), taskModel) )
             return true;
       }
       return false;

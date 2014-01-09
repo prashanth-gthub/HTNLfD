@@ -59,8 +59,8 @@ public class Graph {
     */
    public Node oneNode (DecompositionClass dec, Node root) {
       for (String stepName : dec.getStepNames()) {
-         Step step = dec.getStep(stepName);
-
+         Step stepReal = dec.getStep(stepName);
+         Step step = dec.new Step(stepReal);
          if ( step.getType().isInternal() ) {
             Node newRoot = null;
             if ( step.getMinOccurs() != 0 ) {
@@ -105,6 +105,7 @@ public class Graph {
          if ( nodes.size() == demonstration.size() ) {
             equal = true;
             for (int i = 0; i < nodes.size(); i++) {
+               
                if ( !nodes.get(i).isEquivalent(demonstration.get(i), taskModel) ) {
                   equal = false;
                   break;
@@ -156,7 +157,8 @@ public class Graph {
             return (new Integer(this.LCS)).compareTo(new Integer(o.LCS));
          }
 
-      };
+      }
+      ;
 
       List<Pair> nodesLCS = new ArrayList<Pair>();
 
@@ -198,7 +200,6 @@ public class Graph {
       boolean merged = true;
 
       ArrayList<Node> evl = nodes;
-     
 
       int[] indices = new int[newNodes2.size()];
 
@@ -309,28 +310,34 @@ public class Graph {
 
             steps = new ArrayList<Step>();
             for (int m = firstM + 1; m < secondM; m++) {
-               steps.add(nodes.get(m).step);
+
+               Step stepFake = nodes.get(m).step;
+               Step stepReal = stepFake.getDecompositionClass().getStep(
+                     nodes.get(m).stepName);
+
+               steps.add(stepReal);
 
             }
 
             List<Step> stepsD = new ArrayList<Step>();
 
             for (int m = firstD + 1; m < secondD; m++) {
-               stepsD.add(demonstration.get(m).step);
+
+               Step stepFake = demonstration.get(m).step;
+               Step stepReal = stepFake.getDecompositionClass().getStep(
+                     demonstration.get(m).stepName);
+               stepsD.add(stepReal);
                nodeSteps.add(demonstration.get(m));
             }
 
-            TaskClass originalTask = nodes.get(firstM + 1).step
-                  .getDecompositionClass().getGoal();
+            TaskClass originalTask = steps.get(0).getDecompositionClass()
+                  .getGoal();
 
             TaskClass originalTaskCopy = new TaskClass(taskModel, originalTask);
 
-            TaskClass newTask2 = nodes.get(firstM + 1).step
-                  .getDecompositionClass()
-                  .getGoal()
+            TaskClass newTask2 = originalTaskCopy
                   .addInternalTask(taskModel,
-                        nodes.get(firstM + 1).step.getDecompositionClass(),
-                        steps);
+                        originalTaskCopy.getDecomposition(steps.get(0).getDecompositionClass().getId()), steps);
 
             Node tempRoot = new Node(null, NType.Root);
             getTree(newTask2, tempRoot);
@@ -342,22 +349,27 @@ public class Graph {
                getPermutations(nodesListPermutation, nodesL);
             }
 
+            taskModel.add(newTask2);
             if ( !statisfiable(nodesListPermutation, nodeSteps, taskModel) ) {
 
-               taskModel.add(newTask2);
+               taskModel.remove(newTask2);
+               
+               TaskClass newTask2Original = originalTask
+                     .addInternalTask(taskModel,steps.get(0).getDecompositionClass(), steps);
+               taskModel.add(newTask2Original);
 
-               TaskClass newTask = nodes.get(firstM + 1).step
+               TaskClass newTask = steps
+                     .get(0)
                      .getDecompositionClass()
                      .getGoal()
                      .addInternalTask(taskModel,
-                           nodes.get(firstM + 1).step.getDecompositionClass(),
-                           stepsD);
+                           steps.get(0).getDecompositionClass(), stepsD);
                // taskModel.add(newTask);
 
-               this.demonstration.addAlternativeRecipe(newTask, null, newTask2);
+               this.demonstration.addAlternativeRecipe(newTask, null, newTask2Original);
             } else {
-               taskModel.remove(originalTask);
-               taskModel.add(originalTaskCopy);
+               
+               taskModel.remove(newTask2);
             }
 
          } else if ( firstM + 1 == secondM && firstD + 1 != secondD ) {
@@ -376,7 +388,10 @@ public class Graph {
             // optional
             for (int i = firstM + 1; i < secondM; i++) {
                nodes.get(i).typeOfNode = NType.Optional;
-               nodes.get(i).step.setMinOccurs(0);
+               Step stepFake = nodes.get(i).step;
+               Step stepReal = stepFake.getDecompositionClass().getStep(
+                     nodes.get(i).stepName);
+               stepReal.setMinOccurs(0);
             }
          } else if ( firstD + 1 == secondD && firstM + 1 == secondM ) {
             ;

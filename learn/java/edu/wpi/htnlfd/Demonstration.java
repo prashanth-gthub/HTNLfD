@@ -393,7 +393,7 @@ public class Demonstration {
          DecompositionClass parentSubtask, TaskModel taskModel, boolean type,
          String slotName, String slotType, String binding, String modified) {
       List<Object[]> parents = parentSubtask.findParents(parentTask, null,
-            parentSubtask, taskModel);
+            parentSubtask, null,taskModel);
 
       String lastInputName = this.inputTransformation.transferBottomUp(parents,
             slotName, slotType, modified, type);
