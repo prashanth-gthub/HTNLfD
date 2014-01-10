@@ -17,6 +17,8 @@ public class Node {
    public Step step;
 
    public String stepName;
+   
+   public ArrayList<Step> required;
 
    public Node value;
 
@@ -97,6 +99,10 @@ public class Node {
          ArrayList<Node> nodes = new ArrayList<Node>();
          nodes.add(root);
          nodesLists.add(nodes);
+         if(root.step!=null && root.step.getDecompositionClass().isOptionalStep(root.stepName)){
+            ArrayList<Node> nodesO = new ArrayList<Node>();            
+            nodesLists.add(nodesO);
+         }
          
          return nodesLists;
       } else if ( root.typeOfChildren == CType.Required ) {
@@ -129,6 +135,10 @@ public class Node {
             }
             
          }
+         if(root.step!=null && root.step.getDecompositionClass().isOptionalStep(root.stepName)){
+            ArrayList<Node> nodesO = new ArrayList<Node>();            
+            nodesListsTemp.add(nodesO);
+         }
          
          return nodesListsTemp;
       } else if ( root.typeOfChildren == CType.Alter ) {
@@ -140,6 +150,11 @@ public class Node {
                nodesListsTemp.add(l);
             }
          }
+         
+         if(root.step!=null && root.step.getDecompositionClass().isOptionalStep(root.stepName)){
+            ArrayList<Node> nodesO = new ArrayList<Node>();            
+            nodesListsTemp.add(nodesO);
+         }         
          
          return nodesListsTemp;
       }
