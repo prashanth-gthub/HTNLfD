@@ -439,6 +439,7 @@ public class Demonstration {
                + (taskName.length() > 1 ? taskName.substring(1) : "")
                + countSubtask, true, task);
 
+      subtask.setId(subtask.findDecompositionName(taskName));
       task.addDecompositionClass(subtask);
 
       for (edu.wpi.cetask.Task step : steps) {

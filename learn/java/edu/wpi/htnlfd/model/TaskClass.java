@@ -740,13 +740,13 @@ public class TaskClass extends TaskModel.Member {
     * Finds a new task name.
     */
    public String findTaskName (String taskName, TaskModel taskModel) {
-      int count = 1;
+      int count = 'A';
 
       while (true) {
-         if ( taskModel.getTaskClass(taskName + count) != null )
+         if ( taskModel.getTaskClass(taskName + (char)count) != null )
             count++;
          else
-            return taskName + count;
+            return taskName + (char)count;
       }
    }
 
@@ -791,6 +791,7 @@ public class TaskClass extends TaskModel.Member {
                + (taskName.length() > 1 ? taskName.substring(1) : "")
                + countSubtask, true, taskI);
 
+      subtask.setId(subtask.findDecompositionName(taskName));
       subtask.setGoal(taskI);
       subtask.setQname(new QName(taskModel.namespace, subtask.getId()));
       taskI.addDecompositionClass(subtask);

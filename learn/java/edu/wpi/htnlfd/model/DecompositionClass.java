@@ -70,6 +70,7 @@ public class DecompositionClass extends TaskModel.Member {
          + (DecName.length() > 1 ? DecName.substring(1) : "");
 
       while (true) {
+         
          if ( goal.getDecomposition(decNameFind + count) != null )
             count++;
          else
