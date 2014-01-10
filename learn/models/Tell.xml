@@ -2,7 +2,7 @@
   <task id="TellAppCondition">
     <input name="subtask" type="string"/>
     <input name="condition" type="string"/>
-    <binding slot="$this.subtask" value="_TempTask1A"/>
+    <binding slot="$this.subtask" value="_TempAA"/>
     <binding slot="$this.external" value="true"/>
     <script>Packages.edu.wpi.htnlfd.Init.addApplicable ($disco, $this.subtask, $this.condition);</script>
   </task>

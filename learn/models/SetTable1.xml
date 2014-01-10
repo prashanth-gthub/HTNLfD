@@ -7,39 +7,39 @@
     <input name="place2_location" type="Location"/>
     <input modified="place3_newObject" name="place3_object" type="PhysObj"/>
     <input name="place3_location" type="Location"/>
-    <input modified="_TempTask11__TempTask1B_place1_newObject" name="_TempTask11__TempTask1B_place1_object" type="PhysObj"/>
+    <input modified="_TempA1__TempAB_place1_newObject" name="_TempA1__TempAB_place1_object" type="PhysObj"/>
     <input modified="place4_newObject" name="place4_place4_object" type="PhysObj"/>
     <input name="place4_place4_location" type="Location"/>
     <output name="place1_newObject" type="PhysObj"/>
     <output name="place2_newObject" type="PhysObj"/>
     <output name="place3_newObject" type="PhysObj"/>
-    <output name="_TempTask11__TempTask1B_place1_newObject" type="PhysObj"/>
+    <output name="_TempA1__TempAB_place1_newObject" type="PhysObj"/>
     <output name="place4_newObject" type="PhysObj"/>
     <subtasks id="placeSilverwareA">
       <step name="place1" task="std:Place"/>
-      <step name="_TempTask11" task="_TempTask1"/>
+      <step name="_TempA1" task="_TempA"/>
       <step name="place3" task="std:Place"/>
       <step minOccurs="0" name="place4" task="std:Place"/>
       <binding slot="$this.place4_place4_location" value="new Location(0,1,0)"/>
+      <binding slot="$_TempA1.place1_referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$place4.referenceFrame" value="$this.place1_referenceFrame"/>
-      <binding slot="$this._TempTask11__TempTask1B_place1_newObject" value="$_TempTask11._TempTask1B_place1_newObject"/>
       <binding slot="$place3.referenceFrame" value="$this.place1_referenceFrame"/>
-      <binding slot="$_TempTask11._TempTask1B_place1_object" value="$this._TempTask11__TempTask1B_place1_object"/>
+      <binding slot="$_TempA1._TempAB_place1_object" value="$this._TempA1__TempAB_place1_object"/>
       <binding slot="$place4.object" value="$this.place4_place4_object"/>
       <binding slot="$place1.location" value="$this.place1_location"/>
-      <binding slot="$_TempTask11.place1_object" value="$this.place2_object"/>
       <binding slot="$place4.location" value="$this.place4_place4_location"/>
       <binding slot="$place3.location" value="$this.place3_location"/>
-      <binding slot="$_TempTask11.place1_referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$this.place4_place4_object" value="Fork.F3"/>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
+      <binding slot="$this._TempA1__TempAB_place1_newObject" value="$_TempA1._TempAB_place1_newObject"/>
       <binding slot="$this.place3_newObject" value="$place3.newObject"/>
       <binding slot="$this.place4_newObject" value="$place4.newObject"/>
       <binding slot="$place1.object" value="$this.place1_object"/>
       <binding slot="$this.place1_newObject" value="$place1.newObject"/>
-      <binding slot="$_TempTask11.place1_location" value="$this.place2_location"/>
+      <binding slot="$_TempA1.place1_object" value="$this.place2_object"/>
       <binding slot="$place3.object" value="$this.place3_object"/>
-      <binding slot="$this.place2_newObject" value="$_TempTask11.place1_newObject"/>
+      <binding slot="$this.place2_newObject" value="$_TempA1.place1_newObject"/>
+      <binding slot="$_TempA1.place1_location" value="$this.place2_location"/>
     </subtasks>
   </task>
   <task id="PlaceGlasses">
@@ -72,7 +72,7 @@
     <input name="placeSilverware1_place3_location" type="Location"/>
     <input modified="placeGlasses1_place1_newObject" name="placeGlasses1_place1_object" type="PhysObj"/>
     <input name="placeGlasses1_place1_location" type="Location"/>
-    <input modified="placeSilverware1__TempTask11__TempTask1B_place1_newObject" name="placeSilverware1__TempTask11__TempTask1B_place1_object" type="PhysObj"/>
+    <input modified="placeSilverware1__TempA1__TempAB_place1_newObject" name="placeSilverware1__TempA1__TempAB_place1_object" type="PhysObj"/>
     <output name="placeDishes1_place1_newObject" type="PhysObj"/>
     <output name="placeDishes1_place2_newObject" type="PhysObj"/>
     <output name="placeDishes1_place3_newObject" type="PhysObj"/>
@@ -80,7 +80,7 @@
     <output name="placeSilverware1_place2_newObject" type="PhysObj"/>
     <output name="placeSilverware1_place3_newObject" type="PhysObj"/>
     <output name="placeGlasses1_place1_newObject" type="PhysObj"/>
-    <output name="placeSilverware1__TempTask11__TempTask1B_place1_newObject" type="PhysObj"/>
+    <output name="placeSilverware1__TempA1__TempAB_place1_newObject" type="PhysObj"/>
     <subtasks id="setTableA" ordered="false">
       <step name="placeDishes1" task="setTable5:PlaceDishes"/>
       <step name="placeSilverware1" requires="placeDishes1" task="PlaceSilverware"/>
@@ -93,6 +93,7 @@
       <binding slot="$this.placeSilverware1_place1_location" value="new Location(-1,0,0)"/>
       <binding slot="$placeGlasses1.place1_location" value="$this.placeGlasses1_place1_location"/>
       <binding slot="$placeDishes1.place1_location" value="$this.placeDishes1_place1_location"/>
+      <binding slot="$this.placeSilverware1__TempA1__TempAB_place1_object" value="Fork.F2"/>
       <binding slot="$this.placeDishes1_place1_referenceFrame" value="Table.T1"/>
       <binding slot="$this.placeGlasses1_place1_location" value="new Location(0,1,0)"/>
       <binding slot="$placeDishes1.place1_referenceFrame" value="$this.placeDishes1_place1_referenceFrame"/>
@@ -101,10 +102,10 @@
       <binding slot="$this.placeDishes1_place1_newObject" value="$placeDishes1.place1_newObject"/>
       <binding slot="$this.placeDishes1_place2_referenceFrame" value="DinnerPlate.DP1"/>
       <binding slot="$placeSilverware1.place2_location" value="$this.placeSilverware1_place2_location"/>
-      <binding slot="$this.placeSilverware1__TempTask11__TempTask1B_place1_object" value="Fork.F2"/>
       <binding slot="$this.placeDishes1_place2_object" value="SaladPlate.SP1"/>
       <binding slot="$this.placeSilverware1_place2_location" value="new Location(1,0,0)"/>
       <binding slot="$placeGlasses1.place1_object" value="$this.placeGlasses1_place1_object"/>
+      <binding slot="$placeSilverware1._TempA1__TempAB_place1_object" value="$this.placeSilverware1__TempA1__TempAB_place1_object"/>
       <binding slot="$this.placeSilverware1_place2_newObject" value="$placeSilverware1.place2_newObject"/>
       <binding slot="$placeSilverware1.place3_object" value="$this.placeSilverware1_place3_object"/>
       <binding slot="$placeSilverware1.place1_object" value="$this.placeSilverware1_place1_object"/>
@@ -117,11 +118,9 @@
       <binding slot="$placeDishes1.place2_location" value="$this.placeDishes1_place2_location"/>
       <binding slot="$this.placeDishes1_place1_object" value="DinnerPlate.DP1"/>
       <binding slot="$this.placeDishes1_place3_location" value="new Location(0,0,2)"/>
-      <binding slot="$placeSilverware1._TempTask11__TempTask1B_place1_object" value="$this.placeSilverware1__TempTask11__TempTask1B_place1_object"/>
       <binding slot="$this.placeDishes1_place3_newObject" value="$placeDishes1.place3_newObject"/>
       <binding slot="$this.placeSilverware1_place1_object" value="Spoon.S1"/>
       <binding slot="$placeDishes1.place1_object" value="$this.placeDishes1_place1_object"/>
-      <binding slot="$this.placeSilverware1__TempTask11__TempTask1B_place1_newObject" value="$placeSilverware1._TempTask11__TempTask1B_place1_newObject"/>
       <binding slot="$this.placeSilverware1_place2_object" value="Fork.F1"/>
       <binding slot="$placeSilverware1.place1_location" value="$this.placeSilverware1_place1_location"/>
       <binding slot="$this.placeSilverware1_place3_object" value="Knife.K1"/>
@@ -129,6 +128,7 @@
       <binding slot="$this.placeDishes1_place2_location" value="new Location(0,0,1)"/>
       <binding slot="$placeDishes1.place2_referenceFrame" value="$this.placeDishes1_place2_referenceFrame"/>
       <binding slot="$this.placeDishes1_place1_location" value="new Location(0,0,0)"/>
+      <binding slot="$this.placeSilverware1__TempA1__TempAB_place1_newObject" value="$placeSilverware1._TempA1__TempAB_place1_newObject"/>
     </subtasks>
   </task>
   <task id="PlaceDishes">
@@ -161,26 +161,26 @@
       <binding slot="$place2.object" value="$this.place2_object"/>
     </subtasks>
   </task>
-  <task id="_TempTask1">
+  <task id="_TempA">
     <input name="place1_referenceFrame" type="PhysObj"/>
     <input name="place1_location" type="Location"/>
     <input modified="place1_newObject" name="place1_object" type="PhysObj"/>
-    <input modified="_TempTask1B_place1_newObject" name="_TempTask1B_place1_object" type="PhysObj"/>
+    <input modified="_TempAB_place1_newObject" name="_TempAB_place1_object" type="PhysObj"/>
     <output name="place1_newObject" type="PhysObj"/>
-    <output name="_TempTask1B_place1_newObject" type="PhysObj"/>
-    <subtasks id="_TempTask1A">
+    <output name="_TempAB_place1_newObject" type="PhysObj"/>
+    <subtasks id="_TempAA">
       <step name="place1" task="std:Place"/>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
       <binding slot="$this.place1_newObject" value="$place1.newObject"/>
       <binding slot="$place1.object" value="$this.place1_object"/>
       <binding slot="$place1.location" value="$this.place1_location"/>
     </subtasks>
-    <subtasks id="_TempTask1B">
+    <subtasks id="_TempAB">
       <step name="place1" task="std:Place"/>
+      <binding slot="$this._TempAB_place1_newObject" value="$place1.newObject"/>
       <binding slot="$place1.referenceFrame" value="$this.place1_referenceFrame"/>
-      <binding slot="$place1.object" value="$this._TempTask1B_place1_object"/>
+      <binding slot="$place1.object" value="$this._TempAB_place1_object"/>
       <binding slot="$place1.location" value="$this.place1_location"/>
-      <binding slot="$this._TempTask1B_place1_newObject" value="$place1.newObject"/>
     </subtasks>
   </task>
 </taskModel>

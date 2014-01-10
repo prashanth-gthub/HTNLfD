@@ -64,17 +64,17 @@ public class DecompositionClass extends TaskModel.Member {
     * decomposition in all of the tasks???
     */
    public String findDecompositionName (String DecName) {
-      int count = 1;
+      int count = 'A';
 
       String decNameFind = Character.toLowerCase(DecName.charAt(0))
          + (DecName.length() > 1 ? DecName.substring(1) : "");
 
       while (true) {
          
-         if ( goal.getDecomposition(decNameFind + count) != null )
+         if ( goal.getDecomposition(decNameFind + (char)count) != null )
             count++;
          else
-            return decNameFind + count;
+            return decNameFind + (char)count;
       }
    }
 
