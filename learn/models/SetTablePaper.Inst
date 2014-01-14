@@ -1,0 +1,13 @@
+cd models
+load SetTableDemonstration.xml
+load Tell.xml
+
+task Demonstration
+task Place / DinnerPlate.DP1 / new Location(0,0,0) / Table.T1
+task Place / Knife.K1 / new Location(0,0,1) / DinnerPlate.DP1
+task Place / Fork.F1 / new Location(0,0,2) / DinnerPlate.DP1
+task NewSetting / DinnerPlate.DP1 / Fork.F1 / Knife.K1
+task Place / Cover.C1 / new Location(0,0,0) / ???
+done Demonstration
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"SetTable")
+print PlaceDishes urn:disco.wpi.edu:htnlfd:setTable1

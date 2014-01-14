@@ -17,8 +17,8 @@ public class Node {
    public Step step;
 
    public String stepName;
-   
-   public ArrayList<Step> required;
+
+   public ArrayList<Node> required;
 
    public Node value;
 
@@ -67,7 +67,7 @@ public class Node {
    /**
     * Evaluate nodes value.
     */
-   public List<ArrayList<Node>> evaluate () {
+   public List<ArrayList<Node>> getHighestLevel () {
 
       List<ArrayList<Node>> nodeList = new ArrayList<ArrayList<Node>>();
 
@@ -85,7 +85,7 @@ public class Node {
       return nodeList;
    }
 
-   public List<ArrayList<Node>> constantEvaluation () {
+   public List<ArrayList<Node>> getLowestLevel () {
 
       List<ArrayList<Node>> nodeLists = constantEval(this);
       return nodeLists;
@@ -93,69 +93,71 @@ public class Node {
    }
 
    public List<ArrayList<Node>> constantEval (Node root) {
-      
+
       if ( root.children == null || root.children.size() == 0 ) {
          List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
          ArrayList<Node> nodes = new ArrayList<Node>();
          nodes.add(root);
          nodesLists.add(nodes);
-         if(root.step!=null && root.step.getDecompositionClass().isOptionalStep(root.stepName)){
-            ArrayList<Node> nodesO = new ArrayList<Node>();            
+         if ( root.step != null
+            && root.step.getDecompositionClass().isOptionalStep(root.stepName) ) {
+            ArrayList<Node> nodesO = new ArrayList<Node>();
             nodesLists.add(nodesO);
          }
-         
+
          return nodesLists;
       } else if ( root.typeOfChildren == CType.Required ) {
-         
+
          List<ArrayList<Node>> nodesListsTemp = new ArrayList<ArrayList<Node>>();
          for (Node child : root.children) {
             List<ArrayList<Node>> list = constantEval(child);
             List<ArrayList<Node>> nodesLists = new ArrayList<ArrayList<Node>>();
-            
-            if(nodesListsTemp.size() != 0){
-               for(ArrayList<Node> l:list){
-                  for(ArrayList<Node> li:nodesListsTemp){
-                     ArrayList<Node> temp = new ArrayList<Node>();                     
-                     for(Node lii:li){
+
+            if ( nodesListsTemp.size() != 0 ) {
+               for (ArrayList<Node> l : list) {
+                  for (ArrayList<Node> li : nodesListsTemp) {
+                     ArrayList<Node> temp = new ArrayList<Node>();
+                     for (Node lii : li) {
                         temp.add(lii);
                      }
-                     for(Node ll:l){
+                     for (Node ll : l) {
                         temp.add(ll);
                      }
                      nodesLists.add(temp);
                   }
                }
-               
+
                nodesListsTemp = nodesLists;
-            }
-            else{
-               for(ArrayList<Node> l:list){                  
-                  nodesListsTemp.add(l);                  
+            } else {
+               for (ArrayList<Node> l : list) {
+                  nodesListsTemp.add(l);
                }
             }
-            
+
          }
-         if(root.step!=null && root.step.getDecompositionClass().isOptionalStep(root.stepName)){
-            ArrayList<Node> nodesO = new ArrayList<Node>();            
+         if ( root.step != null
+            && root.step.getDecompositionClass().isOptionalStep(root.stepName) ) {
+            ArrayList<Node> nodesO = new ArrayList<Node>();
             nodesListsTemp.add(nodesO);
          }
-         
+
          return nodesListsTemp;
       } else if ( root.typeOfChildren == CType.Alter ) {
 
          List<ArrayList<Node>> nodesListsTemp = new ArrayList<ArrayList<Node>>();
          for (Node child : root.children) {
             List<ArrayList<Node>> list = constantEval(child);
-            for(ArrayList<Node> l:list){
+            for (ArrayList<Node> l : list) {
                nodesListsTemp.add(l);
             }
          }
-         
-         if(root.step!=null && root.step.getDecompositionClass().isOptionalStep(root.stepName)){
-            ArrayList<Node> nodesO = new ArrayList<Node>();            
+
+         if ( root.step != null
+            && root.step.getDecompositionClass().isOptionalStep(root.stepName) ) {
+            ArrayList<Node> nodesO = new ArrayList<Node>();
             nodesListsTemp.add(nodesO);
-         }         
-         
+         }
+
          return nodesListsTemp;
       }
       return null;
@@ -171,26 +173,9 @@ public class Node {
       } else {
          if ( root.typeOfChildren == CType.Required ) {
             for (Node child : root.children) {
-               // Node ret = eval(child, nodes, nodeList);
-               // if ( ret != null ){
                nodes.add(child);
-               // }
-               /*
-                * for(ArrayList<Node> li:nodeList){ li.add(ret); }
-                */
-
             }
          }
-         /*
-          * else if ( root.typeOfChildren == CType.Alter ) { int size =
-          * nodes.size(); for (int ch=0;ch<root.children.size();ch++) { Node
-          * child = root.children.get(ch); if(ch == 0){ Node ret = eval(child,
-          * nodes, nodeList); if ( ret != null ) nodes.add(ret); } else {
-          * ArrayList<Node> newNodes = new ArrayList<Node>(); for(int
-          * s=0;s<size;s++){ newNodes.add(nodes.get(s).getCopy()); }
-          * nodeList.add(newNodes); Node ret = eval(child, newNodes, nodeList);
-          * if ( ret != null ) newNodes.add(ret); } } }
-          */
       }
       return null;
    }
@@ -249,10 +234,10 @@ public class Node {
       }
       Step stepFake = this.step;
       Step stepReal = stepFake.getDecompositionClass().getStep(this.stepName);
-      
+
       Step stepFakeD = comp.step;
       Step stepRealD = stepFakeD.getDecompositionClass().getStep(comp.stepName);
-            
+
       if ( stepReal != null && stepRealD != null
          && stepReal.isEquivalent(stepRealD, taskModel) ) {
          Map.Entry<String, Step> entry1 = new AbstractMap.SimpleEntry<String, Step>(

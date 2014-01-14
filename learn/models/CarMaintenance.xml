@@ -72,7 +72,7 @@
 	<task id="CheckRadiatorFluid">
 	
 		<subtasks id="checkRadiatorFluid" ordered="true">
-			<step name="goto" task="Goto"/>	
+			<step name="goto" task="Goto"/>		
 			<step name="checkFluid" task="CheckFluid"/> 
 			
 			<binding slot="$goto.location" value="Car.R.location"/>
@@ -99,7 +99,7 @@
 		
 		<subtasks id="checkFluid" ordered="true">
 			<step name="readLevel" task="ReadLevel"/>
-			<step name="fill" task="Fill"/>
+			<step name="fill" task="Fill"/>	
 			
 			<binding slot="$fill.fluid" value="$this.fluid"/>
 			<binding slot="$fill.fromLevel" value="$readLevel.level"/>
@@ -115,7 +115,7 @@
 		<postcondition sufficient="true">
 			($this.fromLevel >= $this.toLevel)
 		</postcondition>
-		<subtasks id="fill">
+		<subtasks id="fill" ordered="true">
 			
 			<step name="bringFluid" task="BringObject"/>
 			<step name="addFluid" task="AddFluid"/>
@@ -134,7 +134,7 @@
 		<input name="fromLevel" type="Level"/>
 		<input name="toLevel" type="Level"/>
 
-		<subtasks id="addFluid">
+		<subtasks id="addFluid" ordered="true">
 			
 			<step name="openCap" task="OpenCap"/>
 			<step name="pour" task="Pour"/>

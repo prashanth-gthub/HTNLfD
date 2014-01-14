@@ -17,6 +17,14 @@
 		</script>
 
 	</task>
+	
+	<task id="NewSetting">
+       <input name="plate" type="DinnerPlate"/>
+       <input name="fork" type="Fork"/>
+       <input name="knife" type="Knife"/>
+       <output name="setting" type="Setting"/>
+       <script> $this.setting = new Setting($this.plate, $this.fork, $this.knife); </script>
+    </task>
 
 	<task id="Demonstration"/>
 

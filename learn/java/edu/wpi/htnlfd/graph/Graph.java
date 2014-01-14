@@ -22,7 +22,8 @@ public class Graph {
       getTree(task, root);
       Node demonstrationRoot = new Node(null, NType.Root);
       getTree(newTask, demonstrationRoot);
-      List<Node> demonstrationNodes = demonstrationRoot.evaluate().get(0);
+      List<Node> demonstrationNodes = demonstrationRoot.getHighestLevel()
+            .get(0);
       boolean merged = mergable(root, demonstrationNodes, taskModel,
             demonstrationRoot);
       if ( !merged ) {
@@ -105,7 +106,7 @@ public class Graph {
          if ( nodes.size() == demonstration.size() ) {
             equal = true;
             for (int i = 0; i < nodes.size(); i++) {
-               
+
                if ( !nodes.get(i).isEquivalent(demonstration.get(i), taskModel) ) {
                   equal = false;
                   break;
@@ -129,7 +130,7 @@ public class Graph {
          Node demonstrationRoot) {
 
       boolean retMerged = true;
-      List<ArrayList<Node>> nodesListAllPathes = root.constantEvaluation();
+      List<ArrayList<Node>> nodesListAllPathes = root.getLowestLevel();
       // Problem with ordering in permutations
       List<ArrayList<Node>> nodesListPermutation = new ArrayList<ArrayList<Node>>();
       for (ArrayList<Node> nodesL : nodesListAllPathes) {
@@ -141,7 +142,7 @@ public class Graph {
       if ( equal ) {
          return true;
       }
-      List<ArrayList<Node>> nodesList = root.evaluate();
+      List<ArrayList<Node>> nodesList = root.getHighestLevel();
 
       class Pair implements Comparable<Pair> {
          int LCS;
@@ -335,14 +336,15 @@ public class Graph {
 
             TaskClass originalTaskCopy = new TaskClass(taskModel, originalTask);
 
-            TaskClass newTask2 = originalTaskCopy
-                  .addInternalTask(taskModel,
-                        originalTaskCopy.getDecomposition(steps.get(0).getDecompositionClass().getId()), steps);
+            TaskClass newTask2 = originalTaskCopy.addInternalTask(
+                  taskModel,
+                  originalTaskCopy.getDecomposition(steps.get(0)
+                        .getDecompositionClass().getId()), steps);
 
             Node tempRoot = new Node(null, NType.Root);
             getTree(newTask2, tempRoot);
 
-            List<ArrayList<Node>> nodesList = tempRoot.constantEvaluation();
+            List<ArrayList<Node>> nodesList = tempRoot.getLowestLevel();
 
             List<ArrayList<Node>> nodesListPermutation = new ArrayList<ArrayList<Node>>();
             for (ArrayList<Node> nodesL : nodesList) {
@@ -353,9 +355,9 @@ public class Graph {
             if ( !statisfiable(nodesListPermutation, nodeSteps, taskModel) ) {
 
                taskModel.remove(newTask2);
-               
-               TaskClass newTask2Original = originalTask
-                     .addInternalTask(taskModel,steps.get(0).getDecompositionClass(), steps);
+
+               TaskClass newTask2Original = originalTask.addInternalTask(
+                     taskModel, steps.get(0).getDecompositionClass(), steps);
                taskModel.add(newTask2Original);
 
                TaskClass newTask = steps
@@ -366,9 +368,10 @@ public class Graph {
                            steps.get(0).getDecompositionClass(), stepsD);
                // taskModel.add(newTask);
 
-               this.demonstration.addAlternativeRecipe(newTask, null, newTask2Original);
+               this.demonstration.addAlternativeRecipe(newTask, null,
+                     newTask2Original);
             } else {
-               
+
                taskModel.remove(newTask2);
             }
 
