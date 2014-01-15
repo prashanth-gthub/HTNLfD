@@ -58,12 +58,7 @@ done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
 print PlaceSilverware urn:disco.wpi.edu:htnlfd:setTable7
 
-execute TellNewInput / "_Temp1" / "input1" / "boolean" / ""
-print _Temp1 urn:disco.wpi.edu:htnlfd:setTable7
-execute TellAppCondition / "_Temp11" / "$this.input1"
-print _Temp1 urn:disco.wpi.edu:htnlfd:setTable8
-execute TellAppCondition / "_Temp12" / "!$this.input1"
-print _Temp1 urn:disco.wpi.edu:htnlfd:setTable9
+
 
 
 task Demonstration
@@ -75,6 +70,13 @@ task Place / Fork.F4 / new Location(0,1,0) / DinnerPlate.DP1
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"PlaceSilverware")
 print PlaceSilverware urn:disco.wpi.edu:htnlfd:setTable10
+
+execute TellNewInput / "_Temp1" / "input1" / "boolean" / ""
+print _Temp1 urn:disco.wpi.edu:htnlfd:setTable7
+execute TellAppCondition / "_Temp11" / "$this.input1"
+print _Temp1 urn:disco.wpi.edu:htnlfd:setTable8
+execute TellAppCondition / "_Temp12" / "!$this.input1"
+print _Temp1 urn:disco.wpi.edu:htnlfd:setTable9
 
 execute TellNewInput / "_Temp2" / "input1" / "boolean" / ""
 print _Temp2 urn:disco.wpi.edu:htnlfd:setTable11

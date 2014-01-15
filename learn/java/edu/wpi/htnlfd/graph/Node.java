@@ -14,11 +14,15 @@ public class Node {
       Optional, Required, Root, Empty
    };
 
+   static int idCounter = 0;
+
+   public int id;
+
    public Step step;
 
    public String stepName;
 
-   public ArrayList<Node> required;
+   public List<Integer> required = new ArrayList<Integer>();
 
    public Node value;
 
@@ -32,24 +36,38 @@ public class Node {
 
    public boolean visited;
 
-   public Node (Node value, NType typeOfNode) {
+   public Node (Node value, NType typeOfNode, int id) {
       super();
       this.value = value;
       this.typeOfNode = typeOfNode;
+      if ( id == -1 ) {
+         idCounter++;
+         this.id = idCounter;
+      } else {
+         this.id = id;
+      }
    }
 
    public Node (Node value, Node parent, List<Node> children,
-         CType typeOfChildren, NType typeOfNode) {
+         CType typeOfChildren, NType typeOfNode, int id, List<Integer> required) {
       super();
       this.value = value;
       this.parent = parent;
       this.children = children;
       this.typeOfChildren = typeOfChildren;
       this.typeOfNode = typeOfNode;
+      if ( id == -1 ) {
+         idCounter++;
+         this.id = idCounter;
+      } else {
+         this.id = id;
+      }
+      this.required.addAll(required);
    }
 
    public Node (Node value, Node parent, List<Node> children,
-         CType typeOfChildren, NType typeOfNode, Step step, String stepNam) {
+         CType typeOfChildren, NType typeOfNode, Step step, String stepNam,
+         int id, List<Integer> required) {
       super();
       this.value = value;
       this.parent = parent;
@@ -58,10 +76,22 @@ public class Node {
       this.typeOfNode = typeOfNode;
       this.step = step;
       this.stepName = stepNam;
+      if ( id == -1 ) {
+         idCounter++;
+         this.id = idCounter;
+      } else {
+         this.id = id;
+      }
+      this.required.addAll(required);
    }
 
-   public Node () {
-
+   public Node (int id) {
+      if ( id == -1 ) {
+         idCounter++;
+         this.id = idCounter;
+      } else {
+         this.id = id;
+      }
    }
 
    /**
@@ -122,6 +152,8 @@ public class Node {
                      }
                      for (Node ll : l) {
                         temp.add(ll);
+                        if ( root.step != null )
+                           ll.required.addAll(root.required);
                      }
                      nodesLists.add(temp);
                   }
@@ -131,6 +163,10 @@ public class Node {
             } else {
                for (ArrayList<Node> l : list) {
                   nodesListsTemp.add(l);
+                  for (Node ll : l) {
+                     if ( root.step != null )
+                        ll.required.addAll(root.required);
+                  }
                }
             }
 
@@ -148,7 +184,12 @@ public class Node {
          for (Node child : root.children) {
             List<ArrayList<Node>> list = constantEval(child);
             for (ArrayList<Node> l : list) {
+
                nodesListsTemp.add(l);
+               for (Node ll : l) {
+                  if ( root.step != null )
+                     ll.required.addAll(root.required);
+               }
             }
          }
 
@@ -181,7 +222,7 @@ public class Node {
    }
 
    public Node getCopy () {
-      Node n = new Node();
+      Node n = new Node(this.id);
       n.step = this.step;
       n.stepName = this.stepName;
       n.parent = this.parent;
@@ -239,17 +280,20 @@ public class Node {
       Step stepRealD = stepFakeD.getDecompositionClass().getStep(comp.stepName);
 
       if ( stepReal != null && stepRealD != null
-         && stepReal.isEquivalent(stepRealD, taskModel) ) {
+         && stepReal.isEquivalentNoRequired(stepRealD, taskModel) ) {
          Map.Entry<String, Step> entry1 = new AbstractMap.SimpleEntry<String, Step>(
                this.stepName, this.step);
          Map.Entry<String, Step> entry2 = new AbstractMap.SimpleEntry<String, Step>(
                comp.stepName, stepRealD);
-         if ( stepReal.getDecompositionClass().checkStepInputs(entry1,
-               stepReal.getDecompositionClass().getGoal(), entry2,
-               stepRealD.getDecompositionClass().getGoal(),
-               stepReal.getDecompositionClass(),
-               stepRealD.getDecompositionClass(), taskModel) )
-            return true;
+         if ( checkRequired(this, comp, taskModel) ) {
+            if ( stepReal.getDecompositionClass().checkStepInputs(entry1,
+                  stepReal.getDecompositionClass().getGoal(), entry2,
+                  stepRealD.getDecompositionClass().getGoal(),
+                  stepReal.getDecompositionClass(),
+                  stepRealD.getDecompositionClass(), taskModel) )
+
+               return true;
+         }
       }
       return false;
    }
@@ -293,5 +337,68 @@ public class Node {
          System.out.println(this.stepName + " "
             + this.step.getDecompositionClass().getGoal().getId());
 
+   }
+
+   public Node getChild (String name) {
+      for (int i = 0; i < this.children.size(); i++) {
+         if ( this.children.get(i).stepName.equals(name) ) {
+            return this.children.get(i);
+         }
+      }
+      return null;
+   }
+
+   public void setRequired (List<String> req) {
+      for (String r : req) {
+         Node node = this.parent.getChild(r);
+         if ( node != null ) {
+            this.required.add(node.id);
+         }
+      }
+   }
+
+   public boolean checkRequired (Node node1, Node node2, TaskModel taskModel) {
+      if ( (node1.required == null && node2.required == null)
+         || (node1.required.size() == 0 && node2.required.size() == 0) ) {
+         return true;
+      } else if ( node1.required.size() == node2.required.size() ) {
+
+         ArrayList<Integer> temp1 = new ArrayList<Integer>(node1.required);
+         ArrayList<Integer> temp2 = new ArrayList<Integer>(node2.required);
+
+         if ( temp1.size() == temp2.size() ) {
+            for (int i = 0; i < temp1.size(); i++) {
+               Node step1 = node1.parent.getChildById(temp1.get(i));
+               int where = -1;
+               boolean contain = false;
+               for (int j = 0; j < temp2.size(); j++) {
+                  Node step2 = node2.parent.getChildById(temp2.get(j));
+                  if ( step1.isEquivalent(step2, taskModel) ) {
+                     contain = true;
+                     where = j;
+                  }
+               }
+               if ( !contain )
+                  return false;
+               else
+                  temp2.remove(where);
+            }
+
+            return true;
+         }
+         return false;
+
+      } else {
+         return false;
+      }
+   }
+
+   public Node getChildById (int idd) {
+      for (Node child : this.children) {
+         if ( child.id == idd ) {
+            return child;
+         }
+      }
+      return null;
    }
 }

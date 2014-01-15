@@ -536,6 +536,17 @@ public class DecompositionClass extends TaskModel.Member {
          return sameOrder;
       }
 
+      public boolean isEquivalentNoRequired (Step step, TaskModel taskModel) {
+
+         if ( this.getType().getId().equals(step.getType().getId())
+            && this.getType().getQname().getNamespaceURI()
+                  .equals(step.getType().getQname().getNamespaceURI()) ) {
+            return true;
+         }
+
+         return false;
+      }
+
       /**
        * Checks two steps are equivalent.
        */

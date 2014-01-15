@@ -18,9 +18,9 @@ public class Graph {
    public void buildTree (TaskClass task, TaskClass newTask,
          TaskModel taskModel, Demonstration demonstration) {
       this.demonstration = demonstration;
-      this.root = new Node(null, NType.Root);
+      this.root = new Node(null, NType.Root, -1);
       getTree(task, root);
-      Node demonstrationRoot = new Node(null, NType.Root);
+      Node demonstrationRoot = new Node(null, NType.Root, -1);
       getTree(newTask, demonstrationRoot);
       List<Node> demonstrationNodes = demonstrationRoot.getHighestLevel()
             .get(0);
@@ -31,7 +31,7 @@ public class Graph {
       }
 
    }
-
+   
    /**
     * Gets the tree of given taskClass.
     */
@@ -40,7 +40,7 @@ public class Graph {
       if ( task.getDecompositions().size() > 1 ) {
          for (DecompositionClass dec : task.getDecompositions()) {
 
-            Node newRoot = new Node(null, NType.Required);
+            Node newRoot = new Node(null, NType.Required, -1);
             oneNode(dec, newRoot);
             newRoot.typeOfChildren = CType.Required;
             root.typeOfChildren = CType.Alter;
@@ -65,31 +65,36 @@ public class Graph {
          if ( step.getType().isInternal() ) {
             Node newRoot = null;
             if ( step.getMinOccurs() != 0 ) {
-               newRoot = new Node(null, NType.Required);
+               newRoot = new Node(null, NType.Required, -1);
                newRoot.step = step;
                newRoot.stepName = stepName;
             } else {
-               newRoot = new Node(null, NType.Optional);
+               newRoot = new Node(null, NType.Optional, -1);
                newRoot.step = step;
                newRoot.stepName = stepName;
             }
             getTree(step.getType(), newRoot);
+
             newRoot.parent = root;
             root.children.add(newRoot);
+            if ( step.getRequired() != null && step.getRequired().size() != 0 )
+               newRoot.setRequired(step.getRequired());
          } else {
 
             Node newRoot = null;
             if ( step.getMinOccurs() != 0 ) {
-               newRoot = new Node(null, NType.Required);
+               newRoot = new Node(null, NType.Required, -1);
                newRoot.step = step;
                newRoot.stepName = stepName;
             } else {
-               newRoot = new Node(null, NType.Optional);
+               newRoot = new Node(null, NType.Optional, -1);
                newRoot.step = step;
                newRoot.stepName = stepName;
             }
             newRoot.parent = root;
             root.children.add(newRoot);
+            if ( step.getRequired() != null && step.getRequired().size() != 0 )
+               newRoot.setRequired(step.getRequired());
          }
       }
       return null;
@@ -341,7 +346,7 @@ public class Graph {
                   originalTaskCopy.getDecomposition(steps.get(0)
                         .getDecompositionClass().getId()), steps);
 
-            Node tempRoot = new Node(null, NType.Root);
+            Node tempRoot = new Node(null, NType.Root, root.id);
             getTree(newTask2, tempRoot);
 
             List<ArrayList<Node>> nodesList = tempRoot.getLowestLevel();
@@ -536,12 +541,12 @@ public class Graph {
 
       // checking ordering constraints
       if ( nodes.size() != 0 && nodes.get(nodes.size() - 1).step != null
-         && nodes.get(nodes.size() - 1).step.getRequired() != null
-         && nodes.get(nodes.size() - 1).step.getRequired().size() != 0 ) {
-         for (String reqStep : nodes.get(nodes.size() - 1).step.getRequired()) {
+         && nodes.get(nodes.size() - 1).required != null
+         && nodes.get(nodes.size() - 1).required.size() != 0 ) {
+         for (int reqStep : nodes.get(nodes.size() - 1).required) {
             boolean contain = false;
             for (Node req : nodes) {
-               if ( req.stepName.equals(reqStep) ) {
+               if ( req.id == reqStep ) {
                   contain = true;
                }
             }
@@ -565,16 +570,17 @@ public class Graph {
                if ( node.step != null ) {
                   Node temp = new Node(node.value, node.parent, node.children,
                         node.typeOfChildren, node.typeOfNode, node.step,
-                        node.stepName);
+                        node.stepName, node.id, node.required);
                   newNodes.add(temp);
                } else {
-                  Node temp = new Node();
+                  Node temp = new Node(node.id);
                   newNodes.add(temp);
                }
             }
             Node temp = new Node(dem.get(i).value, dem.get(i).parent,
                   dem.get(i).children, dem.get(i).typeOfChildren,
-                  dem.get(i).typeOfNode, dem.get(i).step, dem.get(i).stepName);
+                  dem.get(i).typeOfNode, dem.get(i).step, dem.get(i).stepName,
+                  dem.get(i).id, dem.get(i).required);
             newNodes.add(temp);
             permutation(nodesLists, dem, newNodes);
          }
