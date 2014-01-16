@@ -15,7 +15,7 @@ public class Graph {
     * Builds the tree and tries to merge the new demonstration with the current
     * model.
     */
-   public void buildTree (TaskClass task, TaskClass newTask,
+   public void mergeTasks (TaskClass task, TaskClass newTask,
          TaskModel taskModel, Demonstration demonstration) {
       this.demonstration = demonstration;
       this.root = new Node(null, NType.Root, -1);
@@ -533,12 +533,6 @@ public class Graph {
    void permutation (List<ArrayList<Node>> nodesLists, List<Node> dem,
          List<Node> nodes) {
 
-      if ( nodes.size() == dem.size() ) {
-         nodesLists.add((ArrayList<Node>) nodes);
-
-         return;
-      }
-
       // checking ordering constraints
       if ( nodes.size() != 0 && nodes.get(nodes.size() - 1).step != null
          && nodes.get(nodes.size() - 1).required != null
@@ -555,6 +549,12 @@ public class Graph {
             }
          }
       }
+      
+      if ( nodes.size() == dem.size() ) {
+          nodesLists.add((ArrayList<Node>) nodes);
+
+          return;
+       }
 
       for (int i = 0; i < dem.size(); i++) {
          boolean contain = false;
