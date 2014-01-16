@@ -65,7 +65,7 @@ public class TaskClass extends TaskModel.Member {
 
    }
 
-   private boolean primitive;
+   private boolean primitive = false;
 
    private boolean internal = false;
 
@@ -542,6 +542,10 @@ public class TaskClass extends TaskModel.Member {
    public Node toNode (Document document, Set<String> namespaces,
          Properties properties) {
 
+	  String primitiveProperty = this.getId()+"@primitive";
+      String primitivePropertyVal = String.valueOf(this.isPrimitive());
+      properties.setProperty(primitiveProperty, primitivePropertyVal);
+      
       Element taskElement = document.createElementNS(TaskModel.xmlnsValue,
             "task");
 
