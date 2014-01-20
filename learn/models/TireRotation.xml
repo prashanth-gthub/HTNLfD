@@ -44,12 +44,10 @@
 	<task id="Rotate">
 		<input name="isDirectionalTire" type="boolean"/>
 		<subtasks id="rotateDirectional">
-			<step name="checkRecommendedManufacturerRotation" task="CheckRecommendedManufacturerRotation" minOccurs="0"/>
 			<step name="directionalRotation" task="DirectionalRotation"/>	
 			<applicable> $this.isDirectionalTire </applicable>
 		</subtasks>		
 		<subtasks id="rotateNondirectional">
-			<step name="checkRecommendedManufacturerRotation" task="CheckRecommendedManufacturerRotation" minOccurs="0"/>
 			<step name="nondirectionalRotation" task="NondirectionalRotation"/>
 			<applicable> !$this.isDirectionalTire </applicable>
 		</subtasks>	
@@ -77,8 +75,7 @@
 			
 			<binding slot="$move4.object" value="Car.T4"/>
 			<binding slot="$move4.fromLocation" value="Car.RR"/>
-			<binding slot="$move4.toLocation" value="Car.RF"/>	
-			
+			<binding slot="$move4.toLocation" value="Car.RF"/>				
 		</subtasks>		
 	</task>
 	
@@ -173,40 +170,15 @@
 		
 		<subtasks id="screwTire" ordered="true">
 			<step name="placeTire" task="PlaceTire"/>
-			<step name="checkTireAir" task="CheckTireAir" minOccurs="0"/> <!-- Robot will ask this for every tire -->
 			<step name="tightenLugNuts" task="TightenLugNuts"/>
 			<step name="placeHubcap" task="PlaceHubcap"/>					
 			
 
 			<binding slot="$placeTire.tire" value="$this.tire"/>
-			<binding slot="$checkTireAir.tire" value="$placeTire.tire"/> 
-			<!-- If this step is optional we cannot give the output of this step to the input of next step, 
-				but if we execute this step we must give it's output to the next input -->
 			<binding slot="$tightenLugNuts.tire" value="$placeTire.newTire"/>
 			<binding slot="$placeHubcap.tire" value="$tightenLugNuts.newTire"/>
 			<binding slot="$this.newTire" value="$placeHubcap.newTire"/>
 
-		</subtasks>		
-	</task>
-	
-	
-	<task id="CheckTireAir">
-		<input name="tire" type="Tire" modified="newTire"/>
-		<output name="newTire" type="Tire"/>
-		
-		<subtasks id="checkTireAir" ordered="true">
-			<step name="applyGauge" task="ApplyGauge"/>
-			<step name="readGauge" task="ReadGauge"/>
-			<step name="removeGauge" task="RemoveGauge"/>
-			<step name="fillTire" task="FillTire"/>			
-
-			<binding slot="$applyGauge.tire" value="$this.tire"/>
-			<binding slot="$fillTire.tire" value="$this.tire"/>
-			<binding slot="$removeGauge.tire" value="$this.tire"/>
-			<binding slot="$this.newTire" value="$fillTire.newTire"/>
-			<binding slot="$fillTire.fromLevel" value="$readGauge.level"/>
-			<binding slot="$fillTire.toLevel" value="new Level(10)"/>
-	
 		</subtasks>		
 	</task>
 	
@@ -313,10 +285,7 @@
 			
 		</script>
 	</task>	
-	
-	<task id="CheckRecommendedManufacturerRotation">
-		<!-- This task is performed by user -->
-	</task>
+
 	
 	<task id="Move">
 		<input name="object" type="PhysObj"/>
