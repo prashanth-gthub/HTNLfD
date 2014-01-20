@@ -22,8 +22,9 @@ public class LearnAgent extends Agent {
       Disco disco = interaction.getDisco();
       disco.importPackage("Packages.edu.wpi.htnlfd");
       disco.importPackage("Packages.edu.wpi.htnlfd.domain");
-      disco.importPackage("Packages.edu.wpi.htnlfd.table");
-      disco.importPackage("Packages.edu.wpi.htnlfd.carMaintenance");
+      //disco.importPackage("Packages.edu.wpi.htnlfd.table");
+      //disco.importPackage("Packages.edu.wpi.htnlfd.carMaintenance");
+      disco.importPackage("Packages.edu.wpi.htnlfd.tireRotation");
       disco.eval("function find (value) { return value.find(); }",
             "LearnAgent.main()");
       interaction.start(true);

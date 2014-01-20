@@ -1,0 +1,340 @@
+<taskModel about="urn:disco.wpi.edu:htnlfd:TireRotation" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+	<task id="RotateTires">
+		
+		<!-- Assumption: we don't need to lift the car-->
+		<subtasks id="rotateTires">
+			<step name="unscrewTires" task="UnscrewTires"/>	
+			<step name="rotate" task="Rotate"/>
+			<step name="screwTires" task="ScrewTires"/>
+		</subtasks>		
+	</task>
+	
+	<task id="UnscrewTires">
+		
+		<subtasks id="unscrewTires">
+			<step name="unscrewTire1" task="UnscrewTire"/>	
+			<step name="unscrewTire2" task="UnscrewTire"/>	
+			<step name="unscrewTire3" task="UnscrewTire"/>	
+			<step name="unscrewTire4" task="UnscrewTire"/>	
+			
+			<binding slot="$unscrewTire1.tire" value="Car.T1"/>
+			<binding slot="$unscrewTire2.tire" value="Car.T2"/>
+			<binding slot="$unscrewTire3.tire" value="Car.T3"/>
+			<binding slot="$unscrewTire4.tire" value="Car.T4"/>
+		</subtasks>		
+	</task>
+	
+	<task id="UnscrewTire">
+		<input name="tire" type="Tire" modified="newTire"/>
+		<output name="newTire" type="Tire"/>
+		
+		<subtasks id="unscrewTire" ordered="true">
+			<step name="removeHubcap" task="RemoveHubcap"/>	
+			<step name="removeLugNuts" task="RemoveLugNuts"/>	
+			<step name="removeTire" task="RemoveTire"/>	
+
+			<binding slot="$removeHubcap.tire" value="$this.tire"/>
+			<binding slot="$removeLugNuts.tire" value="$removeHubcap.newTire"/>
+			<binding slot="$removeTire.tire" value="$removeLugNuts.newTire"/>
+			<binding slot="$this.newTire" value="$removeTire.newTire"/>
+
+		</subtasks>		
+	</task>
+	
+	<task id="Rotate">
+		<input name="isDirectionalTire" type="boolean"/>
+		<subtasks id="rotateDirectional">
+			<step name="checkRecommendedManufacturerRotation" task="CheckRecommendedManufacturerRotation" minOccurs="0"/>
+			<step name="directionalRotation" task="DirectionalRotation"/>	
+			<applicable> $this.isDirectionalTire </applicable>
+		</subtasks>		
+		<subtasks id="rotateNondirectional">
+			<step name="checkRecommendedManufacturerRotation" task="CheckRecommendedManufacturerRotation" minOccurs="0"/>
+			<step name="nondirectionalRotation" task="NondirectionalRotation"/>
+			<applicable> !$this.isDirectionalTire </applicable>
+		</subtasks>	
+	</task>
+	
+	<task id="DirectionalRotation">
+
+		<subtasks id="frontToRear">
+			<step name="move1" task="Move"/>	
+			<step name="move2" task="Move"/>	
+			<step name="move3" task="Move"/>	
+			<step name="move4" task="Move"/>
+			
+			<binding slot="$move1.object" value="Car.T1"/>
+			<binding slot="$move1.fromLocation" value="Car.LF"/>
+			<binding slot="$move1.toLocation" value="Car.LR"/>	
+			
+			<binding slot="$move2.object" value="Car.T2"/>
+			<binding slot="$move2.fromLocation" value="Car.RF"/>
+			<binding slot="$move2.toLocation" value="Car.RR"/>	
+			
+			<binding slot="$move3.object" value="Car.T3"/>
+			<binding slot="$move3.fromLocation" value="Car.LR"/>
+			<binding slot="$move3.toLocation" value="Car.LF"/>	
+			
+			<binding slot="$move4.object" value="Car.T4"/>
+			<binding slot="$move4.fromLocation" value="Car.RR"/>
+			<binding slot="$move4.toLocation" value="Car.RF"/>	
+			
+		</subtasks>		
+	</task>
+	
+	<task id="NondirectionalRotation">
+		<!-- We should ask for subtask name -->
+		<subtasks id="rearwardCross">
+			<step name="move1" task="Move"/>	
+			<step name="move2" task="Move"/>	
+			<step name="move3" task="Move"/>	
+			<step name="move4" task="Move"/>	
+			
+			<binding slot="$move1.object" value="Car.T1"/>
+			<binding slot="$move1.fromLocation" value="Car.LF"/>
+			<binding slot="$move1.toLocation" value="Car.RR"/>	
+			
+			<binding slot="$move2.object" value="Car.T2"/>
+			<binding slot="$move2.fromLocation" value="Car.RF"/>
+			<binding slot="$move2.toLocation" value="Car.LR"/>	
+			
+			<binding slot="$move3.object" value="Car.T3"/>
+			<binding slot="$move3.fromLocation" value="Car.LR"/>
+			<binding slot="$move3.toLocation" value="Car.LF"/>	
+			
+			<binding slot="$move4.object" value="Car.T4"/>
+			<binding slot="$move4.fromLocation" value="Car.RR"/>
+			<binding slot="$move4.toLocation" value="Car.RF"/>				
+		</subtasks>		
+		<subtasks id="xPattern">
+			<step name="move1" task="Move"/>	
+			<step name="move2" task="Move"/>	
+			<step name="move3" task="Move"/>	
+			<step name="move4" task="Move"/>	
+			
+			<binding slot="$move1.object" value="Car.T1"/>
+			<binding slot="$move1.fromLocation" value="Car.LF"/>
+			<binding slot="$move1.toLocation" value="Car.RR"/>	
+			
+			<binding slot="$move2.object" value="Car.T2"/>
+			<binding slot="$move2.fromLocation" value="Car.RF"/>
+			<binding slot="$move2.toLocation" value="Car.LR"/>	
+			
+			<binding slot="$move3.object" value="Car.T3"/>
+			<binding slot="$move3.fromLocation" value="Car.LR"/>
+			<binding slot="$move3.toLocation" value="Car.RF"/>	
+			
+			<binding slot="$move4.object" value="Car.T4"/>
+			<binding slot="$move4.fromLocation" value="Car.RR"/>
+			<binding slot="$move4.toLocation" value="Car.LF"/>				
+		</subtasks>	
+		<subtasks id="forwardCross">
+			<step name="move1" task="Move"/>	
+			<step name="move2" task="Move"/>	
+			<step name="move3" task="Move"/>	
+			<step name="move4" task="Move"/>	
+			
+			<binding slot="$move1.object" value="Car.T1"/>
+			<binding slot="$move1.fromLocation" value="Car.LF"/>
+			<binding slot="$move1.toLocation" value="Car.LR"/>	
+			
+			<binding slot="$move2.object" value="Car.T2"/>
+			<binding slot="$move2.fromLocation" value="Car.RF"/>
+			<binding slot="$move2.toLocation" value="Car.RR"/>	
+			
+			<binding slot="$move3.object" value="Car.T3"/>
+			<binding slot="$move3.fromLocation" value="Car.LR"/>
+			<binding slot="$move3.toLocation" value="Car.RF"/>	
+			
+			<binding slot="$move4.object" value="Car.T4"/>
+			<binding slot="$move4.fromLocation" value="Car.RR"/>
+			<binding slot="$move4.toLocation" value="Car.LF"/>				
+		</subtasks>			
+	</task>
+	
+	<task id="ScrewTires">
+		
+		<subtasks id="screwTires">
+			<step name="screwTire1" task="ScrewTire"/>	
+			<step name="screwTire2" task="ScrewTire"/>	
+			<step name="screwTire3" task="ScrewTire"/>	
+			<step name="screwTire4" task="ScrewTire"/>	
+			
+			<binding slot="$screwTire1.tire" value="Car.T1"/>
+			<binding slot="$screwTire2.tire" value="Car.T2"/>
+			<binding slot="$screwTire3.tire" value="Car.T3"/>
+			<binding slot="$screwTire4.tire" value="Car.T4"/>
+		</subtasks>		
+	</task>
+	
+	<task id="ScrewTire">
+		<input name="tire" type="Tire" modified="newTire"/>
+		<output name="newTire" type="Tire"/>
+		
+		<subtasks id="screwTire" ordered="true">
+			<step name="placeTire" task="PlaceTire"/>
+			<step name="checkTireAir" task="CheckTireAir" minOccurs="0"/> <!-- Robot will ask this for every tire -->
+			<step name="tightenLugNuts" task="TightenLugNuts"/>
+			<step name="placeHubcap" task="PlaceHubcap"/>					
+			
+
+			<binding slot="$placeTire.tire" value="$this.tire"/>
+			<binding slot="$checkTireAir.tire" value="$placeTire.tire"/> 
+			<!-- If this step is optional we cannot give the output of this step to the input of next step, 
+				but if we execute this step we must give it's output to the next input -->
+			<binding slot="$tightenLugNuts.tire" value="$placeTire.newTire"/>
+			<binding slot="$placeHubcap.tire" value="$tightenLugNuts.newTire"/>
+			<binding slot="$this.newTire" value="$placeHubcap.newTire"/>
+
+		</subtasks>		
+	</task>
+	
+	
+	<task id="CheckTireAir">
+		<input name="tire" type="Tire" modified="newTire"/>
+		<output name="newTire" type="Tire"/>
+		
+		<subtasks id="checkTireAir" ordered="true">
+			<step name="applyGauge" task="ApplyGauge"/>
+			<step name="readGauge" task="ReadGauge"/>
+			<step name="removeGauge" task="RemoveGauge"/>
+			<step name="fillTire" task="FillTire"/>			
+
+			<binding slot="$applyGauge.tire" value="$this.tire"/>
+			<binding slot="$fillTire.tire" value="$this.tire"/>
+			<binding slot="$removeGauge.tire" value="$this.tire"/>
+			<binding slot="$this.newTire" value="$fillTire.newTire"/>
+			<binding slot="$fillTire.fromLevel" value="$readGauge.level"/>
+			<binding slot="$fillTire.toLevel" value="new Level(10)"/>
+	
+		</subtasks>		
+	</task>
+	
+	
+	<!-- Primitive tasks-->	
+
+	<task id="RemoveHubcap">
+		<input name="tire" type="Tire" modified="newTire"/>
+		<output name="newTire" type="Tire"/>
+		<!--
+		<postcondition sufficient="true">
+			CapIsUnscrewed()
+		</postcondition>
+		-->
+		<script>
+			
+		</script>
+	</task>
+	<task id="ApplyGauge">
+		<input name="tire" type="Tire"/>
+
+		<script>
+			
+		</script>
+	</task>
+	<task id="ReadGauge">
+		<output name="level" type="Level"/>
+		
+		<script>
+			
+		</script>
+	</task>
+	<task id="FillTire">
+		<input name="tire" type="Tire" modified="newTire"/>		
+		<input name="fromLevel" type="Level"/>
+		<input name="toLevel" type="Level"/>
+		<output name="newTire" type="Tire"/>
+
+		<postcondition sufficient="true">
+			($this.fromLevel >= $this.toLevel)
+		</postcondition>
+		<script>
+			
+		</script>
+	</task>
+
+	<task id="PlaceHubcap">
+		<input name="tire" type="Tire" modified="newTire"/>
+		<output name="newTire" type="Tire"/>
+
+		<script>
+			
+		</script>
+	</task>
+	<task id="RemoveGauge">
+		<input name="tire" type="Tire"/>
+
+		<script>
+			
+		</script>
+	</task>	
+	
+	<task id="RemoveLugNuts">
+		<input name="tire" type="Tire" modified="newTire"/>
+		<output name="newTire" type="Tire"/>
+
+		<script>
+			
+		</script>
+	</task>	
+	
+	<task id="RemoveTire">
+		<input name="tire" type="Tire" modified="newTire"/>
+		<output name="newTire" type="Tire"/>
+
+		<script>
+			
+		</script>
+	</task>	
+	
+	<task id="PlaceTire">
+		<input name="tire" type="Tire" modified="newTire"/>
+		<output name="newTire" type="Tire"/>
+
+		<script>
+			
+		</script>
+	</task>	
+	
+	<task id="TightenLugNuts">
+		<input name="tire" type="Tire" modified="newTire"/>
+		<output name="newTire" type="Tire"/>
+
+		<script>
+			
+		</script>
+	</task>	
+	
+	<task id="PlaceHubcap">
+		<input name="tire" type="Tire" modified="newTire"/>
+		<output name="newTire" type="Tire"/>
+
+		<script>
+			
+		</script>
+	</task>	
+	
+	<task id="CheckRecommendedManufacturerRotation">
+		<!-- This task is performed by user -->
+	</task>
+	
+	<task id="Move">
+		<input name="object" type="PhysObj"/>
+		<input name="fromLocation" type="Location"/>
+		<input name="toLocation" type="Location"/>
+		
+		<script>
+			
+		</script>
+	</task>	
+	
+	<!-- Scripts-->
+	<script init="true">
+
+		function reset () {
+			RobotLocation = new Location(-10,-10,-10);
+		}
+		reset();
+	</script>
+  
+</taskModel>
