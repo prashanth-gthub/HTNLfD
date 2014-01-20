@@ -124,7 +124,7 @@ public class Demonstration {
 
          Graph graph = new Graph();
          newTask.setId("Temp");
-         graph.buildTree(task, newTask, taskModel, this);
+         graph.mergeTasks(task, newTask, taskModel, this);
 
          // String applicable = KB.getApplicable(task, newTask);
 
