@@ -1,15 +1,22 @@
 <taskModel about="urn:disco.wpi.edu:htnlfd:TireRotation" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
 	<task id="RotateTires">
-		
+		<input name="looseNuts" type="java.util.List" modified="newLooseNuts"/>
+		<output name="newLooseNuts" type="java.util.List"/>
 		<!-- Assumption: we don't need to lift the car-->
 		<subtasks id="rotateTires">
 			<step name="unscrewTires" task="UnscrewTires"/>	
 			<step name="rotate" task="Rotate"/>
 			<step name="screwTires" task="ScrewTires"/>
+			
+			<binding slot="$this.looseNuts" value="CarWorld.LOOSE_NUTS"/>
+			<binding slot="$unscrewTires.nuts" value="$this.looseNuts"/>
+			<binding slot="$screwTires.nuts" value="$unscrewTires.newNuts"/>
 		</subtasks>		
 	</task>
 	
-	<task id="UnscrewTires">
+	<task id="UnscrewTires">		
+		<input name="nuts" type="java.util.List" modified="newNuts"/>
+		<output name="newNuts" type="java.util.List"/>
 		
 		<subtasks id="unscrewTires">
 			<step name="unscrewTire1" task="UnscrewTire"/>	
@@ -27,6 +34,8 @@
 	<task id="UnscrewTire">
 		<input name="tire" type="Tire" modified="newTire"/>
 		<output name="newTire" type="Tire"/>
+		<input name="nuts" type="java.util.List" modified="newNuts"/>
+		<output name="newNuts" type="java.util.List"/>
 		
 		<subtasks id="unscrewTire" ordered="true">
 			<step name="removeHubcap" task="RemoveHubcap"/>	
@@ -150,6 +159,8 @@
 	</task>
 	
 	<task id="ScrewTires">
+		<input name="nuts" type="java.util.List" modified="newNuts"/>
+		<output name="newNuts" type="java.util.List"/>
 		
 		<subtasks id="screwTires">
 			<step name="screwTire1" task="ScrewTire"/>	
@@ -167,6 +178,8 @@
 	<task id="ScrewTire">
 		<input name="tire" type="Tire" modified="newTire"/>
 		<output name="newTire" type="Tire"/>
+		<input name="nuts" type="java.util.List" modified="newNuts"/>
+		<output name="newNuts" type="java.util.List"/>
 		
 		<subtasks id="screwTire" ordered="true">
 			<step name="placeTire" task="PlaceTire"/>
