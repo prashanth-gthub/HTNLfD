@@ -6,4 +6,5 @@ import java.util.*;
 public class CarWorld extends World{
 
    public static final List<Nut> LOOSE_NUTS = new ArrayList<Nut>();
+
 }
