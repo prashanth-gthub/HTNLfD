@@ -15,14 +15,14 @@
 			<step name="removeTire3" task="RemoveTire"/>	
 			<step name="removeTire4" task="RemoveTire"/>	
 			
-			<binding slot="$removeTire1.tire" value="Car.LFT"/>
-			<binding slot="$removeTire1.wheel" value="Car.LFW"/>
-			<binding slot="$removeTire2.tire" value="Car.RFT"/>
-			<binding slot="$removeTire2.wheel" value="Car.RFW"/>
-			<binding slot="$removeTire3.tire" value="Car.LRT"/>
-			<binding slot="$removeTire3.wheel" value="Car.LRW"/>
-			<binding slot="$removeTire4.tire" value="Car.RRT"/>
-			<binding slot="$removeTire4.wheel" value="Car.RRW"/>
+			<binding slot="$removeTire1.tire" value="Car.LFTire"/>
+			<binding slot="$removeTire1.wheel" value="Car.LFWheel"/>
+			<binding slot="$removeTire2.tire" value="Car.RFTire"/>
+			<binding slot="$removeTire2.wheel" value="Car.RFWheel"/>
+			<binding slot="$removeTire3.tire" value="Car.LRTire"/>
+			<binding slot="$removeTire3.wheel" value="Car.LRWheel"/>
+			<binding slot="$removeTire4.tire" value="Car.RRTire"/>
+			<binding slot="$removeTire4.wheel" value="Car.RRWheel"/>
 		</subtasks>		
 	</task>
 	
@@ -32,15 +32,13 @@
 		<output name="newTire" type="Tire"/>
 		
 		<subtasks id="removeTire" ordered="true">
-			<step name="unscrew" task="Unscrew"/>	
+			<step name="unscrewTire" task="UnscrewTire"/>	
 			<step name="remove" task="Remove"/>	
 
-			<binding slot="$removeHubcap.tire" value="$this.tire"/>
-
-			<binding slot="$unmountTire.wheel" value="$this.wheel"/>
-			<binding slot="$this.newTire" value="$unmountTire.newTire"/>
-			<binding slot="$unscrew.nut" value="$Nut.Nut1"/>
-			<binding slot="$unscrew.stud" value="$Stud.Stud1"/>
+			<binding slot="$unscrewTire.tire" value="$this.tire"/>
+			<binding slot="$remove.wheel" value="$this.wheel"/>			
+			<binding slot="$remove.tire" value="$unscrewTire.newTire"/>
+			<binding slot="$this.newTire" value="$remove.newTire"/>
 
 		</subtasks>		
 	</task>
@@ -52,19 +50,19 @@
 			<step name="placeTire3" task="PlaceTire"/>	
 			<step name="placeTire4" task="PlaceTire"/>
 			
-			<binding slot="$placeTire1.object" value="Car.T1"/>
+			<binding slot="$placeTire1.object" value="Car.LFTire"/>
 			<binding slot="$placeTire1.fromLocation" value="Car.LF"/>
 			<binding slot="$placeTire1.toLocation" value="Car.LR"/>	
 			
-			<binding slot="$placeTire2.object" value="Car.T2"/>
+			<binding slot="$placeTire2.object" value="Car.RFTire"/>
 			<binding slot="$placeTire2.fromLocation" value="Car.RF"/>
 			<binding slot="$placeTire2.toLocation" value="Car.RR"/>	
 			
-			<binding slot="$placeTire3.object" value="Car.T3"/>
+			<binding slot="$placeTire3.object" value="Car.LRTire"/>
 			<binding slot="$placeTire3.fromLocation" value="Car.LR"/>
 			<binding slot="$placeTire3.toLocation" value="Car.LF"/>	
 			
-			<binding slot="$placeTire4.object" value="Car.T4"/>
+			<binding slot="$placeTire4.object" value="Car.RRTire"/>
 			<binding slot="$placeTire4.fromLocation" value="Car.RR"/>
 			<binding slot="$placeTire4.toLocation" value="Car.RF"/>				
 		</subtasks>
@@ -74,19 +72,19 @@
 			<step name="placeTire3" task="PlaceTire"/>	
 			<step name="placeTire4" task="PlaceTire"/>	
 			
-			<binding slot="$placeTire1.object" value="Car.T1"/>
+			<binding slot="$placeTire1.object" value="Car.LFTire"/>
 			<binding slot="$placeTire1.fromLocation" value="Car.LF"/>
 			<binding slot="$placeTire1.toLocation" value="Car.RR"/>	
 			
-			<binding slot="$placeTire2.object" value="Car.T2"/>
+			<binding slot="$placeTire2.object" value="Car.RFTire"/>
 			<binding slot="$placeTire2.fromLocation" value="Car.RF"/>
 			<binding slot="$placeTire2.toLocation" value="Car.LR"/>	
 			
-			<binding slot="$placeTire3.object" value="Car.T3"/>
+			<binding slot="$placeTire3.object" value="Car.LRTire"/>
 			<binding slot="$placeTire3.fromLocation" value="Car.LR"/>
 			<binding slot="$placeTire3.toLocation" value="Car.RF"/>	
 			
-			<binding slot="$placeTire4.object" value="Car.T4"/>
+			<binding slot="$placeTire4.object" value="Car.RRTire"/>
 			<binding slot="$placeTire4.fromLocation" value="Car.RR"/>
 			<binding slot="$placeTire4.toLocation" value="Car.LF"/>				
 		</subtasks>			
@@ -95,11 +93,28 @@
 	<task id="ScrewTires">
 		
 		<subtasks id="screwTires">
-			<step name="screwTire1" task="Screw"/>	
-			<step name="screwTire2" task="Screw"/>	
-			<step name="screwTire3" task="Screw"/>	
-			<step name="screwTire4" task="Screw"/>	
+			<step name="screwTire1" task="ScrewTire"/>	
+			<step name="screwTire2" task="ScrewTire"/>	
+			<step name="screwTire3" task="ScrewTire"/>	
+			<step name="screwTire4" task="ScrewTire"/>
 
+		</subtasks>		
+	</task>
+
+	<task id="ScrewTire">
+		
+		<subtasks id="screwTire">
+			<step name="screwNut1" task="ScrewNut"/>	
+			<step name="screwNut2" task="ScrewNut"/>	
+			<step name="screwNut3" task="ScrewNut"/>	
+		</subtasks>		
+	</task>
+
+	<task id="ScrewNut">
+		
+		<subtasks id="screwTires" ordered="true">
+			<step name="pickup" task="PickUp"/>	
+			<step name="screw" task="Screw"/>		
 		</subtasks>		
 	</task>
 
@@ -117,19 +132,50 @@
 	</task>	
 
 	<task id="Remove">
-		
+		<input name="tire" type="Tire" modified="newTire"/>
+		<input name="wheel" type="Wheel"/>
+		<output name="newTire" type="Tire"/>
+
 		<subtasks id="screwTire" ordered="true">
 			<step name="unmount" task="UnmountTire"/>
-			<step name="place" task="Place"/>
+			<step name="putdown" task="PutDown"/>
 
-
+			<binding slot="$unmount.wheel" value="$this.wheel"/>		
+			<binding slot="$unmount.tire" value="$this.tire"/>	
+			<binding slot="$putdown.tire" value="$unmount.newTire"/>
+			<binding slot="$this.newTire" value="$putdown.newTire"/>
 		</subtasks>
 	</task>	
 	
-	<!-- Primitive tasks-->	
+	<task id="UnscrewTire">
+		<subtasks id="screwTire">
+			<step name="unscrewNut1" task="UnscrewNut"/>
+			<step name="unscrewNut2" task="UnscrewNut"/>
+			<step name="unscrewNut3" task="UnscrewNut"/>
+		</subtasks>
+	</task>	
 
+	<task id="UnscrewNut">
+		
+		<subtasks id="unscrewNut" ordered="true">				
+			<step name="unscrew" task="Unscrew"/>
+			<step name="putdown" task="PutDown"/>		
+		</subtasks>		
+	</task>
+
+	<!-- Primitive tasks(ROS)-->
 	
 	<task id="Unscrew">
+		<input name="nut" type="Nut" modified="newNut"/>
+		<input name="stud" type="Stud"/>
+		<output name="newNut" type="Nut"/>
+
+		<script>
+			
+		</script>
+	</task>	
+
+	<task id="Screw">
 		<input name="nut" type="Nut" modified="newNut"/>
 		<input name="stud" type="Stud"/>
 		<output name="newNut" type="Nut"/>
@@ -160,26 +206,32 @@
 	</task>	
 	
 	<task id="PickUp">
-
+		<input name="object" type="Object" modified="newObject"/>
+		<output name="newObject" type="Object"/>
 		<script>
 			
 		</script>
 	</task>	
-	<task id="Place">
-
+	<task id="PutDown">
+		<input name="object" type="Object" modified="newObject"/>
+		<output name="newObject" type="Object"/>
 		<script>
 			
 		</script>
 	</task>
-	<task id="Screw">
-		<input name="nut" type="Nut" modified="newNut"/>
-		<input name="stud" type="Stud"/>
-		<output name="newNut" type="Nut"/>
 
-		<script>
-			
-		</script>
-	</task>	
+	<!-- Primitive tasks(extra)-->
+
+	<task id="GetNut">
+            <output id="nut" type="Nut"/>
+            <precondition> !CarWorld.LOOSE_NUTS.isEmpty() </precondition>
+            <script> $nut = CarWorld.LOOSE_NUTS.remove(0);  </script>
+         </task>
+
+	<task id="PutNut">
+            <input id="nut" type="Nut"/>
+            <script> CarWorld.LOOSE_NUTS.add($this.nut);  </script>
+         </task>
 
 	
 	
