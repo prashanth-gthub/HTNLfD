@@ -23,16 +23,16 @@ public class Car extends PhysObj {
          -10, 10, 0)));
    
    
-   public static Tire RFWheel = new Tire("RFWheel", Location.plus(Car.location, new Location(10,
+   public static Wheel RFWheel = new Wheel("RFWheel", Location.plus(Car.location, new Location(10,
          10, 0)));
 
-   public static Tire LFWheel = new Tire("LFWheel", Location.plus(Car.location, new Location(
+   public static Wheel LFWheel = new Wheel("LFWheel", Location.plus(Car.location, new Location(
          -10, -10, 0)));
 
-   public static Tire RRWheel = new Tire("RRWheel", Location.plus(Car.location, new Location(10,
+   public static Wheel RRWheel = new Wheel("RRWheel", Location.plus(Car.location, new Location(10,
          -10, 0)));
 
-   public static Tire LRWheel = new Tire("LRWheel", Location.plus(Car.location, new Location(
+   public static Wheel LRWheel = new Wheel("LRWheel", Location.plus(Car.location, new Location(
          -10, 10, 0)));
 
 }
