@@ -105,7 +105,12 @@
 		<subtasks id="screwTire">
 			<step name="screwNut1" task="ScrewNut"/>	
 			<step name="screwNut2" task="ScrewNut"/>	
-			<step name="screwNut3" task="ScrewNut"/>	
+			<step name="screwNut3" task="ScrewNut"/>
+			
+			<binding slot="$screwNut1.stud" value="$this.studs.get(0)"/>
+			<binding slot="$screwNut2.stud" value="$this.studs.get(1)"/>
+			<binding slot="$screwNut3.stud" value="$this.studs.get(2)"/>
+
 
 		</subtasks>		
 	</task>
