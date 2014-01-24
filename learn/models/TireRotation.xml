@@ -14,14 +14,14 @@
 			<step name="removeTire3" task="RemoveTire"/>	
 			<step name="removeTire4" task="RemoveTire"/>	
 			
-			<binding slot="$removeTire1.tire" value="Car.LFTire"/>
-			<binding slot="$removeTire1.wheel" value="Car.LFWheel"/>
-			<binding slot="$removeTire2.tire" value="Car.RFTire"/>
-			<binding slot="$removeTire2.wheel" value="Car.RFWheel"/>
-			<binding slot="$removeTire3.tire" value="Car.LRTire"/>
-			<binding slot="$removeTire3.wheel" value="Car.LRWheel"/>
-			<binding slot="$removeTire4.tire" value="Car.RRTire"/>
-			<binding slot="$removeTire4.wheel" value="Car.RRWheel"/>
+			<binding slot="$removeTire1.tire" value="CarWorld.MyCar.getLFTire()"/>
+			<binding slot="$removeTire1.wheel" value="CarWorld.MyCar.getLFWheel()"/>
+			<binding slot="$removeTire2.tire" value="CarWorld.MyCar.getRFTire()"/>
+			<binding slot="$removeTire2.wheel" value="CarWorld.MyCar.getRFWheel()"/>
+			<binding slot="$removeTire3.tire" value="CarWorld.MyCar.getLRTire()"/>
+			<binding slot="$removeTire3.wheel" value="CarWorld.MyCar.getLRWheel()"/>
+			<binding slot="$removeTire4.tire" value="CarWorld.MyCar.getRRTire()"/>
+			<binding slot="$removeTire4.wheel" value="CarWorld.MyCar.getRRWheel()"/>
 		</subtasks>		
 	</task>
 	
@@ -49,17 +49,17 @@
 			<step name="placeTire3" task="PlaceTire"/>	
 			<step name="placeTire4" task="PlaceTire"/>
 
-			<binding slot="$placeTire1.tire" value="Car.LFTire"/>
-			<binding slot="$placeTire1.wheel" value="Car.LRWheel"/>
+			<binding slot="$placeTire1.tire" value="CarWorld.MyCar.getLFTire()"/>
+			<binding slot="$placeTire1.wheel" value="CarWorld.MyCar.getLRWheel()"/>
 			
-			<binding slot="$placeTire2.tire" value="Car.RFTire"/>
-			<binding slot="$placeTire2.wheel" value="Car.RRWheel"/>
+			<binding slot="$placeTire2.tire" value="CarWorld.MyCar.getRFTire()"/>
+			<binding slot="$placeTire2.wheel" value="CarWorld.MyCar.getRRWheel()"/>
 			
-			<binding slot="$placeTire3.tire" value="Car.LRTire"/>
-			<binding slot="$placeTire3.wheel" value="Car.LFWheel"/>
+			<binding slot="$placeTire3.tire" value="CarWorld.MyCar.getLRTire()"/>
+			<binding slot="$placeTire3.wheel" value="CarWorld.MyCar.getLFWheel()"/>
 			
-			<binding slot="$placeTire4.tire" value="Car.RRTire"/>
-			<binding slot="$placeTire4.wheel" value="Car.RFWheel"/>	
+			<binding slot="$placeTire4.tire" value="CarWorld.MyCar.getRRTire()"/>
+			<binding slot="$placeTire4.wheel" value="CarWorld.MyCar.getRFWheel()"/>	
 		</subtasks>
 		<subtasks id="xPattern">
 			<step name="placeTire1" task="PlaceTire"/>	
@@ -67,17 +67,17 @@
 			<step name="placeTire3" task="PlaceTire"/>	
 			<step name="placeTire4" task="PlaceTire"/>	
 
-			<binding slot="$placeTire1.tire" value="Car.LFTire"/>
-			<binding slot="$placeTire1.wheel" value="Car.RRWheel"/>
+			<binding slot="$placeTire1.tire" value="CarWorld.MyCar.getLFTire()"/>
+			<binding slot="$placeTire1.wheel" value="CarWorld.MyCar.getRRWheel()"/>
 			
-			<binding slot="$placeTire2.tire" value="Car.RFTire"/>
-			<binding slot="$placeTire2.wheel" value="Car.LRWheel"/>
+			<binding slot="$placeTire2.tire" value="CarWorld.MyCar.getRFTire()"/>
+			<binding slot="$placeTire2.wheel" value="CarWorld.MyCar.getLRWheel()"/>
 			
-			<binding slot="$placeTire3.tire" value="Car.LRTire"/>
-			<binding slot="$placeTire3.wheel" value="Car.RFWheel"/>
+			<binding slot="$placeTire3.tire" value="CarWorld.MyCar.getLRTire()"/>
+			<binding slot="$placeTire3.wheel" value="CarWorld.MyCar.getRFWheel()"/>
 			
-			<binding slot="$placeTire4.tire" value="Car.RRTire"/>
-			<binding slot="$placeTire4.wheel" value="Car.LFWheel"/>	
+			<binding slot="$placeTire4.tire" value="CarWorld.MyCar.getRRTire()"/>
+			<binding slot="$placeTire4.wheel" value="CarWorld.MyCar.getLFWheel()"/>	
 		</subtasks>			
 	</task>
 
@@ -89,13 +89,13 @@
 			<step name="screwTire3" task="ScrewTire"/>	
 			<step name="screwTire4" task="ScrewTire"/>
 
-			<binding slot="$screwTire1.wheel" value="Car.LFWheel"/>
+			<binding slot="$screwTire1.wheel" value="CarWorld.MyCar.getLFWheel()"/>
 
-			<binding slot="$screwTire2.wheel" value="Car.LFWheel"/>
+			<binding slot="$screwTire2.wheel" value="CarWorld.MyCar.getLRWheel()"/>
 
-			<binding slot="$screwTire3.wheel" value="Car.LFWheel"/>
+			<binding slot="$screwTire3.wheel" value="CarWorld.MyCar.getRFWheel()"/>
 
-			<binding slot="$screwTire4.wheel" value="Car.LFWheel"/>
+			<binding slot="$screwTire4.wheel" value="CarWorld.MyCar.getRRWheel()"/>
 		</subtasks>		
 	</task>
 

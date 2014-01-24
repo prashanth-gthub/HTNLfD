@@ -7,32 +7,62 @@ public class Car extends PhysObj {
       super(name, location);
    }
 
-   public static final PhysObj Car = new Car("MyCar", new Location(0, 0, 0));
-
-
-   public static Tire RFTire = new Tire("RFTire", Location.plus(Car.location, new Location(10,
+   public Tire RFTire = new Tire("RFTire", Location.plus(this.location, new Location(10,
          10, 0)));
 
-   public static Tire LFTire = new Tire("LFTire", Location.plus(Car.location, new Location(
+   public Tire LFTire = new Tire("LFTire", Location.plus(this.location, new Location(
          -10, -10, 0)));
 
-   public static Tire RRTire = new Tire("RRTire", Location.plus(Car.location, new Location(10,
+   public Tire RRTire = new Tire("RRTire", Location.plus(this.location, new Location(10,
          -10, 0)));
 
-   public static Tire LRTire = new Tire("LRTire", Location.plus(Car.location, new Location(
+   public Tire LRTire = new Tire("LRTire", Location.plus(this.location, new Location(
          -10, 10, 0)));
    
    
-   public static Wheel RFWheel = new Wheel("RFWheel", Location.plus(Car.location, new Location(10,
+   public Wheel RFWheel = new Wheel("RFWheel", Location.plus(this.location, new Location(10,
          10, 0)));
 
-   public static Wheel LFWheel = new Wheel("LFWheel", Location.plus(Car.location, new Location(
+   public Wheel LFWheel = new Wheel("LFWheel", Location.plus(this.location, new Location(
          -10, -10, 0)));
 
-   public static Wheel RRWheel = new Wheel("RRWheel", Location.plus(Car.location, new Location(10,
+   public Wheel RRWheel = new Wheel("RRWheel", Location.plus(this.location, new Location(10,
          -10, 0)));
 
-   public static Wheel LRWheel = new Wheel("LRWheel", Location.plus(Car.location, new Location(
+   public Wheel LRWheel = new Wheel("LRWheel", Location.plus(this.location, new Location(
          -10, 10, 0)));
 
+   public Tire getRFTire () {
+      return RFTire;
+   }
+
+   public Tire getLFTire () {
+      return LFTire;
+   }
+
+   public Tire getRRTire () {
+      return RRTire;
+   }
+
+   public Tire getLRTire () {
+      return LRTire;
+   }
+
+   public Wheel getRFWheel () {
+      return RFWheel;
+   }
+
+   public Wheel getLFWheel () {
+      return LFWheel;
+   }
+
+   public Wheel getRRWheel () {
+      return RRWheel;
+   }
+
+   public Wheel getLRWheel () {
+      return LRWheel;
+   }
+   
+   
 }

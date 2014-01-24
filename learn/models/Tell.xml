@@ -1,8 +1,10 @@
 <taskModel xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext" about="urn:disco.wpi.edu:htnlfd:tell">
-  <task id="TellAppCondition">
+  <task id="TellMaxOccurs">
     <input name="subtask" type="string"/>
-    <input name="condition" type="string"/>
-    <binding slot="$this.subtask" value="_TempAA"/>
+    <input name="stepName" type="number"/>
+    <input name="maxOccurs" type=""/>
+    <binding slot="$this.subtask" value="placeSilverwareA"/>
+    <binding slot="$this.subtask" value="placeSilverwareA"/>
     <binding slot="$this.external" value="true"/>
     <script>Packages.edu.wpi.htnlfd.Init.addApplicable ($disco, $this.subtask, $this.condition);</script>
   </task>

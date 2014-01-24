@@ -19,10 +19,11 @@ public class LearnAgent extends Agent {
       Interaction interaction = new Interaction(new LearnAgent("agent"),
             new User("user"), args.length > 0 && args[0].length() > 0 ? args[0]
                : null);
+     
       Disco disco = interaction.getDisco();
       disco.importPackage("Packages.edu.wpi.htnlfd");
       disco.importPackage("Packages.edu.wpi.htnlfd.domain");
-      //disco.importPackage("Packages.edu.wpi.htnlfd.table");
+      disco.importPackage("Packages.edu.wpi.htnlfd.table");
       disco.importPackage("Packages.edu.wpi.htnlfd.world");
       //disco.importPackage("Packages.edu.wpi.htnlfd.carMaintenance");
       disco.importPackage("Packages.edu.wpi.htnlfd.tireRotation");
