@@ -194,17 +194,17 @@
 		<input name="stud" type="Stud"/>
 		<output name="nut" type="Nut"/>
         	<precondition> $this.stud.getNut() != null </precondition>
-        	<script>  CarWorld.LOOSE_NUTS.add($this.stud.getNut()); $this.stud.setNut(null);</script>
+		<script>  CarWorld.LOOSE_NUTS.add($this.stud.getNut()); $this.stud.setNut(null);</script>
       	</task>	
 
 	<task id="Screw">
         <input name="nut" type="Nut" modified="newNut"/>
 		<input name="stud" type="Stud"/>
 		<output name="newNut" type="Nut"/>			
-		<precondition> 
-			$this.stud.getNut() == null <!-- && !CarWorld.LOOSE_NUTS.isEmpty() -->
-		 </precondition> 
-        	<script>  CarWorld.LOOSE_NUTS.remove($this.nut); $this.nut = $this.stud.getNut(); $this.stud.setNut($this.nut); </script>
+	<!--	<precondition> 
+			$this.stud.getNut() == null  && !CarWorld.LOOSE_NUTS.isEmpty()
+		 </precondition> -->
+        <!--	<script>  CarWorld.LOOSE_NUTS.remove($this.nut); $this.nut = $this.stud.getNut(); $this.stud.setNut($this.nut); </script> -->
       	</task>
 	
 	<task id="UnmountTire">

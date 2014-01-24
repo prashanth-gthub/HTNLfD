@@ -1,4 +1,4 @@
-    # Jan 23, 2014 1:18:00 PM - TaskEngine 1.5.4 / Disco 1.7.5
+    # Jan 24, 2014 10:51:36 AM - TaskEngine 1.5.4 / Disco 1.7.5
     Welcome to Disco! (Type 'help' for command list)
   > cd models
     /home/anahita/Desktop/MyProject/GitHub/HTNLfD/learn/models
@@ -6,9 +6,32 @@
 java.lang.RuntimeException: java.lang.RuntimeException: Evaluating Unscrew precondition
 javax.script.ScriptException: sun.org.mozilla.javascript.EcmaError: TypeError: Cannot call method "getNut" of undefined (<Unknown Source>#1) in <Unknown Source> at line number 1
 at edu.wpi.cetask.TaskEngine.load(TaskEngine.java:405)
-  > history
   > 
-  > status
+  > 
+  > eval CarWorld.MyCar.getLFWheel().getStud1().getNut()
+    # Returned 'Nut.LFWheel_Stud1_Nut'
+  > eval CarWorld.MyCar.getRFWheel().getStud1().getNut()
+    # Returned 'Nut.RFWheel_Stud1_Nut'
+  > eval CarWorld.MyCar.getRRWheel().getStud1().getNut()
+    # Returned 'Nut.RRWheel_Stud1_Nut'
+  > eval CarWorld.MyCar.getLRWheel().getStud1().getNut()
+    # Returned 'Nut.LRWheel_Stud1_Nut'
+  > 
+  > 
+  > 
+  > 
+  > eval CarWorld.MyCar.getLFTire()
+    # Returned 'Tire.LFTire'
+  > eval CarWorld.MyCar.getLFWheel()
+    # Returned 'Wheel.LFWheel'
+  > eval CarWorld.MyCar.getRFWheel()
+    # Returned 'Wheel.RFWheel'
+  > eval CarWorld.MyCar.getLRWheel()
+    # Returned 'Wheel.LRWheel'
+  > eval CarWorld.MyCar.getRRWheel()
+    # Returned 'Wheel.RRWheel'
+  > 
+  > 
   > 
   > quit
     
