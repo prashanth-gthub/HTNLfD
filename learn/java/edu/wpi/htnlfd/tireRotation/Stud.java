@@ -6,10 +6,9 @@ public class Stud extends PhysObj {
 
    public Stud (String name, Location location) {
       super(name, location);
-      nut = new Nut(this.name+"_Nut",null);
    }
    
-   private Nut nut;
+   private Nut nut = new Nut(this.name+"_Nut",null);
 
 	public Nut getNut() {
 		return nut;

@@ -34,7 +34,7 @@
 			<step name="unscrewTire" task="UnscrewTire"/>	
 			<step name="remove" task="Remove"/>	
 
-			<binding slot="$unscrewTire.studs" value="$this.wheel.studs"/>
+			<binding slot="$unscrewTire.wheel" value="$this.wheel"/>
 			<binding slot="$remove.wheel" value="$this.wheel"/>			
 			<binding slot="$remove.tire" value="$this.tire"/>
 			<binding slot="$this.newTire" value="$remove.newTire"/>
@@ -89,30 +89,28 @@
 			<step name="screwTire3" task="ScrewTire"/>	
 			<step name="screwTire4" task="ScrewTire"/>
 
-			<binding slot="$screwTire1.studs" value="Car.LFWheel.studs"/>
+			<binding slot="$screwTire1.wheel" value="Car.LFWheel"/>
 
-			<binding slot="$screwTire2.studs" value="Car.LFWheel.studs"/>
+			<binding slot="$screwTire2.wheel" value="Car.LFWheel"/>
 
-			<binding slot="$screwTire3.studs" value="Car.LFWheel.studs"/>
+			<binding slot="$screwTire3.wheel" value="Car.LFWheel"/>
 
-			<binding slot="$screwTire4.studs" value="Car.LFWheel.studs"/>
+			<binding slot="$screwTire4.wheel" value="Car.LFWheel"/>
 		</subtasks>		
 	</task>
 
 	<task id="ScrewTire">
-		<input name="studs" type="java.util.List"/>
+		<input name="wheel" type="Wheel"/>
 		
 		<subtasks id="screwTire">
 			<step name="screwNut1" task="ScrewNut"/>	
 			<step name="screwNut2" task="ScrewNut"/>	
 			<step name="screwNut3" task="ScrewNut"/>
-			
-			<!--
-				<binding slot="$screwNut1.stud" value="$this.studs.get(0)"/>
-				<binding slot="$screwNut2.stud" value="$this.studs.get(1)"/>
-				<binding slot="$screwNut3.stud" value="$this.studs.get(2)"/>
-			-->
 
+			<binding slot="$screwNut1.stud" value="$this.wheel.getStud1()"/>
+			<binding slot="$screwNut2.stud" value="$this.wheel.getStud2()"/>
+			<binding slot="$screwNut3.stud" value="$this.wheel.getStud3()"/>
+			
 		</subtasks>		
 	</task>
 
@@ -156,71 +154,63 @@
 			<step name="unmount" task="UnmountTire"/>
 			<step name="putdown" task="PutDown"/>
 
-			<binding slot="$unmount.wheel" value="$this.wheel"/>		
-			<binding slot="$unmount.tire" value="$this.tire"/>	
-			<binding slot="$putdown.object" value="$unmount.newTire"/>
+			<binding slot="$unmount.wheel" value="$this.wheel"/>	
+			<binding slot="$putdown.object" value="$unmount.tire"/>
 			<binding slot="$this.newTire" value="$putdown.newObject"/>
 		</subtasks>
 	</task>	
 	
 	<task id="UnscrewTire">
-		<input name="studs" type="java.util.List"/>
+		<input name="wheel" type="Wheel"/>
 		
 		<subtasks id="unscrewTire">
 			<step name="unscrewNut1" task="UnscrewNut"/>
 			<step name="unscrewNut2" task="UnscrewNut"/>
 			<step name="unscrewNut3" task="UnscrewNut"/>
-			
-			<binding slot="$unscrewNut1.nut" value="$this.studs.get(0).getNut()"/>		
-			<binding slot="$unscrewNut1.stud" value="$this.studs.get(0)"/>	
-			
-			<binding slot="$unscrewNut2.nut" value="$this.studs.get(1).getNut()"/>		
-			<binding slot="$unscrewNut2.stud" value="$this.studs.get(1)"/>	
-			
-			<binding slot="$unscrewNut3.nut" value="$this.studs.get(2).getNut()"/>		
-			<binding slot="$unscrewNut3.stud" value="$this.studs.get(2)"/>	
+		
+			<binding slot="$unscrewNut1.stud" value="$this.wheel.getStud1()"/>	
+	
+			<binding slot="$unscrewNut2.stud" value="$this.wheel.getStud2()"/>
+	
+			<binding slot="$unscrewNut3.stud" value="$this.wheel.getStud3()"/>	
 		</subtasks>
 	</task>	
 
 	<task id="UnscrewNut">
-		<input name="nut" type="Nut"/>
 		<input name="stud" type="Stud"/>
 		
 		<subtasks id="unscrewNut" ordered="true">				
 			<step name="unscrew" task="Unscrew"/>
 			<step name="putdown" task="PutDown"/>	
-
-			<binding slot="$unscrew.nut" value="$this.nut"/>		
+		
 			<binding slot="$unscrew.stud" value="$this.stud"/>
-			<binding slot="$putdown.object" value="$this.nut"/>
+			<binding slot="$putdown.object" value="$unscrew.nut"/>
 		</subtasks>		
 	</task>
 
 	<!-- Primitive tasks(ROS)-->
 	
 	<task id="Unscrew">
-        	<input name="nut" type="Nut" modified="newNut"/>
 		<input name="stud" type="Stud"/>
-		<output name="newNut" type="Nut"/>
+		<output name="nut" type="Nut"/>
         	<precondition> $this.stud.getNut() != null </precondition>
-        	<script>  CarWorld.LOOSE_NUTS.add($this.nut); $this.stud.setNut(null);</script>
+        	<script>  CarWorld.LOOSE_NUTS.add($this.stud.getNut()); $this.stud.setNut(null);</script>
       	</task>	
 
 	<task id="Screw">
-        	<input name="nut" type="Nut" modified="newNut"/>
+        <input name="nut" type="Nut" modified="newNut"/>
 		<input name="stud" type="Stud"/>
 		<output name="newNut" type="Nut"/>			
 		<precondition> 
 			$this.stud.getNut() == null <!-- && !CarWorld.LOOSE_NUTS.isEmpty() -->
-		 </precondition>
-        	<script>  CarWorld.LOOSE_NUTS.remove($this.nut); $this.stud.setNut($this.nut); </script>
+		 </precondition> 
+        	<script>  CarWorld.LOOSE_NUTS.remove($this.nut); $this.nut = $this.stud.getNut(); $this.stud.setNut($this.nut); </script>
       	</task>
 	
 	<task id="UnmountTire">
-		<input name="tire" type="Tire" modified="newTire"/>
 		<input name="wheel" type="Wheel"/>
-		<output name="newTire" type="Tire"/>
-
+		<output name="tire" type="Tire"/>
+		
 		<script>
 			
 		</script>

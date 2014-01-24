@@ -1,22 +1,29 @@
 package edu.wpi.htnlfd.tireRotation;
 
-import java.util.*;
 import edu.wpi.htnlfd.domain.*;
 
 public class Wheel extends PhysObj {
 
    public Wheel (String name, Location location) {
       super(name, location);
-      
-      studs.add(new Stud(name+"_Stud1",null));
-      studs.add(new Stud(name+"_Stud2",null));
-      studs.add(new Stud(name+"_Stud3",null));
    }
 
-   public List<Stud> studs = new ArrayList<Stud>();
+   public Stud stud1 = new Stud(name + "_Stud1", null);
 
-	public List<Stud> getStuds() {
-		return studs;
-	}
-	   
+   public Stud stud2 = new Stud(name + "_Stud1", null);
+
+   public Stud stud3 = new Stud(name + "_Stud1", null);
+
+   public Stud getStud1 () {
+      return stud1;
+   }
+
+   public Stud getStud2 () {
+      return stud2;
+   }
+
+   public Stud getStud3 () {
+      return stud3;
+   }
+
 }
