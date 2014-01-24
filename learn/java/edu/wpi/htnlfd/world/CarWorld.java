@@ -6,6 +6,9 @@ import java.util.*;
 
 public class CarWorld extends World{
 
+   public CarWorld(){
+      
+   }
    public static List<Nut> LOOSE_NUTS = new ArrayList<Nut>();
    public static final Car MyCar = new Car("MyCar", new Location(0, 0, 0));
    
