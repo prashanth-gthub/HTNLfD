@@ -4,26 +4,26 @@ import edu.wpi.htnlfd.domain.*;
 
 public class Wheel extends PhysObj {
 
-   public Wheel (String name, Location location) {
-      super(name, location);
-   }
+	public Wheel(String name, Location location) {
+		super(name, location);
+	}
 
-   public Stud stud1 = new Stud(name + "_Stud1", null);
+	private Stud studA = new Stud(name + "_StudA", null);
 
-   public Stud stud2 = new Stud(name + "_Stud2", null);
+	private Stud studB = new Stud(name + "_StudB", null);
 
-   public Stud stud3 = new Stud(name + "_Stud3", null);
+	private Stud studC = new Stud(name + "_StudC", null);
 
-   public Stud getStud1 () {
-      return stud1;
-   }
+	public Stud getStudA() {
+		return studA;
+	}
 
-   public Stud getStud2 () {
-      return stud2;
-   }
+	public Stud getStudB() {
+		return studB;
+	}
 
-   public Stud getStud3 () {
-      return stud3;
-   }
+	public Stud getStudC() {
+		return studC;
+	}
 
 }

@@ -107,9 +107,9 @@
 			<step name="screwNut2" task="ScrewNut"/>	
 			<step name="screwNut3" task="ScrewNut"/>
 
-			<binding slot="$screwNut1.stud" value="$this.wheel.getStud1()"/>
-			<binding slot="$screwNut2.stud" value="$this.wheel.getStud2()"/>
-			<binding slot="$screwNut3.stud" value="$this.wheel.getStud3()"/>
+			<binding slot="$screwNut1.stud" value="$this.wheel.getStudA()"/>
+			<binding slot="$screwNut2.stud" value="$this.wheel.getStudB()"/>
+			<binding slot="$screwNut3.stud" value="$this.wheel.getStudC()"/>
 			
 		</subtasks>		
 	</task>
@@ -168,11 +168,11 @@
 			<step name="unscrewNut2" task="UnscrewNut"/>
 			<step name="unscrewNut3" task="UnscrewNut"/>
 		
-			<binding slot="$unscrewNut1.stud" value="$this.wheel.getStud1()"/>	
+			<binding slot="$unscrewNut1.stud" value="$this.wheel.getStudA()"/>	
 	
-			<binding slot="$unscrewNut2.stud" value="$this.wheel.getStud2()"/>
+			<binding slot="$unscrewNut2.stud" value="$this.wheel.getStudB()"/>
 	
-			<binding slot="$unscrewNut3.stud" value="$this.wheel.getStud3()"/>	
+			<binding slot="$unscrewNut3.stud" value="$this.wheel.getStudC()"/>	
 		</subtasks>
 	</task>	
 
@@ -227,15 +227,15 @@
 	</task>	
 	
 	<task id="PickUp">
-		<input name="object" type="Object" modified="newObject"/>
-		<output name="newObject" type="Object"/>
+		<input name="object" type="PhysObj" modified="newObject"/>
+		<output name="newObject" type="PhysObj"/>
 		<script>
 			
 		</script>
 	</task>	
 	<task id="PutDown">
-		<input name="object" type="Object" modified="newObject"/>
-		<output name="newObject" type="Object"/>
+		<input name="object" type="PhysObj" modified="newObject"/>
+		<output name="newObject" type="PhysObj"/>
 		<script>
 			
 		</script>
