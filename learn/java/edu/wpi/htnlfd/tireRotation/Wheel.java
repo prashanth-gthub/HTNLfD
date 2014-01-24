@@ -10,9 +10,9 @@ public class Wheel extends PhysObj {
 
    public Stud stud1 = new Stud(name + "_Stud1", null);
 
-   public Stud stud2 = new Stud(name + "_Stud1", null);
+   public Stud stud2 = new Stud(name + "_Stud2", null);
 
-   public Stud stud3 = new Stud(name + "_Stud1", null);
+   public Stud stud3 = new Stud(name + "_Stud3", null);
 
    public Stud getStud1 () {
       return stud1;
