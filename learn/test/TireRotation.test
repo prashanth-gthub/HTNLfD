@@ -1,0 +1,154 @@
+    # 24-Jan-2014 9:22:20 PM - TaskEngine 1.5.1 / Disco 1.7.1
+    Welcome to Disco! (Type 'help' for command list)
+  > cd models
+    D:\GitHub\HTNLfD\learn\models
+  > load TireRotation.xml
+#
+# Here, I printed out the value of CarWorld.MyCar.LFwheel, CarWorld.MyCar.LRwheel, and etc that are used in "ScrewTires"
+# I printed out the definition of ScrewTires below
+#
+Wheel.RFwheel
+Wheel.LRwheel
+Wheel.LFwheel
+Wheel.RRwheel
+#
+# This is the value of "this.wheel", input of "ScrewTire" task that is called in "ScrewTires"
+#
+undefined
+#
+# Error
+#
+java.lang.RuntimeException: java.lang.RuntimeException: Evaluating screwTire binding for $screwNut3.stud
+javax.script.ScriptException: sun.org.mozilla.javascript.internal.EcmaError: TypeError: Cannot read property "studC" from undefined (<Unknown Source>#1) in <Unknown Source> at line number 1
+at edu.wpi.cetask.TaskEngine.load(TaskEngine.java:400)
+  > 
+  > 
+  > print ScrewTires
+#
+# Definition of "ScrewTires"
+#
+<task id="ScrewTires" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+		
+		<subtasks id="screwTires">
+			<step name="screwTire1" task="ScrewTire"/>	
+			<step name="screwTire2" task="ScrewTire"/>	
+			<step name="screwTire3" task="ScrewTire"/>	
+			<step name="screwTire4" task="ScrewTire"/>
+
+#
+# I printed them here
+#
+			<binding slot="$screwTire1.wheel" value="println(CarWorld.MyCar.LFwheel);CarWorld.MyCar.LFwheel"/>
+
+			<binding slot="$screwTire2.wheel" value="println(CarWorld.MyCar.LRwheel);CarWorld.MyCar.LRwheel"/>
+
+			<binding slot="$screwTire3.wheel" value="println(CarWorld.MyCar.RFwheel);CarWorld.MyCar.RFwheel"/>
+
+			<binding slot="$screwTire4.wheel" value="println(CarWorld.MyCar.RRwheel);CarWorld.MyCar.RRwheel"/>
+		</subtasks>		
+	</task>
+
+  > 
+  > 
+  > print ScrewTire
+#
+# Definition of "ScrewTire"
+#
+<task id="ScrewTire" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+		<input name="wheel" type="Wheel"/>
+		
+		<subtasks id="screwTire">
+			<step name="screwNut1" task="ScrewNut"/>	
+			<step name="screwNut2" task="ScrewNut"/>	
+			<step name="screwNut3" task="ScrewNut"/>
+
+			<binding slot="$screwNut1.stud" value="$this.wheel.studA"/>
+			<binding slot="$screwNut2.stud" value="$this.wheel.studB"/>
+#
+# I printed "this.wheel" here
+#
+			<binding slot="$screwNut3.stud" value="println($this.wheel);$this.wheel.studC"/>
+			
+		</subtasks>		
+	</task>
+
+  > 
+  > 
+  > 
+  > 
+#
+# Although I think "<binding slot="$screwTire1.wheel" value="println(CarWorld.MyCar.LFwheel);CarWorld.MyCar.LFwheel"/>" 
+# and "<binding slot="$screwTire1.wheel" value="CarWorld.MyCar.LFwheel"/>" result in the same value, I removed the println functions 
+# in "ScrewTires" (as you see below) to be sure that the values are assigned to the inputs.
+#
+# I loaded TireRotation.xml again.
+  > load TireRotation.xml
+WARNING: redefining task model urn:disco.wpi.edu:htnlfd:TireRotation
+#
+# Value of "this.wheel" in "ScrewTire"
+#
+undefined
+#
+# Error
+#
+java.lang.RuntimeException: java.lang.RuntimeException: Evaluating screwTire binding for $screwNut3.stud
+javax.script.ScriptException: sun.org.mozilla.javascript.internal.EcmaError: TypeError: Cannot read property "studC" from undefined (<Unknown Source>#1) in <Unknown Source> at line number 1
+at edu.wpi.cetask.TaskEngine.load(TaskEngine.java:400)
+  > 
+  > 
+  > print ScrewTires
+#
+# Definition of "ScrewTires"
+#
+<task id="ScrewTires" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+		
+		<subtasks id="screwTires">
+			<step name="screwTire1" task="ScrewTire"/>	
+			<step name="screwTire2" task="ScrewTire"/>	
+			<step name="screwTire3" task="ScrewTire"/>	
+			<step name="screwTire4" task="ScrewTire"/>
+#
+# "printlns" are removed  
+#
+			<binding slot="$screwTire1.wheel" value="CarWorld.MyCar.LFwheel"/>
+
+			<binding slot="$screwTire2.wheel" value="CarWorld.MyCar.LRwheel"/>
+
+			<binding slot="$screwTire3.wheel" value="CarWorld.MyCar.RFwheel"/>
+
+			<binding slot="$screwTire4.wheel" value="CarWorld.MyCar.RRwheel"/>
+		</subtasks>		
+	</task>
+
+  > print ScrewTire
+#
+# Definition of "ScrewTire"
+#
+<task id="ScrewTire" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+		<input name="wheel" type="Wheel"/>
+		
+		<subtasks id="screwTire">
+			<step name="screwNut1" task="ScrewNut"/>	
+			<step name="screwNut2" task="ScrewNut"/>	
+			<step name="screwNut3" task="ScrewNut"/>
+
+			<binding slot="$screwNut1.stud" value="$this.wheel.studA"/>
+			<binding slot="$screwNut2.stud" value="$this.wheel.studB"/>
+#
+# I printed "this.wheel" here
+#
+			<binding slot="$screwNut3.stud" value="println($this.wheel);$this.wheel.studC"/>
+			
+		</subtasks>		
+	</task>
+
+  > 
+  > 
+  > 
+  > 
+  > 
+  > status
+  > 
+  > history
+  > quit
+    

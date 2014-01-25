@@ -89,13 +89,13 @@
 			<step name="screwTire3" task="ScrewTire"/>	
 			<step name="screwTire4" task="ScrewTire"/>
 
-			<binding slot="$screwTire1.wheel" value="println(CarWorld.MyCar.LFwheel);CarWorld.MyCar.LFwheel"/>
+			<binding slot="$screwTire1.wheel" value="CarWorld.MyCar.LFwheel"/>
 
-			<binding slot="$screwTire2.wheel" value="println(CarWorld.MyCar.LRwheel);CarWorld.MyCar.LRwheel"/>
+			<binding slot="$screwTire2.wheel" value="CarWorld.MyCar.LRwheel"/>
 
-			<binding slot="$screwTire3.wheel" value="println(CarWorld.MyCar.RFwheel);CarWorld.MyCar.RFwheel"/>
+			<binding slot="$screwTire3.wheel" value="CarWorld.MyCar.RFwheel"/>
 
-			<binding slot="$screwTire4.wheel" value="println(CarWorld.MyCar.RRwheel);CarWorld.MyCar.RRwheel"/>
+			<binding slot="$screwTire4.wheel" value="CarWorld.MyCar.RRwheel"/>
 		</subtasks>		
 	</task>
 
