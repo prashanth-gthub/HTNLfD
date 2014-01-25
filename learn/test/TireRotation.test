@@ -1,11 +1,15 @@
+#
+# Problem: although I am setting the value of "wheel"(input of "ScrewTire" task) in "ScrewTires" task, 
+# it is "undefined" and disco gives me an error.
+#
     # 24-Jan-2014 9:22:20 PM - TaskEngine 1.5.1 / Disco 1.7.1
     Welcome to Disco! (Type 'help' for command list)
   > cd models
     D:\GitHub\HTNLfD\learn\models
   > load TireRotation.xml
 #
-# Here, I printed out the value of CarWorld.MyCar.LFwheel, CarWorld.MyCar.LRwheel, and etc that are used in "ScrewTires"
-# I printed out the definition of ScrewTires below
+# Here, I printed the value of CarWorld.MyCar.LFwheel, CarWorld.MyCar.LRwheel, and etc that are used in "ScrewTires"
+# You can see the definition of ScrewTires below
 #
 Wheel.RFwheel
 Wheel.LRwheel
@@ -65,7 +69,7 @@ at edu.wpi.cetask.TaskEngine.load(TaskEngine.java:400)
 			<binding slot="$screwNut1.stud" value="$this.wheel.studA"/>
 			<binding slot="$screwNut2.stud" value="$this.wheel.studB"/>
 #
-# I printed "this.wheel" here
+# I printed "this.wheel" in the value of this binding
 #
 			<binding slot="$screwNut3.stud" value="println($this.wheel);$this.wheel.studC"/>
 			
@@ -135,7 +139,7 @@ at edu.wpi.cetask.TaskEngine.load(TaskEngine.java:400)
 			<binding slot="$screwNut1.stud" value="$this.wheel.studA"/>
 			<binding slot="$screwNut2.stud" value="$this.wheel.studB"/>
 #
-# I printed "this.wheel" here
+# I printed "this.wheel" value here, as we saw above it is "undefined"
 #
 			<binding slot="$screwNut3.stud" value="println($this.wheel);$this.wheel.studC"/>
 			

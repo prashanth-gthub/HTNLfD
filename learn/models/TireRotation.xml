@@ -1,6 +1,7 @@
 <taskModel about="urn:disco.wpi.edu:htnlfd:TireRotation" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+
 	<task id="RotateTires">
-		<subtasks id="rotateTires" ordered="true">
+		<subtasks id="rotateTires">
 			<step name="removeTires" task="RemoveTires"/>	
 			<step name="rotate" task="Rotate"/>
 			<step name="screwTires" task="ScrewTires"/>		
@@ -8,42 +9,34 @@
 	</task>
 	
 	<task id="RemoveTires">				
-		<subtasks id="removeTires">
+		<subtasks id="removeTires" ordered="false">
 			<step name="removeTire1" task="RemoveTire"/>	
 			<step name="removeTire2" task="RemoveTire"/>	
 			<step name="removeTire3" task="RemoveTire"/>	
 			<step name="removeTire4" task="RemoveTire"/>	
-			
-			<binding slot="$removeTire1.tire" value="CarWorld.MyCar.LFtire"/>
+
 			<binding slot="$removeTire1.wheel" value="CarWorld.MyCar.LFwheel"/>
-			<binding slot="$removeTire2.tire" value="CarWorld.MyCar.RFtire"/>
 			<binding slot="$removeTire2.wheel" value="CarWorld.MyCar.RFwheel"/>
-			<binding slot="$removeTire3.tire" value="CarWorld.MyCar.LRtire"/>
 			<binding slot="$removeTire3.wheel" value="CarWorld.MyCar.LRwheel"/>
-			<binding slot="$removeTire4.tire" value="CarWorld.MyCar.RRtire"/>
 			<binding slot="$removeTire4.wheel" value="CarWorld.MyCar.RRwheel"/>
 		</subtasks>		
 	</task>
 	
 	<task id="RemoveTire">
-		<input name="tire" type="Tire" modified="newTire"/>
 		<input name="wheel" type="Wheel"/>
-		<output name="newTire" type="Tire"/>
 		
-		<subtasks id="removeTire" ordered="true">
+		<subtasks id="removeTire">
 			<step name="unscrewTire" task="UnscrewTire"/>	
 			<step name="remove" task="Remove"/>	
 
 			<binding slot="$unscrewTire.wheel" value="$this.wheel"/>
 			<binding slot="$remove.wheel" value="$this.wheel"/>			
-			<binding slot="$remove.tire" value="$this.tire"/>
-			<binding slot="$this.newTire" value="$remove.newTire"/>
 
 		</subtasks>		
 	</task>
 	
 	<task id="Rotate">
-		<subtasks id="frontToRear">
+		<subtasks id="frontToRear" ordered="false">
 			<step name="placeTire1" task="PlaceTire"/>	
 			<step name="placeTire2" task="PlaceTire"/>	
 			<step name="placeTire3" task="PlaceTire"/>	
@@ -61,7 +54,7 @@
 			<binding slot="$placeTire4.tire" value="CarWorld.MyCar.RRtire"/>
 			<binding slot="$placeTire4.wheel" value="CarWorld.MyCar.RFwheel"/>	
 		</subtasks>
-		<subtasks id="xPattern">
+		<subtasks id="xPattern" ordered="false">
 			<step name="placeTire1" task="PlaceTire"/>	
 			<step name="placeTire2" task="PlaceTire"/>	
 			<step name="placeTire3" task="PlaceTire"/>	
@@ -83,18 +76,15 @@
 
 	<task id="ScrewTires">
 		
-		<subtasks id="screwTires">
+		<subtasks id="screwTires" ordered="false">
 			<step name="screwTire1" task="ScrewTire"/>	
 			<step name="screwTire2" task="ScrewTire"/>	
 			<step name="screwTire3" task="ScrewTire"/>	
 			<step name="screwTire4" task="ScrewTire"/>
 
 			<binding slot="$screwTire1.wheel" value="CarWorld.MyCar.LFwheel"/>
-
 			<binding slot="$screwTire2.wheel" value="CarWorld.MyCar.LRwheel"/>
-
 			<binding slot="$screwTire3.wheel" value="CarWorld.MyCar.RFwheel"/>
-
 			<binding slot="$screwTire4.wheel" value="CarWorld.MyCar.RRwheel"/>
 		</subtasks>		
 	</task>
@@ -102,30 +92,29 @@
 	<task id="ScrewTire">
 		<input name="wheel" type="Wheel"/>
 		
-		<subtasks id="screwTire">
-			<step name="screwNut1" task="ScrewNut"/>	
-			<step name="screwNut2" task="ScrewNut"/>	
-			<step name="screwNut3" task="ScrewNut"/>
+		<subtasks id="screwTire" ordered="false">
+			<step name="screwStud1" task="ScrewStud"/>	
+			<step name="screwStud2" task="ScrewStud"/>	
+			<step name="screwStud3" task="ScrewStud"/>
 
-			<binding slot="$screwNut1.stud" value="$this.wheel.studA"/>
-			<binding slot="$screwNut2.stud" value="$this.wheel.studB"/>
-			<binding slot="$screwNut3.stud" value="println($this.wheel);$this.wheel.studC"/>
+			<binding slot="$screwStud1.stud" value="$this.wheel.studA"/>
+			<binding slot="$screwStud2.stud" value="$this.wheel.studB"/>
+			<binding slot="$screwStud3.stud" value="$this.wheel.studC"/>
 			
 		</subtasks>		
 	</task>
 
-	<task id="ScrewNut">
+	<task id="ScrewStud">
 		<input name="stud" type="Stud"/>
 		<input name="nut" type="Nut"/>
 
-		<subtasks id="screwNut" ordered="true">
-			<step name="pickup" task="PickUp"/>	
-			<step name="screw" task="Screw"/>	
+		<subtasks id="screwStud">
+			<step name="pickup" task="trp:PickUp"/>	
+			<step name="screw" task="trp:Screw"/>	
 	
 			<binding slot="$screw.stud" value="$this.stud"/>	
 			<binding slot="$screw.nut" value="$pickup.newObject"/>
-			<binding slot="$pickup.object" value="$this.nut"/>
-			<binding slot="$this.nut" value="CarWorld.LOOSE_NUTS.get(0)"/>
+			<binding slot="$pickup.object" value="CarWorld.LOOSE_NUTS.get(0)"/>
 		</subtasks>		
 	</task>
 
@@ -134,9 +123,9 @@
 		<input name="wheel" type="Wheel"/>
 		<output name="newTire" type="Tire"/>
 		
-		<subtasks id="placeTire" ordered="true">
-			<step name="pickup" task="PickUp"/>
-			<step name="mount" task="MountTire"/>
+		<subtasks id="placeTire">
+			<step name="pickup" task="trp:PickUp"/>
+			<step name="mount" task="trp:Mount"/>
 			
 			<binding slot="$pickup.object" value="$this.tire"/>
 			<binding slot="$mount.wheel" value="$this.wheel"/>		
@@ -146,114 +135,41 @@
 	</task>	
 
 	<task id="Remove">
-		<input name="tire" type="Tire" modified="newTire"/>
 		<input name="wheel" type="Wheel"/>
-		<output name="newTire" type="Tire"/>
 
-		<subtasks id="remove" ordered="true">
-			<step name="unmount" task="UnmountTire"/>
-			<step name="putdown" task="PutDown"/>
+		<subtasks id="remove">
+			<step name="unmount" task="trp:Unmount"/>
+			<step name="putdown" task="trp:PutDown"/>
 
 			<binding slot="$unmount.wheel" value="$this.wheel"/>	
 			<binding slot="$putdown.object" value="$unmount.tire"/>
-			<binding slot="$this.newTire" value="$putdown.newObject"/>
 		</subtasks>
 	</task>	
 	
 	<task id="UnscrewTire">
 		<input name="wheel" type="Wheel"/>
 		
-		<subtasks id="unscrewTire">
-			<step name="unscrewNut1" task="UnscrewNut"/>
-			<step name="unscrewNut2" task="UnscrewNut"/>
-			<step name="unscrewNut3" task="UnscrewNut"/>
+		<subtasks id="unscrewTire" ordered="false">
+			<step name="unscrewStud1" task="UnscrewStud"/>
+			<step name="unscrewStud2" task="UnscrewStud"/>
+			<step name="unscrewStud3" task="UnscrewStud"/>
 		
-			<binding slot="$unscrewNut1.stud" value="$this.wheel.studA"/>	
-	
-			<binding slot="$unscrewNut2.stud" value="$this.wheel.studB"/>
-
-			<binding slot="$unscrewNut3.stud" value="$this.wheel.studC"/>	
+			<binding slot="$unscrewStud1.stud" value="$this.wheel.studA"/>		
+			<binding slot="$unscrewStud2.stud" value="$this.wheel.studB"/>
+			<binding slot="$unscrewStud3.stud" value="$this.wheel.studC"/>	
 		</subtasks>
 	</task>	
 
-	<task id="UnscrewNut">
+	<task id="UnscrewStud">
 		<input name="stud" type="Stud"/>
 		
-		<subtasks id="unscrewNut" ordered="true">				
-			<step name="unscrew" task="Unscrew"/>
-			<step name="putdown" task="PutDown"/>	
+		<subtasks id="unscrewStud">				
+			<step name="unscrew" task="trp:Unscrew"/>
+			<step name="putdown" task="trp:PutDown"/>	
 		
 			<binding slot="$unscrew.stud" value="$this.stud"/>
 			<binding slot="$putdown.object" value="$unscrew.nut"/>
 		</subtasks>		
 	</task>
 
-	<!-- Primitive tasks(ROS)-->
-	
-	<task id="Unscrew">
-		<input name="stud" type="Stud"/>
-		<output name="nut" type="Nut"/>
-	<!--	<precondition> $this.stud.getNut() != null </precondition> -->
-		<script>  
-			CarWorld.LOOSE_NUTS.add($this.stud.getNut()); $this.nut = $this.stud.getNut(); 
-			$this.stud.setNut(null);
-		</script>
-      	</task>	
-
-	<task id="Screw">
-        <input name="nut" type="Nut" modified="newNut"/>
-		<input name="stud" type="Stud"/>
-		<output name="newNut" type="Nut"/>			
-	<!--	<precondition> 
-			$this.stud.getNut() == null  && !CarWorld.LOOSE_NUTS.isEmpty()
-		 </precondition> -->
-        	<script>  CarWorld.LOOSE_NUTS.remove($this.nut); $this.nut = $this.stud.getNut(); $this.stud.setNut($this.nut); </script>
-      	</task>
-	
-	<task id="UnmountTire">
-		<input name="wheel" type="Wheel"/>
-		<output name="tire" type="Tire"/>
-		
-		<script>
-			
-		</script>
-	</task>	
-	
-	<task id="MountTire">
-		<input name="tire" type="Tire" modified="newTire"/>
-		<input name="wheel" type="Wheel"/>
-		<output name="newTire" type="Tire"/>
-
-		<script>
-			
-		</script>
-	</task>	
-	
-	<task id="PickUp">
-		<input name="object" type="PhysObj" modified="newObject"/>
-		<output name="newObject" type="PhysObj"/>
-		<script>
-			
-		</script>
-	</task>	
-	<task id="PutDown">
-		<input name="object" type="PhysObj" modified="newObject"/>
-		<output name="newObject" type="PhysObj"/>
-		<script>
-			
-		</script>
-	</task>
-
-
-	
-	
-	<!-- Scripts-->
-	<script init="true">
-
-		function reset () {
-			RobotLocation = new Location(-10,-10,-10);
-		}
-		reset();
-	</script>
-  
 </taskModel>

@@ -1,0 +1,63 @@
+<taskModel about="urn:disco.wpi.edu:htnlfd:trp" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+	<!-- Primitive tasks -->	
+	
+	<task id="Unscrew">
+		<input name="stud" type="Stud"/>
+		<output name="nut" type="Nut"/>
+		<precondition> $this.stud.getNut() != null </precondition>
+		<script>  
+			CarWorld.LOOSE_NUTS.add($this.stud.getNut()); 
+			$this.nut = $this.stud.getNut(); 
+			$this.stud.setNut(null);
+		</script>
+    </task>	
+
+	<task id="Screw">
+        <input name="nut" type="Nut" modified="newNut"/>
+		<input name="stud" type="Stud"/>
+		<output name="newNut" type="Nut"/>			
+		<precondition> 
+			($this.stud.getNut() == null)  <!-- (!CarWorld.LOOSE_NUTS.isEmpty())) -->
+		</precondition>
+        <script>  
+			CarWorld.LOOSE_NUTS.remove($this.nut); 
+			$this.nut = $this.stud.getNut(); 
+			$this.stud.setNut($this.nut); 		
+		</script>
+    </task>
+	
+	<task id="Unmount">
+		<input name="wheel" type="Wheel"/>
+		<output name="tire" type="Tire"/>
+		
+		<script>
+			
+		</script>
+	</task>	
+	
+	<task id="Mount">
+		<input name="tire" type="Tire" modified="newTire"/>
+		<input name="wheel" type="Wheel"/>
+		<output name="newTire" type="Tire"/>
+
+		<script>
+			
+		</script>
+	</task>	
+	
+	<task id="PickUp">
+		<input name="object" type="PhysObj" modified="newObject"/>
+		<output name="newObject" type="PhysObj"/>
+		<script>
+			
+		</script>
+	</task>	
+	<task id="PutDown">
+		<input name="object" type="PhysObj" modified="newObject"/>
+		<output name="newObject" type="PhysObj"/>
+		<script>
+			
+		</script>
+	</task>
+	
+</taskModel>
