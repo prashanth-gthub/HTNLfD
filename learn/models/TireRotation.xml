@@ -112,8 +112,8 @@
 			<step name="screw" task="prim:Screw"/>	
 	
 			<binding slot="$screw.stud" value="$this.stud"/>	
-			<binding slot="$screw.nut" value="$pickup.newObject"/>
 			<binding slot="$pickup.object" value="CarWorld.LOOSE_NUTS.isEmpty() ? undefined : CarWorld.LOOSE_NUTS.get(0)"/>
+			<binding slot="$screw.nut" value="$pickup.newObject"/>			
 		</subtasks>		
 	</task>
 
