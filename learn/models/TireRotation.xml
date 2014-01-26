@@ -1,4 +1,4 @@
-<taskModel about="urn:disco.wpi.edu:htnlfd:TireRotation" xmlns:trp="urn:disco.wpi.edu:htnlfd:trp" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+<taskModel about="urn:disco.wpi.edu:htnlfd:TireRotation" xmlns:prim="urn:disco.wpi.edu:htnlfd:TireRotationPrimitives" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
 
 	<task id="RotateTires">
 		<subtasks id="rotateTires">
@@ -108,12 +108,12 @@
 		<input name="stud" type="Stud"/>
 		
 		<subtasks id="screwStud">
-			<step name="pickup" task="trp:PickUp"/>	
-			<step name="screw" task="trp:Screw"/>	
+			<step name="pickup" task="prim:PickUp"/>	
+			<step name="screw" task="prim:Screw"/>	
 	
 			<binding slot="$screw.stud" value="$this.stud"/>	
 			<binding slot="$screw.nut" value="$pickup.newObject"/>
-			<binding slot="$pickup.object" value="CarWorld.LOOSE_NUTS.get(0)"/>
+			<binding slot="$pickup.object" value="CarWorld.LOOSE_NUTS.isEmpty() ? undefined : CarWorld.LOOSE_NUTS.get(0)"/>
 		</subtasks>		
 	</task>
 
@@ -123,8 +123,8 @@
 		<output name="newTire" type="Tire"/>
 		
 		<subtasks id="placeTire">
-			<step name="pickup" task="trp:PickUp"/>
-			<step name="mount" task="trp:Mount"/>
+			<step name="pickup" task="prim:PickUp"/>
+			<step name="mount" task="prim:Mount"/>
 			
 			<binding slot="$pickup.object" value="$this.tire"/>
 			<binding slot="$mount.wheel" value="$this.wheel"/>		
@@ -137,8 +137,8 @@
 		<input name="wheel" type="Wheel"/>
 
 		<subtasks id="remove">
-			<step name="unmount" task="trp:Unmount"/>
-			<step name="putdown" task="trp:PutDown"/>
+			<step name="unmount" task="prim:Unmount"/>
+			<step name="putdown" task="prim:PutDown"/>
 
 			<binding slot="$unmount.wheel" value="$this.wheel"/>	
 			<binding slot="$putdown.object" value="$unmount.tire"/>
@@ -163,8 +163,8 @@
 		<input name="stud" type="Stud"/>
 		
 		<subtasks id="unscrewStud">				
-			<step name="unscrew" task="trp:Unscrew"/>
-			<step name="putdown" task="trp:PutDown"/>	
+			<step name="unscrew" task="prim:Unscrew"/>
+			<step name="putdown" task="prim:PutDown"/>	
 		
 			<binding slot="$unscrew.stud" value="$this.stud"/>
 			<binding slot="$putdown.object" value="$unscrew.nut"/>

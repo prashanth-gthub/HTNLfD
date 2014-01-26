@@ -1,10 +1,13 @@
-<taskModel about="urn:disco.wpi.edu:htnlfd:trp" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+<taskModel about="urn:disco.wpi.edu:htnlfd:TireRotationPrimitives" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
 	<!-- Primitive tasks -->	
-	
+	<!--  if ( isROS() ) -->
+	<!-- link to the drawing-->
+	<!-- one page drawing -->
 	<task id="Unscrew">
 		<input name="stud" type="Stud"/>
 		<output name="nut" type="Nut"/>
-		<!-- <precondition> $this.stud.getNut() != null </precondition> -->
+		<binding slot="$this.external" value="false"/>
+		<precondition> $this.stud == undefined ? undefined : $this.stud.getNut() != null </precondition>
 		<script>  
 			CarWorld.LOOSE_NUTS.add($this.stud.getNut()); 
 			$this.nut = $this.stud.getNut(); 
@@ -15,9 +18,10 @@
 	<task id="Screw">
         <input name="nut" type="Nut" modified="newNut"/>
 		<input name="stud" type="Stud"/>
-		<output name="newNut" type="Nut"/>			
+		<output name="newNut" type="Nut"/>	
+		<binding slot="$this.external" value="false"/>
 		<precondition> 
-			($this.stud.getNut() == null)  <!-- (!CarWorld.LOOSE_NUTS.isEmpty())) -->
+			$this.stud.getNut() == null  &amp;&amp; !CarWorld.LOOSE_NUTS.isEmpty()
 		</precondition>
         <script>  
 			CarWorld.LOOSE_NUTS.remove($this.nut); 
@@ -29,9 +33,10 @@
 	<task id="Unmount"> 
 		<input name="wheel" type="Wheel"/>
 		<output name="tire" type="Tire"/>
-			
+		
 		<script>
-			$this.tire = CarWorld.MyCar.getTire($this.wheel);
+			$this.tire = $this.wheel.getTire();
+			$this.wheel.setTire(null);
 		</script>
 	</task>	
 	
@@ -39,24 +44,30 @@
 		<input name="tire" type="Tire" modified="newTire"/>
 		<input name="wheel" type="Wheel"/>
 		<output name="newTire" type="Tire"/>
-
+		<binding slot="$this.external" value="false"/>
+	
 		<script>
 			$this.newTire.location = new Location($this.wheel.location);
+			$this.wheel.setTire($this.newTire);
 		</script>
 	</task>	
 	
 	<task id="PickUp">
 		<input name="object" type="PhysObj" modified="newObject"/>
 		<output name="newObject" type="PhysObj"/>
+		<binding slot="$this.external" value="false"/>
+		<precondition> $this.object != undefined </precondition>		
 		<script>
-			
+			$this.newObject.location = Location.plus($this.object.location,new Location(0,0,10));
 		</script>
 	</task>	
 	<task id="PutDown">
 		<input name="object" type="PhysObj" modified="newObject"/>
 		<output name="newObject" type="PhysObj"/>
+		<binding slot="$this.external" value="false"/>
+		<precondition> $this.object != undefined </precondition>	
 		<script>
-			
+			$this.newObject.location = Location.plus($this.object.location,new Location(0,0,-10));
 		</script>
 	</task>
 	
