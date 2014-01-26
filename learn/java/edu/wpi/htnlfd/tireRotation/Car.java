@@ -30,5 +30,21 @@ public class Car extends PhysObj {
 
 	public Wheel LRwheel = new Wheel("LRwheel", Location.plus(this.location,
 			new Location(-10, 10, 0)));
-
-	}
+	
+   public Tire getTire(Wheel wheel){
+      if(wheel.name == RFwheel.name){
+         return RFtire;
+      }
+      else if(wheel.name == LFwheel.name){
+         return LFtire;
+      }
+      else if(wheel.name == LRwheel.name){
+         return LRtire;
+      }
+      else if(wheel.name == RRwheel.name){
+         return RRtire;
+      }
+      return null;
+      
+   }
+}

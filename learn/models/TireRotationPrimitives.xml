@@ -4,7 +4,7 @@
 	<task id="Unscrew">
 		<input name="stud" type="Stud"/>
 		<output name="nut" type="Nut"/>
-		<precondition> $this.stud.getNut() != null </precondition>
+		<!-- <precondition> $this.stud.getNut() != null </precondition> -->
 		<script>  
 			CarWorld.LOOSE_NUTS.add($this.stud.getNut()); 
 			$this.nut = $this.stud.getNut(); 
@@ -26,12 +26,12 @@
 		</script>
     </task>
 	
-	<task id="Unmount">
+	<task id="Unmount"> 
 		<input name="wheel" type="Wheel"/>
 		<output name="tire" type="Tire"/>
-		
-		<script>
 			
+		<script>
+			$this.tire = CarWorld.MyCar.getTire($this.wheel);
 		</script>
 	</task>	
 	
@@ -41,7 +41,7 @@
 		<output name="newTire" type="Tire"/>
 
 		<script>
-			
+			$this.newTire.location = new Location($this.wheel.location);
 		</script>
 	</task>	
 	

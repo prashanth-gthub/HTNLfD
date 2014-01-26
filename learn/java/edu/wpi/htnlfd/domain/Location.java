@@ -13,6 +13,12 @@ public class Location extends ApplicationSpecificClass {
       this.z = z;
    }
    
+   public Location (Location loc) {
+      this.x = loc.x;
+      this.y = loc.y;
+      this.z = loc.z;
+   }
+   
    public static Location plus (Location loc1, Location loc2) {
       return new Location(loc1.x+loc2.x, loc1.y+loc2.y, loc1.z+loc2.z);
    }

@@ -1,4 +1,4 @@
-<taskModel about="urn:disco.wpi.edu:htnlfd:TireRotation" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+<taskModel about="urn:disco.wpi.edu:htnlfd:TireRotation" xmlns:trp="urn:disco.wpi.edu:htnlfd:trp" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
 
 	<task id="RotateTires">
 		<subtasks id="rotateTires">
@@ -106,8 +106,7 @@
 
 	<task id="ScrewStud">
 		<input name="stud" type="Stud"/>
-		<input name="nut" type="Nut"/>
-
+		
 		<subtasks id="screwStud">
 			<step name="pickup" task="trp:PickUp"/>	
 			<step name="screw" task="trp:Screw"/>	

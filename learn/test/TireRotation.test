@@ -1,158 +1,348 @@
 #
-# Problem: although I am setting the value of "wheel"(input of "ScrewTire" task) in "ScrewTires" task, 
-# it is "undefined" and disco gives me an error.
+# Problem: Althought "this.stud" is not undefined, but disco gives an error that the value of "this.stud" in the precondition is undefined.
+# How I know that the value is not undefined: After removing the precondition disco execute the task with the correct inputs and outputs.
 #
-    # 24-Jan-2014 9:22:20 PM - TaskEngine 1.5.1 / Disco 1.7.1
+    # 25-Jan-2014 6:53:48 PM - TaskEngine 1.5.4 / Disco 1.7.5
     Welcome to Disco! (Type 'help' for command list)
   > cd models
     D:\GitHub\HTNLfD\learn\models
+#
+# Loading the files
+#
+  > load TireRotationPrimitives.xml
   > load TireRotation.xml
-#
-# Here, I printed the value of CarWorld.MyCar.LFwheel, CarWorld.MyCar.LRwheel, and etc that are used in "ScrewTires"
-# You can see the definition of ScrewTires below
-#
-Wheel.RFwheel
-Wheel.LRwheel
-Wheel.LFwheel
-Wheel.RRwheel
-#
-# This is the value of "this.wheel", input of "ScrewTire" task that is called in "ScrewTires"
-#
-undefined
 #
 # Error
 #
-java.lang.RuntimeException: java.lang.RuntimeException: Evaluating screwTire binding for $screwNut3.stud
-javax.script.ScriptException: sun.org.mozilla.javascript.internal.EcmaError: TypeError: Cannot read property "studC" from undefined (<Unknown Source>#1) in <Unknown Source> at line number 1
-at edu.wpi.cetask.TaskEngine.load(TaskEngine.java:400)
+java.lang.RuntimeException: java.lang.RuntimeException: Evaluating Unscrew precondition
+javax.script.ScriptException: sun.org.mozilla.javascript.internal.EcmaError: TypeError: Cannot call method "getNut" of undefined (<Unknown Source>#1) in <Unknown Source> at line number 1
+at edu.wpi.cetask.TaskEngine.load(TaskEngine.java:405)
   > 
   > 
-  > print ScrewTires
+  > 
+  > 
+  > 
 #
-# Definition of "ScrewTires"
+# Unscrew task definition
 #
-<task id="ScrewTires" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-		
-		<subtasks id="screwTires">
-			<step name="screwTire1" task="ScrewTire"/>	
-			<step name="screwTire2" task="ScrewTire"/>	
-			<step name="screwTire3" task="ScrewTire"/>	
-			<step name="screwTire4" task="ScrewTire"/>
+  > print Unscrew
 
-#
-# I printed them here
-#
-			<binding slot="$screwTire1.wheel" value="println(CarWorld.MyCar.LFwheel);CarWorld.MyCar.LFwheel"/>
-
-			<binding slot="$screwTire2.wheel" value="println(CarWorld.MyCar.LRwheel);CarWorld.MyCar.LRwheel"/>
-
-			<binding slot="$screwTire3.wheel" value="println(CarWorld.MyCar.RFwheel);CarWorld.MyCar.RFwheel"/>
-
-			<binding slot="$screwTire4.wheel" value="println(CarWorld.MyCar.RRwheel);CarWorld.MyCar.RRwheel"/>
-		</subtasks>		
-	</task>
+  <task id="Unscrew" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+		<input name="stud" type="Stud"/>
+		<output name="nut" type="Nut"/>
+		<precondition> $this.stud.getNut() != null </precondition>
+		<script>  
+			CarWorld.LOOSE_NUTS.add($this.stud.getNut()); 
+			$this.nut = $this.stud.getNut(); 
+			$this.stud.setNut(null);
+		</script>
+    </task>
 
   > 
   > 
-  > print ScrewTire
 #
-# Definition of "ScrewTire"
+# Changing Unscrew task definition and loading the files again.
 #
-<task id="ScrewTire" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-		<input name="wheel" type="Wheel"/>
-		
-		<subtasks id="screwTire">
-			<step name="screwNut1" task="ScrewNut"/>	
-			<step name="screwNut2" task="ScrewNut"/>	
-			<step name="screwNut3" task="ScrewNut"/>
-
-			<binding slot="$screwNut1.stud" value="$this.wheel.studA"/>
-			<binding slot="$screwNut2.stud" value="$this.wheel.studB"/>
-#
-# I printed "this.wheel" in the value of this binding
-#
-			<binding slot="$screwNut3.stud" value="println($this.wheel);$this.wheel.studC"/>
-			
-		</subtasks>		
-	</task>
-
-  > 
-  > 
-  > 
-  > 
-#
-# Although I think "<binding slot="$screwTire1.wheel" value="println(CarWorld.MyCar.LFwheel);CarWorld.MyCar.LFwheel"/>" 
-# and "<binding slot="$screwTire1.wheel" value="CarWorld.MyCar.LFwheel"/>" result in the same value, I removed the println functions 
-# in "ScrewTires" (as you see below) to be sure that the values are assigned to the inputs.
-#
-# I loaded TireRotation.xml again.
+  > load TireRotationPrimitives.xml
+WARNING: redefining task model urn:disco.wpi.edu:htnlfd:trp
   > load TireRotation.xml
 WARNING: redefining task model urn:disco.wpi.edu:htnlfd:TireRotation
-#
-# Value of "this.wheel" in "ScrewTire"
-#
-undefined
-#
-# Error
-#
-java.lang.RuntimeException: java.lang.RuntimeException: Evaluating screwTire binding for $screwNut3.stud
-javax.script.ScriptException: sun.org.mozilla.javascript.internal.EcmaError: TypeError: Cannot read property "studC" from undefined (<Unknown Source>#1) in <Unknown Source> at line number 1
-at edu.wpi.cetask.TaskEngine.load(TaskEngine.java:400)
-  > 
-  > 
-  > print ScrewTires
-#
-# Definition of "ScrewTires"
-#
-<task id="ScrewTires" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-		
-		<subtasks id="screwTires">
-			<step name="screwTire1" task="ScrewTire"/>	
-			<step name="screwTire2" task="ScrewTire"/>	
-			<step name="screwTire3" task="ScrewTire"/>	
-			<step name="screwTire4" task="ScrewTire"/>
-#
-# "printlns" are removed  
-#
-			<binding slot="$screwTire1.wheel" value="CarWorld.MyCar.LFwheel"/>
-
-			<binding slot="$screwTire2.wheel" value="CarWorld.MyCar.LRwheel"/>
-
-			<binding slot="$screwTire3.wheel" value="CarWorld.MyCar.RFwheel"/>
-
-			<binding slot="$screwTire4.wheel" value="CarWorld.MyCar.RRwheel"/>
-		</subtasks>		
-	</task>
-
-  > print ScrewTire
-#
-# Definition of "ScrewTire"
-#
-<task id="ScrewTire" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-		<input name="wheel" type="Wheel"/>
-		
-		<subtasks id="screwTire">
-			<step name="screwNut1" task="ScrewNut"/>	
-			<step name="screwNut2" task="ScrewNut"/>	
-			<step name="screwNut3" task="ScrewNut"/>
-
-			<binding slot="$screwNut1.stud" value="$this.wheel.studA"/>
-			<binding slot="$screwNut2.stud" value="$this.wheel.studB"/>
-#
-# I printed "this.wheel" value here, as we saw above it is "undefined"
-#
-			<binding slot="$screwNut3.stud" value="println($this.wheel);$this.wheel.studC"/>
-			
-		</subtasks>		
-	</task>
-
   > 
   > 
   > 
+  > print Unscrew
+#
+# Unscrew task definition
+#
+  <task id="Unscrew" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+		<input name="stud" type="Stud"/>
+		<output name="nut" type="Nut"/>
+#
+# Removing the precondition
+#
+		<!-- <precondition> $this.stud.getNut() != null </precondition> -->
+		<script>  
+			CarWorld.LOOSE_NUTS.add($this.stud.getNut()); 
+			$this.nut = $this.stud.getNut(); 
+			$this.stud.setNut(null);
+		</script>
+    </task>
+
   > 
+  > 
+#
+# RotateTires execution
+#
+  > task RotateTires
+    User says "Let's achieve RotateTires."
+#
+# Input of Unscrew is not undefined
+#
+    Agent execute Unscrew on Stud.LFwheel_StudA producing Nut.LFwheel_StudA_Nut.
+    Agent execute PutDown on Nut.LFwheel_StudA_Nut producing Nut.LFwheel_StudA_Nut.
+    Agent execute Unscrew on Stud.LFwheel_StudB producing Nut.LFwheel_StudB_Nut.
+    Agent execute PutDown on Nut.LFwheel_StudB_Nut producing Nut.LFwheel_StudB_Nut.
+    Agent execute Unscrew on Stud.LFwheel_StudC producing Nut.LFwheel_StudC_Nut.
+    Agent says "Ok."
+  > next
+    Agent execute PutDown on Nut.LFwheel_StudC_Nut producing Nut.LFwheel_StudC_Nut.
+    Agent execute Unmount on Wheel.LFwheel producing Tire.LFtire.
+    Agent execute PutDown on Tire.LFtire producing Tire.LFtire.
+    Agent execute Unscrew on Stud.RFwheel_StudA producing Nut.RFwheel_StudA_Nut.
+    Agent execute PutDown on Nut.RFwheel_StudA_Nut producing Nut.RFwheel_StudA_Nut.
+    Agent says "Ok."
+  > next
+    Agent execute Unscrew on Stud.RFwheel_StudB producing Nut.RFwheel_StudB_Nut.
+    Agent execute PutDown on Nut.RFwheel_StudB_Nut producing Nut.RFwheel_StudB_Nut.
+    Agent execute Unscrew on Stud.RFwheel_StudC producing Nut.RFwheel_StudC_Nut.
+    Agent execute PutDown on Nut.RFwheel_StudC_Nut producing Nut.RFwheel_StudC_Nut.
+    Agent execute Unmount on Wheel.RFwheel producing Tire.RFtire.
+    Agent says "Ok."
+  > 
+  > next
+    Agent execute PutDown on Tire.RFtire producing Tire.RFtire.
+    Agent execute Unscrew on Stud.LRwheel_StudA producing Nut.LRwheel_StudA_Nut.
+    Agent execute PutDown on Nut.LRwheel_StudA_Nut producing Nut.LRwheel_StudA_Nut.
+    Agent execute Unscrew on Stud.LRwheel_StudB producing Nut.LRwheel_StudB_Nut.
+    Agent execute PutDown on Nut.LRwheel_StudB_Nut producing Nut.LRwheel_StudB_Nut.
+    Agent says "Ok."
+  > next
+    Agent execute Unscrew on Stud.LRwheel_StudC producing Nut.LRwheel_StudC_Nut.
+    Agent execute PutDown on Nut.LRwheel_StudC_Nut producing Nut.LRwheel_StudC_Nut.
+    Agent execute Unmount on Wheel.LRwheel producing Tire.LRtire.
+    Agent execute PutDown on Tire.LRtire producing Tire.LRtire.
+    Agent execute Unscrew on Stud.RRwheel_StudA producing Nut.RRwheel_StudA_Nut.
+    Agent says "Ok."
+  > next
+    Agent execute PutDown on Nut.RRwheel_StudA_Nut producing Nut.RRwheel_StudA_Nut.
+    Agent execute Unscrew on Stud.RRwheel_StudB producing Nut.RRwheel_StudB_Nut.
+    Agent execute PutDown on Nut.RRwheel_StudB_Nut producing Nut.RRwheel_StudB_Nut.
+    Agent execute Unscrew on Stud.RRwheel_StudC producing Nut.RRwheel_StudC_Nut.
+    Agent execute PutDown on Nut.RRwheel_StudC_Nut producing Nut.RRwheel_StudC_Nut.
+    Agent says "Ok."
+  > next
+    Agent execute Unmount on Wheel.RRwheel producing Tire.RRtire.
+    Agent execute PutDown on Tire.RRtire producing Tire.RRtire.
+    Agent says "How shall we achieve Rotate?"
+  > say
+[1] Let's achieve Rotate by frontToRear.
+[2] Let's achieve Rotate by xPattern.
+[3] Let's not achieve Rotate.
+[4] Stop achieve RotateTires.
+[5] Let's achieve RotateTires.
+  >> 1
+    User says "Let's achieve Rotate by frontToRear."
+    Agent execute PickUp on Tire.LFtire producing Tire.LFtire.
+    Agent execute Mount on Tire.LFtire and Wheel.LRwheel producing Tire.LFtire.
+    Agent execute PickUp on Tire.RFtire producing Tire.RFtire.
+    Agent execute Mount on Tire.RFtire and Wheel.RRwheel producing Tire.RFtire.
+    Agent execute PickUp on Tire.LRtire producing Tire.LRtire.
+    Agent says "Ok."
+  > next
+    Agent execute Mount on Tire.LRtire and Wheel.LFwheel producing Tire.LRtire.
+    Agent execute PickUp on Tire.RRtire producing Tire.RRtire.
+    Agent execute Mount on Tire.RRtire and Wheel.RFwheel producing Tire.RRtire.
+#
+# I added NutTemp to the list of LOOSE_NUTS because when I loaded the TireRotation.xml the array is empty so 
+# disco gives an error when it wants to evaluate "CarWorld.LOOSE_NUTS.get(0)".
+#
+    Agent execute PickUp on Nut.NutTemp producing Nut.NutTemp.
+    Agent execute Screw on Nut.NutTemp and Stud.LFwheel_StudA producing Nut.NutTemp.
+    Agent says "Ok."
+  > next
+    Agent execute PickUp on Nut.LFwheel_StudA_Nut producing Nut.LFwheel_StudA_Nut.
+    Agent execute Screw on Nut.LFwheel_StudA_Nut and Stud.LFwheel_StudB producing Nut.LFwheel_StudA_Nut.
+    Agent execute PickUp on Nut.LFwheel_StudB_Nut producing Nut.LFwheel_StudB_Nut.
+    Agent execute Screw on Nut.LFwheel_StudB_Nut and Stud.LFwheel_StudC producing Nut.LFwheel_StudB_Nut.
+    Agent execute PickUp on Nut.LFwheel_StudC_Nut producing Nut.LFwheel_StudC_Nut.
+    Agent says "Ok."
+  > next
+    Agent execute Screw on Nut.LFwheel_StudC_Nut and Stud.LRwheel_StudA producing Nut.LFwheel_StudC_Nut.
+    Agent execute PickUp on Nut.RFwheel_StudA_Nut producing Nut.RFwheel_StudA_Nut.
+    Agent execute Screw on Nut.RFwheel_StudA_Nut and Stud.LRwheel_StudB producing Nut.RFwheel_StudA_Nut.
+    Agent execute PickUp on Nut.RFwheel_StudB_Nut producing Nut.RFwheel_StudB_Nut.
+    Agent execute Screw on Nut.RFwheel_StudB_Nut and Stud.LRwheel_StudC producing Nut.RFwheel_StudB_Nut.
+    Agent says "Ok."
+  > next
+    Agent execute PickUp on Nut.RFwheel_StudC_Nut producing Nut.RFwheel_StudC_Nut.
+    Agent execute Screw on Nut.RFwheel_StudC_Nut and Stud.RFwheel_StudA producing Nut.RFwheel_StudC_Nut.
+    Agent execute PickUp on Nut.LRwheel_StudA_Nut producing Nut.LRwheel_StudA_Nut.
+    Agent execute Screw on Nut.LRwheel_StudA_Nut and Stud.RFwheel_StudB producing Nut.LRwheel_StudA_Nut.
+    Agent execute PickUp on Nut.LRwheel_StudB_Nut producing Nut.LRwheel_StudB_Nut.
+    Agent says "Ok."
+  > next
+    Agent execute Screw on Nut.LRwheel_StudB_Nut and Stud.RFwheel_StudC producing Nut.LRwheel_StudB_Nut.
+    Agent execute PickUp on Nut.LRwheel_StudC_Nut producing Nut.LRwheel_StudC_Nut.
+    Agent execute Screw on Nut.LRwheel_StudC_Nut and Stud.RRwheel_StudA producing Nut.LRwheel_StudC_Nut.
+    Agent execute PickUp on Nut.RRwheel_StudA_Nut producing Nut.RRwheel_StudA_Nut.
+    Agent execute Screw on Nut.RRwheel_StudA_Nut and Stud.RRwheel_StudB producing Nut.RRwheel_StudA_Nut.
+    Agent says "Ok."
+  > next
+    Agent execute PickUp on Nut.RRwheel_StudB_Nut producing Nut.RRwheel_StudB_Nut.
+    Agent execute Screw on Nut.RRwheel_StudB_Nut and Stud.RRwheel_StudC producing Nut.RRwheel_StudB_Nut.
+    Agent says "Ok."
+  > next
+    Agent says "Ok."
+  > next
+    Agent says "Ok."
   > 
   > status
+
+[Achieve RotateTires] -accepted -done
+   User says "Let's achieve RotateTires."
+   [Achieve RemoveTires] -done
+   [Achieve Rotate] -done
+   [Achieve ScrewTires] -done
+      [Achieve ScrewTire on Wheel.LFwheel] -done
+      [Achieve ScrewTire on Wheel.LRwheel] -done
+      [Achieve ScrewTire on Wheel.RFwheel] -done
+      [Achieve ScrewTire on Wheel.RRwheel] -done
+         [Achieve ScrewStud on Stud.RRwheel_StudA] -done
+         [Achieve ScrewStud on Stud.RRwheel_StudB] -done
+         [Achieve ScrewStud on Stud.RRwheel_StudC] -done <-focus
+            Agent execute PickUp on Nut.RRwheel_StudB_Nut producing Nut.RRwheel_StudB_Nut.
+            Agent execute Screw on Nut.RRwheel_StudB_Nut and Stud.RRwheel_StudC producing Nut.RRwheel_StudB_Nut.
+            Agent says "Ok."
+            Agent says "Ok."
+            Agent says "Ok."
+
   > 
   > history
+
+[Achieve RotateTires] -accepted -done
+   User says "Let's achieve RotateTires."
+   [Achieve RemoveTires] -done
+      [Achieve RemoveTire on Wheel.LFwheel] -done
+         [Achieve UnscrewTire on Wheel.LFwheel] -done
+            [Achieve UnscrewStud on Stud.LFwheel_StudA] -done
+               Agent execute Unscrew on Stud.LFwheel_StudA producing Nut.LFwheel_StudA_Nut.
+               Agent execute PutDown on Nut.LFwheel_StudA_Nut producing Nut.LFwheel_StudA_Nut.
+            [Achieve UnscrewStud on Stud.LFwheel_StudB] -done
+               Agent execute Unscrew on Stud.LFwheel_StudB producing Nut.LFwheel_StudB_Nut.
+               Agent execute PutDown on Nut.LFwheel_StudB_Nut producing Nut.LFwheel_StudB_Nut.
+            [Achieve UnscrewStud on Stud.LFwheel_StudC] -done
+               Agent execute Unscrew on Stud.LFwheel_StudC producing Nut.LFwheel_StudC_Nut.
+               Agent says "Ok."
+               Agent execute PutDown on Nut.LFwheel_StudC_Nut producing Nut.LFwheel_StudC_Nut.
+         [Achieve Remove on Wheel.LFwheel] -done
+            Agent execute Unmount on Wheel.LFwheel producing Tire.LFtire.
+            Agent execute PutDown on Tire.LFtire producing Tire.LFtire.
+      [Achieve RemoveTire on Wheel.RFwheel] -done
+         [Achieve UnscrewTire on Wheel.RFwheel] -done
+            [Achieve UnscrewStud on Stud.RFwheel_StudA] -done
+               Agent execute Unscrew on Stud.RFwheel_StudA producing Nut.RFwheel_StudA_Nut.
+               Agent execute PutDown on Nut.RFwheel_StudA_Nut producing Nut.RFwheel_StudA_Nut.
+               Agent says "Ok."
+            [Achieve UnscrewStud on Stud.RFwheel_StudB] -done
+               Agent execute Unscrew on Stud.RFwheel_StudB producing Nut.RFwheel_StudB_Nut.
+               Agent execute PutDown on Nut.RFwheel_StudB_Nut producing Nut.RFwheel_StudB_Nut.
+            [Achieve UnscrewStud on Stud.RFwheel_StudC] -done
+               Agent execute Unscrew on Stud.RFwheel_StudC producing Nut.RFwheel_StudC_Nut.
+               Agent execute PutDown on Nut.RFwheel_StudC_Nut producing Nut.RFwheel_StudC_Nut.
+         [Achieve Remove on Wheel.RFwheel] -done
+            Agent execute Unmount on Wheel.RFwheel producing Tire.RFtire.
+            Agent says "Ok."
+            Agent execute PutDown on Tire.RFtire producing Tire.RFtire.
+      [Achieve RemoveTire on Wheel.LRwheel] -done
+         [Achieve UnscrewTire on Wheel.LRwheel] -done
+            [Achieve UnscrewStud on Stud.LRwheel_StudA] -done
+               Agent execute Unscrew on Stud.LRwheel_StudA producing Nut.LRwheel_StudA_Nut.
+               Agent execute PutDown on Nut.LRwheel_StudA_Nut producing Nut.LRwheel_StudA_Nut.
+            [Achieve UnscrewStud on Stud.LRwheel_StudB] -done
+               Agent execute Unscrew on Stud.LRwheel_StudB producing Nut.LRwheel_StudB_Nut.
+               Agent execute PutDown on Nut.LRwheel_StudB_Nut producing Nut.LRwheel_StudB_Nut.
+               Agent says "Ok."
+            [Achieve UnscrewStud on Stud.LRwheel_StudC] -done
+               Agent execute Unscrew on Stud.LRwheel_StudC producing Nut.LRwheel_StudC_Nut.
+               Agent execute PutDown on Nut.LRwheel_StudC_Nut producing Nut.LRwheel_StudC_Nut.
+         [Achieve Remove on Wheel.LRwheel] -done
+            Agent execute Unmount on Wheel.LRwheel producing Tire.LRtire.
+            Agent execute PutDown on Tire.LRtire producing Tire.LRtire.
+      [Achieve RemoveTire on Wheel.RRwheel] -done
+         [Achieve UnscrewTire on Wheel.RRwheel] -done
+            [Achieve UnscrewStud on Stud.RRwheel_StudA] -done
+               Agent execute Unscrew on Stud.RRwheel_StudA producing Nut.RRwheel_StudA_Nut.
+               Agent says "Ok."
+               Agent execute PutDown on Nut.RRwheel_StudA_Nut producing Nut.RRwheel_StudA_Nut.
+            [Achieve UnscrewStud on Stud.RRwheel_StudB] -done
+               Agent execute Unscrew on Stud.RRwheel_StudB producing Nut.RRwheel_StudB_Nut.
+               Agent execute PutDown on Nut.RRwheel_StudB_Nut producing Nut.RRwheel_StudB_Nut.
+            [Achieve UnscrewStud on Stud.RRwheel_StudC] -done
+               Agent execute Unscrew on Stud.RRwheel_StudC producing Nut.RRwheel_StudC_Nut.
+               Agent execute PutDown on Nut.RRwheel_StudC_Nut producing Nut.RRwheel_StudC_Nut.
+               Agent says "Ok."
+         [Achieve Remove on Wheel.RRwheel] -done
+            Agent execute Unmount on Wheel.RRwheel producing Tire.RRtire.
+            Agent execute PutDown on Tire.RRtire producing Tire.RRtire.
+   [Achieve Rotate] -done
+      [User says let's achieve Rotate by frontToRear] -done
+         Agent says "How shall we achieve Rotate?"
+         User says "Let's achieve Rotate by frontToRear."
+      [Achieve PlaceTire on Tire.LFtire and Wheel.LRwheel producing Tire.LFtire] -done
+         Agent execute PickUp on Tire.LFtire producing Tire.LFtire.
+         Agent execute Mount on Tire.LFtire and Wheel.LRwheel producing Tire.LFtire.
+      [Achieve PlaceTire on Tire.RFtire and Wheel.RRwheel producing Tire.RFtire] -done
+         Agent execute PickUp on Tire.RFtire producing Tire.RFtire.
+         Agent execute Mount on Tire.RFtire and Wheel.RRwheel producing Tire.RFtire.
+      [Achieve PlaceTire on Tire.LRtire and Wheel.LFwheel producing Tire.LRtire] -done
+         Agent execute PickUp on Tire.LRtire producing Tire.LRtire.
+         Agent says "Ok."
+         Agent execute Mount on Tire.LRtire and Wheel.LFwheel producing Tire.LRtire.
+      [Achieve PlaceTire on Tire.RRtire and Wheel.RFwheel producing Tire.RRtire] -done
+         Agent execute PickUp on Tire.RRtire producing Tire.RRtire.
+         Agent execute Mount on Tire.RRtire and Wheel.RFwheel producing Tire.RRtire.
+   [Achieve ScrewTires] -done
+      [Achieve ScrewTire on Wheel.LFwheel] -done
+         [Achieve ScrewStud on Stud.LFwheel_StudA] -done
+            Agent execute PickUp on Nut.NutTemp producing Nut.NutTemp.
+            Agent execute Screw on Nut.NutTemp and Stud.LFwheel_StudA producing Nut.NutTemp.
+            Agent says "Ok."
+         [Achieve ScrewStud on Stud.LFwheel_StudB] -done
+            Agent execute PickUp on Nut.LFwheel_StudA_Nut producing Nut.LFwheel_StudA_Nut.
+            Agent execute Screw on Nut.LFwheel_StudA_Nut and Stud.LFwheel_StudB producing Nut.LFwheel_StudA_Nut.
+         [Achieve ScrewStud on Stud.LFwheel_StudC] -done
+            Agent execute PickUp on Nut.LFwheel_StudB_Nut producing Nut.LFwheel_StudB_Nut.
+            Agent execute Screw on Nut.LFwheel_StudB_Nut and Stud.LFwheel_StudC producing Nut.LFwheel_StudB_Nut.
+      [Achieve ScrewTire on Wheel.LRwheel] -done
+         [Achieve ScrewStud on Stud.LRwheel_StudA] -done
+            Agent execute PickUp on Nut.LFwheel_StudC_Nut producing Nut.LFwheel_StudC_Nut.
+            Agent says "Ok."
+            Agent execute Screw on Nut.LFwheel_StudC_Nut and Stud.LRwheel_StudA producing Nut.LFwheel_StudC_Nut.
+         [Achieve ScrewStud on Stud.LRwheel_StudB] -done
+            Agent execute PickUp on Nut.RFwheel_StudA_Nut producing Nut.RFwheel_StudA_Nut.
+            Agent execute Screw on Nut.RFwheel_StudA_Nut and Stud.LRwheel_StudB producing Nut.RFwheel_StudA_Nut.
+         [Achieve ScrewStud on Stud.LRwheel_StudC] -done
+            Agent execute PickUp on Nut.RFwheel_StudB_Nut producing Nut.RFwheel_StudB_Nut.
+            Agent execute Screw on Nut.RFwheel_StudB_Nut and Stud.LRwheel_StudC producing Nut.RFwheel_StudB_Nut.
+            Agent says "Ok."
+      [Achieve ScrewTire on Wheel.RFwheel] -done
+         [Achieve ScrewStud on Stud.RFwheel_StudA] -done
+            Agent execute PickUp on Nut.RFwheel_StudC_Nut producing Nut.RFwheel_StudC_Nut.
+            Agent execute Screw on Nut.RFwheel_StudC_Nut and Stud.RFwheel_StudA producing Nut.RFwheel_StudC_Nut.
+         [Achieve ScrewStud on Stud.RFwheel_StudB] -done
+            Agent execute PickUp on Nut.LRwheel_StudA_Nut producing Nut.LRwheel_StudA_Nut.
+            Agent execute Screw on Nut.LRwheel_StudA_Nut and Stud.RFwheel_StudB producing Nut.LRwheel_StudA_Nut.
+         [Achieve ScrewStud on Stud.RFwheel_StudC] -done
+            Agent execute PickUp on Nut.LRwheel_StudB_Nut producing Nut.LRwheel_StudB_Nut.
+            Agent says "Ok."
+            Agent execute Screw on Nut.LRwheel_StudB_Nut and Stud.RFwheel_StudC producing Nut.LRwheel_StudB_Nut.
+      [Achieve ScrewTire on Wheel.RRwheel] -done
+         [Achieve ScrewStud on Stud.RRwheel_StudA] -done
+            Agent execute PickUp on Nut.LRwheel_StudC_Nut producing Nut.LRwheel_StudC_Nut.
+            Agent execute Screw on Nut.LRwheel_StudC_Nut and Stud.RRwheel_StudA producing Nut.LRwheel_StudC_Nut.
+         [Achieve ScrewStud on Stud.RRwheel_StudB] -done
+            Agent execute PickUp on Nut.RRwheel_StudA_Nut producing Nut.RRwheel_StudA_Nut.
+            Agent execute Screw on Nut.RRwheel_StudA_Nut and Stud.RRwheel_StudB producing Nut.RRwheel_StudA_Nut.
+            Agent says "Ok."
+         [Achieve ScrewStud on Stud.RRwheel_StudC] -done <-focus
+            Agent execute PickUp on Nut.RRwheel_StudB_Nut producing Nut.RRwheel_StudB_Nut.
+            Agent execute Screw on Nut.RRwheel_StudB_Nut and Stud.RRwheel_StudC producing Nut.RRwheel_StudB_Nut.
+            Agent says "Ok."
+            Agent says "Ok."
+            Agent says "Ok."
+
+  > 
+  > 
+  > 
   > quit
     

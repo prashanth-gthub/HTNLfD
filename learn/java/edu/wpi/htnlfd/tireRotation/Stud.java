@@ -8,7 +8,7 @@ public class Stud extends PhysObj {
       super(name, location);
    }
    
-   public Nut nut = new Nut(this.name+"_Nut",null);
+   private Nut nut = new Nut(this.name+"_Nut",null);
 
 	public Nut getNut() {
 		return nut;
