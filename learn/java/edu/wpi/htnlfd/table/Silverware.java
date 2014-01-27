@@ -5,7 +5,7 @@ import edu.wpi.htnlfd.domain.*;
 
 public abstract class Silverware extends PhysObj {
 
-   protected Silverware (String name, Location location) {
-      super(name, location);
-   }
+	protected Silverware(String name, Location location) {
+		super(name, location);
+	}
 }

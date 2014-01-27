@@ -1,8 +1,5 @@
 package edu.wpi.htnlfd.world;
 
-public class World {
+public abstract class World {
 
-   public World () {
-
-   }
 }

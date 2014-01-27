@@ -5,7 +5,7 @@ import edu.wpi.htnlfd.domain.*;
 
 public abstract class Glass extends PhysObj {
 
-   protected Glass (String name, Location location) {
-      super(name, location);
-   }
+	protected Glass(String name, Location location) {
+		super(name, location);
+	}
 }

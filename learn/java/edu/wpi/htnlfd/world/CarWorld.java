@@ -6,12 +6,12 @@ import java.util.*;
 
 public class CarWorld extends World {
 
-   public CarWorld () {
+	public CarWorld() {
 
-   }
+	}
 
-   public static final List<Nut> LOOSE_NUTS = new ArrayList<Nut>();
+	public final List<Nut> LOOSE_NUTS = new ArrayList<Nut>();
 
-   public static final Car MyCar = new Car("MyCar", new Location(0, 0, 0));
+	public final Car MyCar = new Car("MyCar", new Location(0, 0, 0));
 
 }

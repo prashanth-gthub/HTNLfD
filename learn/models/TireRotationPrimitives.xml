@@ -6,11 +6,12 @@
 		<output name="nut" type="Nut"/>
 		<binding slot="$this.external" value="false"/>
 		<precondition> $this.stud == undefined ? undefined : $this.stud.getNut() != null </precondition>
+		
 		<script>
 			if  ( isROS() ) {
 			    ;
                   	} else{
-				CarWorld.LOOSE_NUTS.add($this.stud.getNut()); 
+				world.LOOSE_NUTS.add($this.stud.getNut()); 
 				$this.nut = $this.stud.getNut(); 
 				$this.stud.setNut(null);
 			}
@@ -23,13 +24,13 @@
 		<output name="newNut" type="Nut"/>	
 		<binding slot="$this.external" value="false"/>
 		<precondition> 
-			$this.stud.getNut() == null  &amp;&amp; !CarWorld.LOOSE_NUTS.isEmpty()
+			$this.stud.getNut() == null  &amp;&amp; !world.LOOSE_NUTS.isEmpty()
 		</precondition>
 		<script>  
 			if  ( isROS() ) {
 				;
 		  	} else{
-				CarWorld.LOOSE_NUTS.remove($this.nut); 
+				world.LOOSE_NUTS.remove($this.nut); 
 				$this.nut = $this.stud.getNut(); 
 				$this.stud.setNut($this.nut); 	
 			}	
@@ -40,6 +41,7 @@
 		<input name="wheel" type="Wheel"/>
 		<output name="tire" type="Tire"/>
 		<precondition> ($this.tire == undefined || $this.wheel == undefined )? undefined : true </precondition>
+		<postcondition> $this.wheel.getTire() == null &amp;&amp; $this.tire == $this.wheel.getTire() </postcondition>
 		<script>
 			if  ( isROS() ) {
 				;
@@ -56,6 +58,7 @@
 		<output name="newTire" type="Tire"/>
 		<binding slot="$this.external" value="false"/>
 		<precondition> ($this.tire == undefined || $this.wheel == undefined )? undefined : true </precondition>	
+		<postcondition> $this.wheel.getTire() == $this.newTire </postcondition>
 		<script>
 			if  ( isROS() ) {
 				;

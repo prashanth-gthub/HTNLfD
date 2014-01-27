@@ -5,7 +5,7 @@ import edu.wpi.htnlfd.domain.*;
 
 public abstract class Dish extends PhysObj {
 
-   protected Dish (String name, Location location) {
-      super(name, location);
-   }
+	protected Dish(String name, Location location) {
+		super(name, location);
+	}
 }
