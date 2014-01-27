@@ -162,7 +162,7 @@
 			<binding slot="$placeWineGlass.location" value="$this.location"/>			
 			<binding slot="$placeWaterGlass.object" value="Object.WaterGlass"/>
 			<binding slot="$placeWineGlass.object" value="Object.WineGlass"/>
-			<binding slot="$placeWaterGlass.referenceFrame" value="Object.DinnerPlate"/>
+			<binding slot="$placeWaterGlass.referenceFrame" value="Jelly.StrawberryJelly"/>
 			<binding slot="$placeWineGlass.referenceFrame" value="Object.DinnerPlate"/>
 		</subtasks>
 		<subtasks id="placingGlassesCasual">	
@@ -239,6 +239,12 @@
 		function Object (name) {
 			this.name = name;
 		}
+
+		function Jelly(name){
+			this.name = name;
+		}
+
+		Jelly.StrawberryJelly = new Jelly("StrawberryJelly");
 
 		Object.prototype.toString = function () { return this.name; }
 			
