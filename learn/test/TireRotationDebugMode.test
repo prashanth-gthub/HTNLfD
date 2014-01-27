@@ -1,0 +1,286 @@
+    # 27-Jan-2014 12:44:05 AM - TaskEngine 1.5.4 / Disco 1.7.5
+    Welcome to Disco! (Type 'help' for command list)
+  > cd models
+    D:\GitHub\HTNLfD\learn\models
+  > load TireRotationPrimitives.xml
+  > load TireRotation.xml
+  > task RotateTires
+    User says "Let's achieve RotateTires."
+    Agent execute Unscrew on Stud.LFwheel_StudA producing Nut.LFwheel_StudA_Nut.
+    Agent execute PutDown on Nut.LFwheel_StudA_Nut producing Nut.LFwheel_StudA_Nut.
+    Agent execute Unscrew on Stud.LFwheel_StudB producing Nut.LFwheel_StudB_Nut.
+    Agent execute PutDown on Nut.LFwheel_StudB_Nut producing Nut.LFwheel_StudB_Nut.
+    Agent execute Unscrew on Stud.LFwheel_StudC producing Nut.LFwheel_StudC_Nut.
+    Agent says "Ok."
+  > next
+    Agent execute PutDown on Nut.LFwheel_StudC_Nut producing Nut.LFwheel_StudC_Nut.
+    Agent execute Unmount on Wheel.LFwheel producing Tire.LFtire.
+    Agent execute PutDown on Tire.LFtire producing Tire.LFtire.
+    Agent execute Unscrew on Stud.RFwheel_StudA producing Nut.RFwheel_StudA_Nut.
+    Agent execute PutDown on Nut.RFwheel_StudA_Nut producing Nut.RFwheel_StudA_Nut.
+    Agent says "Ok."
+  > next
+    Agent execute Unscrew on Stud.RFwheel_StudB producing Nut.RFwheel_StudB_Nut.
+    Agent execute PutDown on Nut.RFwheel_StudB_Nut producing Nut.RFwheel_StudB_Nut.
+    Agent execute Unscrew on Stud.RFwheel_StudC producing Nut.RFwheel_StudC_Nut.
+    Agent execute PutDown on Nut.RFwheel_StudC_Nut producing Nut.RFwheel_StudC_Nut.
+    Agent execute Unmount on Wheel.RFwheel producing Tire.RFtire.
+    Agent says "Ok."
+  > next
+    Agent execute PutDown on Tire.RFtire producing Tire.RFtire.
+    Agent execute Unscrew on Stud.LRwheel_StudA producing Nut.LRwheel_StudA_Nut.
+    Agent execute PutDown on Nut.LRwheel_StudA_Nut producing Nut.LRwheel_StudA_Nut.
+    Agent execute Unscrew on Stud.LRwheel_StudB producing Nut.LRwheel_StudB_Nut.
+    Agent execute PutDown on Nut.LRwheel_StudB_Nut producing Nut.LRwheel_StudB_Nut.
+    Agent says "Ok."
+  > next
+    Agent execute Unscrew on Stud.LRwheel_StudC producing Nut.LRwheel_StudC_Nut.
+    Agent execute PutDown on Nut.LRwheel_StudC_Nut producing Nut.LRwheel_StudC_Nut.
+    Agent execute Unmount on Wheel.LRwheel producing Tire.LRtire.
+    Agent execute PutDown on Tire.LRtire producing Tire.LRtire.
+    Agent execute Unscrew on Stud.RRwheel_StudA producing Nut.RRwheel_StudA_Nut.
+    Agent says "Ok."
+  > next
+    Agent execute PutDown on Nut.RRwheel_StudA_Nut producing Nut.RRwheel_StudA_Nut.
+    Agent execute Unscrew on Stud.RRwheel_StudB producing Nut.RRwheel_StudB_Nut.
+    Agent execute PutDown on Nut.RRwheel_StudB_Nut producing Nut.RRwheel_StudB_Nut.
+    Agent execute Unscrew on Stud.RRwheel_StudC producing Nut.RRwheel_StudC_Nut.
+    Agent execute PutDown on Nut.RRwheel_StudC_Nut producing Nut.RRwheel_StudC_Nut.
+    Agent says "Ok."
+  > next
+    Agent execute Unmount on Wheel.RRwheel producing Tire.RRtire.
+    Agent execute PutDown on Tire.RRtire producing Tire.RRtire.
+    Agent says "How shall we achieve Rotate?"
+  > say
+[1] Let's achieve Rotate by frontToRear.
+[2] Let's achieve Rotate by xPattern.
+[3] Let's not achieve Rotate.
+[4] Stop achieve RotateTires.
+  >> 1
+    User says "Let's achieve Rotate by frontToRear."
+    Agent execute PickUp on Tire.LFtire producing Tire.LFtire.
+    Agent execute Mount on Tire.LFtire and Wheel.LRwheel producing Tire.LFtire.
+    Agent execute PickUp on Tire.RFtire producing Tire.RFtire.
+    Agent execute Mount on Tire.RFtire and Wheel.RRwheel producing Tire.RFtire.
+    Agent execute PickUp on Tire.LRtire producing Tire.LRtire.
+    Agent says "Ok."
+  > next
+    Agent execute Mount on Tire.LRtire and Wheel.LFwheel producing Tire.LRtire.
+    Agent execute PickUp on Tire.RRtire producing Tire.RRtire.
+    Agent execute Mount on Tire.RRtire and Wheel.RFwheel producing Tire.RRtire.
+    Agent says "What is the PickUp object?"
+  > next
+    Agent says "What is the PickUp object?"
+  > 
+  > 
+  > 
+  > 
+  > debug
+  > 
+  > history
+
+[RotateTires] -accepted -live
+   User: Propose.Should(RotateTires)
+   [RemoveTires] -done
+      [RemoveTire(Wheel.LFwheel)] -done
+         [UnscrewWheel(Wheel.LFwheel)] -done
+            [UnscrewStud(Stud.LFwheel_StudA)] -done
+               Agent: Unscrew(Stud.LFwheel_StudA,Nut.LFwheel_StudA_Nut)
+               Agent: PutDown(Nut.LFwheel_StudA_Nut,Nut.LFwheel_StudA_Nut)
+            [UnscrewStud(Stud.LFwheel_StudB)] -done
+               Agent: Unscrew(Stud.LFwheel_StudB,Nut.LFwheel_StudB_Nut)
+               Agent: PutDown(Nut.LFwheel_StudB_Nut,Nut.LFwheel_StudB_Nut)
+            [UnscrewStud(Stud.LFwheel_StudC)] -done
+               Agent: Unscrew(Stud.LFwheel_StudC,Nut.LFwheel_StudC_Nut)
+               Agent: Ok
+               Agent: PutDown(Nut.LFwheel_StudC_Nut,Nut.LFwheel_StudC_Nut)
+         [UnmountWheel(Wheel.LFwheel)] -done
+            Agent: Unmount(Wheel.LFwheel,Tire.LFtire)
+            Agent: PutDown(Tire.LFtire,Tire.LFtire)
+      [RemoveTire(Wheel.RFwheel)] -done
+         [UnscrewWheel(Wheel.RFwheel)] -done
+            [UnscrewStud(Stud.RFwheel_StudA)] -done
+               Agent: Unscrew(Stud.RFwheel_StudA,Nut.RFwheel_StudA_Nut)
+               Agent: PutDown(Nut.RFwheel_StudA_Nut,Nut.RFwheel_StudA_Nut)
+               Agent: Ok
+            [UnscrewStud(Stud.RFwheel_StudB)] -done
+               Agent: Unscrew(Stud.RFwheel_StudB,Nut.RFwheel_StudB_Nut)
+               Agent: PutDown(Nut.RFwheel_StudB_Nut,Nut.RFwheel_StudB_Nut)
+            [UnscrewStud(Stud.RFwheel_StudC)] -done
+               Agent: Unscrew(Stud.RFwheel_StudC,Nut.RFwheel_StudC_Nut)
+               Agent: PutDown(Nut.RFwheel_StudC_Nut,Nut.RFwheel_StudC_Nut)
+         [UnmountWheel(Wheel.RFwheel)] -done
+            Agent: Unmount(Wheel.RFwheel,Tire.RFtire)
+            Agent: Ok
+            Agent: PutDown(Tire.RFtire,Tire.RFtire)
+      [RemoveTire(Wheel.LRwheel)] -done
+         [UnscrewWheel(Wheel.LRwheel)] -done
+            [UnscrewStud(Stud.LRwheel_StudA)] -done
+               Agent: Unscrew(Stud.LRwheel_StudA,Nut.LRwheel_StudA_Nut)
+               Agent: PutDown(Nut.LRwheel_StudA_Nut,Nut.LRwheel_StudA_Nut)
+            [UnscrewStud(Stud.LRwheel_StudB)] -done
+               Agent: Unscrew(Stud.LRwheel_StudB,Nut.LRwheel_StudB_Nut)
+               Agent: PutDown(Nut.LRwheel_StudB_Nut,Nut.LRwheel_StudB_Nut)
+               Agent: Ok
+            [UnscrewStud(Stud.LRwheel_StudC)] -done
+               Agent: Unscrew(Stud.LRwheel_StudC,Nut.LRwheel_StudC_Nut)
+               Agent: PutDown(Nut.LRwheel_StudC_Nut,Nut.LRwheel_StudC_Nut)
+         [UnmountWheel(Wheel.LRwheel)] -done
+            Agent: Unmount(Wheel.LRwheel,Tire.LRtire)
+            Agent: PutDown(Tire.LRtire,Tire.LRtire)
+      [RemoveTire(Wheel.RRwheel)] -done
+         [UnscrewWheel(Wheel.RRwheel)] -done
+            [UnscrewStud(Stud.RRwheel_StudA)] -done
+               Agent: Unscrew(Stud.RRwheel_StudA,Nut.RRwheel_StudA_Nut)
+               Agent: Ok
+               Agent: PutDown(Nut.RRwheel_StudA_Nut,Nut.RRwheel_StudA_Nut)
+            [UnscrewStud(Stud.RRwheel_StudB)] -done
+               Agent: Unscrew(Stud.RRwheel_StudB,Nut.RRwheel_StudB_Nut)
+               Agent: PutDown(Nut.RRwheel_StudB_Nut,Nut.RRwheel_StudB_Nut)
+            [UnscrewStud(Stud.RRwheel_StudC)] -done
+               Agent: Unscrew(Stud.RRwheel_StudC,Nut.RRwheel_StudC_Nut)
+               Agent: PutDown(Nut.RRwheel_StudC_Nut,Nut.RRwheel_StudC_Nut)
+               Agent: Ok
+         [UnmountWheel(Wheel.RRwheel)] -done
+            Agent: Unmount(Wheel.RRwheel,Tire.RRtire)
+            Agent: PutDown(Tire.RRtire,Tire.RRtire)
+   [Rotate] -done
+      [Propose.How([Rotate],frontToRear)] -done
+         Agent: Ask.How(Rotate,frontToRear)
+         User: Propose.How([Rotate],frontToRear)
+      [MountTire(Tire.LFtire,Wheel.LRwheel,Tire.LFtire)] -done
+         Agent: PickUp(Tire.LFtire,Tire.LFtire)
+         Agent: Mount(Tire.LFtire,Wheel.LRwheel,Tire.LFtire)
+      [MountTire(Tire.RFtire,Wheel.RRwheel,Tire.RFtire)] -done
+         Agent: PickUp(Tire.RFtire,Tire.RFtire)
+         Agent: Mount(Tire.RFtire,Wheel.RRwheel,Tire.RFtire)
+      [MountTire(Tire.LRtire,Wheel.LFwheel,Tire.LRtire)] -done
+         Agent: PickUp(Tire.LRtire,Tire.LRtire)
+         Agent: Ok
+         Agent: Mount(Tire.LRtire,Wheel.LFwheel,Tire.LRtire)
+      [MountTire(Tire.RRtire,Wheel.RFwheel,Tire.RRtire)] -done
+         Agent: PickUp(Tire.RRtire,Tire.RRtire)
+         Agent: Mount(Tire.RRtire,Wheel.RFwheel,Tire.RRtire)
+   [ScrewWheels] -live
+      [ScrewWheel(Wheel.LFwheel)] -live
+         [ScrewStud(Stud.LFwheel_StudA)] -live
+            [PickUp] -live
+               [Propose.What(PickUp,object)] -live <-focus
+                  Agent: Ask.What(PickUp,object)
+                  [Accept(Ask.What(PickUp,object))] -live
+                     Agent: Ask.What(PickUp,object)
+            [Screw(,Stud.LFwheel_StudA)]
+         [ScrewStud(Stud.LFwheel_StudB)] -live
+            [PickUp] -live
+            [Screw(,Stud.LFwheel_StudB)]
+         [ScrewStud(Stud.LFwheel_StudC)] -live
+            [PickUp] -live
+            [Screw(,Stud.LFwheel_StudC)]
+      [ScrewWheel(Wheel.LRwheel)] -live
+         [ScrewStud(Stud.LRwheel_StudA)] -live
+            [PickUp] -live
+            [Screw(,Stud.LRwheel_StudA)]
+         [ScrewStud(Stud.LRwheel_StudB)] -live
+            [PickUp] -live
+            [Screw(,Stud.LRwheel_StudB)]
+         [ScrewStud(Stud.LRwheel_StudC)] -live
+            [PickUp] -live
+            [Screw(,Stud.LRwheel_StudC)]
+      [ScrewWheel(Wheel.RFwheel)] -live
+         [ScrewStud(Stud.RFwheel_StudA)] -live
+            [PickUp] -live
+            [Screw(,Stud.RFwheel_StudA)]
+         [ScrewStud(Stud.RFwheel_StudB)] -live
+            [PickUp] -live
+            [Screw(,Stud.RFwheel_StudB)]
+         [ScrewStud(Stud.RFwheel_StudC)] -live
+            [PickUp] -live
+            [Screw(,Stud.RFwheel_StudC)]
+      [ScrewWheel(Wheel.RRwheel)] -live
+         [ScrewStud(Stud.RRwheel_StudA)] -live
+            [PickUp] -live
+            [Screw(,Stud.RRwheel_StudA)]
+         [ScrewStud(Stud.RRwheel_StudB)] -live
+            [PickUp] -live
+            [Screw(,Stud.RRwheel_StudB)]
+         [ScrewStud(Stud.RRwheel_StudC)] -live
+            [PickUp] -live
+            [Screw(,Stud.RRwheel_StudC)]
+
+  > eval CarWorld.LOOSE_NUTS.isEmpty()	 ? undefined : CarWorld.LOOSE_NUTS.get(0)
+    # Returned 'Nut.LFwheel_StudA_Nut'
+  > 
+  > 
+  > print ScrewStud
+
+  <task id="ScrewStud" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+		<input name="stud" type="Stud"/>
+		
+		<subtasks id="screwStud">
+			<step name="pickup" task="prim:PickUp"/>	
+			<step name="screw" task="prim:Screw"/>	
+	
+			<binding slot="$screw.stud" value="$this.stud"/>	
+			<binding slot="$pickup.object" value="CarWorld.LOOSE_NUTS.isEmpty() ? undefined : CarWorld.LOOSE_NUTS.get(0)"/>
+			<binding slot="$screw.nut" value="$pickup.newObject"/>			
+		</subtasks>		
+	</task>
+
+  > 
+  > 
+  > status
+
+[RotateTires] -accepted -live
+   User: Propose.Should(RotateTires)
+   [RemoveTires] -done
+   [Rotate] -done
+   [ScrewWheels] -live
+      [ScrewWheel(Wheel.LFwheel)] -live
+         [ScrewStud(Stud.LFwheel_StudA)] -live
+            [PickUp] -live
+               [Propose.What(PickUp,object)] -live <-focus
+                  Agent: Ask.What(PickUp,object)
+                  [Accept(Ask.What(PickUp,object))] -live
+                     Agent: Ask.What(PickUp,object)
+            [Screw(,Stud.LFwheel_StudA)]
+         [ScrewStud(Stud.LFwheel_StudB)] -live
+            [PickUp] -live
+            [Screw(,Stud.LFwheel_StudB)]
+         [ScrewStud(Stud.LFwheel_StudC)] -live
+            [PickUp] -live
+            [Screw(,Stud.LFwheel_StudC)]
+      [ScrewWheel(Wheel.LRwheel)] -live
+         [ScrewStud(Stud.LRwheel_StudA)] -live
+            [PickUp] -live
+            [Screw(,Stud.LRwheel_StudA)]
+         [ScrewStud(Stud.LRwheel_StudB)] -live
+            [PickUp] -live
+            [Screw(,Stud.LRwheel_StudB)]
+         [ScrewStud(Stud.LRwheel_StudC)] -live
+            [PickUp] -live
+            [Screw(,Stud.LRwheel_StudC)]
+      [ScrewWheel(Wheel.RFwheel)] -live
+         [ScrewStud(Stud.RFwheel_StudA)] -live
+            [PickUp] -live
+            [Screw(,Stud.RFwheel_StudA)]
+         [ScrewStud(Stud.RFwheel_StudB)] -live
+            [PickUp] -live
+            [Screw(,Stud.RFwheel_StudB)]
+         [ScrewStud(Stud.RFwheel_StudC)] -live
+            [PickUp] -live
+            [Screw(,Stud.RFwheel_StudC)]
+      [ScrewWheel(Wheel.RRwheel)] -live
+         [ScrewStud(Stud.RRwheel_StudA)] -live
+            [PickUp] -live
+            [Screw(,Stud.RRwheel_StudA)]
+         [ScrewStud(Stud.RRwheel_StudB)] -live
+            [PickUp] -live
+            [Screw(,Stud.RRwheel_StudB)]
+         [ScrewStud(Stud.RRwheel_StudC)] -live
+            [PickUp] -live
+            [Screw(,Stud.RRwheel_StudC)]
+
+[<Segment null>, <Segment RotateTires>, <Segment ScrewWheels>, <Segment ScrewWheel(Wheel.LFwheel)>, <Segment ScrewStud(Stud.LFwheel_StudA)>, <Segment PickUp>, <Segment Propose.What(PickUp,object)>, <Segment Accept(Ask.What(PickUp,object))>]
+
+  > quit
+    

@@ -1,8 +1,7 @@
 <taskModel about="urn:disco.wpi.edu:htnlfd:TireRotationPrimitives" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
+	<!-- For seeing the graphical model please refer to heres-how/docs/TireRotation.pdf -->
+	<!--  if ( isROS() ) -->	
 	<!-- Primitive tasks -->	
-	<!--  if ( isROS() ) -->
-	<!-- link to the drawing-->
-	<!-- one page drawing -->
 	<task id="Unscrew">
 		<input name="stud" type="Stud"/>
 		<output name="nut" type="Nut"/>
