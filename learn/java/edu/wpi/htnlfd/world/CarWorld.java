@@ -13,5 +13,8 @@ public class CarWorld extends World {
 	public final List<Nut> LOOSE_NUTS = new ArrayList<Nut>();
 
 	public final Car MyCar = new Car("MyCar", new Location(0, 0, 0));
-
+	
+	public void reset(){
+		MyCar.reset();
+	}
 }

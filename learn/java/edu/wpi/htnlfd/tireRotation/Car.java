@@ -7,46 +7,44 @@ public class Car extends PhysObj {
 		super(name, location);
 		reset();
 	}
+	
+	public final Tire RFtire = new Tire("RFtire", Location.plus(this.getLocation(), new Location(
+			10, 10, 0)));
 
-	public Tire RFtire;
+	public final Tire LFtire = new Tire("LFtire", Location.plus(this.getLocation(), new Location(
+			-10, -10, 0)));
 
-	public Tire LFtire;
+	public final Tire RRtire = new Tire("RRtire", Location.plus(this.getLocation(), new Location(
+			10, -10, 0)));
 
-	public Tire RRtire;
+	public final Tire LRtire = new Tire("LRtire", Location.plus(this.getLocation(), new Location(
+			-10, 10, 0)));
 
-	public Tire LRtire;
+	public final Wheel RFwheel = new Wheel("RFwheel", Location.plus(this.getLocation(),
+			new Location(10, 10, 0)), RFtire);
 
-	public Wheel RFwheel;
+	public final Wheel LFwheel = new Wheel("LFwheel", Location.plus(this.getLocation(),
+			new Location(-10, -10, 0)), LFtire);
 
-	public Wheel LFwheel;
+	public final Wheel RRwheel = new Wheel("RRwheel", Location.plus(this.getLocation(),
+			new Location(10, -10, 0)), RRtire);
 
-	public Wheel RRwheel;
-
-	public Wheel LRwheel;
+	public final Wheel LRwheel = new Wheel("LRwheel", Location.plus(this.getLocation(),
+			new Location(-10, 10, 0)), LRtire);
 
 	public void reset() {
-		RFtire = new Tire("RFtire", Location.plus(this.location, new Location(
-				10, 10, 0)));
-
-		LFtire = new Tire("LFtire", Location.plus(this.location, new Location(
+		RFtire.setLocation(Location.plus(this.getLocation(), new Location(
+			10, 10, 0)));
+		LFtire.setLocation(Location.plus(this.getLocation(), new Location(
 				-10, -10, 0)));
-
-		RRtire = new Tire("RRtire", Location.plus(this.location, new Location(
+		RRtire.setLocation(Location.plus(this.getLocation(), new Location(
 				10, -10, 0)));
-
-		LRtire = new Tire("LRtire", Location.plus(this.location, new Location(
+		LRtire.setLocation(Location.plus(this.getLocation(), new Location(
 				-10, 10, 0)));
-
-		RFwheel = new Wheel("RFwheel", Location.plus(this.location,
-				new Location(10, 10, 0)), RFtire);
-
-		LFwheel = new Wheel("LFwheel", Location.plus(this.location,
-				new Location(-10, -10, 0)), LFtire);
-
-		RRwheel = new Wheel("RRwheel", Location.plus(this.location,
-				new Location(10, -10, 0)), RRtire);
-
-		LRwheel = new Wheel("LRwheel", Location.plus(this.location,
-				new Location(-10, 10, 0)), LRtire);
+		
+		RFwheel.reset();
+		LFwheel.reset();
+		RRwheel.reset();
+		LRwheel.reset();		
 	}
 }

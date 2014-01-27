@@ -9,7 +9,7 @@ public class PhysObj extends ApplicationSpecificClass implements Cloneable {
 	// fields public for convenience in JavaScript
 	public final String name;
 
-	public Location location;
+	private Location location;
 
 	@Override
 	public Object clone() {
@@ -67,4 +67,11 @@ public class PhysObj extends ApplicationSpecificClass implements Cloneable {
 		return result;
 	}
 
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
 }

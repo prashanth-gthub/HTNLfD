@@ -13,11 +13,11 @@ public class Wheel extends PhysObj {
 		this.tire = tire;
 	}
 
-	public final Stud studA = new Stud(name + "_StudA", null);
+	public final Stud studA = new Stud(name + "_StudA", Location.plus(this.getLocation(), new Location(0,0,1)));
 
-	public final Stud studB = new Stud(name + "_StudB", null);
+	public final Stud studB = new Stud(name + "_StudB", Location.plus(this.getLocation(), new Location(0,0,-1)));
 
-	public final Stud studC = new Stud(name + "_StudC", null);
+	public final Stud studC = new Stud(name + "_StudC", Location.plus(this.getLocation(), new Location(0,0,2)));
 
 	private Tire tire;
 
@@ -27,5 +27,11 @@ public class Wheel extends PhysObj {
 
 	public void setTire(Tire tire) {
 		this.tire = tire;
+	}
+	
+	public void reset(){
+		studA.reset();
+		studB.reset();
+		studC.reset();
 	}
 }

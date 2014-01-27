@@ -5,8 +5,12 @@
 		<input name="stud" type="Stud"/>
 		<output name="nut" type="Nut"/>
 		<binding slot="$this.external" value="false"/>
-		<precondition> $this.stud == undefined ? undefined : $this.stud.getNut() != null </precondition>
-		
+		<precondition> 
+			$this.stud == undefined ? undefined : $this.stud.getNut() != null </precondition>
+		<postcondition> 
+			$this.stud == undefined ? undefined : 
+			$this.stud.getNut() == null
+		</postcondition>
 		<script>
 			if  ( isROS() ) {
 			    ;
@@ -19,20 +23,25 @@
     	</task>	
 
 	<task id="Screw">
-        <input name="nut" type="Nut" modified="newNut"/>
+       		<input name="nut" type="Nut" modified="newNut"/>
 		<input name="stud" type="Stud"/>
 		<output name="newNut" type="Nut"/>	
 		<binding slot="$this.external" value="false"/>
 		<precondition> 
-			$this.stud.getNut() == null  &amp;&amp; !world.LOOSE_NUTS.isEmpty()
+			 ($this.stud == undefined || $this.nut == undefined ? undefined :
+			$this.stud.getNut() == null  &amp;&amp; !world.LOOSE_NUTS.isEmpty())
 		</precondition>
+		<postcondition> 
+			$this.stud == undefined || $this.nut == undefined ? undefined : 
+			$this.stud.getNut() != null  &amp;&amp; !($this.newNut === $this.nut)
+		</postcondition>
 		<script>  
 			if  ( isROS() ) {
 				;
 		  	} else{
-				world.LOOSE_NUTS.remove($this.nut); 
-				$this.nut = $this.stud.getNut(); 
-				$this.stud.setNut($this.nut); 	
+				world.LOOSE_NUTS.remove($this.nut); 				
+				$this.stud.setNut($this.nut); 
+				$this.newNut.setLocation($this.stud.getLocation());	
 			}	
 		</script>
 	</task>
@@ -40,8 +49,13 @@
 	<task id="Unmount"> 
 		<input name="wheel" type="Wheel"/>
 		<output name="tire" type="Tire"/>
-		<precondition> ($this.tire == undefined || $this.wheel == undefined )? undefined : true </precondition>
-		<postcondition> $this.wheel.getTire() == null &amp;&amp; $this.tire == $this.wheel.getTire() </postcondition>
+		<precondition> 
+			$this.wheel == undefined ? undefined : true 
+		</precondition>
+		<postcondition> 
+			$this.wheel == undefined ? undefined : 
+			$this.wheel.getTire() == null
+		</postcondition>
 		<script>
 			if  ( isROS() ) {
 				;
@@ -57,13 +71,18 @@
 		<input name="wheel" type="Wheel"/>
 		<output name="newTire" type="Tire"/>
 		<binding slot="$this.external" value="false"/>
-		<precondition> ($this.tire == undefined || $this.wheel == undefined )? undefined : true </precondition>	
-		<postcondition> $this.wheel.getTire() == $this.newTire </postcondition>
+		<precondition> 
+			($this.tire == undefined || $this.wheel == undefined )? undefined : true 
+		</precondition>	
+		<postcondition> 
+			($this.wheel == undefined || $this.tire == undefined)? undefined : 
+			$this.wheel.getTire() != null  &amp;&amp; !($this.newTire === $this.tire)
+		</postcondition>
 		<script>
 			if  ( isROS() ) {
 				;
 		  	} else{
-				$this.newTire.location = new Location($this.wheel.location);
+				$this.newTire.setLocation($this.wheel.getLocation());
 				$this.wheel.setTire($this.newTire);
 			}
 		</script>
@@ -73,25 +92,29 @@
 		<input name="object" type="PhysObj" modified="newObject"/>
 		<output name="newObject" type="PhysObj"/>
 		<binding slot="$this.external" value="false"/>
-		<precondition> $this.object == undefined ? undefined : true </precondition>		
+		<precondition> 
+			$this.object == undefined ? undefined : true 
+		</precondition>	
+	
 		<script>
 			if  ( isROS() ) {
 				;
-		  	} else{
-				$this.newObject.location = Location.plus($this.object.location,new Location(0,0,10));
-			}
+		  	}
 		</script>
 	</task>	
 	<task id="PutDown">
 		<input name="object" type="PhysObj" modified="newObject"/>
 		<output name="newObject" type="PhysObj"/>
 		<binding slot="$this.external" value="false"/>
-		<precondition> $this.object == undefined ? undefined : true </precondition>	
+		<precondition> 
+			$this.object == undefined ? undefined : true 
+		</precondition>	
+
 		<script>
 			if  ( isROS() ) {
 				;
 		  	} else{
-				$this.newObject.location = Location.plus($this.object.location,new Location(0,0,-10));
+				$this.newObject.setLocation(new Location(0,0,0));
 			}
 		</script>
 	</task>
