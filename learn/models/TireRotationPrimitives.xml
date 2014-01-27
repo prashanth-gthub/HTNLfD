@@ -1,18 +1,21 @@
 <taskModel about="urn:disco.wpi.edu:htnlfd:TireRotationPrimitives" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-	<!-- For seeing the graphical model please refer to heres-how/docs/TireRotation.pdf -->
-	<!--  if ( isROS() ) -->	
+	<!-- For seeing the graphical model please refer to heres-how/docs/TireRotation.pdf -->	
 	<!-- Primitive tasks -->	
 	<task id="Unscrew">
 		<input name="stud" type="Stud"/>
 		<output name="nut" type="Nut"/>
 		<binding slot="$this.external" value="false"/>
 		<precondition> $this.stud == undefined ? undefined : $this.stud.getNut() != null </precondition>
-		<script>  
-			CarWorld.LOOSE_NUTS.add($this.stud.getNut()); 
-			$this.nut = $this.stud.getNut(); 
-			$this.stud.setNut(null);
+		<script>
+			if  ( isROS() ) {
+			    ;
+                  	} else{
+				CarWorld.LOOSE_NUTS.add($this.stud.getNut()); 
+				$this.nut = $this.stud.getNut(); 
+				$this.stud.setNut(null);
+			}
 		</script>
-    </task>	
+    	</task>	
 
 	<task id="Screw">
         <input name="nut" type="Nut" modified="newNut"/>
@@ -22,20 +25,28 @@
 		<precondition> 
 			$this.stud.getNut() == null  &amp;&amp; !CarWorld.LOOSE_NUTS.isEmpty()
 		</precondition>
-        <script>  
-			CarWorld.LOOSE_NUTS.remove($this.nut); 
-			$this.nut = $this.stud.getNut(); 
-			$this.stud.setNut($this.nut); 		
+		<script>  
+			if  ( isROS() ) {
+				;
+		  	} else{
+				CarWorld.LOOSE_NUTS.remove($this.nut); 
+				$this.nut = $this.stud.getNut(); 
+				$this.stud.setNut($this.nut); 	
+			}	
 		</script>
-    </task>
+	</task>
 	
 	<task id="Unmount"> 
 		<input name="wheel" type="Wheel"/>
 		<output name="tire" type="Tire"/>
 		<precondition> ($this.tire == undefined || $this.wheel == undefined )? undefined : true </precondition>
 		<script>
-			$this.tire = $this.wheel.getTire();
-			$this.wheel.setTire(null);
+			if  ( isROS() ) {
+				;
+		  	} else{
+				$this.tire = $this.wheel.getTire();
+				$this.wheel.setTire(null);
+			}
 		</script>
 	</task>	
 	
@@ -46,8 +57,12 @@
 		<binding slot="$this.external" value="false"/>
 		<precondition> ($this.tire == undefined || $this.wheel == undefined )? undefined : true </precondition>	
 		<script>
-			$this.newTire.location = new Location($this.wheel.location);
-			$this.wheel.setTire($this.newTire);
+			if  ( isROS() ) {
+				;
+		  	} else{
+				$this.newTire.location = new Location($this.wheel.location);
+				$this.wheel.setTire($this.newTire);
+			}
 		</script>
 	</task>	
 	
@@ -57,7 +72,11 @@
 		<binding slot="$this.external" value="false"/>
 		<precondition> $this.object == undefined ? undefined : true </precondition>		
 		<script>
-			$this.newObject.location = Location.plus($this.object.location,new Location(0,0,10));
+			if  ( isROS() ) {
+				;
+		  	} else{
+				$this.newObject.location = Location.plus($this.object.location,new Location(0,0,10));
+			}
 		</script>
 	</task>	
 	<task id="PutDown">
@@ -66,8 +85,17 @@
 		<binding slot="$this.external" value="false"/>
 		<precondition> $this.object == undefined ? undefined : true </precondition>	
 		<script>
-			$this.newObject.location = Location.plus($this.object.location,new Location(0,0,-10));
+			if  ( isROS() ) {
+				;
+		  	} else{
+				$this.newObject.location = Location.plus($this.object.location,new Location(0,0,-10));
+			}
 		</script>
 	</task>
+	<script init="true">
+		function isROS(){
+			return false;
+		}
+	</script>
 	
 </taskModel>
