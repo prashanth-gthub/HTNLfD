@@ -1,5 +1,6 @@
 package edu.wpi.htnlfd.tireRotation;
 
+import java.io.PrintStream;
 import edu.wpi.htnlfd.domain.*;
 
 public class Car extends PhysObj {
@@ -47,4 +48,17 @@ public class Car extends PhysObj {
 		RRwheel.reset();
 		LRwheel.reset();		
 	}
+	
+	public void print(PrintStream stream) {
+	   String indent = "\t";
+      stream.append(this.name+this.getLocation().toString()+"\n");
+      stream.append(indent+".RFwheel = ");
+      RFwheel.print(stream,indent);   
+      stream.append(indent+".LFwheel = ");
+      LFwheel.print(stream,indent);  
+      stream.append(indent+".RRwheel = ");
+      RRwheel.print(stream,indent);  
+      stream.append(indent+".LRwheel = ");
+      LRwheel.print(stream,indent);  
+   }
 }

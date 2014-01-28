@@ -2,6 +2,7 @@ package edu.wpi.htnlfd.world;
 
 import edu.wpi.htnlfd.domain.*;
 import edu.wpi.htnlfd.tireRotation.*;
+import java.io.PrintStream;
 import java.util.*;
 
 public class CarWorld extends World {
@@ -17,4 +18,10 @@ public class CarWorld extends World {
 	public void reset(){
 		MyCar.reset();
 	}
+	
+
+   public void print (PrintStream stream) {
+      MyCar.print(System.out);      
+   }  
+   
 }
