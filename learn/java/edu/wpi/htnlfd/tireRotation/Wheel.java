@@ -36,7 +36,7 @@ public class Wheel extends PhysObj {
 		studC.reset();
 	}
 	
-	public void print(PrintStream stream, String indent) {
+   public void print (PrintStream stream, String indent) {
 	   indent = "\t" + indent;
       stream.append(this.name+this.getLocation().toString()+"\n");
       stream.append(indent+".studA = ");
