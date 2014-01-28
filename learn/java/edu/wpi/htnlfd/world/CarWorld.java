@@ -21,7 +21,6 @@ public class CarWorld extends World {
    
 
    public void print (PrintStream stream) {
-      stream = System.out;
       stream.append("LOOSE_NUTS:");
       for(Nut nut:LOOSE_NUTS){
          stream.append(nut.name+",");

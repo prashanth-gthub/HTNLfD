@@ -1,68 +1,110 @@
 #
-# Problem: Why disco asks for an input(PickUp's object) that is bound?
+# Rotate Tire's execution
+# Problem: I was forced to copy eclipse's console to this file since I couldn't see the result of  
+# "eval world.print(java.lang.System.out)"  in the Concole.test output.
 #
-    # 27-Jan-2014 12:04:24 AM - TaskEngine 1.5.4 / Disco 1.7.5
+    # Writing log to C:\Users\User\AppData\Local\Temp\Console.test...
+    # 28-Jan-2014 2:11:12 AM - TaskEngine 1.5.4 / Disco 1.7.5
     Welcome to Disco! (Type 'help' for command list)
-  > cd models
-    D:\GitHub\HTNLfD\learn\models
 #
 # Loading files
 #
+  > cd models
+    D:\GitHub\HTNLfD\learn\models
   > load TireRotationPrimitives.xml
   > load TireRotation.xml
+#
+# RotateTires task
+#
   > task RotateTires
+#
+# RemoveTires task
+#
     User says "Let's achieve RotateTires."
+    Robot execute Unscrew on Stud.LFwheel_StudA producing Nut.LFwheel_StudA_Nut.
+    Robot execute PutDown on Nut.LFwheel_StudA_Nut producing Nut.LFwheel_StudA_Nut.
+    Robot execute Unscrew on Stud.LFwheel_StudB producing Nut.LFwheel_StudB_Nut.
+    Robot execute PutDown on Nut.LFwheel_StudB_Nut producing Nut.LFwheel_StudB_Nut.
+    Robot execute Unscrew on Stud.LFwheel_StudC producing Nut.LFwheel_StudC_Nut.
+    Robot execute PutDown on Nut.LFwheel_StudC_Nut producing Nut.LFwheel_StudC_Nut.
+    Robot execute Unmount on Wheel.LFwheel producing Tire.LFtire.
+    Robot execute PutDown on Tire.LFtire producing Tire.LFtire.
+    Robot execute Unscrew on Stud.RFwheel_StudA producing Nut.RFwheel_StudA_Nut.
+    Robot execute PutDown on Nut.RFwheel_StudA_Nut producing Nut.RFwheel_StudA_Nut.
+    Robot execute Unscrew on Stud.RFwheel_StudB producing Nut.RFwheel_StudB_Nut.
+    Robot execute PutDown on Nut.RFwheel_StudB_Nut producing Nut.RFwheel_StudB_Nut.
+    Robot execute Unscrew on Stud.RFwheel_StudC producing Nut.RFwheel_StudC_Nut.
+    Robot execute PutDown on Nut.RFwheel_StudC_Nut producing Nut.RFwheel_StudC_Nut.
+    Robot execute Unmount on Wheel.RFwheel producing Tire.RFtire.
+    Robot execute PutDown on Tire.RFtire producing Tire.RFtire.
+    Robot execute Unscrew on Stud.LRwheel_StudA producing Nut.LRwheel_StudA_Nut.
+    Robot execute PutDown on Nut.LRwheel_StudA_Nut producing Nut.LRwheel_StudA_Nut.
+    Robot execute Unscrew on Stud.LRwheel_StudB producing Nut.LRwheel_StudB_Nut.
+    Robot execute PutDown on Nut.LRwheel_StudB_Nut producing Nut.LRwheel_StudB_Nut.
+    Robot execute Unscrew on Stud.LRwheel_StudC producing Nut.LRwheel_StudC_Nut.
+    Robot execute PutDown on Nut.LRwheel_StudC_Nut producing Nut.LRwheel_StudC_Nut.
+    Robot execute Unmount on Wheel.LRwheel producing Tire.LRtire.
+    Robot execute PutDown on Tire.LRtire producing Tire.LRtire.
+    Robot execute Unscrew on Stud.RRwheel_StudA producing Nut.RRwheel_StudA_Nut.
+    Robot execute PutDown on Nut.RRwheel_StudA_Nut producing Nut.RRwheel_StudA_Nut.
+    Robot execute Unscrew on Stud.RRwheel_StudB producing Nut.RRwheel_StudB_Nut.
+    Robot execute PutDown on Nut.RRwheel_StudB_Nut producing Nut.RRwheel_StudB_Nut.
+    Robot execute Unscrew on Stud.RRwheel_StudC producing Nut.RRwheel_StudC_Nut.
+    Robot execute PutDown on Nut.RRwheel_StudC_Nut producing Nut.RRwheel_StudC_Nut.
+    Robot execute Unmount on Wheel.RRwheel producing Tire.RRtire.
+    Robot execute PutDown on Tire.RRtire producing Tire.RRtire.
+    Robot says "How shall we achieve Rotate?"
 #
-# Start of RemoveTires
+# Printing the World
 #
-    Agent execute Unscrew on Stud.LFwheel_StudA producing Nut.LFwheel_StudA_Nut.
-    Agent execute PutDown on Nut.LFwheel_StudA_Nut producing Nut.LFwheel_StudA_Nut.
-    Agent execute Unscrew on Stud.LFwheel_StudB producing Nut.LFwheel_StudB_Nut.
-    Agent execute PutDown on Nut.LFwheel_StudB_Nut producing Nut.LFwheel_StudB_Nut.
-    Agent execute Unscrew on Stud.LFwheel_StudC producing Nut.LFwheel_StudC_Nut.
-    Agent says "Ok."
-  > next
-    Agent execute PutDown on Nut.LFwheel_StudC_Nut producing Nut.LFwheel_StudC_Nut.
-    Agent execute Unmount on Wheel.LFwheel producing Tire.LFtire.
-    Agent execute PutDown on Tire.LFtire producing Tire.LFtire.
-    Agent execute Unscrew on Stud.RFwheel_StudA producing Nut.RFwheel_StudA_Nut.
-    Agent execute PutDown on Nut.RFwheel_StudA_Nut producing Nut.RFwheel_StudA_Nut.
-    Agent says "Ok."
-  > next
-    Agent execute Unscrew on Stud.RFwheel_StudB producing Nut.RFwheel_StudB_Nut.
-    Agent execute PutDown on Nut.RFwheel_StudB_Nut producing Nut.RFwheel_StudB_Nut.
-    Agent execute Unscrew on Stud.RFwheel_StudC producing Nut.RFwheel_StudC_Nut.
-    Agent execute PutDown on Nut.RFwheel_StudC_Nut producing Nut.RFwheel_StudC_Nut.
-    Agent execute Unmount on Wheel.RFwheel producing Tire.RFtire.
-    Agent says "Ok."
-  > next
-    Agent execute PutDown on Tire.RFtire producing Tire.RFtire.
-    Agent execute Unscrew on Stud.LRwheel_StudA producing Nut.LRwheel_StudA_Nut.
-    Agent execute PutDown on Nut.LRwheel_StudA_Nut producing Nut.LRwheel_StudA_Nut.
-    Agent execute Unscrew on Stud.LRwheel_StudB producing Nut.LRwheel_StudB_Nut.
-    Agent execute PutDown on Nut.LRwheel_StudB_Nut producing Nut.LRwheel_StudB_Nut.
-    Agent says "Ok."
-  > next
-    Agent execute Unscrew on Stud.LRwheel_StudC producing Nut.LRwheel_StudC_Nut.
-    Agent execute PutDown on Nut.LRwheel_StudC_Nut producing Nut.LRwheel_StudC_Nut.
-    Agent execute Unmount on Wheel.LRwheel producing Tire.LRtire.
-    Agent execute PutDown on Tire.LRtire producing Tire.LRtire.
-    Agent execute Unscrew on Stud.RRwheel_StudA producing Nut.RRwheel_StudA_Nut.
-    Agent says "Ok."
-  > next
-    Agent execute PutDown on Nut.RRwheel_StudA_Nut producing Nut.RRwheel_StudA_Nut.
-    Agent execute Unscrew on Stud.RRwheel_StudB producing Nut.RRwheel_StudB_Nut.
-    Agent execute PutDown on Nut.RRwheel_StudB_Nut producing Nut.RRwheel_StudB_Nut.
-    Agent execute Unscrew on Stud.RRwheel_StudC producing Nut.RRwheel_StudC_Nut.
-    Agent execute PutDown on Nut.RRwheel_StudC_Nut producing Nut.RRwheel_StudC_Nut.
-    Agent says "Ok."
-  > next
-    Agent execute Unmount on Wheel.RRwheel producing Tire.RRtire.
-    Agent execute PutDown on Tire.RRtire producing Tire.RRtire.
+  > eval world.print(java.lang.System.out)
 #
-# Start of Rotate
+# Nuts are unscrewed
 #
-    Agent says "How shall we achieve Rotate?"
+LOOSE_NUTS:LFwheel_StudA_Nut,LFwheel_StudB_Nut,LFwheel_StudC_Nut,RFwheel_StudA_Nut,RFwheel_StudB_Nut,RFwheel_StudC_Nut,LRwheel_StudA_Nut,LRwheel_StudB_Nut,LRwheel_StudC_Nut,RRwheel_StudA_Nut,RRwheel_StudB_Nut,RRwheel_StudC_Nut,
+.MyCar[0,0,0]
+	.RFwheel = RFwheel[10,10,0]
+		.studA = RFwheel_StudA[10,10,1]
+			getNut() = undefined
+		.studB = RFwheel_StudB[10,10,-1]
+			getNut() = undefined
+		.studC = RFwheel_StudC[10,10,2]
+#
+# Nuts are unscrewed
+#
+			getNut() = undefined
+#
+# No tire on the wheel
+#
+		getTire() = undefined
+	.LFwheel = LFwheel[-10,-10,0]
+		.studA = LFwheel_StudA[-10,-10,1]
+			getNut() = undefined
+		.studB = LFwheel_StudB[-10,-10,-1]
+			getNut() = undefined
+		.studC = LFwheel_StudC[-10,-10,2]
+			getNut() = undefined
+		getTire() = undefined
+	.RRwheel = RRwheel[10,-10,0]
+		.studA = RRwheel_StudA[10,-10,1]
+			getNut() = undefined
+		.studB = RRwheel_StudB[10,-10,-1]
+			getNut() = undefined
+		.studC = RRwheel_StudC[10,-10,2]
+			getNut() = undefined
+		getTire() = undefined
+	.LRwheel = LRwheel[-10,10,0]
+		.studA = LRwheel_StudA[-10,10,1]
+			getNut() = undefined
+		.studB = LRwheel_StudB[-10,10,-1]
+			getNut() = undefined
+		.studC = LRwheel_StudC[-10,10,2]
+			getNut() = undefined
+		getTire() = undefined
+    # Returned 'null'
+#
+# Rotate task
+#
   > say
 [1] Let's achieve Rotate by frontToRear.
 [2] Let's achieve Rotate by xPattern.
@@ -70,193 +112,235 @@
 [4] Stop achieve RotateTires.
   >> 1
     User says "Let's achieve Rotate by frontToRear."
-    Agent execute PickUp on Tire.LFtire producing Tire.LFtire.
-    Agent execute Mount on Tire.LFtire and Wheel.LRwheel producing Tire.LFtire.
-    Agent execute PickUp on Tire.RFtire producing Tire.RFtire.
-    Agent execute Mount on Tire.RFtire and Wheel.RRwheel producing Tire.RFtire.
-    Agent execute PickUp on Tire.LRtire producing Tire.LRtire.
-    Agent says "Ok."
+    Robot execute PickUp on Tire.LFtire producing Tire.LFtire.
+    Robot execute Mount on Tire.LFtire and Wheel.LRwheel producing Tire.LFtire.
+    Robot execute PickUp on Tire.RFtire producing Tire.RFtire.
+    Robot execute Mount on Tire.RFtire and Wheel.RRwheel producing Tire.RFtire.
+    Robot execute PickUp on Tire.LRtire producing Tire.LRtire.
+    Robot execute Mount on Tire.LRtire and Wheel.LFwheel producing Tire.LRtire.
+    Robot execute PickUp on Tire.RRtire producing Tire.RRtire.
+    Robot execute Mount on Tire.RRtire and Wheel.RFwheel producing Tire.RRtire.
+#
+# ScrewWheels task
+#
+    Robot execute PickUp on Nut.LFwheel_StudA_Nut producing Nut.LFwheel_StudA_Nut.
+    Robot execute Screw on Nut.LFwheel_StudA_Nut and Stud.LFwheel_StudA producing Nut.LFwheel_StudA_Nut.
+    Robot execute PickUp on Nut.LFwheel_StudB_Nut producing Nut.LFwheel_StudB_Nut.
+    Robot execute Screw on Nut.LFwheel_StudB_Nut and Stud.LFwheel_StudB producing Nut.LFwheel_StudB_Nut.
+    Robot execute PickUp on Nut.LFwheel_StudC_Nut producing Nut.LFwheel_StudC_Nut.
+    Robot execute Screw on Nut.LFwheel_StudC_Nut and Stud.LFwheel_StudC producing Nut.LFwheel_StudC_Nut.
+    Robot execute PickUp on Nut.RFwheel_StudA_Nut producing Nut.RFwheel_StudA_Nut.
+    Robot execute Screw on Nut.RFwheel_StudA_Nut and Stud.LRwheel_StudA producing Nut.RFwheel_StudA_Nut.
+    Robot execute PickUp on Nut.RFwheel_StudB_Nut producing Nut.RFwheel_StudB_Nut.
+    Robot execute Screw on Nut.RFwheel_StudB_Nut and Stud.LRwheel_StudB producing Nut.RFwheel_StudB_Nut.
+    Robot execute PickUp on Nut.RFwheel_StudC_Nut producing Nut.RFwheel_StudC_Nut.
+    Robot execute Screw on Nut.RFwheel_StudC_Nut and Stud.LRwheel_StudC producing Nut.RFwheel_StudC_Nut.
+    Robot execute PickUp on Nut.LRwheel_StudA_Nut producing Nut.LRwheel_StudA_Nut.
+    Robot execute Screw on Nut.LRwheel_StudA_Nut and Stud.RFwheel_StudA producing Nut.LRwheel_StudA_Nut.
+    Robot execute PickUp on Nut.LRwheel_StudB_Nut producing Nut.LRwheel_StudB_Nut.
+    Robot execute Screw on Nut.LRwheel_StudB_Nut and Stud.RFwheel_StudB producing Nut.LRwheel_StudB_Nut.
+    Robot execute PickUp on Nut.LRwheel_StudC_Nut producing Nut.LRwheel_StudC_Nut.
+    Robot execute Screw on Nut.LRwheel_StudC_Nut and Stud.RFwheel_StudC producing Nut.LRwheel_StudC_Nut.
+    Robot execute PickUp on Nut.RRwheel_StudA_Nut producing Nut.RRwheel_StudA_Nut.
+    Robot execute Screw on Nut.RRwheel_StudA_Nut and Stud.RRwheel_StudA producing Nut.RRwheel_StudA_Nut.
+    Robot execute PickUp on Nut.RRwheel_StudB_Nut producing Nut.RRwheel_StudB_Nut.
+    Robot execute Screw on Nut.RRwheel_StudB_Nut and Stud.RRwheel_StudB producing Nut.RRwheel_StudB_Nut.
+    Robot execute PickUp on Nut.RRwheel_StudC_Nut producing Nut.RRwheel_StudC_Nut.
+    Robot execute Screw on Nut.RRwheel_StudC_Nut and Stud.RRwheel_StudC producing Nut.RRwheel_StudC_Nut.
+    Robot says "Ok."
+  > 
   > next
-    Agent execute Mount on Tire.LRtire and Wheel.LFwheel producing Tire.LRtire.
-    Agent execute PickUp on Tire.RRtire producing Tire.RRtire.
-    Agent execute Mount on Tire.RRtire and Wheel.RFwheel producing Tire.RRtire.
+    Robot says "Ok."
 #
-# Start of ScrewWheels
+# Printing the world
 #
-# Why disco asks for PickUp's object?
+  > eval world.print(java.lang.System.out)
 #
-    Agent says "What is the PickUp object?"
-  > next
-    Agent says "What is the PickUp object?"
-  > 
-  > 
-  > 
-  > sayhistory
-    Invalid command. Type 'help' for commands.
-  > 
-  > historu
-    Invalid command. Type 'help' for commands.
+# No Nuts
+#
+LOOSE_NUTS:Empty
+.MyCar[0,0,0]
+	.RFwheel = RFwheel[10,10,0]
+		.studA = RFwheel_StudA[10,10,1]
+#
+# Nuts' location is the same as Studs' location
+#
+			getNut() = LRwheel_StudA_Nut[10,10,1]
+		.studB = RFwheel_StudB[10,10,-1]
+			getNut() = LRwheel_StudB_Nut[10,10,-1]
+		.studC = RFwheel_StudC[10,10,2]
+			getNut() = LRwheel_StudC_Nut[10,10,2]
+#
+# RRtire on RFwheel
+#
+		getTire() = RRtire[10,10,0]
+	.LFwheel = LFwheel[-10,-10,0]
+		.studA = LFwheel_StudA[-10,-10,1]
+			getNut() = LFwheel_StudA_Nut[-10,-10,1]
+		.studB = LFwheel_StudB[-10,-10,-1]
+			getNut() = LFwheel_StudB_Nut[-10,-10,-1]
+		.studC = LFwheel_StudC[-10,-10,2]
+			getNut() = LFwheel_StudC_Nut[-10,-10,2]
+		getTire() = LRtire[-10,-10,0]
+	.RRwheel = RRwheel[10,-10,0]
+		.studA = RRwheel_StudA[10,-10,1]
+			getNut() = RRwheel_StudA_Nut[10,-10,1]
+		.studB = RRwheel_StudB[10,-10,-1]
+			getNut() = RRwheel_StudB_Nut[10,-10,-1]
+		.studC = RRwheel_StudC[10,-10,2]
+			getNut() = RRwheel_StudC_Nut[10,-10,2]
+		getTire() = RFtire[10,-10,0]
+	.LRwheel = LRwheel[-10,10,0]
+		.studA = LRwheel_StudA[-10,10,1]
+			getNut() = RFwheel_StudA_Nut[-10,10,1]
+		.studB = LRwheel_StudB[-10,10,-1]
+			getNut() = RFwheel_StudB_Nut[-10,10,-1]
+		.studC = LRwheel_StudC[-10,10,2]
+			getNut() = RFwheel_StudC_Nut[-10,10,2]
+		getTire() = LFtire[-10,10,0]
+    # Returned 'null'
   > history
+
 #
-# History
+# RotateTires task is done
 #
-[Achieve RotateTires] -accepted -live
+[Achieve RotateTires] -accepted -done
    User says "Let's achieve RotateTires."
    [Achieve RemoveTires] -done
       [Achieve RemoveTire on Wheel.LFwheel] -done
          [Achieve UnscrewWheel on Wheel.LFwheel] -done
             [Achieve UnscrewStud on Stud.LFwheel_StudA] -done
-               Agent execute Unscrew on Stud.LFwheel_StudA producing Nut.LFwheel_StudA_Nut.
-               Agent execute PutDown on Nut.LFwheel_StudA_Nut producing Nut.LFwheel_StudA_Nut.
+               Robot execute Unscrew on Stud.LFwheel_StudA producing Nut.LFwheel_StudA_Nut.
+               Robot execute PutDown on Nut.LFwheel_StudA_Nut producing Nut.LFwheel_StudA_Nut.
             [Achieve UnscrewStud on Stud.LFwheel_StudB] -done
-               Agent execute Unscrew on Stud.LFwheel_StudB producing Nut.LFwheel_StudB_Nut.
-               Agent execute PutDown on Nut.LFwheel_StudB_Nut producing Nut.LFwheel_StudB_Nut.
+               Robot execute Unscrew on Stud.LFwheel_StudB producing Nut.LFwheel_StudB_Nut.
+               Robot execute PutDown on Nut.LFwheel_StudB_Nut producing Nut.LFwheel_StudB_Nut.
             [Achieve UnscrewStud on Stud.LFwheel_StudC] -done
-               Agent execute Unscrew on Stud.LFwheel_StudC producing Nut.LFwheel_StudC_Nut.
-               Agent says "Ok."
-               Agent execute PutDown on Nut.LFwheel_StudC_Nut producing Nut.LFwheel_StudC_Nut.
+               Robot execute Unscrew on Stud.LFwheel_StudC producing Nut.LFwheel_StudC_Nut.
+               Robot execute PutDown on Nut.LFwheel_StudC_Nut producing Nut.LFwheel_StudC_Nut.
          [Achieve UnmountWheel on Wheel.LFwheel] -done
-            Agent execute Unmount on Wheel.LFwheel producing Tire.LFtire.
-            Agent execute PutDown on Tire.LFtire producing Tire.LFtire.
+            Robot execute Unmount on Wheel.LFwheel producing Tire.LFtire.
+            Robot execute PutDown on Tire.LFtire producing Tire.LFtire.
       [Achieve RemoveTire on Wheel.RFwheel] -done
          [Achieve UnscrewWheel on Wheel.RFwheel] -done
             [Achieve UnscrewStud on Stud.RFwheel_StudA] -done
-               Agent execute Unscrew on Stud.RFwheel_StudA producing Nut.RFwheel_StudA_Nut.
-               Agent execute PutDown on Nut.RFwheel_StudA_Nut producing Nut.RFwheel_StudA_Nut.
-               Agent says "Ok."
+               Robot execute Unscrew on Stud.RFwheel_StudA producing Nut.RFwheel_StudA_Nut.
+               Robot execute PutDown on Nut.RFwheel_StudA_Nut producing Nut.RFwheel_StudA_Nut.
             [Achieve UnscrewStud on Stud.RFwheel_StudB] -done
-               Agent execute Unscrew on Stud.RFwheel_StudB producing Nut.RFwheel_StudB_Nut.
-               Agent execute PutDown on Nut.RFwheel_StudB_Nut producing Nut.RFwheel_StudB_Nut.
+               Robot execute Unscrew on Stud.RFwheel_StudB producing Nut.RFwheel_StudB_Nut.
+               Robot execute PutDown on Nut.RFwheel_StudB_Nut producing Nut.RFwheel_StudB_Nut.
             [Achieve UnscrewStud on Stud.RFwheel_StudC] -done
-               Agent execute Unscrew on Stud.RFwheel_StudC producing Nut.RFwheel_StudC_Nut.
-               Agent execute PutDown on Nut.RFwheel_StudC_Nut producing Nut.RFwheel_StudC_Nut.
+               Robot execute Unscrew on Stud.RFwheel_StudC producing Nut.RFwheel_StudC_Nut.
+               Robot execute PutDown on Nut.RFwheel_StudC_Nut producing Nut.RFwheel_StudC_Nut.
          [Achieve UnmountWheel on Wheel.RFwheel] -done
-            Agent execute Unmount on Wheel.RFwheel producing Tire.RFtire.
-            Agent says "Ok."
-            Agent execute PutDown on Tire.RFtire producing Tire.RFtire.
+            Robot execute Unmount on Wheel.RFwheel producing Tire.RFtire.
+            Robot execute PutDown on Tire.RFtire producing Tire.RFtire.
       [Achieve RemoveTire on Wheel.LRwheel] -done
          [Achieve UnscrewWheel on Wheel.LRwheel] -done
             [Achieve UnscrewStud on Stud.LRwheel_StudA] -done
-               Agent execute Unscrew on Stud.LRwheel_StudA producing Nut.LRwheel_StudA_Nut.
-               Agent execute PutDown on Nut.LRwheel_StudA_Nut producing Nut.LRwheel_StudA_Nut.
+               Robot execute Unscrew on Stud.LRwheel_StudA producing Nut.LRwheel_StudA_Nut.
+               Robot execute PutDown on Nut.LRwheel_StudA_Nut producing Nut.LRwheel_StudA_Nut.
             [Achieve UnscrewStud on Stud.LRwheel_StudB] -done
-               Agent execute Unscrew on Stud.LRwheel_StudB producing Nut.LRwheel_StudB_Nut.
-               Agent execute PutDown on Nut.LRwheel_StudB_Nut producing Nut.LRwheel_StudB_Nut.
-               Agent says "Ok."
+               Robot execute Unscrew on Stud.LRwheel_StudB producing Nut.LRwheel_StudB_Nut.
+               Robot execute PutDown on Nut.LRwheel_StudB_Nut producing Nut.LRwheel_StudB_Nut.
             [Achieve UnscrewStud on Stud.LRwheel_StudC] -done
-               Agent execute Unscrew on Stud.LRwheel_StudC producing Nut.LRwheel_StudC_Nut.
-               Agent execute PutDown on Nut.LRwheel_StudC_Nut producing Nut.LRwheel_StudC_Nut.
+               Robot execute Unscrew on Stud.LRwheel_StudC producing Nut.LRwheel_StudC_Nut.
+               Robot execute PutDown on Nut.LRwheel_StudC_Nut producing Nut.LRwheel_StudC_Nut.
          [Achieve UnmountWheel on Wheel.LRwheel] -done
-            Agent execute Unmount on Wheel.LRwheel producing Tire.LRtire.
-            Agent execute PutDown on Tire.LRtire producing Tire.LRtire.
+            Robot execute Unmount on Wheel.LRwheel producing Tire.LRtire.
+            Robot execute PutDown on Tire.LRtire producing Tire.LRtire.
       [Achieve RemoveTire on Wheel.RRwheel] -done
          [Achieve UnscrewWheel on Wheel.RRwheel] -done
             [Achieve UnscrewStud on Stud.RRwheel_StudA] -done
-               Agent execute Unscrew on Stud.RRwheel_StudA producing Nut.RRwheel_StudA_Nut.
-               Agent says "Ok."
-               Agent execute PutDown on Nut.RRwheel_StudA_Nut producing Nut.RRwheel_StudA_Nut.
+               Robot execute Unscrew on Stud.RRwheel_StudA producing Nut.RRwheel_StudA_Nut.
+               Robot execute PutDown on Nut.RRwheel_StudA_Nut producing Nut.RRwheel_StudA_Nut.
             [Achieve UnscrewStud on Stud.RRwheel_StudB] -done
-               Agent execute Unscrew on Stud.RRwheel_StudB producing Nut.RRwheel_StudB_Nut.
-               Agent execute PutDown on Nut.RRwheel_StudB_Nut producing Nut.RRwheel_StudB_Nut.
+               Robot execute Unscrew on Stud.RRwheel_StudB producing Nut.RRwheel_StudB_Nut.
+               Robot execute PutDown on Nut.RRwheel_StudB_Nut producing Nut.RRwheel_StudB_Nut.
             [Achieve UnscrewStud on Stud.RRwheel_StudC] -done
-               Agent execute Unscrew on Stud.RRwheel_StudC producing Nut.RRwheel_StudC_Nut.
-               Agent execute PutDown on Nut.RRwheel_StudC_Nut producing Nut.RRwheel_StudC_Nut.
-               Agent says "Ok."
+               Robot execute Unscrew on Stud.RRwheel_StudC producing Nut.RRwheel_StudC_Nut.
+               Robot execute PutDown on Nut.RRwheel_StudC_Nut producing Nut.RRwheel_StudC_Nut.
          [Achieve UnmountWheel on Wheel.RRwheel] -done
-            Agent execute Unmount on Wheel.RRwheel producing Tire.RRtire.
-            Agent execute PutDown on Tire.RRtire producing Tire.RRtire.
+            Robot execute Unmount on Wheel.RRwheel producing Tire.RRtire.
+            Robot execute PutDown on Tire.RRtire producing Tire.RRtire.
    [Achieve Rotate] -done
       [User says let's achieve Rotate by frontToRear] -done
-         Agent says "How shall we achieve Rotate?"
+         Robot says "How shall we achieve Rotate?"
          User says "Let's achieve Rotate by frontToRear."
       [Achieve MountTire on Tire.LFtire and Wheel.LRwheel producing Tire.LFtire] -done
-         Agent execute PickUp on Tire.LFtire producing Tire.LFtire.
-         Agent execute Mount on Tire.LFtire and Wheel.LRwheel producing Tire.LFtire.
+         Robot execute PickUp on Tire.LFtire producing Tire.LFtire.
+         Robot execute Mount on Tire.LFtire and Wheel.LRwheel producing Tire.LFtire.
       [Achieve MountTire on Tire.RFtire and Wheel.RRwheel producing Tire.RFtire] -done
-         Agent execute PickUp on Tire.RFtire producing Tire.RFtire.
-         Agent execute Mount on Tire.RFtire and Wheel.RRwheel producing Tire.RFtire.
+         Robot execute PickUp on Tire.RFtire producing Tire.RFtire.
+         Robot execute Mount on Tire.RFtire and Wheel.RRwheel producing Tire.RFtire.
       [Achieve MountTire on Tire.LRtire and Wheel.LFwheel producing Tire.LRtire] -done
-         Agent execute PickUp on Tire.LRtire producing Tire.LRtire.
-         Agent says "Ok."
-         Agent execute Mount on Tire.LRtire and Wheel.LFwheel producing Tire.LRtire.
+         Robot execute PickUp on Tire.LRtire producing Tire.LRtire.
+         Robot execute Mount on Tire.LRtire and Wheel.LFwheel producing Tire.LRtire.
       [Achieve MountTire on Tire.RRtire and Wheel.RFwheel producing Tire.RRtire] -done
-         Agent execute PickUp on Tire.RRtire producing Tire.RRtire.
-         Agent execute Mount on Tire.RRtire and Wheel.RFwheel producing Tire.RRtire.
-#
-# Start of ScrewWheels
-#
-   [Achieve ScrewWheels] -live
-      [Achieve ScrewWheel on Wheel.LFwheel] -live
-#
-# ScrewStud has it's input(Stud.LFwheel_StudA).
-#
-         [Achieve ScrewStud on Stud.LFwheel_StudA] -live
-            [Agent execute PickUp] -live
-#
-# PickUp doesn't have it's input. Why?
-#
-               [User says propose the PickUp object] -live <-focus
-                  Agent says "What is the PickUp object?"
-                  [User accept] -live
-                     Agent says "What is the PickUp object?"
-            [Agent execute Screw on a nut and Stud.LFwheel_StudA]
-         [Achieve ScrewStud on Stud.LFwheel_StudB] -live
-         [Achieve ScrewStud on Stud.LFwheel_StudC] -live
-      [Achieve ScrewWheel on Wheel.LRwheel] -live
-      [Achieve ScrewWheel on Wheel.RFwheel] -live
-      [Achieve ScrewWheel on Wheel.RRwheel] -live
+         Robot execute PickUp on Tire.RRtire producing Tire.RRtire.
+         Robot execute Mount on Tire.RRtire and Wheel.RFwheel producing Tire.RRtire.
+   [Achieve ScrewWheels] -done
+      [Achieve ScrewWheel on Wheel.LFwheel] -done
+         [Achieve ScrewStud on Stud.LFwheel_StudA] -done
+            Robot execute PickUp on Nut.LFwheel_StudA_Nut producing Nut.LFwheel_StudA_Nut.
+            Robot execute Screw on Nut.LFwheel_StudA_Nut and Stud.LFwheel_StudA producing Nut.LFwheel_StudA_Nut.
+         [Achieve ScrewStud on Stud.LFwheel_StudB] -done
+            Robot execute PickUp on Nut.LFwheel_StudB_Nut producing Nut.LFwheel_StudB_Nut.
+            Robot execute Screw on Nut.LFwheel_StudB_Nut and Stud.LFwheel_StudB producing Nut.LFwheel_StudB_Nut.
+         [Achieve ScrewStud on Stud.LFwheel_StudC] -done
+            Robot execute PickUp on Nut.LFwheel_StudC_Nut producing Nut.LFwheel_StudC_Nut.
+            Robot execute Screw on Nut.LFwheel_StudC_Nut and Stud.LFwheel_StudC producing Nut.LFwheel_StudC_Nut.
+      [Achieve ScrewWheel on Wheel.LRwheel] -done
+         [Achieve ScrewStud on Stud.LRwheel_StudA] -done
+            Robot execute PickUp on Nut.RFwheel_StudA_Nut producing Nut.RFwheel_StudA_Nut.
+            Robot execute Screw on Nut.RFwheel_StudA_Nut and Stud.LRwheel_StudA producing Nut.RFwheel_StudA_Nut.
+         [Achieve ScrewStud on Stud.LRwheel_StudB] -done
+            Robot execute PickUp on Nut.RFwheel_StudB_Nut producing Nut.RFwheel_StudB_Nut.
+            Robot execute Screw on Nut.RFwheel_StudB_Nut and Stud.LRwheel_StudB producing Nut.RFwheel_StudB_Nut.
+         [Achieve ScrewStud on Stud.LRwheel_StudC] -done
+            Robot execute PickUp on Nut.RFwheel_StudC_Nut producing Nut.RFwheel_StudC_Nut.
+            Robot execute Screw on Nut.RFwheel_StudC_Nut and Stud.LRwheel_StudC producing Nut.RFwheel_StudC_Nut.
+      [Achieve ScrewWheel on Wheel.RFwheel] -done
+         [Achieve ScrewStud on Stud.RFwheel_StudA] -done
+            Robot execute PickUp on Nut.LRwheel_StudA_Nut producing Nut.LRwheel_StudA_Nut.
+            Robot execute Screw on Nut.LRwheel_StudA_Nut and Stud.RFwheel_StudA producing Nut.LRwheel_StudA_Nut.
+         [Achieve ScrewStud on Stud.RFwheel_StudB] -done
+            Robot execute PickUp on Nut.LRwheel_StudB_Nut producing Nut.LRwheel_StudB_Nut.
+            Robot execute Screw on Nut.LRwheel_StudB_Nut and Stud.RFwheel_StudB producing Nut.LRwheel_StudB_Nut.
+         [Achieve ScrewStud on Stud.RFwheel_StudC] -done
+            Robot execute PickUp on Nut.LRwheel_StudC_Nut producing Nut.LRwheel_StudC_Nut.
+            Robot execute Screw on Nut.LRwheel_StudC_Nut and Stud.RFwheel_StudC producing Nut.LRwheel_StudC_Nut.
+      [Achieve ScrewWheel on Wheel.RRwheel] -done
+         [Achieve ScrewStud on Stud.RRwheel_StudA] -done
+            Robot execute PickUp on Nut.RRwheel_StudA_Nut producing Nut.RRwheel_StudA_Nut.
+            Robot execute Screw on Nut.RRwheel_StudA_Nut and Stud.RRwheel_StudA producing Nut.RRwheel_StudA_Nut.
+         [Achieve ScrewStud on Stud.RRwheel_StudB] -done
+            Robot execute PickUp on Nut.RRwheel_StudB_Nut producing Nut.RRwheel_StudB_Nut.
+            Robot execute Screw on Nut.RRwheel_StudB_Nut and Stud.RRwheel_StudB producing Nut.RRwheel_StudB_Nut.
+         [Achieve ScrewStud on Stud.RRwheel_StudC] -done <-focus
+            Robot execute PickUp on Nut.RRwheel_StudC_Nut producing Nut.RRwheel_StudC_Nut.
+            Robot execute Screw on Nut.RRwheel_StudC_Nut and Stud.RRwheel_StudC producing Nut.RRwheel_StudC_Nut.
+            Robot says "Ok."
+            Robot says "Ok."
 
-  > eval CarWorld.LOOSE_NUTS.isEmpty()
-    # Returned 'false'
-#
-# "CarWorld.LOOSE_NUTS.isEmpty()	 ? undefined : CarWorld.LOOSE_NUTS.get(0)" returns the Nut. (please see below)
-#
-  > 	eval CarWorld.LOOSE_NUTS.isEmpty()	 ? undefined : CarWorld.LOOSE_NUTS.get(0)
-    # Returned 'Nut.LFwheel_StudA_Nut'
-#
-# ScrewStud task
-#
-  > print ScrewStud
-
-  <task id="ScrewStud" xmlns="http://www.cs.wpi.edu/~rich/cetask/cea-2018-ext">
-		<input name="stud" type="Stud"/>
-		
-		<subtasks id="screwStud">
-			<step name="pickup" task="prim:PickUp"/>	
-			<step name="screw" task="prim:Screw"/>	
-	
-			<binding slot="$screw.stud" value="$this.stud"/>	
-#
-# "$pickup.object" is bound to "CarWorld.LOOSE_NUTS.isEmpty() ? undefined : CarWorld.LOOSE_NUTS.get(0)" and 
-# we know that "CarWorld.LOOSE_NUTS.isEmpty() ? undefined : CarWorld.LOOSE_NUTS.get(0)" has a value. So, why disco asks for PickUp's object?
-#
-			<binding slot="$pickup.object" value="CarWorld.LOOSE_NUTS.isEmpty() ? undefined : CarWorld.LOOSE_NUTS.get(0)"/>
-			<binding slot="$screw.nut" value="$pickup.newObject"/>			
-		</subtasks>		
-	</task>
-
-  > 
-  > 
   > status
 
-[Achieve RotateTires] -accepted -live
+[Achieve RotateTires] -accepted -done
    User says "Let's achieve RotateTires."
    [Achieve RemoveTires] -done
    [Achieve Rotate] -done
-   [Achieve ScrewWheels] -live
-      [Achieve ScrewWheel on Wheel.LFwheel] -live
-         [Achieve ScrewStud on Stud.LFwheel_StudA] -live
-            [Agent execute PickUp] -live
-               [User says propose the PickUp object] -live <-focus
-                  Agent says "What is the PickUp object?"
-                  [User accept] -live
-                     Agent says "What is the PickUp object?"
-            [Agent execute Screw on a nut and Stud.LFwheel_StudA]
-         [Achieve ScrewStud on Stud.LFwheel_StudB] -live
-         [Achieve ScrewStud on Stud.LFwheel_StudC] -live
-      [Achieve ScrewWheel on Wheel.LRwheel] -live
-      [Achieve ScrewWheel on Wheel.RFwheel] -live
-      [Achieve ScrewWheel on Wheel.RRwheel] -live
+   [Achieve ScrewWheels] -done
+      [Achieve ScrewWheel on Wheel.LFwheel] -done
+      [Achieve ScrewWheel on Wheel.LRwheel] -done
+      [Achieve ScrewWheel on Wheel.RFwheel] -done
+      [Achieve ScrewWheel on Wheel.RRwheel] -done
+         [Achieve ScrewStud on Stud.RRwheel_StudA] -done
+         [Achieve ScrewStud on Stud.RRwheel_StudB] -done
+         [Achieve ScrewStud on Stud.RRwheel_StudC] -done <-focus
+            Robot execute PickUp on Nut.RRwheel_StudC_Nut producing Nut.RRwheel_StudC_Nut.
+            Robot execute Screw on Nut.RRwheel_StudC_Nut and Stud.RRwheel_StudC producing Nut.RRwheel_StudC_Nut.
+            Robot says "Ok."
+            Robot says "Ok."
 
   > quit
     
