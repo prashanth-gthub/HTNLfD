@@ -27,6 +27,9 @@ public class Stud extends PhysObj {
       indent = "\t" + indent;
       stream.append(this.name + this.getLocation().toString() + "\n");
       stream.append(indent + "getNut() = ");
-      nut.print(stream, indent);
+      if(nut!=null)
+         nut.print(stream, indent);
+      else
+         stream.append("undefined\n");
    }
 }

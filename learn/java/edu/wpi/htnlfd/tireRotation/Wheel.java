@@ -46,6 +46,9 @@ public class Wheel extends PhysObj {
       stream.append(indent+".studC = ");
       studC.print(stream,indent);  
       stream.append(indent+"getTire() = ");
-      getTire().print(stream,indent); 
+      if(getTire()!=null)
+         getTire().print(stream,indent); 
+      else
+         stream.append("undefined\n");
    }
 }
