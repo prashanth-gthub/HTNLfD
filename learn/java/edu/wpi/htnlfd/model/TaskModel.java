@@ -28,7 +28,8 @@ public class TaskModel {
 		if (taskmodels.size() == 0) {
 			count = 1;
 		} else {
-			String nameS = taskmodels.get(taskmodels.size() - 1).namespacePrefix;
+			//taskmodels.get(taskmodels.size() - 1); // ??
+         String nameS = TaskModel.namespacePrefix; 
 			nameS = nameS.replaceAll("[^0-9]*", "");
 			count = Integer.parseInt(nameS) + 1;
 

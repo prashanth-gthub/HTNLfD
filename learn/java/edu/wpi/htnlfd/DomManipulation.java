@@ -96,7 +96,7 @@ public class DomManipulation {
 			Transformer transformer = tf.newTransformer();
 
 			askQuestion.toNode(taskmodel, documentTell);
-			writeProperties(AskQuestion.filename, AskQuestion.properties); // /???
+			writeProperties(askQuestion.filename, AskQuestion.properties); // /???
 			// Adding indentation and omitting xml declaration
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.setOutputProperty(

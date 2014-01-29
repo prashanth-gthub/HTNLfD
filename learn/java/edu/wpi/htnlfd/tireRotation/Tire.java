@@ -10,7 +10,7 @@ public class Tire extends PhysObj {
    }
 
    public void print (PrintStream stream, String indent) {
-      stream.append(this.name + this.getLocation().toString() + "\n");
+      stream.append(this.name + this.getLocation() + "\n");
    }
 
 }

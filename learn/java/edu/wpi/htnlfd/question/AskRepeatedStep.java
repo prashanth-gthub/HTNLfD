@@ -5,7 +5,6 @@ import java.util.*;
 import java.util.Map.Entry;
 import edu.wpi.htnlfd.model.*;
 import edu.wpi.htnlfd.model.DecompositionClass.*;
-import edu.wpi.htnlfd.model.TaskClass.*;
 
 public class AskRepeatedStep extends Question {
 

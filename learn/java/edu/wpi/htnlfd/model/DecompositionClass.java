@@ -174,13 +174,13 @@ public class DecompositionClass extends TaskModel.Member {
 									DecompositionClass.Type.InputInput));
 
 					if (modified != null) {
-						String outName = null;
+						/*String outName = null;
 						outName = currentTask.getInput(inputT.getName())
 								.getModified().getName();
 
 						String outputTaskName = prevDec.getBindings()
 								.get("$this." + modified).getValue()
-								.substring(2 + stepName.length());
+								.substring(2 + stepName.length()); // ??*/ 
 
 						/*
 						 * currentDec.addBinding("$this." + outName,

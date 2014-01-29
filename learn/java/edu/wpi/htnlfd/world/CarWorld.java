@@ -21,15 +21,13 @@ public class CarWorld extends World {
    
 
    public void print (PrintStream stream) {
-      stream.append("LOOSE_NUTS:");
+      if(!LOOSE_NUTS.isEmpty())
+         stream.append("\nLOOSE_NUTS:");
       for(Nut nut:LOOSE_NUTS){
          stream.append(nut.name+",");
-      }      
-      if(LOOSE_NUTS.isEmpty())
-         stream.append("Empty");
-
+      }     
       stream.append("\n");
-      MyCar.print(stream);
+      MyCar.print(stream,"");
    }
 
 }

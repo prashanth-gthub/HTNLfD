@@ -19,12 +19,13 @@ public class LearnAgent extends Agent {
 	public static void main(String[] args) {
 
 		Interaction interaction = new Interaction(new LearnAgent("robot"),
-				new User("user"),
+				new User("Human"),
 				args.length > 0 && args[0].length() > 0 ? args[0] : null);
 
 		Disco disco = interaction.getDisco();
-		disco.setGlobal("world", new CarWorld());
+		disco.setGlobal("$world", new CarWorld());
 		((Agent) disco.getInteraction().getSystem()).setMax(100);
+		//Disco.DEBUG = true;
 		disco.importPackage("Packages.edu.wpi.htnlfd");
 		disco.importPackage("Packages.edu.wpi.htnlfd.domain");
 		disco.importPackage("Packages.edu.wpi.htnlfd.table");

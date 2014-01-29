@@ -9,29 +9,21 @@ public class Car extends PhysObj {
       reset();
    }
 
-   public final Tire RFtire = new Tire("RFtire", Location.plus(
-         this.getLocation(), new Location(10, 10, 0)));
+   public final Tire RFtire = new Tire("RFtire", null);
 
-   public final Tire LFtire = new Tire("LFtire", Location.plus(
-         this.getLocation(), new Location(-10, -10, 0)));
+   public final Tire LFtire = new Tire("LFtire", null);
 
-   public final Tire RRtire = new Tire("RRtire", Location.plus(
-         this.getLocation(), new Location(10, -10, 0)));
+   public final Tire RRtire = new Tire("RRtire", null);
 
-   public final Tire LRtire = new Tire("LRtire", Location.plus(
-         this.getLocation(), new Location(-10, 10, 0)));
+   public final Tire LRtire = new Tire("LRtire", null);
 
-   public final Wheel RFwheel = new Wheel("RFwheel", Location.plus(
-         this.getLocation(), new Location(10, 10, 0)), RFtire);
+   public final Wheel RFwheel = new Wheel("RFwheel", null, RFtire);
 
-   public final Wheel LFwheel = new Wheel("LFwheel", Location.plus(
-         this.getLocation(), new Location(-10, -10, 0)), LFtire);
+   public final Wheel LFwheel = new Wheel("LFwheel", null, LFtire);
 
-   public final Wheel RRwheel = new Wheel("RRwheel", Location.plus(
-         this.getLocation(), new Location(10, -10, 0)), RRtire);
+   public final Wheel RRwheel = new Wheel("RRwheel", null, RRtire);
 
-   public final Wheel LRwheel = new Wheel("LRwheel", Location.plus(
-         this.getLocation(), new Location(-10, 10, 0)), LRtire);
+   public final Wheel LRwheel = new Wheel("LRwheel", null, LRtire);
 
    public void reset () {
       RFtire.setLocation(Location.plus(this.getLocation(), new Location(10, 10,
@@ -49,9 +41,9 @@ public class Car extends PhysObj {
       LRwheel.reset();
    }
 
-   public void print (PrintStream stream) {
-      String indent = "\t";
-      stream.append("." + this.name + this.getLocation().toString() + "\n");
+   public void print (PrintStream stream, String indent) {
+      indent = "  "+indent;
+      stream.append("." + this.name + this.getLocation() + "\n");
       stream.append(indent + ".RFwheel = ");
       RFwheel.print(stream, indent);
       stream.append(indent + ".LFwheel = ");

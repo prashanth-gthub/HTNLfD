@@ -5,7 +5,7 @@ import java.util.*;
 import edu.wpi.htnlfd.model.*;
 
 public class AskQuestion {
-	public static final String filename = "models\\Tell";
+	public final String filename = "models\\Tell";
 
 	public String namespace = "urn:disco.wpi.edu:htnlfd:tell";
 

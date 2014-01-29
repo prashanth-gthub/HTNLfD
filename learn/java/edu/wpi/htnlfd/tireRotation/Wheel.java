@@ -37,18 +37,18 @@ public class Wheel extends PhysObj {
 	}
 	
    public void print (PrintStream stream, String indent) {
-	   indent = "\t" + indent;
-      stream.append(this.name+this.getLocation().toString()+"\n");
+	   indent = "  " + indent;
+      stream.append(this.name+this.getLocation()+"\n");
       stream.append(indent+".studA = ");
       studA.print(stream,indent);   
       stream.append(indent+".studB = ");
       studB.print(stream,indent);  
       stream.append(indent+".studC = ");
       studC.print(stream,indent);  
-      stream.append(indent+"getTire() = ");
-      if(getTire()!=null)
+      
+      if(getTire()!=null){
+         stream.append(indent+"getTire() = ");
          getTire().print(stream,indent); 
-      else
-         stream.append("undefined\n");
+      }
    }
 }
