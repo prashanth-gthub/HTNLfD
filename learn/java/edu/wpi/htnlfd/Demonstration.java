@@ -151,7 +151,7 @@ public class Demonstration {
 
 		// internalTaskQ();
 
-		LA.question = askQuestion.Ask(taskModel);
+		//LA.question = askQuestion.Ask(taskModel);
 
 		return this.taskModel;
 	}

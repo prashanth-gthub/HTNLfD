@@ -23,7 +23,6 @@ public class Location extends ApplicationSpecificClass {
 	}
 
 	public String find() {
-		// assumes importPackage("Packages.edu.wpi.htnlfd.table")
 		return "new Location(" + x + "," + y + "," + z + ")";
 	}
 

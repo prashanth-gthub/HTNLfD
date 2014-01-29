@@ -25,7 +25,7 @@ public class LearnAgent extends Agent {
 		Disco disco = interaction.getDisco();
 		disco.setGlobal("$world", new CarWorld());
 		((Agent) disco.getInteraction().getSystem()).setMax(100);
-		Disco.DEBUG = true;
+		//Disco.DEBUG = true;
 		disco.importPackage("Packages.edu.wpi.htnlfd");
 		disco.importPackage("Packages.edu.wpi.htnlfd.domain");
 		disco.importPackage("Packages.edu.wpi.htnlfd.table");

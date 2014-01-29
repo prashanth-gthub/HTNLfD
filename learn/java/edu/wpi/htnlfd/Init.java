@@ -2,7 +2,9 @@ package edu.wpi.htnlfd;
 
 import java.io.*;
 import java.util.*;
+
 import javax.xml.transform.*;
+
 import edu.wpi.cetask.*;
 import edu.wpi.disco.*;
 import edu.wpi.htnlfd.model.TaskModel;
@@ -15,8 +17,8 @@ public class Init {
 	private static Demonstration demonstration = null;
 
 	private static DomManipulation DOM = null;
-
-	private static String filename = "SetTable1";
+	public static String namespace = "tireRotation";
+	private static String filename = "tireRotation1";
 
 	private static String separator = System.getProperty("file.separator");
 

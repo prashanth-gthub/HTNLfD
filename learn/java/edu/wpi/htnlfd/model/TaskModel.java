@@ -1,7 +1,11 @@
 package edu.wpi.htnlfd.model;
 
 import org.w3c.dom.*;
+
+import edu.wpi.htnlfd.Init;
+
 import java.util.*;
+
 import javax.xml.namespace.QName;
 
 public class TaskModel {
@@ -22,7 +26,7 @@ public class TaskModel {
 	 */
 	public TaskModel() {
 
-		namespace = "urn:disco.wpi.edu:htnlfd:setTable";
+		namespace = "urn:disco.wpi.edu:htnlfd:"+Init.namespace;
 
 		int count = 1;
 		if (taskmodels.size() == 0) {

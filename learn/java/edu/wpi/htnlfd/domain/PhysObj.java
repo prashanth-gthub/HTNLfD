@@ -30,7 +30,6 @@ public class PhysObj extends ApplicationSpecificClass implements Cloneable {
 
 	@Override
 	public String find() {
-		// assumes importPackage("Packages.edu.wpi.htnlfd.table")
 		return getClass().getSimpleName() + '.' + name;
 	}
 
