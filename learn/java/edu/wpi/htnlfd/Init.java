@@ -59,7 +59,7 @@ public class Init {
 	 */
 	public static void addSteps(Disco disco, String subtask, String after)
 			throws Exception {
-
+		demonstration.getNewTaskModel();
 		learnedTaskmodel = demonstration.addSteps(disco, subtask, after);
 		load(disco);
 	}
@@ -69,7 +69,7 @@ public class Init {
 	 */
 	public static void addOptionalStep(Disco disco, String subtask,
 			String stepName) throws Exception {
-
+		demonstration.getNewTaskModel();
 		learnedTaskmodel = demonstration.addOptionalStep(subtask, stepName);
 		load(disco);
 	}
@@ -79,7 +79,7 @@ public class Init {
 	 */
 	public static void addMaxOccurs(Disco disco, String subtask,
 			String stepName, int maxOccurs) throws Exception {
-
+		demonstration.getNewTaskModel();
 		learnedTaskmodel = demonstration.addMaxOccurs(subtask, stepName,
 				maxOccurs);
 		load(disco);
@@ -90,7 +90,7 @@ public class Init {
 	 */
 	public static void addAlternativeRecipe(Disco disco, String taskName,
 			String applicable) throws Exception {
-
+		demonstration.getNewTaskModel();
 		learnedTaskmodel = demonstration.addAlternativeRecipe(disco, taskName,
 				applicable);
 		load(disco);
@@ -98,17 +98,47 @@ public class Init {
 
 	public static void addOrderStep(Disco disco, String subtaskId,
 			String stepNameDep, String stepNameRef) throws Exception {
-
+		demonstration.getNewTaskModel();
 		learnedTaskmodel = demonstration.addOrderStep(subtaskId, stepNameDep,
 				stepNameRef);
 		load(disco);
 	}
-
+	
+	public static void removeBinding(Disco disco, String subtaskId,
+			String name) throws Exception {
+		demonstration.getNewTaskModel();
+		learnedTaskmodel = demonstration.removeBinding(subtaskId, name);
+		load(disco);
+	}
+	
+	public static void addBinding(Disco disco, String subtaskId,
+			String key, String value) throws Exception {
+		demonstration.getNewTaskModel();
+		learnedTaskmodel = demonstration.addBinding(subtaskId, key, value);
+		load(disco);
+	}
+	
+	public static void changeBinding(Disco disco, String subtaskId,
+			String key, String value) throws Exception {
+		demonstration.getNewTaskModel();
+		learnedTaskmodel = demonstration.changeBinding(subtaskId, key, value);
+		load(disco);
+	}
+	
+	public static void connectSteps(Disco disco, String subtaskId,
+			String step1, String output, String step2, String input) throws Exception {
+		demonstration.getNewTaskModel();
+		learnedTaskmodel = demonstration.connectSteps(subtaskId,
+				step1, output, step2, input);
+		load(disco);
+	}
+	
 	/**
 	 * Makes the steps of a subtask completely ordered
 	 */
 	public static void setOrdered(Disco disco, String subtaskId)
 			throws Exception {
+		demonstration.getNewTaskModel();
 		learnedTaskmodel = demonstration.setOrdered(subtaskId);
 		load(disco);
 
@@ -119,7 +149,7 @@ public class Init {
 	 */
 	public static void addApplicable(Disco disco, String subtaskId,
 			String condition) throws Exception {
-
+		demonstration.getNewTaskModel();
 		learnedTaskmodel = demonstration.addApplicable(subtaskId, condition);
 		load(disco);
 	}
@@ -129,6 +159,7 @@ public class Init {
 	 */
 	public static void addPrecondition(Disco disco, String taskName,
 			String precondition) throws Exception {
+		demonstration.getNewTaskModel();
 		learnedTaskmodel = demonstration
 				.addPrecondition(taskName, precondition);
 		load(disco);
@@ -140,7 +171,7 @@ public class Init {
 	 */
 	public static void addPostcondition(Disco disco, String taskName,
 			String postcondition, boolean sufficient) throws Exception {
-
+		demonstration.getNewTaskModel();
 		learnedTaskmodel = demonstration.addPostcondition(taskName,
 				postcondition, sufficient);
 		load(disco);
@@ -151,6 +182,7 @@ public class Init {
 	 */
 	public static void addOutput(Disco disco, String taskName,
 			String outputName, String outputType) throws Exception {
+		demonstration.getNewTaskModel();
 		learnedTaskmodel = demonstration.addOutput(taskName, outputName,
 				outputType);
 		load(disco);
@@ -162,6 +194,7 @@ public class Init {
 	 */
 	public static void addInput(Disco disco, String taskName, String inputName,
 			String type, String modified) throws Exception {
+		demonstration.getNewTaskModel();
 		learnedTaskmodel = demonstration.addInput(taskName, inputName, type,
 				modified);
 		load(disco);

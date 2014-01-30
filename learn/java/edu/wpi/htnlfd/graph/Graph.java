@@ -1,6 +1,7 @@
 package edu.wpi.htnlfd.graph;
 
 import java.util.*;
+
 import edu.wpi.htnlfd.Demonstration;
 import edu.wpi.htnlfd.graph.Node.*;
 import edu.wpi.htnlfd.model.*;
@@ -14,9 +15,10 @@ public class Graph {
 	/**
 	 * Builds the tree and tries to merge the new demonstration with the current
 	 * model.
+	 * @throws ClassNotFoundException 
 	 */
 	public void mergeTasks(TaskClass task, TaskClass newTask,
-			TaskModel taskModel, Demonstration demonstration) {
+			TaskModel taskModel, Demonstration demonstration) throws ClassNotFoundException {
 		this.demonstration = demonstration;
 		this.root = new Node(null, NType.Root, -1);
 		getTree(task, root);
@@ -134,9 +136,10 @@ public class Graph {
 	/**
 	 * Checks whether the current demonstration is satisfied by the model or not
 	 * if not, it tries to merge them.
+	 * @throws ClassNotFoundException 
 	 */
 	boolean mergable(Node root, List<Node> demonstration, TaskModel taskModel,
-			Node demonstrationRoot) {
+			Node demonstrationRoot) throws ClassNotFoundException {
 
 		boolean retMerged = true;
 		List<ArrayList<Node>> nodesListAllPathes = root.getLowestLevel();
@@ -204,10 +207,11 @@ public class Graph {
 
 	/**
 	 * Merges the new demonstration with the model.
+	 * @throws ClassNotFoundException 
 	 */
 	private boolean merge(Node root, List<Node> demonstration,
 			List<Node> newNodes1, List<Node> newNodes2, ArrayList<Node> nodes,
-			TaskModel taskModel) {
+			TaskModel taskModel) throws ClassNotFoundException {
 		boolean merged = true;
 
 		ArrayList<Node> evl = nodes;

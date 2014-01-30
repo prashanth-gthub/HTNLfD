@@ -2,9 +2,12 @@ package edu.wpi.htnlfd.model;
 
 import edu.wpi.htnlfd.model.TaskClass.Input;
 import edu.wpi.htnlfd.model.TaskClass.*;
+
 import org.w3c.dom.*;
+
 import java.util.*;
 import java.util.Map.Entry;
+
 import javax.xml.namespace.QName;
 
 public class DecompositionClass extends TaskModel.Member {
@@ -128,9 +131,10 @@ public class DecompositionClass extends TaskModel.Member {
 
 	/**
 	 * Creates and adds the step after another step in the demopositionClass.
+	 * @throws ClassNotFoundException 
 	 */
 	public String addStep(Step which, String stepName, Step step,
-			String nameWhich, TaskModel taskModel) {
+			String nameWhich, TaskModel taskModel) throws ClassNotFoundException {
 		DecompositionClass.Step stp = which.getDecompositionClass().new Step(
 				step.getType(), step.getMinOccurs(), step.getMaxOccurs(), null);
 		String newName = which.findStepName(step.getType().getId());
@@ -174,13 +178,15 @@ public class DecompositionClass extends TaskModel.Member {
 									DecompositionClass.Type.InputInput));
 
 					if (modified != null) {
-						/*String outName = null;
-						outName = currentTask.getInput(inputT.getName())
-								.getModified().getName();
-
-						String outputTaskName = prevDec.getBindings()
-								.get("$this." + modified).getValue()
-								.substring(2 + stepName.length()); // ??*/ 
+						/*
+						 * String outName = null; outName =
+						 * currentTask.getInput(inputT.getName())
+						 * .getModified().getName();
+						 * 
+						 * String outputTaskName = prevDec.getBindings()
+						 * .get("$this." + modified).getValue() .substring(2 +
+						 * stepName.length()); // ??
+						 */
 
 						/*
 						 * currentDec.addBinding("$this." + outName,
@@ -1398,7 +1404,7 @@ public class DecompositionClass extends TaskModel.Member {
 				}
 			}
 		}
-
+		addOrderingByDataflow();
 	}
 
 	/**
@@ -1455,22 +1461,22 @@ public class DecompositionClass extends TaskModel.Member {
 	}
 
 	/**
-	 * Removes the binding that is related to an input.
+	 * Removes the constant binding that is related to an input.
 	 */
-	public void removeBindingInput(String name) {
+	public void removeConstantBindingInput(String name) {
 
 		List<Entry<String, Binding>> removed = new ArrayList<Entry<String, Binding>>();
 
 		for (Entry<String, Binding> bind : this.getBindings().entrySet()) {
 
-			if (bind.getValue().getSlot().contains(name)
+			if (bind.getValue().getSlot().equals(name)
 					&& !bind.getValue().getValue().contains("this")) {
 				removed.add(bind);
 			}
 		}
 
 		for (Entry<String, Binding> rem : removed) {
-			// System.out.println(rem.getKey()+" "+rem.getValue());
+
 			this.removeBinding(rem.getKey());
 
 		}

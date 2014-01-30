@@ -4,9 +4,12 @@ import edu.wpi.disco.Disco;
 import edu.wpi.htnlfd.ApplicationSpecificClass;
 import edu.wpi.htnlfd.model.DecompositionClass.Binding;
 import edu.wpi.htnlfd.model.DecompositionClass.Step;
+
 import org.w3c.dom.*;
+
 import java.util.*;
 import java.util.Map.Entry;
+
 import javax.script.*;
 import javax.xml.namespace.QName;
 
@@ -160,15 +163,16 @@ public class TaskClass extends TaskModel.Member {
 	 * TaskClass.
 	 * 
 	 * @param taskModel
+	 * @throws ClassNotFoundException 
 	 */
 	public String addInput(TaskModel taskModel, TaskClass task,
 			String inputName, String inputType, String modified,
-			Object inputBindingValue, DecompositionClass subtask, String prefix) {
+			Object inputBindingValue, DecompositionClass subtask, String prefix) throws ClassNotFoundException {
 		boolean contain = false;
 		String name = null;
 		for (Input input : task.getDeclaredInputs()) {
-			if (!((modified != null) ^ input.getModified() != null)
-					&& input.getType().equals(inputType)) {
+			if (//!((modified != null) ^ input.getModified() != null)
+					 typeCheck(input.getType(),inputType)) {
 
 				String value = subtask.findValueInParents(taskModel, null,
 						task, subtask, input.getName());
@@ -446,14 +450,8 @@ public class TaskClass extends TaskModel.Member {
 	 * Removes the output by name.
 	 */
 	public void removeOutput(String name) {
-		Iterator<Output> iter = this.declaredOutputs.iterator();
-		while (iter.hasNext()) {
-			Output out = iter.next();
-			if (out.getName().equals(name)) {
-				iter.remove();
-				break;
-			}
-		}
+		Output out = this.getOutput(name);
+		this.removeOutput(out);
 	}
 
 	private List<DecompositionClass> decompositions = new ArrayList<DecompositionClass>();
@@ -637,11 +635,12 @@ public class TaskClass extends TaskModel.Member {
 
 	/**
 	 * Adds the inputs and bindings to a new task.
+	 * @throws ClassNotFoundException 
 	 */
 	public List<String> addInputsBindings(TaskModel taskModel,
 			edu.wpi.cetask.Task step, String stepNameR,
 			DecompositionClass subtask, Disco disco)
-			throws NoSuchMethodException, ScriptException {
+			throws NoSuchMethodException, ScriptException, ClassNotFoundException {
 
 		List<String> inputs = new ArrayList<String>();
 
@@ -1061,5 +1060,38 @@ public class TaskClass extends TaskModel.Member {
 			}
 		}
 		return valOut;
+	}
+	
+	public boolean typeCheck(String type1, String type2) throws ClassNotFoundException{
+		if(type1.equals(type2)){
+			return true;
+		}
+		
+		Class<?> t1 = findClass(type1);
+		Class<?> t2 = findClass(type2);		
+		
+		if(t1.isAssignableFrom(t2) || t2.isAssignableFrom(t1))
+			return true;
+		return false;
+		
+	}
+	public Class<?> findClass(String className) throws ClassNotFoundException{
+		final Package[] packages = Package.getPackages();
+		String pack = null;
+	    for (final Package p : packages) {
+	        pack = p.getName();
+	        final String tentative = pack + "." + className;
+	        try {
+	            Class.forName(tentative);
+	        } catch (final ClassNotFoundException e) {
+	            continue;
+	        }
+	    
+	        break;
+	    }
+		if(pack == null){
+			throw new ClassNotFoundException();
+		}
+		return Class.forName(pack + "." + className);
 	}
 }

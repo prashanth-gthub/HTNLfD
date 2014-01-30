@@ -2,6 +2,7 @@ package edu.wpi.htnlfd.graph;
 
 import edu.wpi.htnlfd.model.DecompositionClass.Step;
 import edu.wpi.htnlfd.model.*;
+
 import java.util.*;
 
 public class Node {
@@ -305,8 +306,9 @@ public class Node {
 
 	/**
 	 * Adds the node to the tree and adds the step to the taskClass.
+	 * @throws ClassNotFoundException 
 	 */
-	public Node addNode(Node node, CType required, TaskModel taskModel) {
+	public Node addNode(Node node, CType required, TaskModel taskModel) throws ClassNotFoundException {
 
 		if (node.step == null)
 			return null;
@@ -328,8 +330,9 @@ public class Node {
 
 	/**
 	 * Adds the optional step.
+	 * @throws ClassNotFoundException 
 	 */
-	public Node addOptionalStep(Node node, CType required, TaskModel taskModel) {
+	public Node addOptionalStep(Node node, CType required, TaskModel taskModel) throws ClassNotFoundException {
 		this.step.setMinOccurs(0);
 		return addNode(node, required, taskModel);
 	}

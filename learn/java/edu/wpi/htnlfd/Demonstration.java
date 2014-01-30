@@ -5,15 +5,22 @@ import edu.wpi.disco.*;
 import edu.wpi.disco.lang.*;
 import edu.wpi.htnlfd.graph.Graph;
 import edu.wpi.htnlfd.model.*;
+import edu.wpi.htnlfd.model.DecompositionClass.Binding;
 import edu.wpi.htnlfd.model.DecompositionClass.Step;
+import edu.wpi.htnlfd.model.DecompositionClass.Type;
 import edu.wpi.htnlfd.model.TaskClass.Input;
 import edu.wpi.htnlfd.model.TaskClass.Output;
-import edu.wpi.htnlfd.model.DecompositionClass.*;
 import edu.wpi.htnlfd.question.AskQuestion;
+
+
+
+
+
 //import edu.wpi.htnlfd.table.TableKnowledgeBase;
 import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
+
 import javax.script.*;
 import javax.xml.namespace.QName;
 
@@ -99,10 +106,11 @@ public class Demonstration {
 	 * functions.
 	 * 
 	 * @throws IOException
+	 * @throws ClassNotFoundException 
 	 */
 	public TaskModel buildTaskModel(Disco disco, String taskName,
 			List<edu.wpi.cetask.Task> steps) throws NoSuchMethodException,
-			ScriptException, IOException {
+			ScriptException, IOException, ClassNotFoundException {
 		taskModel = new TaskModel();
 
 		if (this.externalTaskModel != null) {
@@ -151,7 +159,7 @@ public class Demonstration {
 
 		// internalTaskQ();
 
-		//LA.question = askQuestion.Ask(taskModel);
+		// LA.question = askQuestion.Ask(taskModel);
 
 		return this.taskModel;
 	}
@@ -441,10 +449,11 @@ public class Demonstration {
 	 * our classes. It also calls addOrdering function to add ordering
 	 * constraints. It adds all of the subtask's steps' inputs and bindings to
 	 * the new task.
+	 * @throws ClassNotFoundException 
 	 */
 	public TaskClass demonstratedTask(Disco disco, String taskName,
 			List<edu.wpi.cetask.Task> steps) throws NoSuchMethodException,
-			ScriptException {
+			ScriptException, ClassNotFoundException {
 		TaskClass task = null;
 		task = new TaskClass(taskModel, taskName, new QName(
 				taskModel.namespace, taskName));
@@ -481,7 +490,7 @@ public class Demonstration {
 
 				for (DecompositionClass sub : subtask.getStep(stepNameR)
 						.getType().getDecompositions()) {
-					sub.removeBindingInput(inputName);
+					sub.removeConstantBindingInput(inputName);
 				}
 
 			}
@@ -700,11 +709,10 @@ public class Demonstration {
 	/**
 	 * Adds the step. This function adds the specified steps the end of a
 	 * subtask of a task.
+	 * @throws ClassNotFoundException 
 	 */
 	public TaskModel addSteps(Disco disco, String subtaskId, String afterStep)
-			throws NoSuchMethodException, ScriptException {
-
-		getNewTaskModel();
+			throws NoSuchMethodException, ScriptException, ClassNotFoundException {
 
 		List<Task> steps = findDemonstration(disco);
 		DecompositionClass subtask = this.taskModel
@@ -735,7 +743,7 @@ public class Demonstration {
 
 				for (DecompositionClass sub : subtask.getStep(stepNameR)
 						.getType().getDecompositions()) {
-					sub.removeBindingInput(inputName);
+					sub.removeConstantBindingInput(inputName);
 				}
 
 			}
@@ -753,8 +761,6 @@ public class Demonstration {
 	 */
 	public TaskModel addOptionalStep(String subtaskId, String stepName) {
 
-		getNewTaskModel();
-
 		DecompositionClass subtask = this.taskModel
 				.getDecompositionClass(subtaskId);
 
@@ -769,8 +775,6 @@ public class Demonstration {
 	 */
 	public TaskModel addMaxOccurs(String subtaskId, String stepName,
 			int maxOccurs) {
-
-		getNewTaskModel();
 
 		DecompositionClass subtask = this.taskModel
 				.getDecompositionClass(subtaskId);
@@ -808,11 +812,10 @@ public class Demonstration {
 
 	/**
 	 * Adds the alternative recipe.
+	 * @throws ClassNotFoundException 
 	 */
 	public TaskModel addAlternativeRecipe(Disco disco, String taskName,
-			String applicable) throws NoSuchMethodException, ScriptException {
-
-		getNewTaskModel();
+			String applicable) throws NoSuchMethodException, ScriptException, ClassNotFoundException {
 
 		List<Task> steps = findDemonstration(disco);
 		TaskClass task = this.taskModel.getTaskClass(taskName);
@@ -823,8 +826,6 @@ public class Demonstration {
 	}
 
 	public TaskModel answerQuestion(String taskName, String input) {
-
-		getNewTaskModel();
 
 		TaskClass task = taskModel.getTaskClass(taskName);
 		Input in = task.getInput(defaultInputName);
@@ -844,8 +845,6 @@ public class Demonstration {
 	public TaskModel addOrderStep(String subtaskId, String stepNameDep,
 			String stepNameRef) {
 
-		getNewTaskModel();
-
 		DecompositionClass subtask = this.taskModel
 				.getDecompositionClass(subtaskId);
 
@@ -860,8 +859,6 @@ public class Demonstration {
 	 * Makes the steps of a subtask totally ordered
 	 */
 	public TaskModel setOrdered(String subtaskId) {
-
-		getNewTaskModel();
 
 		DecompositionClass subtask = this.taskModel
 				.getDecompositionClass(subtaskId);
@@ -880,8 +877,6 @@ public class Demonstration {
 	 */
 	public TaskModel addApplicable(String subtaskId, String condition) {
 
-		getNewTaskModel();
-
 		DecompositionClass subtask = this.taskModel
 				.getDecompositionClass(subtaskId);
 
@@ -897,8 +892,6 @@ public class Demonstration {
 	 */
 	public TaskModel addPrecondition(String taskName, String precondition) {
 
-		getNewTaskModel();
-
 		TaskClass task = this.taskModel.getTaskClass(taskName);
 		task.setPrecondition(precondition);
 
@@ -912,8 +905,6 @@ public class Demonstration {
 	 */
 	public TaskModel addPostcondition(String taskName, String postcondition,
 			boolean sufficient) {
-
-		getNewTaskModel();
 
 		TaskClass task = this.taskModel.getTaskClass(taskName);
 		task.setPostcondition(postcondition);
@@ -930,8 +921,6 @@ public class Demonstration {
 	public TaskModel addOutput(String taskName, String outputName,
 			String outputType) {
 
-		getNewTaskModel();
-
 		TaskClass task = this.taskModel.getTaskClass(taskName);
 		TaskClass.Output outputC = null;
 		outputC = task.new Output(outputName, outputType);
@@ -945,8 +934,6 @@ public class Demonstration {
 	 */
 	public TaskModel addInput(String taskName, String inputName, String type,
 			String modified) {
-
-		getNewTaskModel();
 
 		TaskClass task = this.taskModel.getTaskClass(taskName);
 		TaskClass.Output outputC = null;
@@ -1270,4 +1257,63 @@ public class Demonstration {
 		 */
 	}
 
+	public TaskModel removeBinding(String subtaskId, String name) {
+
+		DecompositionClass subtask = this.taskModel
+				.getDecompositionClass(subtaskId);
+		subtask.removeBinding(name);
+
+		return taskModel;
+	}
+
+	public TaskModel addBinding(String subtaskId, String key, String value) {
+
+		DecompositionClass subtask = this.taskModel
+				.getDecompositionClass(subtaskId);
+		String[] keyArray = key.split(".");
+		Binding binding = subtask.new Binding(keyArray[1], keyArray[0], value,
+				null);
+		subtask.addBinding(key, binding);
+		Map.Entry<String, Binding> entry = new AbstractMap.SimpleEntry<String, Binding>(
+				key, binding);
+
+		subtask.setType(entry);
+		return taskModel;
+	}
+
+	public TaskModel changeBinding(String subtaskId, String key, String newValue) {
+
+		DecompositionClass subtask = this.taskModel
+				.getDecompositionClass(subtaskId);
+		Binding oldValue = subtask.getBindings().get(key);
+		oldValue.setValue(newValue);
+		Map.Entry<String, Binding> entry = new AbstractMap.SimpleEntry<String, Binding>(
+				key, oldValue);
+
+		subtask.setType(entry);
+		return taskModel;
+	}
+
+	public TaskModel connectSteps(String subtaskId, String step1,
+			String outName, String step2, String inName) {
+		DecompositionClass subtask = this.taskModel
+				.getDecompositionClass(subtaskId);
+		TaskClass task = subtask.getGoal();
+		// Output out = subtask.getStep(step1).getType().getOutput(outName);
+		Input in = subtask.getStep(step2).getType().getInput(inName);
+		if (in.getModified() != null) {
+			Entry<String, Binding> bind = subtask.getBinding("$" + step1 + "."
+					+ outName);
+			task.removeOutput(bind.getValue().getSlot());
+			// remove binding
+			subtask.removeBinding(bind.getKey());
+		}
+		Binding binding = subtask.new Binding(inName, step2, "$" + step1 + "."
+				+ outName, Type.InputOutput);
+		subtask.addBinding("$" + step2 + "." + inName, binding);
+
+		subtask.setOrdered(false);
+		subtask.addOrdering(taskModel);
+		return taskModel;
+	}
 }
