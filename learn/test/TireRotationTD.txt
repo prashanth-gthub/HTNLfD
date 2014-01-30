@@ -1,0 +1,15 @@
+cd models
+load TireRotationPrimitives.xml
+load TireRotationDem.xml
+
+eval Packages.edu.wpi.htnlfd.Init.addTask($disco,"RemoveTires")
+eval Packages.edu.wpi.htnlfd.Init.addTask($disco,"Rotate")
+eval Packages.edu.wpi.htnlfd.Init.addTask($disco,"ScrewWheels")
+
+task Demonstration
+task RemoveTires urn:disco.wpi.edu:htnlfd:tireRotation3
+task Rotate urn:disco.wpi.edu:htnlfd:tireRotation3
+task ScrewWheels urn:disco.wpi.edu:htnlfd:tireRotation3
+done Demonstration
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"RotateTires")
+print RotateTires urn:disco.wpi.edu:htnlfd:tireRotation4
