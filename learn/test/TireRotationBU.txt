@@ -7,19 +7,19 @@ task Unscrew / $world.MyCar.LFwheel.studA
 task PutDown / $world.MyCar.LFwheel.studA
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"UnscrewStud")
-print UnscrewStud urn:disco.wpi.edu:htnlfd:tireRotation2
+print UnscrewStud urn:disco.wpi.edu:htnlfd:tireRotation1
 
 eval Packages.edu.wpi.htnlfd.Init.connectSteps($disco, "unscrewStudA", "unscrew1", "nut", "putDown1","object")
 
 eval Packages.edu.wpi.htnlfd.Init.removeBinding($disco,"unscrewStudA","$this.unscrew1_stud")
-print UnscrewStud urn:disco.wpi.edu:htnlfd:tireRotation4
+print UnscrewStud urn:disco.wpi.edu:htnlfd:tireRotation3
 
 task Demonstration
-task UnscrewStud urn:disco.wpi.edu:htnlfd:tireRotation4 / $world.MyCar.LFwheel.studA
-task UnscrewStud urn:disco.wpi.edu:htnlfd:tireRotation4 / $world.MyCar.LFwheel.studB
-task UnscrewStud urn:disco.wpi.edu:htnlfd:tireRotation4 / $world.MyCar.LFwheel.studC
+task UnscrewStud urn:disco.wpi.edu:htnlfd:tireRotation3 / $world.MyCar.LFwheel.studA
+task UnscrewStud urn:disco.wpi.edu:htnlfd:tireRotation3 / $world.MyCar.LFwheel.studB
+task UnscrewStud urn:disco.wpi.edu:htnlfd:tireRotation3 / $world.MyCar.LFwheel.studC
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"UnscrewWheel")
-print UnscrewWheel urn:disco.wpi.edu:htnlfd:tireRotation5
+print UnscrewWheel urn:disco.wpi.edu:htnlfd:tireRotation4
 
 
