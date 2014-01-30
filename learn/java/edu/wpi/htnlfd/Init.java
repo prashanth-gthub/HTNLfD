@@ -14,9 +14,9 @@ public class Init {
 	/** The learned taskmodel. */
 	private static TaskModel learnedTaskmodel = null;
 
-	private static Demonstration demonstration = null;
+	private static Demonstration demonstration = new Demonstration();
 
-	private static DomManipulation DOM = null;
+	private static DomManipulation DOM = new DomManipulation();
 	public static String namespace = "tireRotation";
 	private static String filename = "tireRotation1";
 
@@ -103,36 +103,37 @@ public class Init {
 				stepNameRef);
 		load(disco);
 	}
-	
-	public static void removeBinding(Disco disco, String subtaskId,
-			String name) throws Exception {
+
+	public static void removeBinding(Disco disco, String subtaskId, String name)
+			throws Exception {
 		demonstration.getNewTaskModel();
 		learnedTaskmodel = demonstration.removeBinding(subtaskId, name);
 		load(disco);
 	}
-	
-	public static void addBinding(Disco disco, String subtaskId,
-			String key, String value) throws Exception {
+
+	public static void addBinding(Disco disco, String subtaskId, String key,
+			String value) throws Exception {
 		demonstration.getNewTaskModel();
 		learnedTaskmodel = demonstration.addBinding(subtaskId, key, value);
 		load(disco);
 	}
-	
-	public static void changeBinding(Disco disco, String subtaskId,
-			String key, String value) throws Exception {
+
+	public static void changeBinding(Disco disco, String subtaskId, String key,
+			String value) throws Exception {
 		demonstration.getNewTaskModel();
 		learnedTaskmodel = demonstration.changeBinding(subtaskId, key, value);
 		load(disco);
 	}
-	
+
 	public static void connectSteps(Disco disco, String subtaskId,
-			String step1, String output, String step2, String input) throws Exception {
+			String step1, String output, String step2, String input)
+			throws Exception {
 		demonstration.getNewTaskModel();
-		learnedTaskmodel = demonstration.connectSteps(subtaskId,
-				step1, output, step2, input);
+		learnedTaskmodel = demonstration.connectSteps(subtaskId, step1, output,
+				step2, input);
 		load(disco);
 	}
-	
+
 	/**
 	 * Makes the steps of a subtask completely ordered
 	 */
@@ -197,6 +198,13 @@ public class Init {
 		demonstration.getNewTaskModel();
 		learnedTaskmodel = demonstration.addInput(taskName, inputName, type,
 				modified);
+		load(disco);
+
+	}
+
+	public static void addTask(Disco disco, String taskName) throws Exception {
+		demonstration.getNewTaskModel();
+		learnedTaskmodel = demonstration.addTask(taskName);
 		load(disco);
 
 	}

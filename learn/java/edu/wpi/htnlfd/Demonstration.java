@@ -16,6 +16,7 @@ import edu.wpi.htnlfd.question.AskQuestion;
 
 
 
+
 //import edu.wpi.htnlfd.table.TableKnowledgeBase;
 import java.io.IOException;
 import java.util.*;
@@ -183,7 +184,7 @@ public class Demonstration {
 			if (task.isEquivalent(newTask, taskModel))
 				return null;
 
-			if (task.getId().equals(newTask.getId())) {
+			if (task.getId().equals(newTask.getId()) && !task.getDecompositions().isEmpty()) {
 
 				return task;
 
@@ -454,7 +455,10 @@ public class Demonstration {
 	public TaskClass demonstratedTask(Disco disco, String taskName,
 			List<edu.wpi.cetask.Task> steps) throws NoSuchMethodException,
 			ScriptException, ClassNotFoundException {
-		TaskClass task = null;
+		TaskClass task = taskModel.getTaskClass(taskName);
+		if(task!=null && task.getDecompositions().isEmpty()){
+			taskModel.remove(task);
+		}
 		task = new TaskClass(taskModel, taskName, new QName(
 				taskModel.namespace, taskName));
 
@@ -1314,6 +1318,13 @@ public class Demonstration {
 
 		subtask.setOrdered(false);
 		subtask.addOrdering(taskModel);
+		return taskModel;
+	}
+
+	public TaskModel addTask(String taskName) {
+		TaskClass task = new TaskClass(taskModel, taskName, new QName(
+				taskModel.namespace, taskName));
+		taskModel.add(task);
 		return taskModel;
 	}
 }

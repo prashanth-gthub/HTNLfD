@@ -131,9 +131,9 @@ public class TaskClass extends TaskModel.Member {
 		this.primitive = primitive;
 	}
 
-	private List<Input> declaredInputs;
+	private List<Input> declaredInputs = new ArrayList<Input>();
 
-	private List<Output> declaredOutputs;
+	private List<Output> declaredOutputs = new ArrayList<Output>();
 
 	/**
 	 * Checks for input.
