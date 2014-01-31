@@ -13,3 +13,83 @@ task ScrewWheels urn:disco.wpi.edu:htnlfd:tireRotation3
 done Demonstration
 eval Packages.edu.wpi.htnlfd.Init.learn($disco,"RotateTires")
 print RotateTires urn:disco.wpi.edu:htnlfd:tireRotation4
+
+eval Packages.edu.wpi.htnlfd.Init.addTask($disco,"RemoveTire")
+eval Packages.edu.wpi.htnlfd.Init.addInput($disco,"RemoveTire","wheel","Wheel",null)
+
+task Demonstration
+task RemoveTire urn:disco.wpi.edu:htnlfd:tireRotation6 / $world.MyCar.LFwheel
+task RemoveTire urn:disco.wpi.edu:htnlfd:tireRotation6 / $world.MyCar.RFwheel
+task RemoveTire urn:disco.wpi.edu:htnlfd:tireRotation6 / $world.MyCar.LRwheel
+task RemoveTire urn:disco.wpi.edu:htnlfd:tireRotation6 / $world.MyCar.RRwheel
+done Demonstration
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"RemoveTires")
+print RemoveTires urn:disco.wpi.edu:htnlfd:tireRotation7
+
+eval Packages.edu.wpi.htnlfd.Init.addTask($disco,"MountTire")
+eval Packages.edu.wpi.htnlfd.Init.addOutput($disco,"MountTire","newTire","Tire")
+eval Packages.edu.wpi.htnlfd.Init.addInput($disco,"MountTire","tire","Tire","newTire")
+eval Packages.edu.wpi.htnlfd.Init.addInput($disco,"MountTire","wheel","Wheel",null)
+
+task Demonstration
+task MountTire urn:disco.wpi.edu:htnlfd:tireRotation11 / $world.MyCar.LRwheel.getTire() / $world.MyCar.LRwheel
+task MountTire urn:disco.wpi.edu:htnlfd:tireRotation11 / $world.MyCar.RFwheel.getTire() / $world.MyCar.RRwheel
+task MountTire urn:disco.wpi.edu:htnlfd:tireRotation11 / $world.MyCar.LRwheel.getTire() / $world.MyCar.LFwheel
+task MountTire urn:disco.wpi.edu:htnlfd:tireRotation11 / $world.MyCar.RRwheel.getTire() / $world.MyCar.RFwheel
+done Demonstration
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"Rotate")
+print Rotate urn:disco.wpi.edu:htnlfd:tireRotation12
+
+task Demonstration
+task MountTire urn:disco.wpi.edu:htnlfd:tireRotation11 / $world.MyCar.LFwheel.getTire() / $world.MyCar.RRwheel
+task MountTire urn:disco.wpi.edu:htnlfd:tireRotation11 / $world.MyCar.RFwheel.getTire() / $world.MyCar.LRwheel
+task MountTire urn:disco.wpi.edu:htnlfd:tireRotation11 / $world.MyCar.LRwheel.getTire() / $world.MyCar.RFwheel
+task MountTire urn:disco.wpi.edu:htnlfd:tireRotation11 / $world.MyCar.RRwheel.getTire() / $world.MyCar.LFwheel
+done Demonstration
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"Rotate")
+print Rotate urn:disco.wpi.edu:htnlfd:tireRotation13
+
+eval Packages.edu.wpi.htnlfd.Init.addTask($disco,"ScrewWheel")
+eval Packages.edu.wpi.htnlfd.Init.addInput($disco,"ScrewWheel","wheel","Wheel",null)
+
+task Demonstration
+task ScrewWheel urn:disco.wpi.edu:htnlfd:tireRotation15 / $world.MyCar.LFwheel
+task ScrewWheel urn:disco.wpi.edu:htnlfd:tireRotation15 / $world.MyCar.RFwheel
+task ScrewWheel urn:disco.wpi.edu:htnlfd:tireRotation15 / $world.MyCar.LRwheel
+task ScrewWheel urn:disco.wpi.edu:htnlfd:tireRotation15 / $world.MyCar.RRwheel
+done Demonstration
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"ScrewWheels")
+print ScrewWheels urn:disco.wpi.edu:htnlfd:tireRotation16
+
+eval Packages.edu.wpi.htnlfd.Init.addTask($disco,"ScrewStud")
+eval Packages.edu.wpi.htnlfd.Init.addInput($disco,"ScrewStud","stud","Stud",null)
+
+task Demonstration
+task ScrewStud urn:disco.wpi.edu:htnlfd:tireRotation18 / $world.MyCar.LFwheel.studA
+task ScrewStud urn:disco.wpi.edu:htnlfd:tireRotation18 / $world.MyCar.LFwheel.studB
+task ScrewStud urn:disco.wpi.edu:htnlfd:tireRotation18 / $world.MyCar.LFwheel.studC
+done Demonstration
+eval Packages.edu.wpi.htnlfd.Init.learn($disco,"ScrewWheel")
+print ScrewWheel urn:disco.wpi.edu:htnlfd:tireRotation19
+
+eval Packages.edu.wpi.htnlfd.Init.changeSubtaskName($disco,"rotateA","frontToRear")
+eval Packages.edu.wpi.htnlfd.Init.changeSubtaskName($disco,"rotateB","xPattern")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

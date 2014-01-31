@@ -201,6 +201,7 @@ public class Init {
 		load(disco);
 
 	}
+	
 
 	public static void addTask(Disco disco, String taskName) throws Exception {
 		demonstration.getNewTaskModel();
@@ -209,6 +210,13 @@ public class Init {
 
 	}
 
+	public static void changeSubtaskName(Disco disco, String subtaskId,
+			String newName) throws Exception {
+		demonstration.getNewTaskModel();
+		learnedTaskmodel = demonstration.changeSubtaskName(subtaskId, newName);
+		load(disco);
+	}
+	
 	public static void answerQuestion(Disco disco, String taskName, String input)
 			throws Exception {
 

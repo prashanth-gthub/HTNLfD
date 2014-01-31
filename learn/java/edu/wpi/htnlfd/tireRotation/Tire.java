@@ -16,6 +16,6 @@ public class Tire extends PhysObj {
 
 	public String find() {
 		String[] wheelName = this.name.split("_");
-		return "$world.MyCar." + wheelName[0] + ".getTire()";
+		return "$world.MyCar." + wheelName[0].substring(0, 2) +"wheel.getTire()";
 	}
 }

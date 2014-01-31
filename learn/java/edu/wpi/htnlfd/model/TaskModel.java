@@ -119,11 +119,11 @@ public class TaskModel {
 					if (c.isEquivalent(next, this)) {
 						iterator.remove();
 						System.out.println(c.getId() + " and " + next.getId());
-					} else if (next.getDecompositions().isEmpty()) {
+					} /*else if (next.getDecompositions().isEmpty()) {
 						// not just remove, change their parents
 						// ?????????????????
 						iterator.remove();
-					}
+					}*/
 				}
 			}
 		}

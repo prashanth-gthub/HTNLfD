@@ -17,6 +17,7 @@ import edu.wpi.htnlfd.question.AskQuestion;
 
 
 
+
 //import edu.wpi.htnlfd.table.TableKnowledgeBase;
 import java.io.IOException;
 import java.util.*;
@@ -1326,5 +1327,13 @@ public class Demonstration {
 				taskModel.namespace, taskName));
 		taskModel.add(task);
 		return taskModel;
+	}
+
+	public TaskModel changeSubtaskName(String subtaskId, String newName) {
+		DecompositionClass subtask = this.taskModel
+				.getDecompositionClass(subtaskId);
+		
+		subtask.setId(newName);
+		return null;
 	}
 }

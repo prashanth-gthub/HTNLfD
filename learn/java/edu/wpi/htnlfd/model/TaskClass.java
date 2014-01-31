@@ -69,7 +69,7 @@ public class TaskClass extends TaskModel.Member {
 	}
 
 	private boolean primitive = false;
-
+	
 	private boolean internal = false;
 
 	private String precondition;
@@ -80,6 +80,15 @@ public class TaskClass extends TaskModel.Member {
 
 	public boolean isInternal() {
 		return internal;
+	}
+	
+	
+
+	public boolean isDefined() {
+		if(this.getDecompositions().isEmpty()){
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -121,6 +130,8 @@ public class TaskClass extends TaskModel.Member {
 	 * Checks if is primitive.
 	 */
 	public boolean isPrimitive() {
+		if(this.getDecompositions().isEmpty())
+			return true;
 		return primitive;
 	}
 
@@ -481,6 +492,9 @@ public class TaskClass extends TaskModel.Member {
 	 */
 	public boolean isEquivalent(TaskClass next, TaskModel taskModel) {
 
+		if(!this.isDefined() || !next.isDefined()){
+			return false;
+		}
 		TaskClass fakeTask = new TaskClass(taskModel, next);
 
 		if (this.getDeclaredInputs().size() == fakeTask.getDeclaredInputs()
